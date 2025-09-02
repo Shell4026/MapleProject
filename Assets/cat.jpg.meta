@@ -1,0 +1,19 @@
+{
+    "metaHash": 13046373818924041134,
+    "name": "cat",
+    "obj": {
+        "Texture": {
+            "aniso": 12,
+            "bSRGB": true,
+            "height": 728,
+            "width": 736
+        },
+        "name": "cat",
+        "type": "Texture",
+        "uuid": "80140b63b1e02a0ee6cd909da2941cf1",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "80140b63b1e02a0ee6cd909da2941cf1",
+    "version": 1
+}

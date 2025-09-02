@@ -1,0 +1,19 @@
+{
+    "metaHash": 15577279002302361059,
+    "name": "defaultNormal",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bSRGB": false,
+            "height": 128,
+            "width": 128
+        },
+        "name": "defaultNormal",
+        "type": "Texture",
+        "uuid": "60fa36899b5740075616eb35e06216ba",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "60fa36899b5740075616eb35e06216ba",
+    "version": 1
+}

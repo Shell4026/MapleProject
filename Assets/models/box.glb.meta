@@ -1,0 +1,27 @@
+{
+    "metaHash": 14081208084529061672,
+    "name": "box",
+    "obj": {
+        "Mesh": [
+            {
+                "name": "Cube",
+                "type": "Mesh",
+                "uuid": "7f329d00b7707b749f822a4e786830ee",
+                "version": 1
+            },
+            {
+                "name": "Cube.001",
+                "type": "Mesh",
+                "uuid": "2f2bedecda1b3682f40010cd491bd583",
+                "version": 1
+            }
+        ],
+        "name": "box",
+        "type": "Model",
+        "uuid": "bee82681672716a4fb1816ba57061988",
+        "version": 1
+    },
+    "typeHash": 2826227911019964647,
+    "uuid": "bee82681672716a4fb1816ba57061988",
+    "version": 1
+}

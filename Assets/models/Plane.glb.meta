@@ -1,0 +1,21 @@
+{
+    "metaHash": 16469481577290450241,
+    "name": "Plane",
+    "obj": {
+        "Mesh": [
+            {
+                "name": "Plane",
+                "type": "Mesh",
+                "uuid": "72f9acd3af22ed09541de7ae11c8930a",
+                "version": 1
+            }
+        ],
+        "name": "Plane",
+        "type": "Model",
+        "uuid": "af15937daeb50672db65071dbcaed7a5",
+        "version": 1
+    },
+    "typeHash": 2826227911019964647,
+    "uuid": "af15937daeb50672db65071dbcaed7a5",
+    "version": 1
+}

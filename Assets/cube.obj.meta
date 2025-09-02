@@ -1,0 +1,21 @@
+{
+    "metaHash": 15357218536020956943,
+    "name": "cube",
+    "obj": {
+        "Mesh": [
+            {
+                "name": "Mesh",
+                "type": "Mesh",
+                "uuid": "1d3cd757b7bd951ce946909da3b02daf",
+                "version": 1
+            }
+        ],
+        "name": "cube",
+        "type": "Model",
+        "uuid": "f02676634e0229a37c1c36dbdca13bc9",
+        "version": 1
+    },
+    "typeHash": 2826227911019964647,
+    "uuid": "f02676634e0229a37c1c36dbdca13bc9",
+    "version": 1
+}

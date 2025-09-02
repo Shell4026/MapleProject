@@ -1,0 +1,21 @@
+{
+    "metaHash": 12616188193225124247,
+    "name": "Sphere",
+    "obj": {
+        "Mesh": [
+            {
+                "name": "Mesh",
+                "type": "Mesh",
+                "uuid": "00075214bfffe44b5c449be6624bead2",
+                "version": 1
+            }
+        ],
+        "name": "Sphere",
+        "type": "Model",
+        "uuid": "a798bd628e4114a6e45683dbf20bfd1f",
+        "version": 1
+    },
+    "typeHash": 2826227911019964647,
+    "uuid": "a798bd628e4114a6e45683dbf20bfd1f",
+    "version": 1
+}
