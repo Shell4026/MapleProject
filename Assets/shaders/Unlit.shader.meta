@@ -1,5 +1,5 @@
 {
-    "metaHash": 15624394356759938739,
+    "metaHash": 4845503761541832666,
     "name": "Unlit",
     "obj": {
         "name": "Unlit",
@@ -3085,7 +3085,7 @@
                         ]
                     },
                     "type": "VulkanShaderPass",
-                    "uuid": "707b44fc644185e35809dde4394b3071",
+                    "uuid": "fc2f57bd5b4db44587960bf91ec5d2e7",
                     "version": 1
                 }
             ]

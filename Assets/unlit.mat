@@ -1,6 +1,6 @@
 {
     "Material": {
-        "shader": "29a303056fef0dce249ab91740f1143e"
+        "shader": "d9c09d9da3d787f9d399303490f72415"
     },
     "MaterialPropertyBlock": {
         "scalar": null,
@@ -16,7 +16,7 @@
             ]
         }
     },
-    "name": "NewMaterial1.mat",
+    "name": "unlit",
     "type": "Material",
     "uuid": "5158ea71df5ba712acdc345aa4185bf2",
     "version": 1
