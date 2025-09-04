@@ -5,179 +5,8 @@
             "Components": [
                 {
                     "Component": {
-                        "hideInspector": false
-                    },
-                    "Transform": {
-                        "parent": "6017a1a59f905fc701351e950580727c",
-                        "quat": [
-                            -1.4488791748590302e-05,
-                            4.8108529881574214e-05,
-                            0.2811034619808197,
-                            0.9596774578094482
-                        ],
-                        "vPosition": [
-                            -2.368964433670044,
-                            -2.170408248901367,
-                            -0.00018269817519467324
-                        ],
-                        "vRotation": [
-                            -4.367002111393958e-05,
-                            0.005757254082709551,
-                            32.65214920043945
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "26425790257ffd1a3727617e4910de78",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            2.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "name": "BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "0299a6311b14ea40e2fadd681fa9aa2b",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "axisLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "bGravity": false,
-                        "bKinematic": true,
-                        "bouncy": 0.0,
-                        "collision": "0299a6311b14ea40e2fadd681fa9aa2b",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "name": "RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "d345c5936ac892e7cdbc38b19957a40e",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEnable": true,
-                "hideInspector": false,
-                "transform": "26425790257ffd1a3727617e4910de78"
-            },
-            "name": "Collider",
-            "type": "GameObject",
-            "uuid": "e0c45d4bd3981ee11a279a4cd1d0942e",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "Transform": {
-                        "parent": "6017a1a59f905fc701351e950580727c",
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            2.702948570251465,
-                            -1.7097444534301758,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "8ec59e8fd795b6dba7c23d90eb21d3b5",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            9.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "name": "BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "2a5ada13d026bd9eeb9da0798d0a3dff",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "axisLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "bGravity": false,
-                        "bKinematic": true,
-                        "bouncy": 0.0,
-                        "collision": "2a5ada13d026bd9eeb9da0798d0a3dff",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "name": "RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "3e724c186951c3c861db15e5942b7230",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEnable": true,
-                "hideInspector": false,
-                "transform": "8ec59e8fd795b6dba7c23d90eb21d3b5"
-            },
-            "name": "Collider",
-            "type": "GameObject",
-            "uuid": "d5c4b5cda74f23f45da6de68c4a67aec",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "Transform": {
                         "quat": [
@@ -219,7 +48,8 @@
                         "projection": 1
                     },
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "name": "Camera",
                     "type": "Camera",
@@ -228,7 +58,8 @@
                 },
                 {
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "PlayerCamera2D": {
                         "maxX": 7.099999904632568,
@@ -259,7 +90,332 @@
             "Components": [
                 {
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Transform": {
+                        "parent": "6017a1a59f905fc701351e950580727c",
+                        "quat": [
+                            -1.4488791748590302e-05,
+                            4.8108529881574214e-05,
+                            0.2811034619808197,
+                            0.9596774578094482
+                        ],
+                        "vPosition": [
+                            -2.368964433670044,
+                            -2.170408248901367,
+                            -0.00018269817519467324
+                        ],
+                        "vRotation": [
+                            -4.367002111393958e-05,
+                            0.005757254082709551,
+                            32.65214920043945
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "26425790257ffd1a3727617e4910de78",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            2.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "name": "BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "0299a6311b14ea40e2fadd681fa9aa2b",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "axisLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "bGravity": false,
+                        "bKinematic": true,
+                        "bouncy": 0.0,
+                        "collision": "0299a6311b14ea40e2fadd681fa9aa2b",
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "name": "RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "d345c5936ac892e7cdbc38b19957a40e",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "26425790257ffd1a3727617e4910de78"
+            },
+            "name": "Collider",
+            "type": "GameObject",
+            "uuid": "e0c45d4bd3981ee11a279a4cd1d0942e",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            -5.9586029052734375,
+                            1.7881797552108765,
+                            -0.0005051348707638681
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "c1caad215c6dc427c4a31918e59eb8be",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "PlayerMovement2D": {
+                        "jumpSpeed": 5.5,
+                        "rigidBody": "281790ad57afd3238070d84285be5aca",
+                        "speed": 1.5
+                    },
+                    "name": "user/PlayerMovement2D",
+                    "type": "PlayerMovement2D",
+                    "uuid": "6cf78cc45cf20dd6d7572f9556b35245",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "axisLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "bGravity": true,
+                        "bKinematic": false,
+                        "bouncy": 0.0,
+                        "collision": "fab235134bd8e7346144a1f74ace5714",
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "name": "RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "281790ad57afd3238070d84285be5aca",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "c1caad215c6dc427c4a31918e59eb8be"
+            },
+            "name": "Player",
+            "type": "GameObject",
+            "uuid": "6bc7265948c7ded57e9246980aa851ea",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Transform": {
+                        "parent": "6017a1a59f905fc701351e950580727c",
+                        "quat": [
+                            0.7071067690849304,
+                            0.0,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            -0.25
+                        ],
+                        "vRotation": [
+                            90.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            14.199999809265137,
+                            1.0,
+                            7.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "bbc704856fd9a32f3dbcc270856ffc75",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "41639a3c447161b54d88d0ebb570cab9",
+                        "mesh": "72f9acd3af22ed09541de7ae11c8930a"
+                    },
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "eed35ac023692e36300ea599d02df10a",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "bbc704856fd9a32f3dbcc270856ffc75"
+            },
+            "name": "평면",
+            "type": "GameObject",
+            "uuid": "ccc98ecb8f9a2f8dc721ecff30a86459",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Transform": {
+                        "parent": "6017a1a59f905fc701351e950580727c",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            2.702948570251465,
+                            -1.7097444534301758,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "8ec59e8fd795b6dba7c23d90eb21d3b5",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            9.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "name": "BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "2a5ada13d026bd9eeb9da0798d0a3dff",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "axisLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "bGravity": false,
+                        "bKinematic": true,
+                        "bouncy": 0.0,
+                        "collision": "2a5ada13d026bd9eeb9da0798d0a3dff",
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "name": "RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "3e724c186951c3c861db15e5942b7230",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "8ec59e8fd795b6dba7c23d90eb21d3b5"
+            },
+            "name": "Collider",
+            "type": "GameObject",
+            "uuid": "d5c4b5cda74f23f45da6de68c4a67aec",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "Transform": {
                         "parent": "c1caad215c6dc427c4a31918e59eb8be",
@@ -300,7 +456,8 @@
                         ]
                     },
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "name": "BoxCollider",
                     "type": "BoxCollider",
@@ -322,89 +479,8 @@
             "Components": [
                 {
                     "Component": {
-                        "hideInspector": false
-                    },
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            -5.958602428436279,
-                            1.7881797552108765,
-                            -0.0005051348707638681
-                        ],
-                        "vRotation": [
-                            0.0,
-                            -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "c1caad215c6dc427c4a31918e59eb8be",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "PlayerMovement2D": {
-                        "jumpSpeed": 5.5,
-                        "rigidBody": "281790ad57afd3238070d84285be5aca",
-                        "speed": 1.5
-                    },
-                    "name": "user/PlayerMovement2D",
-                    "type": "PlayerMovement2D",
-                    "uuid": "6cf78cc45cf20dd6d7572f9556b35245",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "axisLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "bGravity": true,
-                        "bKinematic": false,
-                        "bouncy": 0.0,
-                        "collision": "fab235134bd8e7346144a1f74ace5714",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "name": "RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "281790ad57afd3238070d84285be5aca",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEnable": true,
-                "hideInspector": false,
-                "transform": "c1caad215c6dc427c4a31918e59eb8be"
-            },
-            "name": "Player",
-            "type": "GameObject",
-            "uuid": "6bc7265948c7ded57e9246980aa851ea",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "Transform": {
                         "quat": [
@@ -449,66 +525,8 @@
             "Components": [
                 {
                     "Component": {
-                        "hideInspector": false
-                    },
-                    "Transform": {
-                        "parent": "6017a1a59f905fc701351e950580727c",
-                        "quat": [
-                            0.7071067690849304,
-                            0.0,
-                            0.0,
-                            0.7071067690849304
-                        ],
-                        "vPosition": [
-                            0.0,
-                            0.0,
-                            -0.25
-                        ],
-                        "vRotation": [
-                            90.0,
-                            -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            14.199999809265137,
-                            1.0,
-                            7.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "bbc704856fd9a32f3dbcc270856ffc75",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false
-                    },
-                    "MeshRenderer": {
-                        "mat": "41639a3c447161b54d88d0ebb570cab9",
-                        "mesh": "72f9acd3af22ed09541de7ae11c8930a"
-                    },
-                    "name": "MeshRenderer",
-                    "type": "MeshRenderer",
-                    "uuid": "eed35ac023692e36300ea599d02df10a",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEnable": true,
-                "hideInspector": false,
-                "transform": "bbc704856fd9a32f3dbcc270856ffc75"
-            },
-            "name": "평면",
-            "type": "GameObject",
-            "uuid": "ccc98ecb8f9a2f8dc721ecff30a86459",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "Transform": {
                         "parent": "c1caad215c6dc427c4a31918e59eb8be",
@@ -520,7 +538,7 @@
                         ],
                         "vPosition": [
                             0.0,
-                            0.4050000011920929,
+                            0.38435447216033936,
                             0.0
                         ],
                         "vRotation": [
@@ -531,7 +549,7 @@
                         "vScale": [
                             0.699999988079071,
                             1.0,
-                            0.8100000023841858
+                            0.8399999737739563
                         ]
                     },
                     "name": "Transform",
@@ -541,10 +559,11 @@
                 },
                 {
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "MeshRenderer": {
-                        "mat": "5158ea71df5ba712acdc345aa4185bf2",
+                        "mat": "75ae6baa94ceea3e77e2c44d3e293ed4",
                         "mesh": "72f9acd3af22ed09541de7ae11c8930a"
                     },
                     "name": "MeshRenderer",
@@ -567,7 +586,8 @@
             "Components": [
                 {
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "Transform": {
                         "parent": "6017a1a59f905fc701351e950580727c",
@@ -608,7 +628,8 @@
                         ]
                     },
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "name": "BoxCollider",
                     "type": "BoxCollider",
@@ -617,7 +638,8 @@
                 },
                 {
                     "Component": {
-                        "hideInspector": false
+                        "hideInspector": false,
+                        "priority": 0
                     },
                     "RigidBody": {
                         "angularDamping": 0.10000000149011612,
