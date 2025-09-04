@@ -1,6 +1,8 @@
 #pragma once
 #include "Export.h"
 
+#include "Core/SContainer.hpp"
+
 #include "Game/Component/Component.h"
 #include "Game/Component/RigidBody.h"
 namespace sh::game
@@ -13,8 +15,7 @@ namespace sh::game
 
 		SH_USER_API void Start() override;
 		SH_USER_API void BeginUpdate() override;
-		SH_USER_API void FixedUpdate() override;
-		SH_USER_API void LateUpdate() override;
+		SH_USER_API void Update() override;
 	private:
 		void Jump();
 	private:
@@ -24,6 +25,9 @@ namespace sh::game
 		float jumpSpeed = 5.5f;
 		PROPERTY(rigidBody)
 		RigidBody* rigidBody = nullptr;
+
+		core::SObjWeakPtr<RigidBody> floor;
+
 		float xVelocity = 0.f;
 		float yVelocity = 0.f;
 

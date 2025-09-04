@@ -16,6 +16,7 @@ namespace sh::game
 		if (core::IsValid(rigidBody))
 		{
 			rigidBody->SetAxisLock({ 1, 1, 1 });
+			SetPriority(rigidBody->GetPriority() - 1);
 		}
 	}
 	SH_USER_API void PlayerMovement2D::BeginUpdate()
@@ -42,23 +43,20 @@ namespace sh::game
 
 		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 
-		phys::Ray ray{ pos, Vec3{0.0f, -1.0f, 0.f}, 0.5f };
+		phys::Ray ray{ {pos.x, pos.y, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 1.0f };
 		auto hitOpt = world.GetPhysWorld()->RayCast(ray);
 		if (hitOpt.has_value())
+		{
 			floorY = hitOpt.value().hitPoint.y;
-		else
-			floorY = -1000.0f;
+			floor = RigidBody::GetRigidBodyFromHandle(hitOpt.value().rigidBodyHandle);
+		}
 	}
-	SH_USER_API void PlayerMovement2D::FixedUpdate()
-	{
-		
-	}
-	SH_USER_API void PlayerMovement2D::LateUpdate()
+	SH_USER_API void PlayerMovement2D::Update()
 	{
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		if (pos.y < floorY)
 		{
-			gameObject.transform->SetWorldPosition(pos.x, floorY, pos.z);
+			gameObject.transform->SetPosition(pos.x, floorY, pos.z);
 			gameObject.transform->UpdateMatrix();
 		}
 	}
