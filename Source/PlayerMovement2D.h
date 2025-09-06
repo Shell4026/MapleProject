@@ -1,5 +1,6 @@
 #pragma once
 #include "Export.h"
+#include "PlayerAnimation.h"
 
 #include "Core/SContainer.hpp"
 
@@ -25,6 +26,8 @@ namespace sh::game
 		float jumpSpeed = 5.5f;
 		PROPERTY(rigidBody)
 		RigidBody* rigidBody = nullptr;
+		PROPERTY(anim)
+		PlayerAnimation* anim = nullptr;
 
 		core::SObjWeakPtr<RigidBody> floor;
 
@@ -32,5 +35,7 @@ namespace sh::game
 		float yVelocity = 0.f;
 
 		float floorY = -1000.0f;
+
+		bool bGround = false;
 	};
 }//namespace

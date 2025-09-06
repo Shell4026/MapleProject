@@ -24,18 +24,15 @@ namespace sh::game
 		Camera* targetCamera = nullptr;
 		PROPERTY(player)
 		GameObject* player = nullptr;
+		float dis = 1.0f;
 		float velocityX = 1.0f;
 		float velocityY = 1.0f;
 		PROPERTY(smoothTime)
 		float smoothTime = 1.0f;
-		PROPERTY(minX)
-		float minX = -100;
-		PROPERTY(maxX)
-		float maxX = 100;
-		PROPERTY(minY)
-		float minY = -100;
-		PROPERTY(maxY)
-		float maxY = 100;
+		PROPERTY(camlimitMin)
+		Vec2 camlimitMin;
+		PROPERTY(camlimitMax)
+		Vec2 camlimitMax;
 
 		float centerX = 0.f;
 		float centerY = 0.f;

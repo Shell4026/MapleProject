@@ -32,12 +32,13 @@ namespace sh::game
 		Vec3 lookPos = targetCamera->GetLookPos();
 		lookPos.x = camPos.x;
 		lookPos.y = camPos.y;
+		lookPos.z = 0;
 		targetCamera->SetLookPos(lookPos);
 
 		const float w = gameObject.world.renderer.GetWidth();
 		const float h = gameObject.world.renderer.GetHeight();
 
-		float dis = h * 0.005f;
+		dis = h * 0.01f;
 		Vec3 pos = camPos;
 		pos.z = lookPos.z + dis;
 
@@ -76,25 +77,44 @@ namespace sh::game
 	}
 	void PlayerCamera2D::MoveToPlayer()
 	{
-		float width = (world.renderer.GetWidth() >> 1) / 100.f;
-		float height = (world.renderer.GetHeight() >> 1) / 100.f;
+		float width = world.renderer.GetWidth() / 100.f;
+		float height = dis;
 
-		float x = gameObject.transform->GetWorldPosition().x;
-		float y = gameObject.transform->GetWorldPosition().y;
-		float z = gameObject.transform->GetWorldPosition().z;
+		auto pos = gameObject.transform->GetWorldPosition();
 
-		float minX = std::min(this->minX + width, this->maxX - width);
-		float maxX = std::max(this->minX + width, this->maxX - width);
+		const float worldWidth = camlimitMax.x - camlimitMin.x;
+		const float worldHeight = camlimitMax.y - camlimitMin.y;
 
-		if (x >= minX && x <= maxX)
-			x = SmoothDamp(x, centerX, velocityX, smoothTime, world.deltaTime);
+		float minX = camlimitMin.x;
+		float maxX = camlimitMax.x;
+		float minY = camlimitMin.y;
+		float maxY = camlimitMax.y;
 
-		if (y >= minY && y <= maxY)
-			y = SmoothDamp(y, centerY, velocityY, smoothTime, world.deltaTime);
+		if (worldWidth <= width)
+			minX = maxX = (minX + maxX) * 0.5f;
+		else 
+		{
+			minX = minX + width * 0.5f;
+			maxX = maxX - width * 0.5f;
+		}
 
-		x = std::clamp(x, minX, maxX);
-		//y = std::clamp(y, minY, maxY);
+		if (worldHeight <= height)
+			minY = maxY = (minY + maxY) * 0.5f;
+		else 
+		{
+			minY = minY + height * 0.5f;
+			maxY = maxY - height * 0.5f;
+		}
 
-		gameObject.transform->SetWorldPosition({ x, y, z });
+		if (pos.x >= minX && pos.x <= maxX)
+			pos.x = SmoothDamp(pos.x, centerX, velocityX, smoothTime, world.deltaTime);
+
+		if (pos.y >= minY && pos.y <= maxY)
+			pos.y = SmoothDamp(pos.y, centerY, velocityY, smoothTime, world.deltaTime);
+
+		pos.x = std::clamp(pos.x, minX, maxX);
+		pos.y = std::clamp(pos.y, minY, maxY);
+
+		gameObject.transform->SetWorldPosition(pos);
 	}
 }//namespace
