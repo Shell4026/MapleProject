@@ -40,8 +40,10 @@ namespace sh::game
 
 		const float w = gameObject.world.renderer.GetWidth();
 		const float h = gameObject.world.renderer.GetHeight();
+		const float worldWidth = (camlimitMax.x - camlimitMin.x) * 100;
+		const float worldHeight = (camlimitMax.y - camlimitMin.y) * 100;
 
-		dis = h * 0.01f;
+		dis = std::min(h, worldHeight) * 0.01f;
 		Vec3 pos = camPos;
 		pos.z = lookPos.z + dis;
 
