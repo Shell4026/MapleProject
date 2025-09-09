@@ -2,23 +2,34 @@
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
+
+#include "Render/Material.h"
 namespace sh::game
 {
 	PlayerAnimation::PlayerAnimation(GameObject& owner) :
 		Component(owner)
 	{
 	}
-	SH_USER_API void PlayerAnimation::Start()
+	SH_USER_API void PlayerAnimation::Awake()
 	{
+#if !SH_SERVER
 		if (core::IsValid(meshRenderer))
 		{
-			mat = meshRenderer->GetMaterial();
+			auto oldMatPtr = meshRenderer->GetMaterial();
+			if (!core::IsValid(oldMatPtr))
+				return;
+
+			mat = core::SObject::Create<render::Material>(*oldMatPtr);
+			meshRenderer->SetMaterial(mat.Get());
+
 			initPos = meshRenderer->gameObject.transform->position;
 			initMeshScale = meshRenderer->gameObject.transform->scale;
 		}
+#endif
 	}
 	SH_USER_API void PlayerAnimation::Update()
 	{
+#if !SH_SERVER
 		if (!mat.IsValid())
 			return;
 
@@ -47,6 +58,7 @@ namespace sh::game
 		}
 		}
 		t += world.deltaTime;
+#endif
 	}
 	SH_USER_API void PlayerAnimation::SetPose(Pose pose)
 	{

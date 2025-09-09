@@ -36,6 +36,7 @@ namespace sh::game
 #else
 		void ProcessLocalInput();
 		void ProcessStatePacket(const PlayerStatePacket& packet);
+		void ProcessRemoteAnim();
 #endif
 	private:
 		PROPERTY(rigidBody)

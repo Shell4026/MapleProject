@@ -24,7 +24,7 @@ namespace sh::game
 	public:
 		SH_USER_API PlayerAnimation(GameObject& owner);
 
-		SH_USER_API void Start() override;
+		SH_USER_API void Awake() override;
 		SH_USER_API void Update() override;
 
 		SH_USER_API void SetPose(Pose pose);
@@ -41,8 +41,7 @@ namespace sh::game
 		std::vector<render::Texture*> walks;
 		PROPERTY(jumps)
 		std::vector<render::Texture*> jumps;
-
-		core::SObjWeakPtr<render::Material> mat;
+		core::SObjWeakPtr<render::Material> mat = nullptr;
 
 		Pose curPose = Pose::Idle;
 

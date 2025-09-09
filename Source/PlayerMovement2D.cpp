@@ -113,12 +113,10 @@ namespace sh::game
 			return;
 
 		if (player->IsLocal())
-		{
-			SH_INFO_FORMAT("Im local {}", (void*)player);
 			ProcessLocalInput();
-		}
 		else
-			SH_INFO_FORMAT("Im remote {}", (void*)player);
+			ProcessRemoteAnim();
+
 		++tick;
 #endif
 	}
@@ -214,6 +212,20 @@ namespace sh::game
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		yVelocity = rigidBody->GetLinearVelocity().y;
 
+		phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
+		auto hitOpt = world.GetPhysWorld()->RayCast(ray);
+		if (hitOpt.has_value())
+		{
+			floorY = hitOpt.value().hitPoint.y;
+			floor = RigidBody::GetRigidBodyFromHandle(hitOpt.value().rigidBodyHandle);
+			bGround = true;
+		}
+		else
+		{
+			floorY = -1000.0f;
+			bGround = false;
+		}
+
 		float xMove = 0.f;
 		if (Input::GetKeyDown(Input::KeyCode::Right))
 		{
@@ -264,20 +276,6 @@ namespace sh::game
 		}
 		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 
-		phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
-		auto hitOpt = world.GetPhysWorld()->RayCast(ray);
-		if (hitOpt.has_value())
-		{
-			floorY = hitOpt.value().hitPoint.y;
-			floor = RigidBody::GetRigidBodyFromHandle(hitOpt.value().rigidBodyHandle);
-			bGround = true;
-		}
-		else
-		{
-			floorY = -1000.0f;
-			bGround = false;
-		}
-
 		bool inputChanged = (xMove != lastSent.xMove) || (bJump != lastSent.bJump);
 
 		if (inputChanged)
@@ -304,10 +302,6 @@ namespace sh::game
 		const glm::vec2 serverPos{ packet.px, packet.py };
 		const glm::vec2 serverVel{ packet.vx, packet.vy };
 
-		// 서버에서 처리한 마지막 입력만 남기고 앞에 입력들을 지움
-		while (!pendingInputs.empty() && pendingInputs.front().seq <= packet.lastProcessedInputSeq)
-			pendingInputs.pop_front();
-
 		const auto& curPos = gameObject.transform->GetWorldPosition();
 		float mix = 1.0f;
 		float dif = glm::length(serverPos - glm::vec2{ curPos });
@@ -324,6 +318,9 @@ namespace sh::game
 		if (core::IsValid(rigidBody))
 			rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 
+		// 서버에서 처리한 마지막 입력만 남기고 앞에 입력들을 지움
+		while (!pendingInputs.empty() && pendingInputs.front().seq <= packet.lastProcessedInputSeq)
+			pendingInputs.pop_front();
 		// 서버에서 입력된 처리 후의 움직임 예측
 		for (const auto& input : pendingInputs)
 		{
@@ -340,6 +337,26 @@ namespace sh::game
 				rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 		}
 
+	}
+	void PlayerMovement2D::ProcessRemoteAnim()
+	{
+		if (!core::IsValid(anim))
+			return;
+		if (yVelocity != 0)
+			anim->SetPose(PlayerAnimation::Pose::Jump);
+		else
+		{
+			if (xVelocity == 0)
+				anim->SetPose(PlayerAnimation::Pose::Idle);
+			else
+			{
+				if (xVelocity > 0)
+					anim->bRight = true;
+				else
+					anim->bRight = false;
+				anim->SetPose(PlayerAnimation::Pose::Walk);
+			}
+		}
 	}
 #endif
 }//namespace
