@@ -12,6 +12,16 @@ namespace sh::game
 		uuid(core::UUID::Generate()), currentWorld(core::UUID::Generate())
 	{
 	}
+	User::User(const User& other) :
+		ip(other.ip), port(other.port),
+		uuid(other.uuid), currentWorld(other.currentWorld)
+	{
+	}
+	User::User(User&& other) noexcept :
+		ip(std::move(other.ip)), port(other.port),
+		uuid(std::move(other.uuid)), currentWorld(std::move(other.currentWorld))
+	{
+	}
 	SH_USER_API void User::SetNickname(const std::string& name)
 	{
 		nickname = name;
@@ -24,11 +34,11 @@ namespace sh::game
 	{
 		return nickname;
 	}
-	SH_USER_API void User::SetUUID(const core::UUID& uuid)
+	SH_USER_API void User::SetUserUUID(const core::UUID& uuid)
 	{
 		this->uuid = uuid;
 	}
-	SH_USER_API auto User::GetUUID() const -> const core::UUID&
+	SH_USER_API auto User::GetUserUUID() const -> const core::UUID&
 	{
 		return uuid;
 	}

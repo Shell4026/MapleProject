@@ -1,4 +1,5 @@
 #pragma once
+#if !SH_SERVER
 #include "Export.h"
 #include "User.h"
 
@@ -13,6 +14,7 @@ namespace sh::game
 	public:
 		SH_USER_API MapleClient(GameObject& owner);
 
+		SH_USER_API void OnDestroy() override;
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
 		SH_USER_API void BeginUpdate() override;
@@ -27,3 +29,4 @@ namespace sh::game
 		static MapleClient* instance;
 	};
 }//namespace
+#endif

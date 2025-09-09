@@ -1,5 +1,6 @@
 #pragma once
 #include "Export.h"
+#include "EndPoint.hpp"
 #include "PlayerAnimation.h"
 #include "Player.h"
 #include "MapleServer.h"
@@ -27,9 +28,15 @@ namespace sh::game
 		SH_USER_API void BeginUpdate() override;
 		SH_USER_API void Update() override;
 	private:
-		void Jump();
+		
+#if SH_SERVER
+		void ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint);
+		/// @brief 이전에 왔던 입력 기반 움직임 적용 함수
+		void ProcessInput();
+#else
+		void ProcessLocalInput();
 		void ProcessStatePacket(const PlayerStatePacket& packet);
-		void ProcessInputPacket(const PlayerInputPacket& packet);
+#endif
 	private:
 		PROPERTY(rigidBody)
 		RigidBody* rigidBody = nullptr;
@@ -54,12 +61,36 @@ namespace sh::game
 		
 #if !SH_SERVER
 		MapleClient* client = nullptr;
-		uint32_t nextInputSeq = 1;
 		std::deque<PlayerInputPacket> pendingInputs;
+
+		uint64_t tick = 0;
+		struct LastSent
+		{
+			float xMove = 0.f;
+			uint32_t inputSeqCounter = 0;
+			bool bJump = false;
+		} lastSent;
 #else
 		MapleServer* server = nullptr;
-		uint32_t lastProcessedSeq = 0;
 		uint32_t serverTick = 0;
+
+		struct PlayerData
+		{
+			uint32_t lastProcessedSeq = 0; // 마지막으로 처리한 seq
+			struct InputState
+			{
+				float xMove = 0.f;
+				uint32_t seq = 0;
+				bool jump = false;
+			}lastInput;
+			struct LastSent
+			{
+				glm::vec2 pos;
+				glm::vec2 vel;
+				uint32_t seq = 0;
+				bool bFirst = true;
+			} lastSent;
+		} playerData;
 #endif
 		bool bGround = false;
 	};

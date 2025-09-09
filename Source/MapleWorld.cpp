@@ -1,5 +1,10 @@
 #include "MapleWorld.h"
 #include "Player.h"
+#include "Packet/PlayerJoinWorldPacket.h"
+#include "Packet/PlayerSpawnPacket.hpp"
+#include "Packet/PlayerDespawnPacket.hpp"
+#include "Packet/PlayerLeavePacket.h"
+#include "Packet/HeartbeatPacket.hpp"
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
@@ -15,10 +20,15 @@ namespace sh::game
 			{
 				const std::string& ip = evt.senderIp;
 				const uint16_t port = evt.senderPort;
-				const MapleServer::Endpoint endpoint{ ip, port };
+				const Endpoint endpoint{ ip, port };
+				uint32_t id = evt.packet->GetId();
 
-				if (evt.packet->GetId() == PlayerJoinWorldPacket::ID)
+				if (id == PlayerJoinWorldPacket::ID)
 					ProcessPlayerJoin(static_cast<const PlayerJoinWorldPacket&>(*evt.packet), endpoint);
+				else if (id == PlayerLeavePacket::ID)
+					ProcessPlayerLeave(static_cast<const PlayerLeavePacket&>(*evt.packet), endpoint);
+				else if (id == HeartbeatPacket::ID)
+					ProcessHeartbeat(endpoint);
 			}
 		);
 #else
@@ -26,9 +36,10 @@ namespace sh::game
 		(
 			[&](const PacketEvent& evt)
 			{
+				Endpoint ep{ evt.senderIp, evt.senderPort };
 				if (evt.packet->GetId() == PlayerSpawnPacket::ID)
 				{
-					ProcessPlayerSpawn(static_cast<const PlayerSpawnPacket&>(*evt.packet));
+					ProcessPlayerSpawn(static_cast<const PlayerSpawnPacket&>(*evt.packet), ep);
 				}
 			}
 		);
@@ -70,9 +81,15 @@ namespace sh::game
 		client->SendPacket(packet);
 #endif
 	}
-	void MapleWorld::ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const MapleServer::Endpoint& endpoint)
+	SH_USER_API void MapleWorld::LateUpdate()
 	{
 #if SH_SERVER
+		CheckHeartbeats();
+#endif
+	}
+#if SH_SERVER
+	void MapleWorld::ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const Endpoint& endpoint)
+	{
 		auto userPtr = server->GetUser(endpoint);
 		if (userPtr == nullptr)
 			return;
@@ -84,31 +101,115 @@ namespace sh::game
 			if (GetUUID() == core::UUID{ packet.worldUUID })
 			{
 				if (playerSpawnPoint == nullptr)
-					SH_ERROR("Invalid spawn point!");
-				else
 				{
-					const auto& pos = playerSpawnPoint->GetWorldPosition();
-					SpawnPlayer(userPtr->GetUUID(), pos.x, pos.y);
+					SH_ERROR("Invalid spawn point!");
+					return;
+				}
+				userPtr->SetCurrentWorldUUID(GetUUID());
+
+				const auto& spawnPos = playerSpawnPoint->GetWorldPosition();
+				// 접속한 플레이어에게 다른 플레이어 동기화
+				for (auto& [uuid, playerPtr] : players)
+				{
+					const auto& playerPos = playerPtr->gameObject.transform->position;
+					PlayerSpawnPacket packet;
+					packet.x = playerPos.x;
+					packet.y = playerPos.y;
+					packet.playerUUID = playerPtr->GetUserUUID().ToString();
+
+					server->Send(packet, endpoint.ip, endpoint.port);
+				}
+				// 접속한 플레이어 생성
+				{
+					auto player = SpawnPlayer(userPtr->GetUserUUID(), spawnPos.x, spawnPos.y);
+					players[userPtr->GetUserUUID().ToString()] = player;
 
 					PlayerSpawnPacket packet;
-					packet.x = pos.x;
-					packet.y = pos.y;
-					packet.playerUUID = userPtr->GetUUID().ToString();
+					packet.x = spawnPos.x;
+					packet.y = spawnPos.y;
+					packet.playerUUID = userPtr->GetUserUUID().ToString();
+
 					server->BroadCast(packet);
 				}
 			}
 		}
-#endif
 	}
-	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet)
+	void MapleWorld::ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& endpoint)
+	{
+		User* user = server->GetUser(endpoint);
+		if (user == nullptr || user->GetUserUUID().ToString() != packet.playerUUID)
+			return;
+
+		PlayerDespawnPacket despawnPacket{};
+		despawnPacket.playerUUID = packet.playerUUID;
+		ProcessPlayerDespawn(despawnPacket);
+
+		server->BroadCast(despawnPacket);
+	}
+	void MapleWorld::ProcessHeartbeat(const Endpoint& ep)
+	{
+		User* user = server->GetUser(ep);
+		if (user == nullptr)
+			return;
+
+		auto it = players.find(user->GetUserUUID().ToString());
+		if (it == players.end())
+			return;
+
+		Player& player = *it->second;
+		player.IncreaseHeartbeat();
+	}
+	void MapleWorld::CheckHeartbeats()
+	{
+		std::vector<Player*> dead{};
+		for (auto& [uuidStr, player] : players)
+		{
+			if (!player.IsValid())
+				continue;
+			if (player->GetHeartbeat() <= 0)
+				dead.push_back(player.Get());
+		}
+		for (auto player : dead)
+		{
+			PlayerDespawnPacket despawnPacket{};
+			despawnPacket.playerUUID = player->GetUserUUID().ToString();
+			ProcessPlayerDespawn(despawnPacket);
+
+			server->BroadCast(despawnPacket);
+			server->Kick(player->GetUserUUID());
+		}
+	}
+#else
+	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet, const Endpoint& endpoint)
 	{
 		core::UUID playerUUID{ packet.playerUUID };
-		if (playerUUID == client->GetUser().GetUUID())
+
+		Player* player = nullptr;
+		player = SpawnPlayer(playerUUID, packet.x, packet.y);
+
+		if (playerUUID == client->GetUser().GetUserUUID())
 		{
-			localPlayer = SpawnPlayer(playerUUID, packet.x, packet.y);
+			localPlayer = player;
 			camera->SetPlayer(localPlayer->gameObject);
 		}
-		else
-			SpawnPlayer(playerUUID, packet.x, packet.y);
+
+		players.insert_or_assign(packet.playerUUID, player);
 	}
-}
+#endif
+	void MapleWorld::ProcessPlayerDespawn(const PlayerDespawnPacket& packet)
+	{
+		auto it = players.find(packet.playerUUID);
+		if (it == players.end())
+			return;
+
+		Player* player = it->second.Get();
+		players.erase(it);
+
+		if (player == localPlayer.Get())
+		{
+			SH_INFO("Bye");
+		}
+
+		player->gameObject.Destroy();
+	}
+}//namespace

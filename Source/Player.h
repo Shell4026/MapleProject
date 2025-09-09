@@ -14,9 +14,19 @@ namespace sh::game
 		SH_USER_API void SetUserUUID(const core::UUID& uuid);
 		SH_USER_API auto GetUserUUID() const -> const core::UUID&;
 
+		SH_USER_API void IncreaseHeartbeat();
+		SH_USER_API auto GetHeartbeat() const -> uint32_t;
+
+		SH_USER_API auto IsLocal() const -> bool;
+
+		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
+		SH_USER_API void Update() override;
 	private:
 		core::UUID userUUID;
+
+		uint32_t heartbeat;
+
 		bool bLocal = true;
 	};
 }

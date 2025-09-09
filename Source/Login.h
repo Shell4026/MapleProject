@@ -1,5 +1,6 @@
 #pragma once
 #include "Export.h"
+#if !SH_SERVER
 #include "MapleClient.h"
 
 #include "Game/Component/NetworkComponent.h"
@@ -24,3 +25,4 @@ namespace sh::game
 		World* nextWorld = nullptr;
 	};
 }//namespace
+#endif

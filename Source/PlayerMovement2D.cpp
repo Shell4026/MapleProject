@@ -14,10 +14,11 @@ namespace sh::game
 		(
 			[&](const PacketEvent& evt)
 			{
+				Endpoint ep = { evt.senderIp, evt.senderPort };
+				if (server->GetUser(ep) == nullptr)
+					return;
 				if (evt.packet->GetId() == PlayerInputPacket::ID)
-				{
-					ProcessInputPacket(static_cast<const PlayerInputPacket&>(*evt.packet));
-				}
+					ProcessInputPacket(static_cast<const PlayerInputPacket&>(*evt.packet), ep);
 			}
 		);
 #else
@@ -54,24 +55,124 @@ namespace sh::game
 	SH_USER_API void PlayerMovement2D::BeginUpdate()
 	{
 #if SH_SERVER
-		PlayerStatePacket packet;
+		if (!core::IsValid(rigidBody))
+			return;
+		ProcessInput();
 		const auto& pos = gameObject.transform->GetWorldPosition();
-		packet.px = pos.x; 
-		packet.py = pos.y;
-		if (core::IsValid(rigidBody))
+		const auto v = rigidBody->GetLinearVelocity();
+
+		const glm::vec2 serverPos{ pos.x, pos.y };
+		const glm::vec2 serverVel = { v.x, v.y };
+
+		bool send = false;
+		if (playerData.lastSent.bFirst)
 		{
-			auto v = rigidBody->GetLinearVelocity();
-			packet.vx = v.x; 
-			packet.vy = v.y; 
+			send = true;
+			playerData.lastSent.bFirst = false;
 		}
-		packet.lastProcessedInputSeq = lastProcessedSeq;
-		packet.playerUUID = player->GetUserUUID().ToString();
-		packet.serverTick = ++serverTick;
-		packet.timestamp = 0;
+		else
+		{
+			float posDiff = glm::length(serverPos - playerData.lastSent.pos);
+			float velDiff = glm::length(serverVel - playerData.lastSent.vel);
 
-		server->BroadCast(packet);
+			// 새로 들어온 입력이 있었고, 그걸 처리했다면 즉시 송신
+			if (playerData.lastProcessedSeq != playerData.lastSent.seq)
+				send = true;
+			// 임계값 옵션
+			//else if (posDiff > 0.05f || velDiff > 0.05f)
+			//	send = true;
+		}
 
-		phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
+		// 3 ticks 마다 강제 송신 (60fps기준 1초에 20번)
+		if (serverTick++ >= 3)
+			send = true;
+
+		if (send)
+		{
+			PlayerStatePacket packet;
+
+			packet.px = pos.x;
+			packet.py = pos.y;
+			packet.vx = v.x;
+			packet.vy = v.y;
+			packet.lastProcessedInputSeq = playerData.lastProcessedSeq;
+			packet.playerUUID = player->GetUserUUID().ToString();
+			packet.serverTick = serverTick;
+			packet.timestamp = 0;
+
+			server->BroadCast(packet);
+
+			playerData.lastSent.pos = serverPos;
+			playerData.lastSent.vel = serverVel;
+			playerData.lastSent.seq = playerData.lastProcessedSeq;
+
+			serverTick = 0;
+		}
+#else
+		if (!core::IsValid(player))
+			return;
+
+		if (player->IsLocal())
+		{
+			SH_INFO_FORMAT("Im local {}", (void*)player);
+			ProcessLocalInput();
+		}
+		else
+			SH_INFO_FORMAT("Im remote {}", (void*)player);
+		++tick;
+#endif
+	}
+	SH_USER_API void PlayerMovement2D::Update()
+	{
+		const auto& pos = gameObject.transform->GetWorldPosition();
+		if (pos.y < floorY)
+		{
+			gameObject.transform->SetPosition(pos.x, floorY, pos.z);
+			gameObject.transform->UpdateMatrix();
+		}
+	}
+#if SH_SERVER
+	void PlayerMovement2D::ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint)
+	{
+		if (!core::IsValid(rigidBody))
+			return;
+		if (packet.playerUUID != player->GetUserUUID().ToString())
+			return;
+
+		PlayerData::InputState input{};
+		input.xMove = packet.inputX;
+		input.jump = packet.jump;
+		input.seq = packet.seq;
+
+		yVelocity = rigidBody->GetLinearVelocity().y;
+		if (bGround)
+		{
+			if (input.xMove == 0)
+				xVelocity = 0;
+			else
+				xVelocity = std::clamp(input.xMove * speed, -speed, speed);
+
+			if (input.jump)
+				yVelocity = jumpSpeed;
+		}
+		else
+		{
+			float airSpeed = 0.1f;
+			if (input.xMove != 0)
+			{
+				float targetSpeed = input.xMove * speed;
+				xVelocity = glm::mix(xVelocity, targetSpeed, airSpeed);
+			}
+		}
+		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
+
+		playerData.lastInput = input;
+		playerData.lastProcessedSeq = input.seq;
+	}
+	void PlayerMovement2D::ProcessInput()
+	{
+		const auto& pos = gameObject.transform->GetWorldPosition();
+		const phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
 		auto hitOpt = world.GetPhysWorld()->RayCast(ray);
 		if (hitOpt.has_value())
 		{
@@ -84,7 +185,32 @@ namespace sh::game
 			floorY = -1000.0f;
 			bGround = false;
 		}
+
+		yVelocity = rigidBody->GetLinearVelocity().y;
+		if (bGround)
+		{
+			if (playerData.lastInput.xMove == 0)
+				xVelocity = 0;
+			else
+				xVelocity = std::clamp(playerData.lastInput.xMove * speed, -speed, speed);
+
+			if (playerData.lastInput.jump)
+				yVelocity = jumpSpeed;
+		}
+		else
+		{
+			float airSpeed = 0.1f;
+			if (playerData.lastInput.xMove != 0)
+			{
+				float targetSpeed = playerData.lastInput.xMove * speed;
+				xVelocity = glm::mix(xVelocity, targetSpeed, airSpeed);
+			}
+		}
+		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
+	}
 #else
+	void PlayerMovement2D::ProcessLocalInput()
+	{
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		yVelocity = rigidBody->GetLinearVelocity().y;
 
@@ -114,7 +240,7 @@ namespace sh::game
 				xVelocity = std::clamp(xMove * speed, -speed, speed);
 
 			if (bJump)
-				Jump();
+				yVelocity = jumpSpeed;
 
 			if (core::IsValid(anim))
 			{
@@ -152,33 +278,27 @@ namespace sh::game
 			bGround = false;
 		}
 
-		PlayerInputPacket packet{};
-		packet.inputX = xMove;
-		packet.jump = bJump;
-		packet.seq = nextInputSeq++;
-		packet.playerUUID = client->GetUser().GetUUID().ToString();
-		packet.timestamp = 0;
-		client->SendPacket(packet);
-		pendingInputs.push_back(std::move(packet));
-#endif
-	}
-	SH_USER_API void PlayerMovement2D::Update()
-	{
-		const auto& pos = gameObject.transform->GetWorldPosition();
-		if (pos.y < floorY)
+		bool inputChanged = (xMove != lastSent.xMove) || (bJump != lastSent.bJump);
+
+		if (inputChanged)
 		{
-			gameObject.transform->SetPosition(pos.x, floorY, pos.z);
-			gameObject.transform->UpdateMatrix();
+			PlayerInputPacket packet{};
+			packet.inputX = xMove;
+			packet.jump = bJump;
+			packet.seq = ++lastSent.inputSeqCounter;
+			packet.playerUUID = client->GetUser().GetUserUUID().ToString();
+			packet.timestamp = 0;
+
+			client->SendPacket(packet);
+			pendingInputs.push_back(std::move(packet));
+
+			lastSent.xMove = xMove;
+			lastSent.bJump = bJump;
 		}
-	}
-	void PlayerMovement2D::Jump()
-	{
-		yVelocity = jumpSpeed;
 	}
 	void PlayerMovement2D::ProcessStatePacket(const PlayerStatePacket& packet)
 	{
-#if !SH_SERVER
-		if (packet.playerUUID != client->GetUser().GetUUID().ToString()) 
+		if (player->GetUserUUID().ToString() != packet.playerUUID)
 			return;
 
 		const glm::vec2 serverPos{ packet.px, packet.py };
@@ -191,15 +311,15 @@ namespace sh::game
 		const auto& curPos = gameObject.transform->GetWorldPosition();
 		float mix = 1.0f;
 		float dif = glm::length(serverPos - glm::vec2{ curPos });
-		mix = 0.75f;
-		SH_INFO_FORMAT("len: {}, mix: {}", dif, mix);
+		mix = 0.9f;
+		//SH_INFO_FORMAT("len: {}, mix: {}", dif, mix);
 		auto corrected = glm::mix(glm::vec2{ curPos.x, curPos.y }, serverPos, mix);
 		gameObject.transform->SetPosition(corrected.x, corrected.y, 0.f);
 		gameObject.transform->UpdateMatrix();
-		
+
 		rigidBody->ResetPhysicsTransform();
 
-		xVelocity = serverVel.x; 
+		xVelocity = serverVel.x;
 		yVelocity = serverVel.y;
 		if (core::IsValid(rigidBody))
 			rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
@@ -209,57 +329,17 @@ namespace sh::game
 		{
 			if (input.inputX == 0)
 				xVelocity = 0;
-			else 
+			else
 				xVelocity = std::clamp(input.inputX * speed, -speed, speed);
 
 			if (input.jump && bGround)
 				yVelocity = jumpSpeed;
-
 			yVelocity -= 20.f * world.deltaTime;
-			//float dt = world.fixedDeltaTime + world.deltaTime;
-			//while(dt >= world.FIXED_TIME)
-			//{
-			//	yVelocity -= 20.f * world.FIXED_TIME;
-			//	dt -= world.FIXED_TIME;
-			//}
 
 			if (core::IsValid(rigidBody))
 				rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 		}
-#endif
+
 	}
-	void PlayerMovement2D::ProcessInputPacket(const PlayerInputPacket& packet)
-	{
-#if SH_SERVER
-		if (packet.playerUUID != player->GetUserUUID().ToString()) 
-			return;
-
-		yVelocity = rigidBody->GetLinearVelocity().y;
-
-		lastProcessedSeq = packet.seq;
-		float xMove = packet.inputX;
-		if (bGround)
-		{
-			if (xMove == 0) 
-				xVelocity = 0;
-			else 
-				xVelocity = std::clamp(xMove * speed, -speed, speed);
-
-			if (packet.jump) 
-				yVelocity = jumpSpeed;
-		}
-		else
-		{
-			float airSpeed = 0.1f;
-			if (xMove != 0)
-			{
-				float targetSpeed = xMove * speed;
-				xVelocity = glm::mix(xVelocity, targetSpeed, airSpeed);
-			}
-		}
-
-		if (core::IsValid(rigidBody))
-			rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 #endif
-	}
 }//namespace

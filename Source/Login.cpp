@@ -1,4 +1,5 @@
 #include "Login.h"
+#if !SH_SERVER
 #include "Packet/PlayerJoinPacket.h"
 #include "MapleClient.h"
 
@@ -49,3 +50,4 @@ namespace sh::game
 		Super::Deserialize(json);
 	}
 }//namespace
+#endif

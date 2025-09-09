@@ -9,7 +9,8 @@ class Test : public sh::game::Component
 public:
 	SH_USER_API Test(sh::game::GameObject& owner);
 
-	SH_USER_API void Update() override;
+	SH_USER_API void Awake() override;
+	SH_USER_API void Start() override;
 private:
 	PROPERTY(num)
 	int num = 10;

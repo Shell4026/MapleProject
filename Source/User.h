@@ -12,12 +12,14 @@ namespace sh::game
 	public:
 		SH_USER_API User(const std::string& ip, uint16_t port);
 		SH_USER_API User(std::string&& ip, uint16_t port);
+		SH_USER_API User(const User& other);
+		SH_USER_API User(User&& other) noexcept;
 
 		SH_USER_API void SetNickname(const std::string& name);
 		SH_USER_API void SetNickname(std::string&& name);
 		SH_USER_API auto GetNickName() const -> const std::string&;
-		SH_USER_API void SetUUID(const core::UUID& uuid);
-		SH_USER_API auto GetUUID() const -> const core::UUID&;
+		SH_USER_API void SetUserUUID(const core::UUID& uuid);
+		SH_USER_API auto GetUserUUID() const -> const core::UUID&;
 		SH_USER_API void SetCurrentWorldUUID(const core::UUID& worldUUID);
 		SH_USER_API auto GetCurrentWorldUUID() const -> const core::UUID&;
 	public:

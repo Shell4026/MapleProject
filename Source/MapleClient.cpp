@@ -1,7 +1,9 @@
 #include "MapleClient.h"
+#if !SH_SERVER
 #include "PacketEvent.hpp"
 #include "Packet/ChangeWorldPacket.h"
 #include "Packet/PlayerJoinSuccessPacket.h"
+#include "Packet/PlayerLeavePacket.h"
 
 #include "Game/GameObject.h"
 #include "Game/GameManager.h"
@@ -16,6 +18,14 @@ namespace sh::game
 	{
 		instance = this;
 	}
+	SH_USER_API void MapleClient::OnDestroy()
+	{
+		PlayerLeavePacket packet{};
+		packet.playerUUID = user.GetUserUUID().ToString();
+
+		client.Send(packet);
+		Super::OnDestroy();
+	}
 	SH_USER_API void MapleClient::Awake()
 	{
 		Super::Awake();
@@ -23,13 +33,10 @@ namespace sh::game
 	}
 	SH_USER_API void MapleClient::Start()
 	{
-#if !SH_SERVER
 		Super::Start();
-#endif
 	}
 	SH_USER_API void MapleClient::BeginUpdate()
 	{
-#if !SH_SERVER
 		Super::BeginUpdate();
 
 		auto receivedPacket = client.GetReceivedPacket();
@@ -51,12 +58,11 @@ namespace sh::game
 			else if (id == PlayerJoinSuccessPacket::ID)
 			{
 				auto pakcet = static_cast<PlayerJoinSuccessPacket*>(receivedPacket.get());
-				user.SetUUID(core::UUID{ pakcet->uuid });
+				user.SetUserUUID(core::UUID{ pakcet->uuid });
 			}
 
 			receivedPacket = client.GetReceivedPacket();
 		}
-#endif
 	}
 	SH_USER_API void MapleClient::Update()
 	{
@@ -70,3 +76,4 @@ namespace sh::game
 		return instance;
 	}
 }//namespace
+#endif
