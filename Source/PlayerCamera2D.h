@@ -15,7 +15,8 @@ namespace sh::game
 		SH_USER_API void Start() override;
 		SH_USER_API void BeginUpdate() override;
 		SH_USER_API void Update() override;
-		SH_USER_API void LateUpdate() override;
+
+		SH_USER_API void SetPlayer(GameObject& player);
 	private:
 		auto SmoothDamp(float current, float target, float& currentVelocity, float smoothTime, float deltaTime) const -> float;
 		void MoveToPlayer();

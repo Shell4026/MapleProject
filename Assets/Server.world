@@ -1,0 +1,75 @@
+{
+    "name": "World",
+    "objs": [
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "fe743c447b2742f83f5fe7e82f6f8173",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MapleServer": {
+                        "loadedWorlds": [
+                            "1c2428b8720cab83b1b46f7cd7408592"
+                        ]
+                    },
+                    "NetworkComponent": {},
+                    "SObject": {},
+                    "UdpServer": {
+                        "port": 4026
+                    },
+                    "name": "user/MapleServer",
+                    "type": "MapleServer",
+                    "uuid": "f9fc71fc9c488082469ac926c70d70bf",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "fe743c447b2742f83f5fe7e82f6f8173"
+            },
+            "name": "Server",
+            "type": "GameObject",
+            "uuid": "6777cbb839f0c2d4c7aed2ee99994e86",
+            "version": 1
+        }
+    ],
+    "type": "EditorWorld",
+    "uuid": "09b9be61f83a06d061203eefeb2835f0",
+    "version": 1
+}

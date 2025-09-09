@@ -1,7 +1,10 @@
 ﻿set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Debug\bin)
 set(PROJECT_NAME "New Project")
+set(SERVER_SIDE FALSE)
 file(GLOB SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
-file(GLOB HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h)
+file(GLOB PACKET_SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/Packet/*.cpp)
+file(GLOB HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h  ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp)
+file(GLOB PACKET_HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/Packet/*.h ${CMAKE_CURRENT_SOURCE_DIR}/Source/Packet/*.hpp)
 
 cmake_minimum_required (VERSION 3.8)
 
@@ -21,16 +24,21 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
-add_library(ShellEngineUser SHARED ${SRC} ${HEADERS})
+add_library(ShellEngineUser SHARED ${SRC} ${PACKET_SRC} ${HEADERS} ${PACKET_HEADERS})
 add_library(ShellEngine::User ALIAS ShellEngineUser)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	target_compile_definitions(ShellEngineUser PUBLIC SH_DEBUG)
+endif()
+if (SERVER_SIDE)
+	target_compile_definitions(ShellEngineUser PUBLIC SH_SERVER)
 endif()
 
 target_compile_definitions(ShellEngineUser PUBLIC SH_PROJECT_NAME="${PROJECT_NAME}")
 
 target_include_directories(ShellEngineUser PRIVATE ${ENGINE_DIR}/include)
+target_include_directories(ShellEngineUser PRIVATE ${CMAKE_SOURCE_DIR}/include/external)
+
 target_link_directories(ShellEngineUser PRIVATE ${ENGINE_DIR})
 target_link_directories(ShellEngineUser PRIVATE ${ENGINE_DIR}/lib)
 
@@ -39,6 +47,8 @@ target_link_libraries(ShellEngineUser PRIVATE ShellEngineRender)
 target_link_libraries(ShellEngineUser PRIVATE ShellEngineGame)
 target_link_libraries(ShellEngineUser PRIVATE ShellEnginePhysics)
 target_link_libraries(ShellEngineUser PRIVATE ShellEngineWindow)
+target_link_libraries(ShellEngineUser PRIVATE ShellEngineNetwork)
+target_link_libraries(ShellEngineUser PRIVATE IMGUI)
 
 include(FetchContent)
 

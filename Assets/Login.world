@@ -1,0 +1,202 @@
+{
+    "name": "World",
+    "objs": [
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "fdfb9962a345070dc2f9a654b3509e69",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MapleClient": {},
+                    "NetworkComponent": {},
+                    "SObject": {},
+                    "UdpClient": {
+                        "serverIp": "127.0.0.1",
+                        "serverPort": 4026
+                    },
+                    "name": "user/MapleClient",
+                    "type": "MapleClient",
+                    "uuid": "665152c0020e1173f0f13acc25383949",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "fdfb9962a345070dc2f9a654b3509e69"
+            },
+            "name": "Client",
+            "type": "GameObject",
+            "uuid": "e24a59fbe22135c5a5c61ccb0690735c",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "ad3026b2e12602524d7dc99cd877764e",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Login": {
+                        "nextWorld": "1c2428b8720cab83b1b46f7cd7408592"
+                    },
+                    "NetworkComponent": {},
+                    "SObject": {},
+                    "name": "user/Login",
+                    "type": "Login",
+                    "uuid": "a0c8dcc7cf08c2dade318b4c039f4874",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "ad3026b2e12602524d7dc99cd877764e"
+            },
+            "name": "Login",
+            "type": "GameObject",
+            "uuid": "597aad149d8c22e7002f2b4f48665410",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "93b12da106989f845ee38b9790f8dd0f",
+                    "version": 1
+                },
+                {
+                    "Camera": {
+                        "depth": 0,
+                        "fov": 60.0,
+                        "lookPos": [
+                            0.0,
+                            0.0,
+                            2.0
+                        ],
+                        "projection": 1
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "Camera",
+                    "type": "Camera",
+                    "uuid": "c61acb03cb9e9cb502ad51619ca87cd4",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "93b12da106989f845ee38b9790f8dd0f"
+            },
+            "name": "Camera",
+            "type": "GameObject",
+            "uuid": "85644e871901c7e27d8c6555fb3e7d4d",
+            "version": 1
+        }
+    ],
+    "type": "EditorWorld",
+    "uuid": "1b41c01b192fcb22499930275435bcca",
+    "version": 1
+}

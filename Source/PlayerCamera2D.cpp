@@ -11,6 +11,7 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerCamera2D::Start()
 	{
+#if !SH_SERVER
 		world.renderer.GetWindow().SetSize(1920, 1080);
 
 		if (core::IsValid(player))
@@ -20,9 +21,11 @@ namespace sh::game
 			centerX = px;
 			centerY = py + 0.81f;
 		}
+#endif
 	}
 	SH_USER_API void PlayerCamera2D::BeginUpdate()
 	{
+#if !SH_SERVER
 		Super::BeginUpdate();
 
 		if (!core::IsValid(targetCamera))
@@ -43,9 +46,11 @@ namespace sh::game
 		pos.z = lookPos.z + dis;
 
 		targetCamera->gameObject.transform->SetWorldPosition(pos);
+#endif
 	}
 	SH_USER_API void PlayerCamera2D::Update()
 	{
+#if !SH_SERVER
 		if (!core::IsValid(player))
 			return;
 		const float px = player->transform->GetWorldPosition().x;
@@ -58,9 +63,11 @@ namespace sh::game
 		centerX = px;
 
 		MoveToPlayer();
+#endif
 	}
-	SH_USER_API void PlayerCamera2D::LateUpdate()
+	SH_USER_API void PlayerCamera2D::SetPlayer(GameObject& player)
 	{
+		this->player = &player;
 	}
 	auto PlayerCamera2D::SmoothDamp(float current, float target, float& currentVelocity, float smoothTime, float deltaTime) const -> float
 	{
@@ -77,6 +84,7 @@ namespace sh::game
 	}
 	void PlayerCamera2D::MoveToPlayer()
 	{
+#if !SH_SERVER
 		float width = world.renderer.GetWidth() / 100.f;
 		float height = dis;
 
@@ -116,5 +124,6 @@ namespace sh::game
 		pos.y = std::clamp(pos.y, minY, maxY);
 
 		gameObject.transform->SetWorldPosition(pos);
+#endif
 	}
 }//namespace
