@@ -1,4 +1,4 @@
-#include "MapleWorld.h"
+ï»¿#include "MapleWorld.h"
 #include "Player.h"
 #include "Packet/PlayerJoinWorldPacket.h"
 #include "Packet/PlayerSpawnPacket.hpp"
@@ -97,7 +97,7 @@ namespace sh::game
 		const auto& userWorldUUID = userPtr->GetCurrentWorldUUID();
 		if (userWorldUUID.IsEmpty())
 		{
-			// ÀÌ ¿ùµå¿¡ Á¶ÀÎ ÇßÀ½
+			// ì´ ì›”ë“œì— ì¡°ì¸ í–ˆìŒ
 			if (GetUUID() == core::UUID{ packet.worldUUID })
 			{
 				if (playerSpawnPoint == nullptr)
@@ -108,7 +108,7 @@ namespace sh::game
 				userPtr->SetCurrentWorldUUID(GetUUID());
 
 				const auto& spawnPos = playerSpawnPoint->GetWorldPosition();
-				// Á¢¼ÓÇÑ ÇÃ·¹ÀÌ¾î¿¡°Ô ´Ù¸¥ ÇÃ·¹ÀÌ¾î µ¿±âÈ­
+				// ì ‘ì†í•œ í”Œë ˆì´ì–´ì—ê²Œ ë‹¤ë¥¸ í”Œë ˆì´ì–´ ë™ê¸°í™”
 				for (auto& [uuid, playerPtr] : players)
 				{
 					const auto& playerPos = playerPtr->gameObject.transform->position;
@@ -119,7 +119,7 @@ namespace sh::game
 
 					server->Send(packet, endpoint.ip, endpoint.port);
 				}
-				// Á¢¼ÓÇÑ ÇÃ·¹ÀÌ¾î »ý¼º
+				// ì ‘ì†í•œ í”Œë ˆì´ì–´ ìƒì„±
 				{
 					auto player = SpawnPlayer(userPtr->GetUserUUID(), spawnPos.x, spawnPos.y);
 					players[userPtr->GetUserUUID().ToString()] = player;

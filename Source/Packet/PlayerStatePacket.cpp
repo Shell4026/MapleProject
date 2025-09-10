@@ -1,4 +1,4 @@
-#include "PlayerStatePacket.h"
+﻿#include "PlayerStatePacket.h"
 
 namespace sh::game
 {
@@ -17,6 +17,8 @@ namespace sh::game
 		json["player"] = playerUUID;
 		json["tick"] = serverTick;
 		json["ts"] = timestamp;
+		json["ground"] = bGround;
+		json["floor"] = floor;
 		return json;
 	}
 	SH_USER_API void PlayerStatePacket::Deserialize(const core::Json& json)
@@ -38,5 +40,9 @@ namespace sh::game
 			serverTick = json["tick"];
 		if (json.contains("ts"))
 			timestamp = json["ts"];
+		if (json.contains("ground"))
+			bGround = json["ground"];
+		if (json.contains("floor"))
+			floor = json["floor"];
 	}
 }//namespace

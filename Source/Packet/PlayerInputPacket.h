@@ -18,9 +18,9 @@ namespace sh::game
 		SH_USER_API void Deserialize(const core::Json& json) override;
 	public:
 		float inputX = 0.0f; // -1..1
-		bool jump = false;
 		uint32_t seq = 0;
-		double timestamp = 0.0; // 나중에 쓸지도
+		uint64_t timestamp = 0.0; // 나중에 쓸지도
 		std::string playerUUID;
+		bool bJump = false;
 	};
 }

@@ -10,7 +10,7 @@ namespace sh::game
 	{
 		auto json = network::Packet::Serialize();
 		json["inputX"] = inputX;
-		json["jump"] = jump;
+		json["jump"] = bJump;
 		json["seq"] = seq;
 		json["player"] = playerUUID;
 		json["ts"] = timestamp;
@@ -22,7 +22,7 @@ namespace sh::game
 		if (json.contains("inputX"))
 			inputX = json["inputX"];
 		if (json.contains("jump"))
-			jump = json["jump"];
+			bJump = json["jump"];
 		if (json.contains("seq"))
 			seq = json["seq"];
 		if (json.contains("player"))

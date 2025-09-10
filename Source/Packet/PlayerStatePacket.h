@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../Export.h"
 #include "Network/Packet.h"
 
@@ -19,12 +19,15 @@ namespace sh::game
 	public:
 		float px = 0.f, py = 0.f;
 		float vx = 0.f, vy = 0.f;
+		float floor = -1000.f;
 
 		uint32_t lastProcessedInputSeq = 0;
 		uint32_t serverTick = 0;
 
-		double timestamp = 0.0;
+		uint64_t timestamp = 0.0;
 
 		std::string playerUUID;
+
+		bool bGround = false;
 	};
 }//namespace

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Export.h"
 #include "EndPoint.hpp"
 #include "PlayerAnimation.h"
@@ -24,6 +24,7 @@ namespace sh::game
 	public:
 		SH_USER_API PlayerMovement2D(GameObject& owner);
 
+		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
 		SH_USER_API void BeginUpdate() override;
 		SH_USER_API void Update() override;
@@ -31,11 +32,11 @@ namespace sh::game
 		
 #if SH_SERVER
 		void ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint);
-		/// @brief ÀÌÀü¿¡ ¿Ô´ø ÀÔ·Â ±â¹İ ¿òÁ÷ÀÓ Àû¿ë ÇÔ¼ö
+		/// @brief ì´ì „ì— ì™”ë˜ ì…ë ¥ ê¸°ë°˜ ì›€ì§ì„ ì ìš© í•¨ìˆ˜
 		void ProcessInput();
 #else
 		void ProcessLocalInput();
-		void ProcessStatePacket(const PlayerStatePacket& packet);
+		void ProcessStatePacket(const PlayerStatePacket& packet, bool bLocal);
 		void ProcessRemoteAnim();
 #endif
 	private:
@@ -64,35 +65,29 @@ namespace sh::game
 		MapleClient* client = nullptr;
 		std::deque<PlayerInputPacket> pendingInputs;
 
+		uint64_t inputSeqCounter = 0;
 		uint64_t tick = 0;
-		struct LastSent
-		{
-			float xMove = 0.f;
-			uint32_t inputSeqCounter = 0;
-			bool bJump = false;
-		} lastSent;
 #else
 		MapleServer* server = nullptr;
 		uint32_t serverTick = 0;
 
-		struct PlayerData
+		uint32_t lastProcessedSeq = 0; // ë§ˆì§€ë§‰ìœ¼ë¡œ ì²˜ë¦¬í•œ seq
+		uint64_t lastTick = 0; // ë§ˆì§€ë§‰ìœ¼ë¡œ ì²˜ë¦¬í•œ í´ë¼ì´ì–¸íŠ¸ì¸¡ í‹±
+		struct InputState
 		{
-			uint32_t lastProcessedSeq = 0; // ¸¶Áö¸·À¸·Î Ã³¸®ÇÑ seq
-			struct InputState
-			{
-				float xMove = 0.f;
-				uint32_t seq = 0;
-				bool jump = false;
-			}lastInput;
-			struct LastSent
-			{
-				glm::vec2 pos;
-				glm::vec2 vel;
-				uint32_t seq = 0;
-				bool bFirst = true;
-			} lastSent;
-		} playerData;
+			float xMove = 0.f;
+			uint32_t seq = 0;
+			uint64_t tick = 0;
+		} lastInput;
+
+		struct LastSent
+		{
+			glm::vec2 pos;
+			glm::vec2 vel;
+			uint32_t seq = 0;
+		} lastSent;
 #endif
 		bool bGround = false;
+		bool bJump = false;
 	};
 }//namespace
