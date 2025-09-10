@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Core/Util.h"
 
 #include <string>
@@ -17,7 +17,7 @@ struct Endpoint
 namespace std
 {
 	template<>
-	struct std::hash<Endpoint>
+	struct hash<Endpoint>
 	{
 		auto operator()(const Endpoint& ep) const -> std::size_t
 		{
