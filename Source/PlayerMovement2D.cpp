@@ -81,8 +81,8 @@ namespace sh::game
 			ProcessRemoteAnim();
 		}
 		// 단순 보간
-		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.25f);
-		auto vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 0.25f);
+		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
+		auto vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
 		gameObject.transform->SetWorldPosition(pos);
 		gameObject.transform->UpdateMatrix();
 		rigidBody->SetLinearVelocity(vel);
@@ -254,7 +254,10 @@ namespace sh::game
 		}
 		bool bJump = false;
 		if (Input::GetKeyPressed(Input::KeyCode::F))
-			bJump = true;
+		{
+			if (bGround)
+				bJump = true;
+		}
 
 		// 움직임 예측 코드
 		if (bGround)

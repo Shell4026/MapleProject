@@ -48,7 +48,7 @@ namespace sh::game
 		Player* player = nullptr;
 
 		PROPERTY(speed)
-		float speed = 1.5f;
+		float speed = 1.25f;
 		PROPERTY(jumpSpeed)
 		float jumpSpeed = 5.5f;
 
