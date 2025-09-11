@@ -38,9 +38,9 @@ namespace sh::game
 			{
 				Endpoint ep{ evt.senderIp, evt.senderPort };
 				if (evt.packet->GetId() == PlayerSpawnPacket::ID)
-				{
 					ProcessPlayerSpawn(static_cast<const PlayerSpawnPacket&>(*evt.packet), ep);
-				}
+				else if (evt.packet->GetId() == PlayerDespawnPacket::ID)
+					ProcessPlayerDespawn(static_cast<const PlayerDespawnPacket&>(*evt.packet));
 			}
 		);
 #endif
