@@ -31,7 +31,7 @@ namespace sh::game
 			{
 				if (evt.packet->GetId() == PlayerStatePacket::ID)
 				{
-					ProcessStatePacket(static_cast<const PlayerStatePacket&>(*evt.packet), player->IsLocal());
+					ProcessStatePacket(static_cast<const PlayerStatePacket&>(*evt.packet));
 				}
 			}
 		);
@@ -56,6 +56,8 @@ namespace sh::game
 		client = MapleClient::GetInstance();
 		assert(client != nullptr);
 		client->bus.Subscribe(packetEventSubscriber);
+
+		serverPos = gameObject.transform->GetWorldPosition();
 #endif
 	}
 	SH_USER_API void PlayerMovement2D::BeginUpdate()
@@ -68,12 +70,23 @@ namespace sh::game
 		if (!core::IsValid(player))
 			return;
 
-		if (player->IsLocal())
-			ProcessLocalInput();
-		else
-			ProcessRemoteAnim();
-
 		++tick;
+
+		if (player->IsLocal())
+		{
+			ProcessLocalInput();
+		}
+		else
+		{
+			ProcessRemoteAnim();
+		}
+		// 단순 보간
+		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.25f);
+		auto vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 0.25f);
+		gameObject.transform->SetWorldPosition(pos);
+		gameObject.transform->UpdateMatrix();
+		rigidBody->SetLinearVelocity(vel);
+		rigidBody->ResetPhysicsTransform();
 #endif
 	}
 	SH_USER_API void PlayerMovement2D::Update()
@@ -86,8 +99,9 @@ namespace sh::game
 				gameObject.transform->UpdateMatrix();
 			}
 		}
-#if SH_SERVER
 		// 이 시점에서 물리 계산이 끝났음 (FixedUpdate->Update)
+#if SH_SERVER
+		
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		const auto v = rigidBody->GetLinearVelocity();
 
@@ -133,7 +147,6 @@ namespace sh::game
 			packet.timestamp = lastTick;
 			packet.bGround = bGround;
 			packet.floor = floorY;
-			SH_INFO_FORMAT("foor: {}", floorY);
 
 			server->BroadCast(packet);
 
@@ -143,6 +156,7 @@ namespace sh::game
 
 			serverTick = 0;
 		}
+#else
 #endif
 	}
 #if SH_SERVER
@@ -276,10 +290,7 @@ namespace sh::game
 		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 
 		bool bInputChanged = false;
-		if (pendingInputs.empty())
-			bInputChanged = true;
-		else
-			bInputChanged = (xMove != pendingInputs.back().inputX) || (bJump != pendingInputs.back().bJump);
+		bInputChanged = (xMove != lastSent.inputX) || (bJump != lastSent.bJump);
 
 		if (bInputChanged)
 		{
@@ -290,11 +301,14 @@ namespace sh::game
 			packet.playerUUID = client->GetUser().GetUserUUID().ToString();
 			packet.timestamp = tick;
 
-			client->SendPacket(packet);
-			pendingInputs.push_back(std::move(packet));
+			lastSent = std::move(packet);
+
+			client->SendPacket(lastSent);
+
+			SH_INFO_FORMAT("send (tick:{})", tick);
 		}
 	}
-	void PlayerMovement2D::ProcessStatePacket(const PlayerStatePacket& packet, bool bLocal)
+	void PlayerMovement2D::ProcessStatePacket(const PlayerStatePacket& packet)
 	{
 		if (packet.playerUUID != player->GetUserUUID().ToString())
 			return;
@@ -302,54 +316,21 @@ namespace sh::game
 		if (!core::IsValid(rigidBody))
 			return;
 
-		const glm::vec2 serverPos{ packet.px, packet.py };
-		const glm::vec2 serverVel{ packet.vx, packet.vy };
+		const auto& pos = gameObject.transform->GetWorldPosition();
+
+		serverPos = { packet.px, packet.py };
+		serverVel = { packet.vx, packet.vy };
+
 		bGround = packet.bGround;
 		floorY = packet.floor;
 
 		xVelocity = serverVel.x;
 		yVelocity = serverVel.y;
-		if (bLocal)
-		{
-			const uint64_t processedTick = packet.timestamp;
-
-			glm::vec2 corrected = serverPos;
-
-			// 서버에서 처리한 마지막 입력만 남기고 앞에 입력들을 지움
-			while (!pendingInputs.empty() && pendingInputs.front().seq <= packet.lastProcessedInputSeq)
-				pendingInputs.pop_front();
-
-			if (inputSeqCounter != packet.lastProcessedInputSeq)
-			{
-				const uint64_t tickDif = tick - processedTick;
-				SH_INFO_FORMAT("tickDif: {}", tickDif);
-				for (int i = 0; i < tickDif; ++i)
-				{
-					yVelocity -= 20.f * world.FIXED_TIME;
-					corrected.x += xVelocity * world.FIXED_TIME;
-					corrected.y += yVelocity * world.FIXED_TIME;
-				}
-			}
-			rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
-			gameObject.transform->SetPosition(serverPos.x, serverPos.y, 0.f);
-			gameObject.transform->UpdateMatrix();
-			rigidBody->ResetPhysicsTransform();
-		}
-		else
-		{
-			rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
-			gameObject.transform->SetPosition(serverPos.x, serverPos.y, 0.f);
-			gameObject.transform->UpdateMatrix();
-			rigidBody->ResetPhysicsTransform();
-		}
 	}
 	void PlayerMovement2D::ProcessRemoteAnim()
 	{
 		if (!core::IsValid(anim))
 			return;
-
-		if (yVelocity != 0)
-			anim->SetPose(PlayerAnimation::Pose::Jump);
 
 		if (bGround)
 		{
@@ -361,9 +342,12 @@ namespace sh::game
 					anim->bRight = true;
 				else if (xVelocity <= -1.0f)
 					anim->bRight = false;
-				anim->SetPose(PlayerAnimation::Pose::Walk);
+				if (std::abs(xVelocity) > 1.0f)
+					anim->SetPose(PlayerAnimation::Pose::Walk);
 			}
 		}
+		else
+			anim->SetPose(PlayerAnimation::Pose::Jump);
 	}
 #endif
 }//namespace

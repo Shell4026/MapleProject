@@ -36,7 +36,7 @@ namespace sh::game
 		void ProcessInput();
 #else
 		void ProcessLocalInput();
-		void ProcessStatePacket(const PlayerStatePacket& packet, bool bLocal);
+		void ProcessStatePacket(const PlayerStatePacket& packet);
 		void ProcessRemoteAnim();
 #endif
 	private:
@@ -63,10 +63,15 @@ namespace sh::game
 		
 #if !SH_SERVER
 		MapleClient* client = nullptr;
-		std::deque<PlayerInputPacket> pendingInputs;
+
+		glm::vec2 serverPos;
+		glm::vec2 serverVel;
+		PlayerInputPacket lastSent;
 
 		uint64_t inputSeqCounter = 0;
 		uint64_t tick = 0;
+
+		bool bReceived = false;
 #else
 		MapleServer* server = nullptr;
 		uint32_t serverTick = 0;

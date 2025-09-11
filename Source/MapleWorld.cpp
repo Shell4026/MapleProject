@@ -79,6 +79,7 @@ namespace sh::game
 		packet.worldUUID = GetUUID().ToString();
 
 		client->SendPacket(packet);
+		SH_INFO_FORMAT("Join the world {}", world.GetUUID().ToString());
 #endif
 	}
 	SH_USER_API void MapleWorld::LateUpdate()
