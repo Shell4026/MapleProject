@@ -17,6 +17,53 @@
                             1.0
                         ],
                         "vPosition": [
+                            -6.0,
+                            2.25,
+                            -0.000377459276933223
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "7050afab470dd6fd43c1a99f5eac6e7c",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "7050afab470dd6fd43c1a99f5eac6e7c"
+            },
+            "name": "SpawnPoint",
+            "type": "GameObject",
+            "uuid": "0b775c44b5d23f3d140ee35e1096f0b9",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
                             -5.959000110626221,
                             2.5380001068115234,
                             7.0
@@ -78,7 +125,7 @@
                     "SObject": {},
                     "name": "user/PlayerCamera2D",
                     "type": "PlayerCamera2D",
-                    "uuid": "fd5c1f73b8f377393b0eb146a7e2bee0",
+                    "uuid": "a7139789dbfc15a66e6c665b91f13093",
                     "version": 1
                 }
             ],
@@ -134,15 +181,15 @@
                         "priority": 0
                     },
                     "MapleWorld": {
-                        "camera": "fd5c1f73b8f377393b0eb146a7e2bee0",
-                        "playerPrefab": "4207eb89d3f19a351dfc08e51f041c5c",
+                        "camera": "a7139789dbfc15a66e6c665b91f13093",
+                        "playerPrefab": "0fc7ea22913f166150d3302665b40b10",
                         "playerSpawnPoint": "7050afab470dd6fd43c1a99f5eac6e7c"
                     },
                     "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/MapleWorld",
                     "type": "MapleWorld",
-                    "uuid": "aad273661cb927e3c8a209075ddd6d11",
+                    "uuid": "ccd023d193ffa7a37c89e7ba6a0ff9c5",
                     "version": 1
                 }
             ],
@@ -154,53 +201,6 @@
             "name": "World",
             "type": "GameObject",
             "uuid": "9904ae89088ccaaf07b386c5edb3e58f",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            -6.0,
-                            2.25,
-                            -0.000377459276933223
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "7050afab470dd6fd43c1a99f5eac6e7c",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEnable": true,
-                "hideInspector": false,
-                "transform": "7050afab470dd6fd43c1a99f5eac6e7c"
-            },
-            "name": "SpawnPoint",
-            "type": "GameObject",
-            "uuid": "0b775c44b5d23f3d140ee35e1096f0b9",
             "version": 1
         },
         {
@@ -244,7 +244,7 @@
                     "BoxCollider": {
                         "bDisplayArea": true,
                         "size": [
-                            6.0,
+                            5.0,
                             1.0,
                             1.0
                         ]
@@ -255,9 +255,9 @@
                         "priority": 0
                     },
                     "SObject": {},
-                    "name": "BoxCollider",
+                    "name": "physics/BoxCollider",
                     "type": "BoxCollider",
-                    "uuid": "e0727f2ec274bbbe4f6c801e57bae23f",
+                    "uuid": "4f32b47f876e5e2e078d46d2f8300a50",
                     "version": 1
                 },
                 {
@@ -273,16 +273,17 @@
                             0.0
                         ],
                         "bGravity": false,
+                        "bInterpolation": true,
                         "bKinematic": true,
                         "bouncy": 0.0,
-                        "collision": "e0727f2ec274bbbe4f6c801e57bae23f",
+                        "collision": "4f32b47f876e5e2e078d46d2f8300a50",
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
                     "SObject": {},
-                    "name": "RigidBody",
+                    "name": "physics/RigidBody",
                     "type": "RigidBody",
-                    "uuid": "e09018848ec2bb8102b8052bb9077ed7",
+                    "uuid": "d86468dc8ab49c5b1c4ac58d9489d3e0",
                     "version": 1
                 }
             ],
@@ -379,7 +380,7 @@
                         "vPosition": [
                             2.687056064605713,
                             1.9960118532180786,
-                            0.32573163509368896
+                            0.0
                         ],
                         "vRotation": [
                             0.0,
@@ -412,9 +413,9 @@
                         "priority": 0
                     },
                     "SObject": {},
-                    "name": "BoxCollider",
+                    "name": "physics/BoxCollider",
                     "type": "BoxCollider",
-                    "uuid": "2a5ada13d026bd9eeb9da0798d0a3dff",
+                    "uuid": "4e2f62725349e84cc57258b087544012",
                     "version": 1
                 },
                 {
@@ -430,16 +431,17 @@
                             0.0
                         ],
                         "bGravity": false,
+                        "bInterpolation": true,
                         "bKinematic": true,
                         "bouncy": 0.0,
-                        "collision": "2a5ada13d026bd9eeb9da0798d0a3dff",
+                        "collision": "4e2f62725349e84cc57258b087544012",
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
                     "SObject": {},
-                    "name": "RigidBody",
+                    "name": "physics/RigidBody",
                     "type": "RigidBody",
-                    "uuid": "3e724c186951c3c861db15e5942b7230",
+                    "uuid": "32ee22c4c64d8e489dfba82745fb6543",
                     "version": 1
                 }
             ],
@@ -505,9 +507,9 @@
                         "priority": 0
                     },
                     "SObject": {},
-                    "name": "BoxCollider",
+                    "name": "physics/BoxCollider",
                     "type": "BoxCollider",
-                    "uuid": "0299a6311b14ea40e2fadd681fa9aa2b",
+                    "uuid": "0f234e8d7d76fd8454f2b0a76fa50732",
                     "version": 1
                 },
                 {
@@ -523,16 +525,17 @@
                             0.0
                         ],
                         "bGravity": false,
+                        "bInterpolation": true,
                         "bKinematic": true,
                         "bouncy": 0.0,
-                        "collision": "0299a6311b14ea40e2fadd681fa9aa2b",
+                        "collision": "0f234e8d7d76fd8454f2b0a76fa50732",
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
                     "SObject": {},
-                    "name": "RigidBody",
+                    "name": "physics/RigidBody",
                     "type": "RigidBody",
-                    "uuid": "d345c5936ac892e7cdbc38b19957a40e",
+                    "uuid": "229f1b2b5fd5421cc3312a9b024a2ab4",
                     "version": 1
                 }
             ],
