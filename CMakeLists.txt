@@ -1,10 +1,14 @@
-﻿set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Debug\bin)
+﻿set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Release\bin)
 set(PROJECT_NAME "New Project")
 set(SERVER_SIDE FALSE)
+
 file(GLOB SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
 file(GLOB PACKET_SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/Packet/*.cpp)
+file(GLOB AI_SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/AI/*.cpp)
+
 file(GLOB HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h  ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp)
 file(GLOB PACKET_HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/Packet/*.h ${CMAKE_CURRENT_SOURCE_DIR}/Source/Packet/*.hpp)
+file(GLOB AI_HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/AI/*.h)
 
 cmake_minimum_required (VERSION 3.8)
 
@@ -24,7 +28,7 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
-add_library(ShellEngineUser SHARED ${SRC} ${PACKET_SRC} ${HEADERS} ${PACKET_HEADERS})
+add_library(ShellEngineUser SHARED ${SRC} ${PACKET_SRC} ${AI_SRC} ${HEADERS} ${PACKET_HEADERS} ${AI_HEADERS})
 add_library(ShellEngine::User ALIAS ShellEngineUser)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -34,6 +38,7 @@ if (SERVER_SIDE)
 	target_compile_definitions(ShellEngineUser PUBLIC SH_SERVER)
 endif()
 
+target_precompile_headers(ShellEngineUser PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
 target_compile_definitions(ShellEngineUser PUBLIC SH_PROJECT_NAME="${PROJECT_NAME}")
 
 target_include_directories(ShellEngineUser PRIVATE ${ENGINE_DIR}/include)

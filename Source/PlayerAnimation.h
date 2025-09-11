@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Export.h"
 
 #include "Core/SContainer.hpp"
@@ -19,7 +19,8 @@ namespace sh::game
 		{
 			Idle,
 			Walk,
-			Jump
+			Jump,
+			Die
 		};
 	public:
 		SH_USER_API PlayerAnimation(GameObject& owner);
@@ -41,6 +42,27 @@ namespace sh::game
 		std::vector<render::Texture*> walks;
 		PROPERTY(jumps)
 		std::vector<render::Texture*> jumps;
+		PROPERTY(die)
+		std::vector<render::Texture*> die;
+
+		PROPERTY(idleScale)
+		game::Vec2 idleScale{ 1.f, 1.f };
+		PROPERTY(walkScale)
+		game::Vec2 walkScale{ 1.f, 1.f };
+		PROPERTY(jumpScale)
+		game::Vec2 jumpScale{ 1.f, 1.f };
+		PROPERTY(dieScale)
+		game::Vec2 dieScale{ 1.f, 1.f };
+
+		PROPERTY(idleDelayMs)
+		float idleDelayMs = 500;
+		PROPERTY(walkDelayMs)
+		float walkDelayMs = 180;
+		PROPERTY(jumpDelayMs)
+		float jumpDelayMs = 1000;
+		PROPERTY(dieDelayMs)
+		float dieDelayMs = 1000;
+
 		core::SObjWeakPtr<render::Material> mat = nullptr;
 
 		Pose curPose = Pose::Idle;
@@ -50,6 +72,6 @@ namespace sh::game
 
 		Vec3 initPos;
 		Vec3 posOffset;
-		Vec3 initMeshScale;
+		Vec3 initScale;
 	};
 }//namespace

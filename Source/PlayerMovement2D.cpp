@@ -1,4 +1,5 @@
 ﻿#include "PlayerMovement2D.h"
+#include "CollisionTag.hpp"
 
 #include "Game/GameObject.h"
 #include "Game/Input.h"
@@ -43,6 +44,8 @@ namespace sh::game
 		if (core::IsValid(rigidBody))
 		{
 			rigidBody->SetAxisLock({ 1, 1, 1 });
+			rigidBody->GetCollider()->SetCollisionTag(tag::entityTag);
+			rigidBody->GetCollider()->SetAllowCollisions(tag::entityTagMask);
 			SetPriority(-1);
 		}
 	}

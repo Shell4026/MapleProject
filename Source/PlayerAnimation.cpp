@@ -1,4 +1,4 @@
-#include "PlayerAnimation.h"
+﻿#include "PlayerAnimation.h"
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
@@ -23,7 +23,7 @@ namespace sh::game
 			meshRenderer->SetMaterial(mat.Get());
 
 			initPos = meshRenderer->gameObject.transform->position;
-			initMeshScale = meshRenderer->gameObject.transform->scale;
+			initScale = gameObject.transform->scale;
 		}
 #endif
 	}
@@ -33,30 +33,35 @@ namespace sh::game
 		if (!mat.IsValid())
 			return;
 
-		if (bRight)
-			meshRenderer->gameObject.transform->SetScale(-initMeshScale.x, initMeshScale.y, initMeshScale.z);
-		else
-			meshRenderer->gameObject.transform->SetScale(initMeshScale.x, initMeshScale.y, initMeshScale.z);
+		auto scale = initScale;
+		scale.x *= bRight ? -1.f : 1.f;
 
 		switch (curPose)
 		{
 		case Pose::Idle:
 		{
-			posOffset = { 0.f, 0.f, 0.f };
-			ChangeTexture(500, idles);
+			scale.x *= idleScale.x;
+			scale.y *= idleScale.y;
+			ChangeTexture(idleDelayMs, idles);
 			break;
 		}
 		case Pose::Walk:
 		{
-			ChangeTexture(180, walks);
+			scale.x *= walkScale.x;
+			scale.y *= walkScale.y;
+			ChangeTexture(walkDelayMs, walks);
 			break;
 		}
 		case Pose::Jump:
 		{
-			ChangeTexture(1000, jumps);
+			scale.x *= jumpScale.x;
+			scale.y *= jumpScale.y;
+			ChangeTexture(jumpDelayMs, jumps);
 			break;
 		}
 		}
+		gameObject.transform->SetScale(scale);
+
 		t += world.deltaTime;
 #endif
 	}

@@ -1,6 +1,6 @@
-#include "PlayerMovement.h"
-#include "Game/Component/RigidBody.h"
+ï»¿#include "PlayerMovement.h"
 
+#include "Game/Component/RigidBody.h"
 #include "Game/GameObject.h"
 #include "Game/Input.h"
 
@@ -19,7 +19,7 @@
 //	reactphysics3d::Vector3 worldPoint;
 //	reactphysics3d::Vector3 worldNormal;
 //
-//	/// Ã¹ ¹øÂ° È÷Æ®¿¡¼­ ¹Ù·Î ¸ØÃßµµ·Ï false ¹ÝÈ¯
+//	/// ì²« ë²ˆì§¸ ížˆíŠ¸ì—ì„œ ë°”ë¡œ ë©ˆì¶”ë„ë¡ false ë°˜í™˜
 //	auto notifyRaycastHit(const reactphysics3d::RaycastInfo& info) -> reactphysics3d::decimal override
 //	{
 //		hit = true;
@@ -60,9 +60,7 @@ namespace sh::game
 	{
 		Super::Awake();
 		if (rb == nullptr)
-		{
 			rb = gameObject.GetComponent<RigidBody>();
-		}
 
 		SH_INFO("Awake?");
 	}
@@ -102,7 +100,7 @@ namespace sh::game
 	SH_USER_API void PlayerMovement::FixedUpdate()
 	{
 		auto pos = gameObject.transform->GetWorldPosition();
-		if (pos.y < -10.0f) // ¹Ù´Ú ¾Æ·¡·Î ¶³¾îÁö¸é ¸®¼Â
+		if (pos.y < -10.0f) // ë°”ë‹¥ ì•„ëž˜ë¡œ ë–¨ì–´ì§€ë©´ ë¦¬ì…‹
 		{
 			gameObject.transform->SetWorldPosition(startPos);
 			rb->SetAngularVelocity(game::Vec3{ 0.f, 0.f, 0.f });
