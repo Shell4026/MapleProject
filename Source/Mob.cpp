@@ -48,7 +48,7 @@ namespace sh::game
 		if (rigidbody != nullptr)
 		{
 			rigidbody->GetCollider()->SetCollisionTag(tag::entityTag);
-			rigidbody->GetCollider()->SetAllowCollisions(tag::entityTagMask);
+			rigidbody->GetCollider()->SetAllowCollisions(tag::groundTag);
 		}
 		// 스포너의 경우 UUID는 서버와 클라 둘다 같음
 #if SH_SERVER

@@ -43,9 +43,10 @@ namespace sh::game
 		world.GetPhysWorld()->SetGravity({ 0.f, -20.f, 0.f });
 		if (core::IsValid(rigidBody))
 		{
-			rigidBody->SetAxisLock({ 1, 1, 1 });
+			rigidBody->SetAngularLock({ 1, 1, 1 });
+			rigidBody->SetAxisLock({ 0, 0, 1 });
 			rigidBody->GetCollider()->SetCollisionTag(tag::entityTag);
-			rigidBody->GetCollider()->SetAllowCollisions(tag::entityTagMask);
+			rigidBody->GetCollider()->SetAllowCollisions(tag::groundTag);
 			SetPriority(-1);
 		}
 	}
@@ -181,7 +182,7 @@ namespace sh::game
 	{
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		const phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
-		auto hitOpt = world.GetPhysWorld()->RayCast(ray);
+		auto hitOpt = world.GetPhysWorld()->RayCast(ray, tag::groundTag);
 		if (hitOpt.has_value())
 		{
 			floorY = hitOpt.value().hitPoint.y;
@@ -229,7 +230,7 @@ namespace sh::game
 		yVelocity = rigidBody->GetLinearVelocity().y;
 
 		phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
-		auto hitOpt = world.GetPhysWorld()->RayCast(ray);
+		auto hitOpt = world.GetPhysWorld()->RayCast(ray, tag::groundTag);
 		if (hitOpt.has_value())
 		{
 			floorY = hitOpt.value().hitPoint.y;

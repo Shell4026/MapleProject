@@ -78,7 +78,7 @@ namespace sh::game
 		PROPERTY(rigidbody)
 		RigidBody* rigidbody = nullptr;
 
-		uint32_t tick = 0.f;
+		uint32_t tick = 0;
 		
 		core::EventSubscriber<PacketEvent> packetSubscriber;
 
