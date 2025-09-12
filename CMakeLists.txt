@@ -1,6 +1,9 @@
 ﻿set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Release\bin)
 set(PROJECT_NAME "New Project")
-set(SERVER_SIDE FALSE)
+
+set(CLIENT ShellEngineUser)
+set(SERVER ShellEngineUserServer)
+set(TARGETS ${CLIENT} ${SERVER})
 
 file(GLOB SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
 file(GLOB PACKET_SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/Packet/*.cpp)
@@ -28,33 +31,6 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
-add_library(ShellEngineUser SHARED ${SRC} ${PACKET_SRC} ${AI_SRC} ${HEADERS} ${PACKET_HEADERS} ${AI_HEADERS})
-add_library(ShellEngine::User ALIAS ShellEngineUser)
-
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	target_compile_definitions(ShellEngineUser PUBLIC SH_DEBUG)
-endif()
-if (SERVER_SIDE)
-	target_compile_definitions(ShellEngineUser PUBLIC SH_SERVER)
-endif()
-
-target_precompile_headers(ShellEngineUser PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
-target_compile_definitions(ShellEngineUser PUBLIC SH_PROJECT_NAME="${PROJECT_NAME}")
-
-target_include_directories(ShellEngineUser PRIVATE ${ENGINE_DIR}/include)
-target_include_directories(ShellEngineUser PRIVATE ${CMAKE_SOURCE_DIR}/include/external)
-
-target_link_directories(ShellEngineUser PRIVATE ${ENGINE_DIR})
-target_link_directories(ShellEngineUser PRIVATE ${ENGINE_DIR}/lib)
-
-target_link_libraries(ShellEngineUser PRIVATE ShellEngineCore)
-target_link_libraries(ShellEngineUser PRIVATE ShellEngineRender)
-target_link_libraries(ShellEngineUser PRIVATE ShellEngineGame)
-target_link_libraries(ShellEngineUser PRIVATE ShellEnginePhysics)
-target_link_libraries(ShellEngineUser PRIVATE ShellEngineWindow)
-target_link_libraries(ShellEngineUser PRIVATE ShellEngineNetwork)
-target_link_libraries(ShellEngineUser PRIVATE IMGUI)
-
 include(FetchContent)
 
 FetchContent_Declare(
@@ -64,7 +40,6 @@ FetchContent_Declare(
   )
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 FetchContent_MakeAvailable(fmt)
-target_link_libraries(ShellEngineUser PRIVATE fmt)
 
 FetchContent_Declare(
   GLM
@@ -72,7 +47,6 @@ FetchContent_Declare(
   GIT_TAG "1.0.1"
   )
 FetchContent_MakeAvailable(GLM)
-target_link_libraries(ShellEngineUser PRIVATE glm)
 
 FETCHCONTENT_DECLARE(
 	JSON
@@ -80,4 +54,37 @@ FETCHCONTENT_DECLARE(
 	GIT_TAG "v3.11.3"
 )
 FETCHCONTENT_MAKEAVAILABLE(JSON)
-target_link_libraries(ShellEngineUser PRIVATE nlohmann_json)
+
+
+foreach(TGT ${TARGETS})
+	add_library(${TGT} SHARED ${SRC} ${PACKET_SRC} ${AI_SRC} ${HEADERS} ${PACKET_HEADERS} ${AI_HEADERS})
+
+	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+		target_compile_definitions(${TGT} PUBLIC SH_DEBUG)
+	endif()
+	if ("${TGT}" STREQUAL "${SERVER}")
+		target_compile_definitions(${SERVER} PUBLIC SH_SERVER)
+	else()
+		target_compile_options(${TGT} PRIVATE /FAs)
+	endif()
+
+	target_precompile_headers(${TGT} PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
+	target_compile_definitions(${TGT} PUBLIC SH_PROJECT_NAME="${PROJECT_NAME}")
+
+	target_include_directories(${TGT} PRIVATE ${ENGINE_DIR}/include)
+	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/include/external)
+
+	target_link_directories(${TGT} PRIVATE ${ENGINE_DIR})
+	target_link_directories(${TGT} PRIVATE ${ENGINE_DIR}/lib)
+
+	target_link_libraries(${TGT} PRIVATE ShellEngineCore)
+	target_link_libraries(${TGT} PRIVATE ShellEngineRender)
+	target_link_libraries(${TGT} PRIVATE ShellEngineGame)
+	target_link_libraries(${TGT} PRIVATE ShellEnginePhysics)
+	target_link_libraries(${TGT} PRIVATE ShellEngineWindow)
+	target_link_libraries(${TGT} PRIVATE ShellEngineNetwork)
+	target_link_libraries(${TGT} PRIVATE IMGUI)
+	target_link_libraries(${TGT} PRIVATE fmt)
+	target_link_libraries(${TGT} PRIVATE glm)
+	target_link_libraries(${TGT} PRIVATE nlohmann_json)
+endforeach()
