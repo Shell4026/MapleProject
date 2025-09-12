@@ -16,6 +16,8 @@
 #include "Game/Component/RigidBody.h"
 
 #include <deque>
+
+//#define SH_SERVER 1
 namespace sh::game
 {
 	class PlayerMovement2D : public Component
@@ -27,7 +29,9 @@ namespace sh::game
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
 		SH_USER_API void BeginUpdate() override;
+		SH_USER_API void FixedUpdate() override;
 		SH_USER_API void Update() override;
+		SH_USER_API void OnCollisionEnter(Collider& collider) override;
 	private:
 		
 #if SH_SERVER
@@ -50,13 +54,16 @@ namespace sh::game
 		PROPERTY(speed)
 		float speed = 1.25f;
 		PROPERTY(jumpSpeed)
-		float jumpSpeed = 5.5f;
+		float jumpSpeed = 5.55f;
+		PROPERTY(maxFallSpeed)
+		float maxFallSpeed = 6.7f;
 
 		core::SObjWeakPtr<RigidBody> floor;
 
 		float xVelocity = 0.f;
 		float yVelocity = 0.f;
 
+		float rayDistance = 1.0f;
 		float floorY = -1000.0f;
 
 		core::EventSubscriber<PacketEvent> packetEventSubscriber;
@@ -68,7 +75,7 @@ namespace sh::game
 		glm::vec2 serverVel;
 		PlayerInputPacket lastSent;
 
-		uint64_t inputSeqCounter = 0;
+		uint64_t inputSeqCounter = 1;
 		uint64_t tick = 0;
 
 		bool bReceived = false;
@@ -83,6 +90,7 @@ namespace sh::game
 			float xMove = 0.f;
 			uint32_t seq = 0;
 			uint64_t tick = 0;
+			bool bJump = false;
 		} lastInput;
 
 		struct LastSent

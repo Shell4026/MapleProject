@@ -84,26 +84,43 @@ namespace sh::game
 		{
 			ProcessRemoteAnim();
 		}
-		// 단순 보간
-		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
-		auto vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
-		gameObject.transform->SetWorldPosition(pos);
-		gameObject.transform->UpdateMatrix();
-		rigidBody->SetLinearVelocity(vel);
-		rigidBody->ResetPhysicsTransform();
 #endif
+	}
+	SH_USER_API void PlayerMovement2D::FixedUpdate()
+	{
+		if (!core::IsValid(rigidBody))
+			return;
+
+		const game::Vec3 v = rigidBody->GetLinearVelocity();
+		if (rigidBody->GetLinearVelocity().y > jumpSpeed)
+			rigidBody->SetLinearVelocity({ v.x, jumpSpeed, v.z });
+		else if(rigidBody->GetLinearVelocity().y < -maxFallSpeed)
+			rigidBody->SetLinearVelocity({ v.x, -maxFallSpeed, v.z });
+		const game::Vec3 pos = rigidBody->GetPhysicsPosition();
+
+		phys::Ray ray{ {pos.x, pos.y + 0.4f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, rayDistance };
+		auto hits = world.GetPhysWorld()->RayCast(ray, tag::groundTag);
+		if (!hits.empty())
+		{
+			floorY = hits.front().hitPoint.y;
+			floor = RigidBody::GetRigidBodyFromHandle(hits.front().rigidBodyHandle);
+		}
+		else
+		{
+			floor.Reset();
+			floorY = -1000.0f;
+			bGround = false;
+		}
 	}
 	SH_USER_API void PlayerMovement2D::Update()
 	{
+		// 이 시점에서 물리 계산이 끝났음 (FixedUpdate->Update)
 		{
 			const auto& pos = gameObject.transform->GetWorldPosition();
 			if (pos.y < floorY)
-			{
 				gameObject.transform->SetPosition(pos.x, floorY, pos.z);
-				gameObject.transform->UpdateMatrix();
-			}
+			gameObject.transform->UpdateMatrix();
 		}
-		// 이 시점에서 물리 계산이 끝났음 (FixedUpdate->Update)
 #if SH_SERVER
 		
 		const auto& pos = gameObject.transform->GetWorldPosition();
@@ -161,7 +178,21 @@ namespace sh::game
 			serverTick = 0;
 		}
 #else
+		// 단순 보간
+		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
+		auto vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
+		gameObject.transform->SetWorldPosition(pos);
+		gameObject.transform->UpdateMatrix();
+		rigidBody->SetLinearVelocity(vel);
+		rigidBody->ResetPhysicsTransform();
 #endif
+	}
+	SH_USER_API void PlayerMovement2D::OnCollisionEnter(Collider& collider)
+	{
+		if (!floor.IsValid())
+			return;
+		if (floor->GetCollider() == &collider)
+			bGround = true;
 	}
 #if SH_SERVER
 	void PlayerMovement2D::ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint)
@@ -170,31 +201,18 @@ namespace sh::game
 			return;
 		if (packet.playerUUID != player->GetUserUUID().ToString())
 			return;
+		if (lastInput.seq >= packet.seq) // 과거 패킷임
+			return;
 
 		if (lastInput.xMove != packet.inputX)
 			lastInput.xMove = packet.inputX;
-		if (packet.bJump)
-			bJump = true;
+		if (lastInput.bJump != packet.bJump)
+			lastInput.bJump = packet.bJump;
 		lastInput.tick = packet.timestamp;
 		lastInput.seq = packet.seq;
 	}
 	void PlayerMovement2D::ProcessInput()
 	{
-		const auto& pos = gameObject.transform->GetWorldPosition();
-		const phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
-		auto hitOpt = world.GetPhysWorld()->RayCast(ray, tag::groundTag);
-		if (hitOpt.has_value())
-		{
-			floorY = hitOpt.value().hitPoint.y;
-			floor = RigidBody::GetRigidBodyFromHandle(hitOpt.value().rigidBodyHandle);
-			bGround = true;
-		}
-		else
-		{
-			floorY = -1000.0f;
-			bGround = false;
-		}
-
 		yVelocity = rigidBody->GetLinearVelocity().y;
 		if (bGround)
 		{
@@ -203,10 +221,10 @@ namespace sh::game
 			else
 				xVelocity = std::clamp(lastInput.xMove * speed, -speed, speed);
 
-			if (bJump)
+			if (lastInput.bJump)
 			{
 				yVelocity = jumpSpeed;
-				bJump = false;
+				bGround = false;
 			}
 		}
 		else
@@ -229,20 +247,6 @@ namespace sh::game
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		yVelocity = rigidBody->GetLinearVelocity().y;
 
-		phys::Ray ray{ {pos.x, pos.y + 0.02f, pos.z}, Vec3{0.0f, -1.0f, 0.f}, 0.1f };
-		auto hitOpt = world.GetPhysWorld()->RayCast(ray, tag::groundTag);
-		if (hitOpt.has_value())
-		{
-			floorY = hitOpt.value().hitPoint.y;
-			floor = RigidBody::GetRigidBodyFromHandle(hitOpt.value().rigidBodyHandle);
-			bGround = true;
-		}
-		else
-		{
-			floorY = -1000.0f;
-			bGround = false;
-		}
-
 		float xMove = 0.f;
 		if (Input::GetKeyDown(Input::KeyCode::Right))
 		{
@@ -257,12 +261,9 @@ namespace sh::game
 				anim->bRight = false;
 		}
 		bool bJump = false;
-		if (Input::GetKeyPressed(Input::KeyCode::F))
-		{
-			if (bGround)
-				bJump = true;
-		}
-
+		if (Input::GetKeyDown(Input::KeyCode::F))
+			bJump = true;
+		
 		// 움직임 예측 코드
 		if (bGround)
 		{
@@ -272,7 +273,10 @@ namespace sh::game
 				xVelocity = std::clamp(xMove * speed, -speed, speed);
 
 			if (bJump)
+			{
 				yVelocity = jumpSpeed;
+				bGround = false;
+			}
 
 			if (core::IsValid(anim))
 			{
