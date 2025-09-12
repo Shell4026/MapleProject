@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "MapleClient.h"
 #include "Packet/HeartbeatPacket.hpp"
 
@@ -56,13 +56,16 @@ namespace sh::game
 			t = 0.f;
 		}
 #else
-		static float t = 0.f;
-		t += world.deltaTime;
-		if (t >= 1.f)
+		if (bLocal)
 		{
-			HeartbeatPacket packet{};
-			MapleClient::GetInstance()->SendPacket(packet);
-			t = 0.f;
+			static float t = 0.f;
+			t += world.deltaTime;
+			if (t >= 1.f)
+			{
+				HeartbeatPacket packet{};
+				MapleClient::GetInstance()->SendPacket(packet);
+				t = 0.f;
+			}
 		}
 #endif
 	}
