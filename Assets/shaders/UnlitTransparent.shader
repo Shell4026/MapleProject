@@ -12,7 +12,8 @@ Shader "Unlit Transparent Shader"
 	{
 		LightingPass "Transparent"
 		
-		ZWrite off;
+		Cull Off;
+		ZWrite Off;
 		Stage Vertex
 		{
 			layout(location = 0) out vec2 fragUvs;
