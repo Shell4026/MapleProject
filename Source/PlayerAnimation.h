@@ -54,6 +54,11 @@ namespace sh::game
 		PROPERTY(dieScale)
 		game::Vec2 dieScale{ 1.f, 1.f };
 
+		PROPERTY(walkOffset)
+		game::Vec2 walkOffset{ 0.f, 0.f };
+		PROPERTY(jumpOffset)
+		game::Vec2 jumpOffset{ 0.f, 0.f };
+
 		PROPERTY(idleDelayMs)
 		float idleDelayMs = 500;
 		PROPERTY(walkDelayMs)

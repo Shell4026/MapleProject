@@ -22,7 +22,7 @@ namespace sh::game
 			mat = core::SObject::Create<render::Material>(*oldMatPtr);
 			meshRenderer->SetMaterial(mat.Get());
 
-			initPos = meshRenderer->gameObject.transform->position;
+			initPos = gameObject.transform->position;
 			initScale = gameObject.transform->scale;
 		}
 #endif
@@ -35,6 +35,7 @@ namespace sh::game
 
 		auto scale = initScale;
 		scale.x *= bRight ? -1.f : 1.f;
+		auto pos = initPos;
 
 		switch (curPose)
 		{
@@ -47,6 +48,8 @@ namespace sh::game
 		}
 		case Pose::Walk:
 		{
+			pos.x += walkOffset.x;
+			pos.y += walkOffset.y;
 			scale.x *= walkScale.x;
 			scale.y *= walkScale.y;
 			ChangeTexture(walkDelayMs, walks);
@@ -54,12 +57,15 @@ namespace sh::game
 		}
 		case Pose::Jump:
 		{
+			pos.x += jumpOffset.x;
+			pos.y += jumpOffset.y;
 			scale.x *= jumpScale.x;
 			scale.y *= jumpScale.y;
 			ChangeTexture(jumpDelayMs, jumps);
 			break;
 		}
 		}
+		gameObject.transform->SetPosition(pos);
 		gameObject.transform->SetScale(scale);
 
 		t += world.deltaTime;
