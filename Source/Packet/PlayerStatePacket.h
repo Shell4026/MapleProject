@@ -24,7 +24,7 @@ namespace sh::game
 		uint32_t lastProcessedInputSeq = 0;
 		uint32_t serverTick = 0;
 
-		uint64_t timestamp = 0.0;
+		uint64_t timestamp = 0;
 
 		std::string playerUUID;
 

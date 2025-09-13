@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../Export.h"
 #include "Network/Packet.h"
 
@@ -19,7 +19,7 @@ namespace sh::game
 	public:
 		float inputX = 0.0f; // -1..1
 		uint32_t seq = 0;
-		uint64_t timestamp = 0.0; // ³ªÁß¿¡ ¾µÁöµµ
+		uint64_t timestamp = 0; // ë‚˜ì¤‘ì— ì“¸ì§€ë„
 		std::string playerUUID;
 		bool bJump = false;
 	};

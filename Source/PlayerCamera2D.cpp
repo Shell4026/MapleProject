@@ -1,4 +1,4 @@
-#include "PlayerCamera2D.h"
+﻿#include "PlayerCamera2D.h"
 
 #include "Game/GameObject.h"
 
@@ -12,7 +12,7 @@ namespace sh::game
 	SH_USER_API void PlayerCamera2D::Start()
 	{
 #if !SH_SERVER
-		world.renderer.GetWindow().SetSize(1920, 1080);
+		world.renderer.GetWindow().SetSize(1366, 768);
 
 		if (core::IsValid(player))
 		{
