@@ -34,35 +34,39 @@
                     },
                     "name": "Transform",
                     "type": "Transform",
-                    "uuid": "fdfb9962a345070dc2f9a654b3509e69",
+                    "uuid": "93b12da106989f845ee38b9790f8dd0f",
                     "version": 1
                 },
                 {
+                    "Camera": {
+                        "depth": 0,
+                        "fov": 60.0,
+                        "lookPos": [
+                            0.0,
+                            0.0,
+                            2.0
+                        ],
+                        "projection": 1
+                    },
                     "Component": {
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "MapleClient": {},
-                    "NetworkComponent": {},
                     "SObject": {},
-                    "UdpClient": {
-                        "serverIp": "127.0.0.1",
-                        "serverPort": 4026
-                    },
-                    "name": "user/MapleClient",
-                    "type": "MapleClient",
-                    "uuid": "665152c0020e1173f0f13acc25383949",
+                    "name": "Camera",
+                    "type": "Camera",
+                    "uuid": "c61acb03cb9e9cb502ad51619ca87cd4",
                     "version": 1
                 }
             ],
             "GameObject": {
                 "bEnable": true,
                 "hideInspector": false,
-                "transform": "fdfb9962a345070dc2f9a654b3509e69"
+                "transform": "93b12da106989f845ee38b9790f8dd0f"
             },
-            "name": "Client",
+            "name": "Camera",
             "type": "GameObject",
-            "uuid": "e24a59fbe22135c5a5c61ccb0690735c",
+            "uuid": "85644e871901c7e27d8c6555fb3e7d4d",
             "version": 1
         },
         {
@@ -113,7 +117,7 @@
                     "SObject": {},
                     "name": "user/Login",
                     "type": "Login",
-                    "uuid": "a0c8dcc7cf08c2dade318b4c039f4874",
+                    "uuid": "53617c5461c1c27ff57f7450192bb3fc",
                     "version": 1
                 }
             ],
@@ -160,39 +164,35 @@
                     },
                     "name": "Transform",
                     "type": "Transform",
-                    "uuid": "93b12da106989f845ee38b9790f8dd0f",
+                    "uuid": "fdfb9962a345070dc2f9a654b3509e69",
                     "version": 1
                 },
                 {
-                    "Camera": {
-                        "depth": 0,
-                        "fov": 60.0,
-                        "lookPos": [
-                            0.0,
-                            0.0,
-                            2.0
-                        ],
-                        "projection": 1
-                    },
                     "Component": {
                         "hideInspector": false,
                         "priority": 0
                     },
+                    "MapleClient": {},
+                    "NetworkComponent": {},
                     "SObject": {},
-                    "name": "Camera",
-                    "type": "Camera",
-                    "uuid": "c61acb03cb9e9cb502ad51619ca87cd4",
+                    "UdpClient": {
+                        "serverIp": "127.0.0.1",
+                        "serverPort": 4026
+                    },
+                    "name": "user/MapleClient",
+                    "type": "MapleClient",
+                    "uuid": "58a8f3f82333e45d1601443c2f4d4781",
                     "version": 1
                 }
             ],
             "GameObject": {
                 "bEnable": true,
                 "hideInspector": false,
-                "transform": "93b12da106989f845ee38b9790f8dd0f"
+                "transform": "fdfb9962a345070dc2f9a654b3509e69"
             },
-            "name": "Camera",
+            "name": "Client",
             "type": "GameObject",
-            "uuid": "85644e871901c7e27d8c6555fb3e7d4d",
+            "uuid": "e24a59fbe22135c5a5c61ccb0690735c",
             "version": 1
         }
     ],

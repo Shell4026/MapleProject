@@ -1,13 +1,11 @@
 {
-    "metaHash": 13940935838353909338,
+    "metaHash": 6891437070365328635,
     "name": "defaultNormal",
     "obj": {
         "Texture": {
             "aniso": 0,
             "bGenerateMipmap": true,
-            "bSRGB": false,
-            "height": 128,
-            "width": 128
+            "bSRGB": false
         },
         "name": "defaultNormal",
         "type": "Texture",
