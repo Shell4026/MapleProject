@@ -16,10 +16,12 @@ namespace sh::game
 	class MobStatePacket;
 	class PlayerJoinWorldPacket;
 
+	/// @brief 몹 클래스. 처음 맵에 배치된 개체는 스포너 개체가 된다.
 	class Mob : public NetworkComponent
 	{
 		COMPONENT(Mob, "user")
 	public:
+
 		SH_USER_API Mob(GameObject& owner);
 
 		SH_USER_API void Awake() override;

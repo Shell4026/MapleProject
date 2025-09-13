@@ -11,6 +11,9 @@
 
 #include "CollisionTag.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/norm.hpp"
+
 namespace sh::game
 {
 	Mob::Mob(GameObject& owner) :
@@ -111,29 +114,36 @@ namespace sh::game
 			tick = 0;
 		}
 #else
-		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.1f);
-		
-		if (core::IsValid(anim))
+		const auto& pos = gameObject.transform->GetWorldPosition();
+		glm::vec2 corrected = serverPos;
+		glm::vec2 correctedVel = serverVel;
+		float difSqr = glm::distance2(glm::vec2{ pos.x, pos.y }, serverPos);
+		if (difSqr < 1.0f * 1.0f)
 		{
-			float dx = serverPos.x - pos.x;
-			if (dx > 0.01f)
-				anim->bRight = true;
-			else if (dx < -0.01f)
-				anim->bRight = false;
+			corrected = glm::mix(glm::vec2{ pos }, serverPos, 0.1f);
 
-			if (std::abs(serverVel.x) < 0.01f)
-				anim->SetPose(PlayerAnimation::Pose::Idle);
-			else
-				anim->SetPose(PlayerAnimation::Pose::Walk);
+			if (core::IsValid(anim))
+			{
+				float dx = serverPos.x - corrected.x;
+				if (dx > 0.01f)
+					anim->bRight = true;
+				else if (dx < -0.01f)
+					anim->bRight = false;
+
+				if (std::abs(serverVel.x) < 0.01f)
+					anim->SetPose(PlayerAnimation::Pose::Idle);
+				else
+					anim->SetPose(PlayerAnimation::Pose::Walk);
+			}
+			if (core::IsValid(rigidbody))
+				correctedVel = glm::mix(glm::vec2{ rigidbody->GetLinearVelocity() }, serverVel, 1.0f);
 		}
-		
-		gameObject.transform->SetWorldPosition({ pos.x, pos.y, 0.01f });
+		gameObject.transform->SetWorldPosition({ corrected.x, corrected.y, 0.01f });
 		gameObject.transform->UpdateMatrix();
 		
 		if (core::IsValid(rigidbody))
 		{
-			auto vel = glm::mix(glm::vec2{ rigidbody->GetLinearVelocity() }, serverVel, 1.0f);
-			rigidbody->SetLinearVelocity({ vel.x, vel.y, 0.f });
+			rigidbody->SetLinearVelocity({ correctedVel.x, correctedVel.y, 0.f });
 			rigidbody->ResetPhysicsTransform();
 		}
 #endif

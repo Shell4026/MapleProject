@@ -4,6 +4,9 @@
 #include "Game/GameObject.h"
 #include "Game/Input.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/norm.hpp"
+
 #include <algorithm>
 namespace sh::game
 {
@@ -179,17 +182,19 @@ namespace sh::game
 		}
 #else
 		// 단순 보간
-		const glm::vec2 pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
-		const glm::vec2 vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
-		gameObject.transform->SetWorldPosition({ pos.x, pos.y, player->IsLocal() ? 0.025f : 0.02f });
+		glm::vec2 corrected = serverPos;
+		glm::vec2 correctedVel = serverVel;
+		
+		const float difSqr = glm::distance2(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos);
+		if (difSqr < 1.0f * 1.0f)
+		{
+			corrected = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
+			correctedVel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
+		}
+		gameObject.transform->SetWorldPosition({ corrected.x, corrected.y, player->IsLocal() ? 0.025f : 0.02f });
 		gameObject.transform->UpdateMatrix();
-		rigidBody->SetLinearVelocity({ vel.x, vel.y, 0.f });
+		rigidBody->SetLinearVelocity({ correctedVel.x, correctedVel.y, 0.f });
 		rigidBody->ResetPhysicsTransform();
-
-		if (player->IsLocal())
-			SH_INFO_FORMAT("my z: {}", gameObject.transform->GetWorldPosition().z);
-		else
-			SH_INFO_FORMAT("other z: {}", gameObject.transform->GetWorldPosition().z);
 #endif
 	}
 	SH_USER_API void PlayerMovement2D::OnCollisionEnter(Collider& collider)
