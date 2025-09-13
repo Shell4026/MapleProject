@@ -4,7 +4,6 @@ Shader "Unlit Shader"
 {
 	Property
 	{
-		vec3 color;
 		sampler2D tex;
 	}
 	
@@ -26,13 +25,11 @@ Shader "Unlit Shader"
 			layout(location = 0) out vec4 outColor;
 
 			layout(location = 0) in vec2 uvs;
-			uniform vec3 color;
 			uniform sampler2D tex;
 
 			void main() 
 			{
 				outColor = texture(tex, uvs);
-				outColor.xyz *= color.xyz;
 			}
 		}
 	}

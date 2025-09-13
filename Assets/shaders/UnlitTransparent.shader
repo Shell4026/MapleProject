@@ -1,11 +1,11 @@
 #version 430 core
 
-Shader "Unlit Transparent Shader"
+Shader "Unlit Transparent Shader2"
 {
 	Property
 	{
 		vec3 color;
-		sampler2D tex;
+		[Local] sampler2D tex;
 	}
 	
 	Pass

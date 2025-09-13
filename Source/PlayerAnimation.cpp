@@ -15,12 +15,11 @@ namespace sh::game
 #if !SH_SERVER
 		if (core::IsValid(meshRenderer))
 		{
-			auto oldMatPtr = meshRenderer->GetMaterial();
-			if (!core::IsValid(oldMatPtr))
-				return;
+			auto propBlock = std::make_unique<render::MaterialPropertyBlock>();
+			if (idles.size() > 0)
+				propBlock->SetProperty("tex", idles.front());
 
-			mat = core::SObject::Create<render::Material>(*oldMatPtr);
-			meshRenderer->SetMaterial(mat.Get());
+			meshRenderer->SetMaterialPropertyBlock(std::move(propBlock));
 
 			initPos = gameObject.transform->position;
 			initScale = gameObject.transform->scale;
@@ -30,7 +29,7 @@ namespace sh::game
 	SH_USER_API void PlayerAnimation::Update()
 	{
 #if !SH_SERVER
-		if (!mat.IsValid())
+		if (!core::IsValid(meshRenderer))
 			return;
 
 		auto scale = initScale;
@@ -79,6 +78,14 @@ namespace sh::game
 			texIdx = 0;
 		}
 	}
+	SH_USER_API void PlayerAnimation::SetMeshRenderer(MeshRenderer& meshRenderer)
+	{
+		this->meshRenderer = &meshRenderer;
+	}
+	SH_USER_API auto PlayerAnimation::GetMeshRenderer() const -> MeshRenderer*
+	{
+		return meshRenderer;
+	}
 	void PlayerAnimation::ChangeTexture(float delayMs, const std::vector<render::Texture*>& texs)
 	{
 		if (t >= delayMs / 1000.f)
@@ -87,6 +94,8 @@ namespace sh::game
 			texIdx = (texIdx + 1) % texs.size();
 		}
 		if (texs.size() > texIdx)
-			mat->SetProperty("tex", texs[texIdx]);
+		{
+			meshRenderer->GetMaterialPropertyBlock()->SetProperty("tex", texs[texIdx]);
+		}
 	}
 }//namespace

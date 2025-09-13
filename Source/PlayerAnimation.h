@@ -8,7 +8,9 @@
 #include "Game/Vector.h"
 
 #include "Render/Texture.h"
+#include "Render/MaterialPropertyBlock.h"
 
+//#undef SH_SERVER
 namespace sh::game
 {
 	class PlayerAnimation : public Component
@@ -29,6 +31,9 @@ namespace sh::game
 		SH_USER_API void Update() override;
 
 		SH_USER_API void SetPose(Pose pose);
+
+		SH_USER_API void SetMeshRenderer(MeshRenderer& meshRenderer);
+		SH_USER_API auto GetMeshRenderer() const -> MeshRenderer*;
 	private:
 		void ChangeTexture(float delayMs, const std::vector<render::Texture*>& texs);
 	public:
@@ -67,8 +72,6 @@ namespace sh::game
 		float jumpDelayMs = 1000;
 		PROPERTY(dieDelayMs)
 		float dieDelayMs = 1000;
-
-		core::SObjWeakPtr<render::Material> mat = nullptr;
 
 		Pose curPose = Pose::Idle;
 
