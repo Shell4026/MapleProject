@@ -5,5 +5,5 @@ out
 temp
 Assets/textures
 Assets/tile
-Assets/Mob
-Assets/Player
+Assets/Mob/*/tex
+Assets/Player/texture

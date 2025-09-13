@@ -1,0 +1,403 @@
+{
+    "Prefab": {
+        "4e37a6d398086e8ef6fe98884174a974": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "e7f2e29715a9a81adc26ca65fb9f9adf",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            0.3700000047683716,
+                            0.25999999046325684,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "11b4eb17afa09423f7f5d1d7163d34da",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "PlayerAnimation": {
+                        "die": [
+                            "ccfcbf7ea24d61e26e709dafc6c55d63",
+                            "e610076ffaea9f7df1d382a259265c77",
+                            "8c29e612c14cd17dcae2c44e6ac11fb9",
+                            "f052257b17ba886817eda51aa2400513",
+                            "46152baecba1da86e1bc6e781fa381bd",
+                            "124fe7aa7203130a59d8a996e3ae327f",
+                            "e354e48faa0d0e3f3dea61e4ee4254cf",
+                            "cc4f5c5def58413c3e97d9aec82a9617"
+                        ],
+                        "dieDelayMs": 120.0,
+                        "dieScale": [
+                            1.190000057220459,
+                            1.2699999809265137
+                        ],
+                        "idleDelayMs": 1000.0,
+                        "idleScale": [
+                            1.0,
+                            1.0
+                        ],
+                        "idles": [
+                            "8ace5ae1522e9d5c12db48bf6fb5ad45"
+                        ],
+                        "jumpDelayMs": 1000.0,
+                        "jumpScale": [
+                            1.0,
+                            1.0
+                        ],
+                        "jumps": [],
+                        "meshRenderer": "1607d501c27fae90ec056e6169d5edf8",
+                        "walkDelayMs": 180.0,
+                        "walkScale": [
+                            1.0,
+                            1.0
+                        ],
+                        "walks": [
+                            "270909f319de43afc5de03cd2c0cb591",
+                            "ee46dfe7eefebf71860a70672fa2f9bc",
+                            "fe430f250eda48cd74e2cabb32461a9c",
+                            "34ac7a3e901fb12c4109c51a2a473cb9",
+                            "b946f553d9e8f28bae4c1e90d53ed2b4",
+                            "34ac7a3e901fb12c4109c51a2a473cb9",
+                            "fe430f250eda48cd74e2cabb32461a9c",
+                            "ee46dfe7eefebf71860a70672fa2f9bc"
+                        ]
+                    },
+                    "SObject": {},
+                    "name": "user/PlayerAnimation",
+                    "type": "PlayerAnimation",
+                    "uuid": "badccbe4884999602cebf98b8883987d",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "11b4eb17afa09423f7f5d1d7163d34da"
+            },
+            "name": "origin",
+            "type": "GameObject",
+            "uuid": "4e37a6d398086e8ef6fe98884174a974",
+            "version": 1
+        },
+        "5aec2526c94cf5b0e0840024aa3cbbea": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "11b4eb17afa09423f7f5d1d7163d34da",
+                        "quat": [
+                            0.7071067690849304,
+                            0.0,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.5,
+                            0.0
+                        ],
+                        "vRotation": [
+                            90.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "7909bae2c2692842828ccdd8376d7ab3",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "b55023119dacbba39c6af542bc728c6d",
+                        "mesh": "72f9acd3af22ed09541de7ae11c8930a",
+                        "renderTag": 1
+                    },
+                    "SObject": {},
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "1607d501c27fae90ec056e6169d5edf8",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "7909bae2c2692842828ccdd8376d7ab3"
+            },
+            "name": "mesh",
+            "type": "GameObject",
+            "uuid": "5aec2526c94cf5b0e0840024aa3cbbea",
+            "version": 1
+        },
+        "8d1581f22132d6db56eee72cc37627b1": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "e7f2e29715a9a81adc26ca65fb9f9adf",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.06319308280944824,
+                            -2.5218842029571533,
+                            -0.1461600512266159
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "38d7f54fb9923a5d07b48a1c10ca8dd6",
+                    "version": 1
+                },
+                {
+                    "AIStrategy": {},
+                    "BasicAI": {},
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "user/BasicAI",
+                    "type": "BasicAI",
+                    "uuid": "5beafb5d51f46bc7d2e52169761a6e2f",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "38d7f54fb9923a5d07b48a1c10ca8dd6"
+            },
+            "name": "BasicAI",
+            "type": "GameObject",
+            "uuid": "8d1581f22132d6db56eee72cc37627b1",
+            "version": 1
+        },
+        "9db844109bbac586223d07072917fc57": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "e7f2e29715a9a81adc26ca65fb9f9adf",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.12999999523162842,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "ce5fbd3ce1001fdd652de16074f82545",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            0.3700000047683716,
+                            0.25999999046325684,
+                            1.0
+                        ]
+                    },
+                    "Collider": {},
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "physics/BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "0a01e096499d3207b1ab6e9098b32aca",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "ce5fbd3ce1001fdd652de16074f82545"
+            },
+            "name": "Collider",
+            "type": "GameObject",
+            "uuid": "9db844109bbac586223d07072917fc57",
+            "version": 1
+        },
+        "c1242ba64e15c66488b1788408e881e9": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            -0.06319308280944824,
+                            2.5218842029571533,
+                            0.1461600512266159
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "e7f2e29715a9a81adc26ca65fb9f9adf",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Mob": {
+                        "ai": "5beafb5d51f46bc7d2e52169761a6e2f",
+                        "anim": "badccbe4884999602cebf98b8883987d",
+                        "attack": 1,
+                        "exp": 3,
+                        "id": 0,
+                        "level": 1,
+                        "maxHp": 15,
+                        "rigidbody": "c060f6527f089d0b84a661d3334c5554",
+                        "speed": 0.6000000238418579
+                    },
+                    "SObject": {},
+                    "name": "user/Mob",
+                    "type": "Mob",
+                    "uuid": "efbfcf9931e92fb96801c8850d111a5e",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "axisLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "bGravity": true,
+                        "bInterpolation": true,
+                        "bKinematic": false,
+                        "bouncy": 0.0,
+                        "collision": "0a01e096499d3207b1ab6e9098b32aca",
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": {},
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "c060f6527f089d0b84a661d3334c5554",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "e7f2e29715a9a81adc26ca65fb9f9adf"
+            },
+            "name": "Snail",
+            "type": "GameObject",
+            "uuid": "c1242ba64e15c66488b1788408e881e9",
+            "version": 1
+        }
+    },
+    "name": "Snail",
+    "rootObj": "c1242ba64e15c66488b1788408e881e9",
+    "type": "Prefab",
+    "uuid": "997013bc68f9357631da0f86bdc247fd",
+    "version": 1
+}
