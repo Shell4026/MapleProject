@@ -91,6 +91,7 @@ namespace sh::game
 			uint32_t seq = 0;
 			uint64_t tick = 0;
 			bool bJump = false;
+			bool bProne = false;
 		} lastInput;
 
 		struct LastSent
@@ -101,6 +102,6 @@ namespace sh::game
 		} lastSent;
 #endif
 		bool bGround = false;
-		bool bJump = false;
+		bool bProne = false;
 	};
 }//namespace

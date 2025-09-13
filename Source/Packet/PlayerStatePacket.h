@@ -29,5 +29,6 @@ namespace sh::game
 		std::string playerUUID;
 
 		bool bGround = false;
+		bool bProne = false;
 	};
 }//namespace

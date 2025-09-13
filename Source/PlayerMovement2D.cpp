@@ -171,7 +171,7 @@ namespace sh::game
 			packet.timestamp = lastTick;
 			packet.bGround = bGround;
 			packet.floor = floorY;
-
+			packet.bProne = lastInput.bProne;
 			server->BroadCast(packet);
 
 			lastSent.pos = serverPos;
@@ -218,6 +218,8 @@ namespace sh::game
 			lastInput.xMove = packet.inputX;
 		if (lastInput.bJump != packet.bJump)
 			lastInput.bJump = packet.bJump;
+		if (lastInput.bProne != packet.bProne)
+			lastInput.bProne = packet.bProne;
 		lastInput.tick = packet.timestamp;
 		lastInput.seq = packet.seq;
 	}
@@ -226,15 +228,22 @@ namespace sh::game
 		yVelocity = rigidBody->GetLinearVelocity().y;
 		if (bGround)
 		{
-			if (lastInput.xMove == 0)
-				xVelocity = 0;
-			else
-				xVelocity = std::clamp(lastInput.xMove * speed, -speed, speed);
-
-			if (lastInput.bJump)
+			if (!lastInput.bProne)
 			{
-				yVelocity = jumpSpeed;
-				bGround = false;
+				if (lastInput.xMove == 0)
+					xVelocity = 0;
+				else
+					xVelocity = std::clamp(lastInput.xMove * speed, -speed, speed);
+
+				if (lastInput.bJump)
+				{
+					yVelocity = jumpSpeed;
+					bGround = false;
+				}
+			}
+			else
+			{
+				xVelocity = 0.0f;
 			}
 		}
 		else
@@ -258,22 +267,28 @@ namespace sh::game
 		yVelocity = rigidBody->GetLinearVelocity().y;
 
 		float xMove = 0.f;
-		if (Input::GetKeyDown(Input::KeyCode::Right))
-		{
-			xMove += 1;
-			if (core::IsValid(anim))
-				anim->bRight = true;
-		}
-		if (Input::GetKeyDown(Input::KeyCode::Left))
-		{
-			xMove += -1;
-			if (core::IsValid(anim))
-				anim->bRight = false;
-		}
 		bool bJump = false;
-		if (Input::GetKeyDown(Input::KeyCode::F))
-			bJump = true;
-		
+		bool bProne = false;
+		if (Input::GetKeyDown(Input::KeyCode::Down))
+			bProne = true;
+		if (!bProne)
+		{
+			if (Input::GetKeyDown(Input::KeyCode::Right))
+			{
+				xMove += 1;
+				if (core::IsValid(anim))
+					anim->bRight = true;
+			}
+			if (Input::GetKeyDown(Input::KeyCode::Left))
+			{
+				xMove += -1;
+				if (core::IsValid(anim))
+					anim->bRight = false;
+			}
+			if (Input::GetKeyDown(Input::KeyCode::F))
+				bJump = true;
+		}
+
 		// 움직임 예측 코드
 		if (bGround)
 		{
@@ -291,9 +306,16 @@ namespace sh::game
 			if (core::IsValid(anim))
 			{
 				if (xVelocity != 0)
+				{
 					anim->SetPose(PlayerAnimation::Pose::Walk);
+				}
 				else
-					anim->SetPose(PlayerAnimation::Pose::Idle);
+				{
+					if (bProne)
+						anim->SetPose(PlayerAnimation::Pose::Prone);
+					else
+						anim->SetPose(PlayerAnimation::Pose::Idle);
+				}
 			}
 		}
 		else
@@ -311,7 +333,7 @@ namespace sh::game
 		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 
 		bool bInputChanged = false;
-		bInputChanged = (xMove != lastSent.inputX) || (bJump != lastSent.bJump);
+		bInputChanged = (xMove != lastSent.inputX) || (bJump != lastSent.bJump || (bProne != lastSent.bProne));
 
 		if (bInputChanged)
 		{
@@ -321,6 +343,7 @@ namespace sh::game
 			packet.seq = inputSeqCounter++;
 			packet.playerUUID = client->GetUser().GetUserUUID().ToString();
 			packet.timestamp = tick;
+			packet.bProne = bProne;
 
 			lastSent = std::move(packet);
 
@@ -344,6 +367,7 @@ namespace sh::game
 
 		bGround = packet.bGround;
 		floorY = packet.floor;
+		bProne = packet.bProne;
 
 		xVelocity = serverVel.x;
 		yVelocity = serverVel.y;
@@ -355,17 +379,20 @@ namespace sh::game
 
 		if (bGround)
 		{
-			if (xVelocity == 0)
-				anim->SetPose(PlayerAnimation::Pose::Idle);
-			else
+			if (!bProne)
 			{
-				if (xVelocity >= 1.0f)
-					anim->bRight = true;
-				else if (xVelocity <= -1.0f)
-					anim->bRight = false;
-				if (std::abs(xVelocity) > 1.0f)
+				if (std::abs(xVelocity) > 0.5f)
 					anim->SetPose(PlayerAnimation::Pose::Walk);
+				else
+					anim->SetPose(PlayerAnimation::Pose::Idle);
+
+				if (xVelocity >= 0.5f)
+					anim->bRight = true;
+				else if (xVelocity <= -0.5f)
+					anim->bRight = false;
 			}
+			else
+				anim->SetPose(PlayerAnimation::Pose::Prone);
 		}
 		else
 			anim->SetPose(PlayerAnimation::Pose::Jump);

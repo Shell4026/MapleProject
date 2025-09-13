@@ -32,10 +32,11 @@ namespace sh::game
 		if (!core::IsValid(meshRenderer))
 			return;
 
-		auto scale = initScale;
-		scale.x *= bRight ? -1.f : 1.f;
+		float dir = bRight ? -1.0f : 1.0f;
 		auto pos = initPos;
-
+		auto scale = initScale;
+		scale.x *= dir;
+		
 		switch (curPose)
 		{
 		case Pose::Idle:
@@ -47,7 +48,7 @@ namespace sh::game
 		}
 		case Pose::Walk:
 		{
-			pos.x += walkOffset.x;
+			pos.x += walkOffset.x * dir;
 			pos.y += walkOffset.y;
 			scale.x *= walkScale.x;
 			scale.y *= walkScale.y;
@@ -56,11 +57,20 @@ namespace sh::game
 		}
 		case Pose::Jump:
 		{
-			pos.x += jumpOffset.x;
+			pos.x += jumpOffset.x * dir;
 			pos.y += jumpOffset.y;
 			scale.x *= jumpScale.x;
 			scale.y *= jumpScale.y;
 			ChangeTexture(jumpDelayMs, jumps);
+			break;
+		}
+		case Pose::Prone:
+		{
+			pos.x += proneOffset.x * dir;
+			pos.y += proneOffset.y;
+			scale.x *= proneScale.x;
+			scale.y *= proneScale.y;
+			ChangeTexture(proneDelayMs, prones);
 			break;
 		}
 		}

@@ -1,4 +1,4 @@
-#include "PlayerInputPacket.h"
+﻿#include "PlayerInputPacket.h"
 
 namespace sh::game
 {
@@ -14,6 +14,7 @@ namespace sh::game
 		json["seq"] = seq;
 		json["player"] = playerUUID;
 		json["ts"] = timestamp;
+		json["prone"] = bProne;
 		return json;
 	}
 	SH_USER_API void PlayerInputPacket::Deserialize(const core::Json& json)
@@ -29,5 +30,7 @@ namespace sh::game
 			playerUUID = json["player"];
 		if (json.contains("ts"))
 			timestamp = json["ts"];
+		if (json.contains("prone"))
+			bProne = json["prone"];
 	}
 }//namespace

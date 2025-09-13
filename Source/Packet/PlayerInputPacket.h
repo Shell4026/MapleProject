@@ -22,5 +22,6 @@ namespace sh::game
 		uint64_t timestamp = 0; // 나중에 쓸지도
 		std::string playerUUID;
 		bool bJump = false;
+		bool bProne = false;
 	};
 }

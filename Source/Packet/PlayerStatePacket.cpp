@@ -19,6 +19,7 @@ namespace sh::game
 		json["ts"] = timestamp;
 		json["ground"] = bGround;
 		json["floor"] = floor;
+		json["prone"] = bProne;
 		return json;
 	}
 	SH_USER_API void PlayerStatePacket::Deserialize(const core::Json& json)
@@ -44,5 +45,7 @@ namespace sh::game
 			bGround = json["ground"];
 		if (json.contains("floor"))
 			floor = json["floor"];
+		if (json.contains("prone"))
+			bProne = json["prone"];
 	}
 }//namespace
