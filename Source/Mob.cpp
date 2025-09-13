@@ -7,6 +7,8 @@
 
 #include "Game/GameObject.h"
 
+#include "Network/StringPacket.h"
+
 #include "CollisionTag.hpp"
 
 namespace sh::game
@@ -110,7 +112,8 @@ namespace sh::game
 		}
 #else
 		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.1f);
-		if (anim != nullptr)
+		
+		if (core::IsValid(anim))
 		{
 			float dx = serverPos.x - pos.x;
 			if (dx > 0.01f)
@@ -123,15 +126,25 @@ namespace sh::game
 			else
 				anim->SetPose(PlayerAnimation::Pose::Walk);
 		}
-		gameObject.transform->SetWorldPosition(pos);
+		
+		gameObject.transform->SetWorldPosition({ pos.x, pos.y, 0.01f });
 		gameObject.transform->UpdateMatrix();
+		
 		if (core::IsValid(rigidbody))
 		{
 			auto vel = glm::mix(glm::vec2{ rigidbody->GetLinearVelocity() }, serverVel, 1.0f);
-			rigidbody->SetLinearVelocity(vel);
+			rigidbody->SetLinearVelocity({ vel.x, vel.y, 0.f });
 			rigidbody->ResetPhysicsTransform();
 		}
 #endif
+	}
+	SH_USER_API void Mob::SetAnimation(PlayerAnimation& anim)
+	{
+		this->anim = &anim;
+	}
+	SH_USER_API auto Mob::GetAnimation() const -> PlayerAnimation*
+	{
+		return anim;
 	}
 	SH_USER_API void Mob::SetAIStrategy(AIStrategy* strategy)
 	{

@@ -41,7 +41,7 @@ namespace sh::game
 	SH_USER_API void PlayerMovement2D::Awake()
 	{
 		world.GetPhysWorld()->SetGravity({ 0.f, -20.f, 0.f });
-		if (core::IsValid(rigidBody))
+		if (rigidBody != nullptr)
 		{
 			rigidBody->SetAngularLock({ 1, 1, 1 });
 			rigidBody->SetAxisLock({ 0, 0, 1 });
@@ -179,12 +179,17 @@ namespace sh::game
 		}
 #else
 		// 단순 보간
-		auto pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
-		auto vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
-		gameObject.transform->SetWorldPosition(pos);
+		const glm::vec2 pos = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
+		const glm::vec2 vel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
+		gameObject.transform->SetWorldPosition({ pos.x, pos.y, player->IsLocal() ? 0.025f : 0.02f });
 		gameObject.transform->UpdateMatrix();
-		rigidBody->SetLinearVelocity(vel);
+		rigidBody->SetLinearVelocity({ vel.x, vel.y, 0.f });
 		rigidBody->ResetPhysicsTransform();
+
+		if (player->IsLocal())
+			SH_INFO_FORMAT("my z: {}", gameObject.transform->GetWorldPosition().z);
+		else
+			SH_INFO_FORMAT("other z: {}", gameObject.transform->GetWorldPosition().z);
 #endif
 	}
 	SH_USER_API void PlayerMovement2D::OnCollisionEnter(Collider& collider)

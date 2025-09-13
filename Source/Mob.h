@@ -25,6 +25,9 @@ namespace sh::game
 		SH_USER_API void Awake() override;
 		SH_USER_API void Update() override;
 
+		SH_USER_API void SetAnimation(PlayerAnimation& anim);
+		SH_USER_API auto GetAnimation() const -> PlayerAnimation*;
+
 		SH_USER_API void SetAIStrategy(AIStrategy* strategy);
 		SH_USER_API auto GetAI() const -> AIStrategy*;
 		SH_USER_API auto GetRigidbody() const -> RigidBody*;

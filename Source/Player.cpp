@@ -34,7 +34,6 @@ namespace sh::game
 	SH_USER_API void Player::Awake()
 	{
 #if !SH_SERVER
-		SH_INFO_FORMAT("local? {}, {}", userUUID.ToString(), MapleClient::GetInstance()->GetUser().GetUserUUID().ToString());
 		if (userUUID == MapleClient::GetInstance()->GetUser().GetUserUUID())
 			bLocal = true;
 		else
@@ -43,7 +42,6 @@ namespace sh::game
 	}
 	SH_USER_API void Player::Start()
 	{
-		SH_INFO("Hello?");
 	}
 	SH_USER_API void Player::Update()
 	{
