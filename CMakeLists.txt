@@ -1,7 +1,7 @@
 ﻿if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Debug\bin)
+	set(ENGINE_DIR C:\ShellEngine\out\build\x64-Debug\bin)
 else()
-	set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Release\bin)
+	set(ENGINE_DIR C:\ShellEngine\out\build\x64-Release\bin)
 endif()
 set(PROJECT_NAME "New Project")
 

@@ -1,13 +1,13 @@
-﻿#include "PlayerAnimation.h"
+﻿#include "MobAnimation.h"
 #if !SH_SERVER
 #include "Game/GameObject.h"
 namespace sh::game
 {
-	PlayerAnimation::PlayerAnimation(GameObject& owner) :
+	MobAnimation::MobAnimation(GameObject& owner) :
 		Component(owner)
 	{
 	}
-	SH_USER_API void PlayerAnimation::Awake()
+	SH_USER_API void MobAnimation::Awake()
 	{
 		if (meshRenderer == nullptr)
 			return;
@@ -16,21 +16,19 @@ namespace sh::game
 			idle->SetTarget(*gameObject.transform);
 			idle->Play(*meshRenderer);
 		}
-		if (walk != nullptr)
-			walk->SetTarget(*gameObject.transform);
+		if (move != nullptr)
+			move->SetTarget(*gameObject.transform);
 		if (jump != nullptr)
 			jump->SetTarget(*gameObject.transform);
-		if (prone != nullptr)
-			prone->SetTarget(*gameObject.transform);
 	}
-	SH_USER_API void PlayerAnimation::BeginUpdate()
+	SH_USER_API void MobAnimation::BeginUpdate()
 	{
 #if !SH_SERVER
 		if (curAnim.IsValid())
 			curAnim->InverseX(bRight);
 #endif
 	}
-	SH_USER_API void PlayerAnimation::SetPose(Pose pose)
+	SH_USER_API void MobAnimation::SetPose(Pose pose)
 	{
 		if (curPose == pose)
 			return;
@@ -50,11 +48,11 @@ namespace sh::game
 				idle->Play(*meshRenderer);
 			}
 			break;
-		case Pose::Walk:
-			if (core::IsValid(walk))
+		case Pose::Move:
+			if (core::IsValid(move))
 			{
-				curAnim = walk;
-				walk->Play(*meshRenderer);
+				curAnim = move;
+				move->Play(*meshRenderer);
 			}
 			break;
 		case Pose::Jump:
@@ -64,21 +62,14 @@ namespace sh::game
 				jump->Play(*meshRenderer);
 			}
 			break;
-		case Pose::Prone:
-			if (core::IsValid(prone))
-			{
-				curAnim = prone;
-				prone->Play(*meshRenderer);
-			}
-			break;
 		}
 		curAnim->InverseX(bRight);
 	}
-	SH_USER_API void PlayerAnimation::SetMeshRenderer(MeshRenderer& meshRenderer)
+	SH_USER_API void MobAnimation::SetMeshRenderer(MeshRenderer& meshRenderer)
 	{
 		this->meshRenderer = &meshRenderer;
 	}
-	SH_USER_API auto PlayerAnimation::GetMeshRenderer() const -> MeshRenderer*
+	SH_USER_API auto MobAnimation::GetMeshRenderer() const -> MeshRenderer*
 	{
 		return meshRenderer;
 	}

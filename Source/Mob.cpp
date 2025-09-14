@@ -131,9 +131,9 @@ namespace sh::game
 					anim->bRight = false;
 
 				if (std::abs(serverVel.x) < 0.01f)
-					anim->SetPose(PlayerAnimation::Pose::Idle);
+					anim->SetPose(MobAnimation::Pose::Idle);
 				else
-					anim->SetPose(PlayerAnimation::Pose::Walk);
+					anim->SetPose(MobAnimation::Pose::Move);
 			}
 			if (core::IsValid(rigidbody))
 				correctedVel = glm::mix(glm::vec2{ rigidbody->GetLinearVelocity() }, serverVel, 1.0f);
@@ -149,11 +149,11 @@ namespace sh::game
 #endif
 	}
 #if !SH_SERVER
-	SH_USER_API void Mob::SetAnimation(PlayerAnimation& anim)
+	SH_USER_API void Mob::SetAnimation(MobAnimation& anim)
 	{
 		this->anim = &anim;
 	}
-	SH_USER_API auto Mob::GetAnimation() const -> PlayerAnimation*
+	SH_USER_API auto Mob::GetAnimation() const -> MobAnimation*
 	{
 		return anim;
 	}

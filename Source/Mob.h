@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
-#include "PlayerAnimation.h"
+#include "MobAnimation.h"
 #include "PacketEvent.hpp"
 #include "AI/AIStrategy.h"
 
@@ -28,8 +28,8 @@ namespace sh::game
 		SH_USER_API void Update() override;
 
 #if !SH_SERVER
-		SH_USER_API void SetAnimation(PlayerAnimation& anim);
-		SH_USER_API auto GetAnimation() const -> PlayerAnimation*;
+		SH_USER_API void SetAnimation(MobAnimation& anim);
+		SH_USER_API auto GetAnimation() const ->MobAnimation*;
 #endif
 
 		SH_USER_API void SetAIStrategy(AIStrategy* strategy);
@@ -71,7 +71,7 @@ namespace sh::game
 		uint32_t lastStateSeq = 0;
 
 		PROPERTY(anim)
-		PlayerAnimation* anim = nullptr;
+		MobAnimation* anim = nullptr;
 #else
 		uint64_t seq = 1;
 #endif
