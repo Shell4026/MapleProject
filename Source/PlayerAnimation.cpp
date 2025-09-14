@@ -32,7 +32,7 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerAnimation::SetPose(Pose pose)
 	{
-		if (curPose == pose)
+		if (curPose == pose || bAnimLock)
 			return;
 		curPose = pose;
 		if (!core::IsValid(meshRenderer))
@@ -72,7 +72,8 @@ namespace sh::game
 			}
 			break;
 		}
-		curAnim->InverseX(bRight);
+		if (curAnim.IsValid())
+			curAnim->InverseX(bRight);
 	}
 	SH_USER_API void PlayerAnimation::SetMeshRenderer(MeshRenderer& meshRenderer)
 	{
@@ -81,6 +82,10 @@ namespace sh::game
 	SH_USER_API auto PlayerAnimation::GetMeshRenderer() const -> MeshRenderer*
 	{
 		return meshRenderer;
+	}
+	SH_USER_API void PlayerAnimation::SetLock(bool bLock)
+	{
+		bAnimLock = bLock;
 	}
 }//namespace
 #endif

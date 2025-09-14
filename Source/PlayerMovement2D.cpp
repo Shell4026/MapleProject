@@ -82,6 +82,7 @@ namespace sh::game
 		if (player->IsLocal())
 		{
 			ProcessLocalInput();
+			ProcessLocalAnim(lastSent.inputX);
 		}
 		else
 		{
@@ -134,7 +135,6 @@ namespace sh::game
 
 		static bool bFirst = true;
 
-		bool bSend = false;
 		if (bFirst)
 		{
 			bSend = true;
@@ -172,6 +172,7 @@ namespace sh::game
 			packet.bGround = bGround;
 			packet.floor = floorY;
 			packet.bProne = lastInput.bProne;
+			packet.bLock = bLock;
 			server->BroadCast(packet);
 
 			lastSent.pos = serverPos;
@@ -179,6 +180,7 @@ namespace sh::game
 			lastSent.seq = lastProcessedSeq;
 
 			serverTick = 0;
+			bSend = false;
 		}
 #else
 		// 단순 보간
@@ -203,6 +205,29 @@ namespace sh::game
 			return;
 		if (floor->GetCollider() == &collider)
 			bGround = true;
+	}
+	SH_USER_API void PlayerMovement2D::Lock()
+	{
+		bLock = true;
+		if (rigidBody != nullptr)
+		{
+			auto vel = rigidBody->GetLinearVelocity();
+			rigidBody->SetLinearVelocity({ 0.0f, vel.y, 0.0f });
+		}
+#if SH_SERVER
+		bSend = true;
+#endif
+	}
+	SH_USER_API void PlayerMovement2D::Unlock()
+	{
+		bLock = false;
+#if SH_SERVER
+		bSend = true;
+#endif
+	}
+	SH_USER_API auto PlayerMovement2D::IsLock() const -> bool
+	{
+		return bLock;
 	}
 #if SH_SERVER
 	void PlayerMovement2D::ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint)
@@ -230,12 +255,12 @@ namespace sh::game
 		{
 			if (!lastInput.bProne)
 			{
-				if (lastInput.xMove == 0)
+				if (lastInput.xMove == 0 || bLock)
 					xVelocity = 0;
 				else
 					xVelocity = std::clamp(lastInput.xMove * speed, -speed, speed);
 
-				if (lastInput.bJump)
+				if (lastInput.bJump && !bLock)
 				{
 					yVelocity = jumpSpeed;
 					bGround = false;
@@ -249,7 +274,7 @@ namespace sh::game
 		else
 		{
 			float airSpeed = 0.1f;
-			if (lastInput.xMove != 0)
+			if (lastInput.xMove != 0 && !bLock)
 			{
 				float targetSpeed = lastInput.xMove * speed;
 				xVelocity = glm::mix(xVelocity, targetSpeed, airSpeed);
@@ -266,7 +291,7 @@ namespace sh::game
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		yVelocity = rigidBody->GetLinearVelocity().y;
 
-		float xMove = 0.f;
+		float xInput = 0.f;
 		bool bJump = false;
 		bool bProne = false;
 		if (Input::GetKeyDown(Input::KeyCode::Down))
@@ -274,71 +299,45 @@ namespace sh::game
 		if (!bProne)
 		{
 			if (Input::GetKeyDown(Input::KeyCode::Right))
-			{
-				xMove += 1;
-				if (core::IsValid(anim))
-					anim->bRight = true;
-			}
+				xInput += 1;
 			if (Input::GetKeyDown(Input::KeyCode::Left))
-			{
-				xMove += -1;
-				if (core::IsValid(anim))
-					anim->bRight = false;
-			}
+				xInput += -1;
 			if (Input::GetKeyDown(Input::KeyCode::F))
 				bJump = true;
 		}
-
 		// 움직임 예측 코드
 		if (bGround)
 		{
-			if (xMove == 0)
+			if (xInput == 0 || bLock)
 				xVelocity = 0;
 			else
-				xVelocity = std::clamp(xMove * speed, -speed, speed);
+				xVelocity = std::clamp(xInput * speed, -speed, speed);
 
-			if (bJump)
+			if (bJump && !bLock)
 			{
 				yVelocity = jumpSpeed;
 				bGround = false;
-			}
-
-			if (core::IsValid(anim))
-			{
-				if (xVelocity != 0)
-				{
-					anim->SetPose(PlayerAnimation::Pose::Walk);
-				}
-				else
-				{
-					if (bProne)
-						anim->SetPose(PlayerAnimation::Pose::Prone);
-					else
-						anim->SetPose(PlayerAnimation::Pose::Idle);
-				}
 			}
 		}
 		else
 		{
 			float airSpeed = 0.1f;
-			if (xMove != 0)
+			if (xInput != 0 && !bLock)
 			{
 				// 현재 속도에서 목표 속도로 보간
-				float targetSpeed = xMove * speed;
+				float targetSpeed = xInput * speed;
 				xVelocity = glm::mix(xVelocity, targetSpeed, airSpeed);
 			}
-			if (core::IsValid(anim))
-				anim->SetPose(PlayerAnimation::Pose::Jump);
 		}
 		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 
 		bool bInputChanged = false;
-		bInputChanged = (xMove != lastSent.inputX) || (bJump != lastSent.bJump || (bProne != lastSent.bProne));
+		bInputChanged = (xInput != lastSent.inputX) || (bJump != lastSent.bJump || (bProne != lastSent.bProne));
 
 		if (bInputChanged)
 		{
 			PlayerInputPacket packet{};
-			packet.inputX = xMove;
+			packet.inputX = xInput;
 			packet.bJump = bJump;
 			packet.seq = inputSeqCounter++;
 			packet.playerUUID = client->GetUser().GetUserUUID().ToString();
@@ -371,10 +370,38 @@ namespace sh::game
 
 		xVelocity = serverVel.x;
 		yVelocity = serverVel.y;
+
+		if (packet.bLock)
+			Lock();
+		else
+			Unlock();
+	}
+	void PlayerMovement2D::ProcessLocalAnim(float xInput)
+	{
+		if (!core::IsValid(anim) || bLock)
+			return;
+
+		if (xInput > 0)
+			anim->bRight = true;
+		else if (xInput < 0)
+			anim->bRight = false;
+
+		if (xInput == 0.0f)
+		{
+			if (bProne)
+				anim->SetPose(PlayerAnimation::Pose::Prone);
+			else
+				anim->SetPose(PlayerAnimation::Pose::Idle);
+		}
+		else
+			anim->SetPose(PlayerAnimation::Pose::Walk);
+
+		if (!bGround)
+			anim->SetPose(PlayerAnimation::Pose::Jump);
 	}
 	void PlayerMovement2D::ProcessRemoteAnim()
 	{
-		if (!core::IsValid(anim))
+		if (!core::IsValid(anim) || bLock)
 			return;
 
 		if (bGround)

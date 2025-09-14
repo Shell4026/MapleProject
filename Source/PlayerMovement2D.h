@@ -32,6 +32,12 @@ namespace sh::game
 		SH_USER_API void FixedUpdate() override;
 		SH_USER_API void Update() override;
 		SH_USER_API void OnCollisionEnter(Collider& collider) override;
+
+		/// @brief 조작을 막는다.
+		SH_USER_API void Lock();
+		/// @brief 조작을 허용한다.
+		SH_USER_API void Unlock();
+		SH_USER_API auto IsLock() const -> bool;
 	private:
 		
 #if SH_SERVER
@@ -41,6 +47,7 @@ namespace sh::game
 #else
 		void ProcessLocalInput();
 		void ProcessStatePacket(const PlayerStatePacket& packet);
+		void ProcessLocalAnim(float xInput);
 		void ProcessRemoteAnim();
 #endif
 	private:
@@ -102,8 +109,10 @@ namespace sh::game
 			glm::vec2 vel;
 			uint32_t seq = 0;
 		} lastSent;
+		bool bSend = false;
 #endif
 		bool bGround = false;
 		bool bProne = false;
+		bool bLock = false;
 	};
 }//namespace

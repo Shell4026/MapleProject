@@ -25,6 +25,9 @@ namespace sh::game
 		SH_USER_API void Play(MeshRenderer& meshRenderer);
 		SH_USER_API void Stop();
 
+		SH_USER_API void SetLoop(bool bLoop);
+		SH_USER_API auto IsLoop() const -> bool;
+
 		SH_USER_API auto IsPlaying() const -> bool;
 		SH_USER_API auto GetCurrentTexture() const -> render::Texture*;
 
@@ -47,6 +50,8 @@ namespace sh::game
 		uint32_t idx = 0;
 		float t = 0;
 
+		PROPERTY(bLoop)
+		bool bLoop = false;
 		bool bPlaying = false;
 		bool bRight = false;
 	};

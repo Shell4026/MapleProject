@@ -27,16 +27,27 @@ namespace sh::game
 			auto propBlock = std::make_unique<render::MaterialPropertyBlock>();
 			meshRenderer.SetMaterialPropertyBlock(std::move(propBlock));
 		}
+		idx = 0;
+		t = 0.0f;
 	}
 	SH_USER_API void Animation::Stop()
 	{
 		idx = 0;
+		t = 0.0f;
 		bPlaying = false;
 		if (target.IsValid())
 		{
 			target->SetPosition(initPos);
 			target->SetScale(initScale);
 		}
+	}
+	SH_USER_API void Animation::SetLoop(bool bLoop)
+	{
+		this->bLoop = bLoop;
+	}
+	SH_USER_API auto Animation::IsLoop() const -> bool
+	{
+		return bLoop;
 	}
 	SH_USER_API auto Animation::IsPlaying() const -> bool
 	{
@@ -68,10 +79,22 @@ namespace sh::game
 
 		if (t >= delay / 1000.f)
 		{
+			if (bLoop)
+			{
+				idx = (idx + 1) % textures.size();
+				if (delays.size() > idx)
+					delay = delays[idx];
+			}
+			else
+			{
+				idx = (idx + 1);
+				if (idx >= textures.size())
+				{
+					idx = textures.size() - 1;
+					bPlaying = false;
+				}
+			}
 			t = 0.0f;
-			idx = (idx + 1) % textures.size();
-			if (delays.size() > idx)
-				delay = delays[idx];
 		}
 		if (meshRenderer.IsValid())
 			meshRenderer->GetMaterialPropertyBlock()->SetProperty("tex", textures[idx]);
