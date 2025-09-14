@@ -46,8 +46,10 @@ namespace sh::game
 	private:
 		PROPERTY(rigidBody)
 		RigidBody* rigidBody = nullptr;
+#if !SH_SERVER
 		PROPERTY(anim)
 		PlayerAnimation* anim = nullptr;
+#endif
 		PROPERTY(player)
 		Player* player = nullptr;
 

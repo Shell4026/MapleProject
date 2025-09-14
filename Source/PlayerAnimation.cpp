@@ -1,9 +1,6 @@
 ﻿#include "PlayerAnimation.h"
-
-#include "Game/World.h"
+#if !SH_SERVER
 #include "Game/GameObject.h"
-
-#include "Render/Material.h"
 namespace sh::game
 {
 	PlayerAnimation::PlayerAnimation(GameObject& owner) :
@@ -12,81 +9,69 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerAnimation::Awake()
 	{
-#if !SH_SERVER
-		if (core::IsValid(meshRenderer))
+		if (meshRenderer == nullptr)
+			return;
+		if (idle != nullptr)
 		{
-			auto propBlock = std::make_unique<render::MaterialPropertyBlock>();
-			if (idles.size() > 0)
-				propBlock->SetProperty("tex", idles.front());
-
-			meshRenderer->SetMaterialPropertyBlock(std::move(propBlock));
-
-			initPos = gameObject.transform->position;
-			initScale = gameObject.transform->scale;
+			idle->SetTarget(*gameObject.transform);
+			idle->Play(*meshRenderer);
 		}
-#endif
+		if (walk != nullptr)
+			walk->SetTarget(*gameObject.transform);
+		if (jump != nullptr)
+			jump->SetTarget(*gameObject.transform);
+		if (prone != nullptr)
+			prone->SetTarget(*gameObject.transform);
 	}
-	SH_USER_API void PlayerAnimation::Update()
+	SH_USER_API void PlayerAnimation::BeginUpdate()
 	{
 #if !SH_SERVER
-		if (!core::IsValid(meshRenderer))
-			return;
-
-		float dir = bRight ? -1.0f : 1.0f;
-		auto pos = initPos;
-		auto scale = initScale;
-		scale.x *= dir;
-		
-		switch (curPose)
-		{
-		case Pose::Idle:
-		{
-			scale.x *= idleScale.x;
-			scale.y *= idleScale.y;
-			ChangeTexture(idleDelayMs, idles);
-			break;
-		}
-		case Pose::Walk:
-		{
-			pos.x += walkOffset.x * dir;
-			pos.y += walkOffset.y;
-			scale.x *= walkScale.x;
-			scale.y *= walkScale.y;
-			ChangeTexture(walkDelayMs, walks);
-			break;
-		}
-		case Pose::Jump:
-		{
-			pos.x += jumpOffset.x * dir;
-			pos.y += jumpOffset.y;
-			scale.x *= jumpScale.x;
-			scale.y *= jumpScale.y;
-			ChangeTexture(jumpDelayMs, jumps);
-			break;
-		}
-		case Pose::Prone:
-		{
-			pos.x += proneOffset.x * dir;
-			pos.y += proneOffset.y;
-			scale.x *= proneScale.x;
-			scale.y *= proneScale.y;
-			ChangeTexture(proneDelayMs, prones);
-			break;
-		}
-		}
-		gameObject.transform->SetPosition(pos);
-		gameObject.transform->SetScale(scale);
-
-		t += world.deltaTime;
+		if (curAnim.IsValid())
+			curAnim->InverseX(bRight);
 #endif
 	}
 	SH_USER_API void PlayerAnimation::SetPose(Pose pose)
 	{
-		if (pose != curPose)
+		if (curPose == pose)
+			return;
+		curPose = pose;
+		if (!core::IsValid(meshRenderer))
+			return;
+		if (curAnim.IsValid())
+			curAnim->Stop();
+
+		switch (pose)
 		{
-			curPose = pose;
-			texIdx = 0;
+		case Pose::Idle:
+			if (core::IsValid(idle))
+			{
+				curAnim = idle;
+				idle->Play(*meshRenderer);
+			}
+			break;
+		case Pose::Walk:
+			if (core::IsValid(walk))
+			{
+				curAnim = walk;
+				walk->Play(*meshRenderer);
+			}
+			break;
+		case Pose::Jump:
+			if (core::IsValid(jump))
+			{
+				curAnim = jump;
+				jump->Play(*meshRenderer);
+			}
+			break;
+		case Pose::Prone:
+			if (core::IsValid(prone))
+			{
+				curAnim = prone;
+				prone->Play(*meshRenderer);
+			}
+			break;
 		}
+		curAnim->InverseX(bRight);
 	}
 	SH_USER_API void PlayerAnimation::SetMeshRenderer(MeshRenderer& meshRenderer)
 	{
@@ -96,16 +81,5 @@ namespace sh::game
 	{
 		return meshRenderer;
 	}
-	void PlayerAnimation::ChangeTexture(float delayMs, const std::vector<render::Texture*>& texs)
-	{
-		if (t >= delayMs / 1000.f)
-		{
-			t = 0.0f;
-			texIdx = (texIdx + 1) % texs.size();
-		}
-		if (texs.size() > texIdx)
-		{
-			meshRenderer->GetMaterialPropertyBlock()->SetProperty("tex", texs[texIdx]);
-		}
-	}
 }//namespace
+#endif

@@ -34,25 +34,17 @@ namespace sh::game
 		if (!core::IsValid(rigidBody))
 			return;
 
-		PlayerAnimation* anim = mob.GetAnim();
-
 		if (state == State::Move || state == State::Chase)
 		{
 			auto vel = rigidBody->GetLinearVelocity();
 			vel.x = dir * mob.GetSpeed();
 			rigidBody->SetLinearVelocity(vel);
-
-			if (core::IsValid(anim))
-				anim->SetPose(PlayerAnimation::Pose::Walk);
 		}
 		else
 		{
 			auto vel = rigidBody->GetLinearVelocity();
 			vel.x = 0.f;
 			rigidBody->SetLinearVelocity(vel);
-
-			if (core::IsValid(anim))
-				anim->SetPose(PlayerAnimation::Pose::Idle);
 		}
 #endif
 	}

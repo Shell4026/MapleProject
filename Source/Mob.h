@@ -27,13 +27,14 @@ namespace sh::game
 		SH_USER_API void Awake() override;
 		SH_USER_API void Update() override;
 
+#if !SH_SERVER
 		SH_USER_API void SetAnimation(PlayerAnimation& anim);
 		SH_USER_API auto GetAnimation() const -> PlayerAnimation*;
+#endif
 
 		SH_USER_API void SetAIStrategy(AIStrategy* strategy);
 		SH_USER_API auto GetAI() const -> AIStrategy*;
 		SH_USER_API auto GetRigidbody() const -> RigidBody*;
-		SH_USER_API auto GetAnim() const -> PlayerAnimation*;
 
 		SH_USER_API auto GetId() const -> uint32_t;
 		SH_USER_API auto GetHp() const -> uint32_t;
@@ -68,6 +69,9 @@ namespace sh::game
 		glm::vec2 serverPos;
 		glm::vec2 serverVel;
 		uint32_t lastStateSeq = 0;
+
+		PROPERTY(anim)
+		PlayerAnimation* anim = nullptr;
 #else
 		uint64_t seq = 1;
 #endif
@@ -76,8 +80,6 @@ namespace sh::game
 
 		uint32_t hp = 15;
 
-		PROPERTY(anim)
-		PlayerAnimation* anim = nullptr;
 		PROPERTY(ai)
 		AIStrategy* ai = nullptr;
 		PROPERTY(rigidbody)

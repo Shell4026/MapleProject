@@ -148,6 +148,7 @@ namespace sh::game
 		}
 #endif
 	}
+#if !SH_SERVER
 	SH_USER_API void Mob::SetAnimation(PlayerAnimation& anim)
 	{
 		this->anim = &anim;
@@ -156,6 +157,7 @@ namespace sh::game
 	{
 		return anim;
 	}
+#endif
 	SH_USER_API void Mob::SetAIStrategy(AIStrategy* strategy)
 	{
 		ai = strategy;
@@ -167,10 +169,6 @@ namespace sh::game
 	SH_USER_API auto Mob::GetRigidbody() const -> RigidBody*
 	{
 		return rigidbody;
-	}
-	SH_USER_API auto Mob::GetAnim() const -> PlayerAnimation*
-	{
-		return anim;
 	}
 	SH_USER_API auto Mob::GetId() const -> uint32_t
 	{

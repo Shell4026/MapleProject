@@ -1,4 +1,8 @@
-﻿set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Release\bin)
+﻿if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Debug\bin)
+else()
+	set(ENGINE_DIR F:\C++\ShellEngine\out\build\x64-Release\bin)
+endif()
 set(PROJECT_NAME "New Project")
 
 set(CLIENT ShellEngineUser)
@@ -57,15 +61,13 @@ FETCHCONTENT_MAKEAVAILABLE(JSON)
 
 
 foreach(TGT ${TARGETS})
-	add_library(${TGT} SHARED ${SRC} ${PACKET_SRC} ${AI_SRC} ${HEADERS} ${PACKET_HEADERS} ${AI_HEADERS})
+	add_library(${TGT} SHARED ${SRC} ${PACKET_SRC} ${AI_SRC} ${HEADERS} ${PACKET_HEADERS} ${AI_HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
 
 	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 		target_compile_definitions(${TGT} PUBLIC SH_DEBUG)
 	endif()
 	if ("${TGT}" STREQUAL "${SERVER}")
 		target_compile_definitions(${SERVER} PUBLIC SH_SERVER)
-	else()
-		target_compile_options(${TGT} PRIVATE /FAs)
 	endif()
 
 	target_precompile_headers(${TGT} PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
