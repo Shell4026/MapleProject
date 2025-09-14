@@ -18,6 +18,8 @@ namespace sh::game
 
 		SH_USER_API void SetPlayer(GameObject& player);
 	private:
+		void SetCameraZ();
+		void MoveY();
 		auto SmoothDamp(float current, float target, float& currentVelocity, float smoothTime, float deltaTime) const -> float;
 		void MoveToPlayer();
 	private:
