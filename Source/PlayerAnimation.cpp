@@ -93,5 +93,9 @@ namespace sh::game
 	{
 		bAnimLock = bLock;
 	}
+	SH_USER_API auto PlayerAnimation::IsLock() const -> bool
+	{
+		return bAnimLock;
+	}
 }//namespace
 #endif

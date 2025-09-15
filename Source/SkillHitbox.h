@@ -17,6 +17,7 @@ namespace sh::game
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void BeginUpdate() override;
+		SH_USER_API void OnDisable() override;
 
 		SH_USER_API auto GetSkill() const -> Skill*;
 		SH_USER_API auto GetPlayer() const-> Player*;

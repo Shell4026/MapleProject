@@ -29,6 +29,7 @@ namespace sh::game
 			mainJson["state"] = state;
 			mainJson["hp"] = hp;
 			mainJson["seq"] = seq;
+			mainJson["stun"] = bStun;
 			return mainJson;
 		}
 		void Deserialize(const core::Json& json)
@@ -52,6 +53,8 @@ namespace sh::game
 				hp = json["hp"];
 			if (json.contains("seq"))
 				seq = json["seq"];
+			if (json.contains("stun"))
+				bStun = json["stun"];
 		}
 	public:
 		std::string spawnerUUID;
@@ -63,5 +66,6 @@ namespace sh::game
 		int state;
 		uint32_t hp;
 		uint32_t seq;
+		bool bStun = false;
 	};
 }//namespace

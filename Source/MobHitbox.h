@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include "Export.h"
+#include "Mob.h"
 
 #include "Game/Component/Component.h"
 
 namespace sh::game
 {
-	class Mob;
 	class RigidBody;
 	class MobHitbox : public Component
 	{

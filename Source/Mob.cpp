@@ -1,9 +1,11 @@
 ﻿#include "Mob.h"
 #include "MapleServer.h"
 #include "MapleClient.h"
+#include "Skill.h"
 #include "Packet/MobStatePacket.hpp"
 #include "Packet/MobSpawnPacket.hpp"
 #include "Packet/PlayerJoinWorldPacket.h"
+#include "Packet/MobHitPacket.h"
 
 #include "Game/GameObject.h"
 
@@ -20,7 +22,6 @@ namespace sh::game
 		NetworkComponent(owner), spawnerUUID(core::UUID::GenerateEmptyUUID())
 	{
 #if !SH_SERVER
-		// 스포너의 경우만 구독함
 		packetSubscriber.SetCallback
 		(
 			[&](const PacketEvent& evt)
@@ -28,9 +29,9 @@ namespace sh::game
 				if (evt.packet->GetId() == MobSpawnPacket::ID)
 					ProcessMobSpawn(static_cast<const MobSpawnPacket&>(*evt.packet));
 				else if (evt.packet->GetId() == MobStatePacket::ID)
-				{
 					ProcessState(static_cast<const MobStatePacket&>(*evt.packet));
-				}
+				else if (evt.packet->GetId() == MobHitPacket::ID)
+					ProcessHit(static_cast<const MobHitPacket&>(*evt.packet));
 
 			}
 		);
@@ -87,7 +88,7 @@ namespace sh::game
 #if SH_SERVER
 		if (bSpawner)
 			return;
-		if (core::IsValid(ai))
+		if (core::IsValid(ai) && !bStun)
 			ai->Run(*this);
 		++tick;
 		if (tick == 6) // 60fps 기준 1초에 10번
@@ -106,12 +107,19 @@ namespace sh::game
 			packet.vy = vel.y;
 			packet.hp = hp;
 			packet.seq = seq++;
+			packet.bStun = bStun;
 			if (ai != nullptr)
 				packet.state = ai->GetState();
 
 			MapleServer::GetInstance()->BroadCast(packet);
 
 			tick = 0;
+		}
+		if (bStun)
+		{
+			stunCount -= world.deltaTime * 1000;
+			if (stunCount <= 0)
+				bStun = false;
 		}
 #else
 		const auto& pos = gameObject.transform->GetWorldPosition();
@@ -124,16 +132,19 @@ namespace sh::game
 
 			if (core::IsValid(anim))
 			{
-				float dx = serverPos.x - corrected.x;
-				if (dx > 0.01f)
-					anim->bRight = true;
-				else if (dx < -0.01f)
-					anim->bRight = false;
+				if (!bStun && !anim->IsLock())
+				{
+					float dx = serverPos.x - corrected.x;
+					if (dx > 0.01f)
+						anim->bRight = true;
+					else if (dx < -0.01f)
+						anim->bRight = false;
 
-				if (std::abs(serverVel.x) < 0.01f)
-					anim->SetPose(MobAnimation::Pose::Idle);
-				else
-					anim->SetPose(MobAnimation::Pose::Move);
+					if (std::abs(serverVel.x) < 0.01f)
+						anim->SetPose(MobAnimation::Pose::Idle);
+					else
+						anim->SetPose(MobAnimation::Pose::Move);
+				}
 			}
 			if (core::IsValid(rigidbody))
 				correctedVel = glm::mix(glm::vec2{ rigidbody->GetLinearVelocity() }, serverVel, 1.0f);
@@ -161,6 +172,25 @@ namespace sh::game
 	SH_USER_API void Mob::Hit(Skill& skill, Player& player)
 	{
 		SH_INFO_FORMAT("hit from {}", player.GetUserUUID().ToString());
+
+		MobHitPacket packet{};
+		packet.skillId = skill.GetId();
+		packet.mobUUID = GetUUID().ToString(); // 몹은 모든 플레이어에게 UUID는 똑같게 보임
+		packet.userUUID = player.GetUserUUID().ToString();
+
+		MapleServer::GetInstance()->BroadCast(packet);
+
+		bStun = true;
+		stunCount = 1000;
+
+		const auto& playerPos = player.gameObject.transform->GetWorldPosition();
+		const auto& mobPos = gameObject.transform->GetWorldPosition();
+		float dx = (mobPos.x - playerPos.x) < 0 ? -1.f : 1.f;
+
+		auto v = rigidbody->GetLinearVelocity();
+		rigidbody->SetLinearVelocity({ 0.f, v.y, v.z });
+		rigidbody->AddForce({ dx * 100.f, 0.f, 0.f });
+		
 	}
 #endif
 	SH_USER_API void Mob::SetAIStrategy(AIStrategy* strategy)
@@ -255,7 +285,29 @@ namespace sh::game
 			serverVel = { packet.vx, packet.vy };
 			hp = packet.hp;
 			lastStateSeq = packet.seq;
+			bool wasStun = bStun;
+			bStun = packet.bStun;
+
+			if (wasStun && !bStun && anim->GetPose() == MobAnimation::Pose::Hit)
+			{
+				anim->SetLock(false);
+				if (std::abs(serverVel.x) < 0.01f)
+					anim->SetPose(MobAnimation::Pose::Idle);
+				else
+					anim->SetPose(MobAnimation::Pose::Move);
+			}
 		}
+	}
+	void Mob::ProcessHit(const MobHitPacket& packet)
+	{
+#if !SH_SERVER
+		if (packet.mobUUID == GetUUID().ToString())
+		{
+			anim->SetPose(MobAnimation::Pose::Hit);
+			anim->SetLock(true);
+			bStun = true;
+		}
+#endif
 	}
 #else
 	void Mob::SpawnMob()

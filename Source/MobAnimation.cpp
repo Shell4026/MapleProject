@@ -20,6 +20,8 @@ namespace sh::game
 			move->SetTarget(*gameObject.transform);
 		if (jump != nullptr)
 			jump->SetTarget(*gameObject.transform);
+		if (hit != nullptr)
+			hit->SetTarget(*gameObject.transform);
 	}
 	SH_USER_API void MobAnimation::BeginUpdate()
 	{
@@ -30,7 +32,7 @@ namespace sh::game
 	}
 	SH_USER_API void MobAnimation::SetPose(Pose pose)
 	{
-		if (curPose == pose)
+		if (curPose == pose || bAnimLock)
 			return;
 		curPose = pose;
 		if (!core::IsValid(meshRenderer))
@@ -45,25 +47,36 @@ namespace sh::game
 			if (core::IsValid(idle))
 			{
 				curAnim = idle;
-				idle->Play(*meshRenderer);
+				curAnim->Play(*meshRenderer);
 			}
 			break;
 		case Pose::Move:
 			if (core::IsValid(move))
 			{
 				curAnim = move;
-				move->Play(*meshRenderer);
+				curAnim->Play(*meshRenderer);
 			}
 			break;
 		case Pose::Jump:
 			if (core::IsValid(jump))
 			{
 				curAnim = jump;
-				jump->Play(*meshRenderer);
+				curAnim->Play(*meshRenderer);
+			}
+			break;
+		case Pose::Hit:
+			if (core::IsValid(hit))
+			{
+				curAnim = hit;
+				curAnim->Play(*meshRenderer);
 			}
 			break;
 		}
 		curAnim->InverseX(bRight);
+	}
+	SH_USER_API auto MobAnimation::GetPose() const -> Pose
+	{
+		return curPose;
 	}
 	SH_USER_API void MobAnimation::SetMeshRenderer(MeshRenderer& meshRenderer)
 	{
@@ -72,6 +85,14 @@ namespace sh::game
 	SH_USER_API auto MobAnimation::GetMeshRenderer() const -> MeshRenderer*
 	{
 		return meshRenderer;
+	}
+	SH_USER_API void MobAnimation::SetLock(bool bLock)
+	{
+		bAnimLock = bLock;
+	}
+	SH_USER_API auto MobAnimation::IsLock() const -> bool
+	{
+		return bAnimLock;
 	}
 }//namespace
 #endif

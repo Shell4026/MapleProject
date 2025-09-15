@@ -2,6 +2,7 @@
 #include "Export.h"
 #include "MobAnimation.h"
 #include "PacketEvent.hpp"
+#include "Skill.h"
 #include "AI/AIStrategy.h"
 
 #include "Core/SContainer.hpp"
@@ -16,8 +17,8 @@ namespace sh::game
 {
 	class MobSpawnPacket;
 	class MobStatePacket;
+	class MobHitPacket;
 	class PlayerJoinWorldPacket;
-	class Skill;
 
 	/// @brief 몹 클래스. 처음 맵에 배치된 개체는 스포너 개체가 된다.
 	class Mob : public NetworkComponent
@@ -53,6 +54,7 @@ namespace sh::game
 #if !SH_SERVER
 		void ProcessMobSpawn(const MobSpawnPacket& packet);
 		void ProcessState(const MobStatePacket& packet);
+		void ProcessHit(const MobHitPacket& packet);
 #else
 		void SpawnMob();
 		void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet);
@@ -96,6 +98,10 @@ namespace sh::game
 		core::EventSubscriber<PacketEvent> packetSubscriber;
 
 		core::UUID spawnerUUID;
+
+		uint32_t stunCount = 0;
+
+		bool bStun = false;
 		bool bSpawner = true;
 	};
 }//namespace

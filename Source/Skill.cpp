@@ -18,6 +18,7 @@ namespace sh::game
 	{
 		if (skillManager != nullptr)
 			skillManager->Register(*this);
+		SH_INFO_FORMAT("hitboxes?: {}", hitboxes.size());
 #if !SH_SERVER
 		if (animator != nullptr)
 		{
@@ -66,6 +67,7 @@ namespace sh::game
 		if (bUsing)
 		{
 			delay -= static_cast<int>(world.deltaTime * 1000.f);
+			hitboxt -= static_cast<int>(world.deltaTime * 1000.f);
 			if (delay <= 0)
 			{
 				bUsing = false;
@@ -82,9 +84,29 @@ namespace sh::game
 						hitbox->gameObject.SetActive(false);
 						hitbox->gameObject.transform->UpdateMatrix();
 					}
-			}
+				}
 #endif
 			}
+#if SH_SERVER
+			if (hitboxt <= 0 && bUsing)
+			{
+				for (auto hitbox : hitboxes)
+				{
+					if (core::IsValid(hitbox))
+					{
+						auto hitboxPos = hitbox->gameObject.transform->position;
+						if (playerMovement->GetPlayer()->IsRight() && hitboxPos.x < 0 ||
+							!playerMovement->GetPlayer()->IsRight() && hitboxPos.x > 0)
+						{
+							hitboxPos.x *= -1.0f;
+							hitbox->gameObject.transform->SetPosition(hitboxPos);
+						}
+						hitbox->gameObject.SetActive(true);
+						hitbox->gameObject.transform->UpdateMatrix();
+					}
+				}
+			}
+#endif
 		}
 		if (!bCanUse)
 		{
@@ -100,6 +122,10 @@ namespace sh::game
 	SH_USER_API auto Skill::IsUsing() const -> bool
 	{
 		return bUsing;
+	}
+	SH_USER_API void Skill::Deserialize(const core::Json& json)
+	{
+		Super::Deserialize(json);
 	}
 	SH_USER_API void Skill::Use()
 	{
@@ -125,22 +151,7 @@ namespace sh::game
 			bCanUse = false;
 			bUsing = true;
 #if SH_SERVER
-			for (auto hitbox : hitboxes)
-			{
-				if (core::IsValid(hitbox))
-				{
-					auto hitboxPos = hitbox->gameObject.transform->position;
-					if (playerMovement->GetPlayer()->IsRight() && hitboxPos.x < 0 ||
-						!playerMovement->GetPlayer()->IsRight() && hitboxPos.x > 0)
-					{
-						hitboxPos.x *= -1.0f;
-						hitbox->gameObject.transform->SetPosition(hitboxPos);
-						hitbox->gameObject.transform->UpdateMatrix();
-					}
-					hitbox->gameObject.SetActive(true);
-					hitbox->gameObject.transform->UpdateMatrix();
-				}
-			}
+			hitboxt = hitBoxMs;
 
 			SkillStatePacket packet{};
 			packet.userUUID = skillManager->GetPlayer()->GetUserUUID().ToString();

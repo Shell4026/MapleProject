@@ -1,7 +1,7 @@
 ﻿#pragma once
 #if !SH_SERVER
 #include "Export.h"
-
+#include "Player.h"
 #include "Animation.h"
 
 #include "Game/Component/Component.h"
@@ -9,7 +9,6 @@
 
 namespace sh::game
 {
-	class Player;
 	class PlayerAnimation : public Component
 	{
 		COMPONENT(PlayerAnimation, "user")
@@ -37,6 +36,7 @@ namespace sh::game
 		/// @brief 락이 걸려 있으면 다른 상태로 바뀌지 않음
 		/// @param lock 락을 걸건지
 		SH_USER_API void SetLock(bool bLock);
+		SH_USER_API auto IsLock() const -> bool;
 	private:
 		PROPERTY(player)
 		Player* player = nullptr;

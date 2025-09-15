@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "PlayerMovement2D.h"
 #include "PlayerSkillManager.h"
+#include "SkillHitbox.h"
 
 #include "Core/SContainer.hpp"
 
@@ -16,7 +17,6 @@
 namespace sh::game
 {
 	class SkillStatePacket;
-	class SkillHitbox;
 
 	class Skill : public NetworkComponent
 	{
@@ -31,6 +31,8 @@ namespace sh::game
 
 		SH_USER_API auto GetId() const -> uint32_t;
 		SH_USER_API auto IsUsing() const -> bool;
+
+		SH_USER_API void Deserialize(const core::Json& json) override;
 
 		SH_USER_API virtual void Use();
 
@@ -66,9 +68,12 @@ namespace sh::game
 		uint32_t cooldownMs = 0;
 		PROPERTY(damage)
 		float damage = 10.f;
+		PROPERTY(hitBoxMs)
+		uint32_t hitBoxMs = 350;
 		PROPERTY(hitboxes)
 		std::vector<SkillHitbox*> hitboxes;
 
+		int hitboxt = 0;
 		int delay = 0;
 		int cooldown = 0;
 #if !SH_SERVER
