@@ -31,6 +31,14 @@ namespace sh::game
 	{
 		return bLocal;
 	}
+	SH_USER_API void Player::SetRight(bool bRight)
+	{
+		this->bRight = bRight;
+	}
+	SH_USER_API auto Player::IsRight() const -> bool
+	{
+		return bRight;
+	}
 	SH_USER_API void Player::Awake()
 	{
 #if !SH_SERVER

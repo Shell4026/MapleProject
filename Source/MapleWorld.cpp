@@ -59,6 +59,8 @@ namespace sh::game
 
 			return player;
 		}
+		else
+			SH_ERROR("Invalid player prefab!");
 		return nullptr;
 	}
 	SH_USER_API void MapleWorld::Start()

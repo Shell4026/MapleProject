@@ -10,11 +10,14 @@
 #include "Game/Component/NetworkComponent.h"
 #include "Game/Component/RigidBody.h"
 #include "Game/Prefab.h"
+
+//#define SH_SERVER 1
 namespace sh::game
 {
 	class MobSpawnPacket;
 	class MobStatePacket;
 	class PlayerJoinWorldPacket;
+	class Skill;
 
 	/// @brief 몹 클래스. 처음 맵에 배치된 개체는 스포너 개체가 된다.
 	class Mob : public NetworkComponent
@@ -30,6 +33,8 @@ namespace sh::game
 #if !SH_SERVER
 		SH_USER_API void SetAnimation(MobAnimation& anim);
 		SH_USER_API auto GetAnimation() const ->MobAnimation*;
+#else
+		SH_USER_API void Hit(Skill& skill, Player& player);
 #endif
 
 		SH_USER_API void SetAIStrategy(AIStrategy* strategy);
@@ -43,6 +48,7 @@ namespace sh::game
 		SH_USER_API auto GetAttack() const->uint32_t;
 		SH_USER_API auto GetLevel() const -> uint32_t;
 		SH_USER_API auto GetExp() const -> uint32_t;
+		SH_USER_API auto IsSpawner() const -> bool;
 	private:
 #if !SH_SERVER
 		void ProcessMobSpawn(const MobSpawnPacket& packet);

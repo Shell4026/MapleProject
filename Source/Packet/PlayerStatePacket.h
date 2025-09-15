@@ -31,5 +31,6 @@ namespace sh::game
 		bool bGround = false;
 		bool bProne = false;
 		bool bLock = false;
+		bool bRight = false;
 	};
 }//namespace

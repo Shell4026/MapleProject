@@ -1,5 +1,4 @@
 ﻿#pragma once
-//#define SH_SERVER 1
 #if SH_SERVER
 #include "Export.h"
 #include "User.h"

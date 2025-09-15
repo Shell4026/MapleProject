@@ -2,6 +2,7 @@
 #include "Export.h"
 #include "Animation.h"
 #include "PlayerMovement2D.h"
+#include "PlayerSkillManager.h"
 
 #include "Core/SContainer.hpp"
 
@@ -10,11 +11,12 @@
 #include "Game/Input.h"
 
 #include <random>
+#include <vector>
 //#define SH_SERVER 1
 namespace sh::game
 {
-	class PlayerSkillManager;
 	class SkillStatePacket;
+	class SkillHitbox;
 
 	class Skill : public NetworkComponent
 	{
@@ -23,6 +25,7 @@ namespace sh::game
 		SH_USER_API Skill(GameObject& owner);
 		
 		SH_USER_API void Awake() override;
+		SH_USER_API void Start() override;
 		SH_USER_API void BeginUpdate() override;
 		SH_USER_API void Update() override;
 
@@ -61,6 +64,10 @@ namespace sh::game
 		uint32_t delayMs = 800;
 		PROPERTY(cooldownMs)
 		uint32_t cooldownMs = 0;
+		PROPERTY(damage)
+		float damage = 10.f;
+		PROPERTY(hitboxes)
+		std::vector<SkillHitbox*> hitboxes;
 
 		int delay = 0;
 		int cooldown = 0;

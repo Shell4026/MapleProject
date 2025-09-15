@@ -1,4 +1,35 @@
 {
+    "cam": {
+        "Camera": {
+            "depth": 0,
+            "fov": 60.0,
+            "lookPos": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": 0,
+            "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
+        },
+        "Component": {
+            "hideInspector": false,
+            "priority": 0
+        },
+        "EditorCamera": {
+            "distance": 6.65500020980835
+        },
+        "SObject": {},
+        "name": "EditorCamera",
+        "type": "EditorCamera",
+        "uuid": "1e545d68c551eb7891d1661c8f63ed46",
+        "version": 1
+    },
+    "camPos": [
+        3.842266321182251,
+        3.842266082763672,
+        3.842266321182251
+    ],
+    "editorObjs": [],
     "name": "World",
     "objs": [
         {
@@ -60,6 +91,7 @@
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
                 "hideInspector": false,
                 "transform": "d748954d136a4d866f38b70177925d98"
@@ -114,7 +146,9 @@
                             10.0
                         ]
                     },
-                    "Collider": {},
+                    "Collider": {
+                        "bTrigger": false
+                    },
                     "Component": {
                         "hideInspector": false,
                         "priority": 0
@@ -132,6 +166,11 @@
                     },
                     "RigidBody": {
                         "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
                         "axisLock": [
                             0.0,
                             0.0,
@@ -153,6 +192,7 @@
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
                 "hideInspector": false,
                 "transform": "664952e9ab84ddc9a1031bd620f17f6b"
@@ -204,7 +244,9 @@
                         "height": 1.0,
                         "radius": 0.5
                     },
-                    "Collider": {},
+                    "Collider": {
+                        "bTrigger": false
+                    },
                     "Component": {
                         "hideInspector": false,
                         "priority": 0
@@ -222,6 +264,11 @@
                     },
                     "RigidBody": {
                         "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
                         "axisLock": [
                             0.0,
                             0.0,
@@ -243,6 +290,7 @@
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
                 "hideInspector": false,
                 "transform": "859ea5e5cd9e7cee18fc04e4b971245c"
@@ -294,7 +342,9 @@
                         "height": 1.0,
                         "radius": 0.5
                     },
-                    "Collider": {},
+                    "Collider": {
+                        "bTrigger": false
+                    },
                     "Component": {
                         "hideInspector": false,
                         "priority": 0
@@ -312,6 +362,11 @@
                     },
                     "RigidBody": {
                         "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
                         "axisLock": [
                             0.0,
                             0.0,
@@ -330,9 +385,24 @@
                     "type": "RigidBody",
                     "uuid": "a15aa1a133efd18225653a6bd146d869",
                     "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Test": {
+                        "num": 10
+                    },
+                    "name": "user/Test",
+                    "type": "Test",
+                    "uuid": "d8fcceb92d9decb04d68e213c25c70f3",
+                    "version": 1
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
                 "hideInspector": false,
                 "transform": "e87ccdd7aa924b68c42da27a976127c7"
@@ -379,7 +449,9 @@
                     "version": 1
                 },
                 {
-                    "Collider": {},
+                    "Collider": {
+                        "bTrigger": false
+                    },
                     "Component": {
                         "hideInspector": false,
                         "priority": 0
@@ -401,6 +473,11 @@
                     },
                     "RigidBody": {
                         "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
                         "axisLock": [
                             0.0,
                             0.0,
@@ -422,6 +499,7 @@
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
                 "hideInspector": false,
                 "transform": "f03d10fdba26896b70c5862ab29995b3"
@@ -429,6 +507,107 @@
             "name": "Sphere",
             "type": "GameObject",
             "uuid": "0ed5f92307a6e2ea000cbac5b4d38856",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "215d8fc89c1d12c68b10588bef10efc9",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "Collider": {
+                        "bTrigger": true
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "physics/BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "aac78d680f3a176deb12e623653cfc58",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "axisLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "bGravity": false,
+                        "bInterpolation": false,
+                        "bKinematic": true,
+                        "bouncy": 0.20000000298023224,
+                        "collision": "aac78d680f3a176deb12e623653cfc58",
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": {},
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "aa42db6ea4eeecfc58ca2e56a816aa07",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "215d8fc89c1d12c68b10588bef10efc9"
+            },
+            "name": "Trigger",
+            "type": "GameObject",
+            "uuid": "2590bd11b02d7e369de4ee7b28c1f88b",
             "version": 1
         }
     ],

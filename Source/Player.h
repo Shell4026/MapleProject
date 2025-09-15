@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Export.h"
 
 #include "Game/Component/NetworkComponent.h"
@@ -19,6 +19,9 @@ namespace sh::game
 
 		SH_USER_API auto IsLocal() const -> bool;
 
+		SH_USER_API void SetRight(bool bRight);
+		SH_USER_API auto IsRight() const -> bool;
+
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
 		SH_USER_API void Update() override;
@@ -28,5 +31,6 @@ namespace sh::game
 		uint32_t heartbeat;
 
 		bool bLocal = true;
+		bool bRight = false;
 	};
 }

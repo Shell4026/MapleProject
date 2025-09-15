@@ -173,6 +173,7 @@ namespace sh::game
 			packet.floor = floorY;
 			packet.bProne = lastInput.bProne;
 			packet.bLock = bLock;
+			packet.bRight = player->IsRight();
 			server->BroadCast(packet);
 
 			lastSent.pos = serverPos;
@@ -205,6 +206,10 @@ namespace sh::game
 			return;
 		if (floor->GetCollider() == &collider)
 			bGround = true;
+	}
+	SH_USER_API auto PlayerMovement2D::GetPlayer() const -> Player*
+	{
+		return player;
 	}
 	SH_USER_API void PlayerMovement2D::Lock()
 	{
@@ -280,6 +285,15 @@ namespace sh::game
 				xVelocity = glm::mix(xVelocity, targetSpeed, airSpeed);
 			}
 		}
+		// 방향
+		if (!lastInput.bProne && !bLock)
+		{
+			if (lastInput.xMove > 0.0f)
+				player->SetRight(true);
+			else if (lastInput.xMove < 0.0f)
+				player->SetRight(false);
+		}
+
 		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
 
 		lastProcessedSeq = lastInput.seq;
@@ -367,6 +381,7 @@ namespace sh::game
 		bGround = packet.bGround;
 		floorY = packet.floor;
 		bProne = packet.bProne;
+		player->SetRight(packet.bRight);
 
 		xVelocity = serverVel.x;
 		yVelocity = serverVel.y;
@@ -381,11 +396,6 @@ namespace sh::game
 		if (!core::IsValid(anim) || bLock)
 			return;
 
-		if (xInput > 0)
-			anim->bRight = true;
-		else if (xInput < 0)
-			anim->bRight = false;
-
 		if (xInput == 0.0f)
 		{
 			if (bProne)
@@ -398,6 +408,15 @@ namespace sh::game
 
 		if (!bGround)
 			anim->SetPose(PlayerAnimation::Pose::Jump);
+
+		// 방향
+		if (!bProne && !bLock)
+		{
+			if (xInput > 0)
+				player->SetRight(true);
+			else if (xInput < 0)
+				player->SetRight(false);
+		}
 	}
 	void PlayerMovement2D::ProcessRemoteAnim()
 	{
@@ -412,11 +431,6 @@ namespace sh::game
 					anim->SetPose(PlayerAnimation::Pose::Walk);
 				else
 					anim->SetPose(PlayerAnimation::Pose::Idle);
-
-				if (xVelocity >= 0.5f)
-					anim->bRight = true;
-				else if (xVelocity <= -0.5f)
-					anim->bRight = false;
 			}
 			else
 				anim->SetPose(PlayerAnimation::Pose::Prone);

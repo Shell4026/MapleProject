@@ -157,6 +157,11 @@ namespace sh::game
 	{
 		return anim;
 	}
+#else
+	SH_USER_API void Mob::Hit(Skill& skill, Player& player)
+	{
+		SH_INFO_FORMAT("hit from {}", player.GetUserUUID().ToString());
+	}
 #endif
 	SH_USER_API void Mob::SetAIStrategy(AIStrategy* strategy)
 	{
@@ -197,6 +202,10 @@ namespace sh::game
 	SH_USER_API auto Mob::GetExp() const -> uint32_t
 	{
 		return exp;
+	}
+	SH_USER_API auto Mob::IsSpawner() const -> bool
+	{
+		return bSpawner;
 	}
 #if !SH_SERVER
 	void Mob::ProcessMobSpawn(const MobSpawnPacket& packet)

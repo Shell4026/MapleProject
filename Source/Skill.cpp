@@ -1,9 +1,9 @@
 ﻿#include "Skill.h"
-#include "PlayerSkillManager.h"
 #include "Packet/SkillUsingPacket.h"
 #include "Packet/SkillStatePacket.h"
 #include "MapleClient.h"
 #include "MapleServer.h"
+#include "SkillHitbox.h"
 
 #include "Game/GameObject.h"
 
@@ -29,6 +29,17 @@ namespace sh::game
 			}
 		}
 #endif
+	}
+	SH_USER_API void Skill::Start()
+	{
+		for (auto hitbox : hitboxes)
+		{
+			if (core::IsValid(hitbox))
+			{
+				hitbox->gameObject.SetActive(false);
+				hitbox->gameObject.transform->UpdateMatrix();
+			}
+		}
 	}
 	SH_USER_API void Skill::BeginUpdate()
 	{
@@ -63,6 +74,15 @@ namespace sh::game
 #if !SH_SERVER
 				if (animator != nullptr)
 					animator->SetLock(false);
+#else
+				for (auto hitbox : hitboxes)
+				{
+					if (core::IsValid(hitbox))
+					{
+						hitbox->gameObject.SetActive(false);
+						hitbox->gameObject.transform->UpdateMatrix();
+					}
+			}
 #endif
 			}
 		}
@@ -104,8 +124,24 @@ namespace sh::game
 			cooldown = cooldownMs;
 			bCanUse = false;
 			bUsing = true;
-
 #if SH_SERVER
+			for (auto hitbox : hitboxes)
+			{
+				if (core::IsValid(hitbox))
+				{
+					auto hitboxPos = hitbox->gameObject.transform->position;
+					if (playerMovement->GetPlayer()->IsRight() && hitboxPos.x < 0 ||
+						!playerMovement->GetPlayer()->IsRight() && hitboxPos.x > 0)
+					{
+						hitboxPos.x *= -1.0f;
+						hitbox->gameObject.transform->SetPosition(hitboxPos);
+						hitbox->gameObject.transform->UpdateMatrix();
+					}
+					hitbox->gameObject.SetActive(true);
+					hitbox->gameObject.transform->UpdateMatrix();
+				}
+			}
+
 			SkillStatePacket packet{};
 			packet.userUUID = skillManager->GetPlayer()->GetUserUUID().ToString();
 			packet.skillId = id;
@@ -144,7 +180,7 @@ namespace sh::game
 #if !SH_SERVER
 	void Skill::PlayAnim()
 	{
-		if (anims.empty() || !core::IsValid(animator) || !core::IsValid(animator->GetMeshRenderer()))
+		if (anims.empty() || !core::IsValid(animator) || !core::IsValid(animator->GetMeshRenderer()) || !core::IsValid(animator->GetPlayer()))
 			return;
 
 		animator->SetPose(PlayerAnimation::Pose::Skill);
@@ -154,7 +190,7 @@ namespace sh::game
 			curAnim->Stop();
 
 		curAnim = anims[motionIdx];
-		curAnim->InverseX(animator->bRight);
+		curAnim->InverseX(animator->GetPlayer()->IsRight());
 		curAnim->Play(*animator->GetMeshRenderer());
 	}
 #endif

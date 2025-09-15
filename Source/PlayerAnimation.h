@@ -9,6 +9,7 @@
 
 namespace sh::game
 {
+	class Player;
 	class PlayerAnimation : public Component
 	{
 		COMPONENT(PlayerAnimation, "user")
@@ -31,13 +32,14 @@ namespace sh::game
 
 		SH_USER_API void SetMeshRenderer(MeshRenderer& meshRenderer);
 		SH_USER_API auto GetMeshRenderer() const -> MeshRenderer*;
+		SH_USER_API auto GetPlayer() const -> Player*;
 
 		/// @brief 락이 걸려 있으면 다른 상태로 바뀌지 않음
 		/// @param lock 락을 걸건지
 		SH_USER_API void SetLock(bool bLock);
-	public:
-		bool bRight = false;
 	private:
+		PROPERTY(player)
+		Player* player = nullptr;
 		PROPERTY(meshRenderer)
 		MeshRenderer* meshRenderer = nullptr;
 

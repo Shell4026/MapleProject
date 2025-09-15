@@ -33,6 +33,8 @@ namespace sh::game
 		SH_USER_API void Update() override;
 		SH_USER_API void OnCollisionEnter(Collider& collider) override;
 
+		SH_USER_API auto GetPlayer() const -> Player*;
+
 		/// @brief 조작을 막는다.
 		SH_USER_API void Lock();
 		/// @brief 조작을 허용한다.

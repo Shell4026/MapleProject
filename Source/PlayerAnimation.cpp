@@ -1,5 +1,7 @@
 ﻿#include "PlayerAnimation.h"
 #if !SH_SERVER
+#include "Player.h"
+
 #include "Game/GameObject.h"
 namespace sh::game
 {
@@ -26,8 +28,8 @@ namespace sh::game
 	SH_USER_API void PlayerAnimation::BeginUpdate()
 	{
 #if !SH_SERVER
-		if (curAnim.IsValid())
-			curAnim->InverseX(bRight);
+		if (curAnim.IsValid() && core::IsValid(player))
+			curAnim->InverseX(player->IsRight());
 #endif
 	}
 	SH_USER_API void PlayerAnimation::SetPose(Pose pose)
@@ -72,8 +74,8 @@ namespace sh::game
 			}
 			break;
 		}
-		if (curAnim.IsValid())
-			curAnim->InverseX(bRight);
+		if (curAnim.IsValid() && core::IsValid(player))
+			curAnim->InverseX(player->IsRight());
 	}
 	SH_USER_API void PlayerAnimation::SetMeshRenderer(MeshRenderer& meshRenderer)
 	{
@@ -82,6 +84,10 @@ namespace sh::game
 	SH_USER_API auto PlayerAnimation::GetMeshRenderer() const -> MeshRenderer*
 	{
 		return meshRenderer;
+	}
+	SH_USER_API auto PlayerAnimation::GetPlayer() const -> Player*
+	{
+		return player;
 	}
 	SH_USER_API void PlayerAnimation::SetLock(bool bLock)
 	{
