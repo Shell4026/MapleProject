@@ -1,5 +1,5 @@
 ﻿#include "BasicAI.h"
-#include "../Mob.h"
+#include "../Mob/Mob.h"
 
 #include "Game/GameObject.h"
 #include "Game/World.h"

@@ -1,5 +1,4 @@
 ﻿#pragma once
-#if !SH_SERVER
 #include "Export.h"
 
 #include "Core/SContainer.hpp"
@@ -56,4 +55,3 @@ namespace sh::game
 		bool bRight = false;
 	};
 }//namespace
-#endif

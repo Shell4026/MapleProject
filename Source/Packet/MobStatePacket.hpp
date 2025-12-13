@@ -26,10 +26,11 @@ namespace sh::game
 			mainJson["y"] = y;
 			mainJson["vx"] = vx;
 			mainJson["vy"] = vy;
-			mainJson["state"] = state;
 			mainJson["hp"] = hp;
+			mainJson["state"] = state;
 			mainJson["seq"] = seq;
 			mainJson["stun"] = bStun;
+			mainJson["stunRemain"] = stunRemainingMs;
 			return mainJson;
 		}
 		void Deserialize(const core::Json& json)
@@ -55,6 +56,8 @@ namespace sh::game
 				seq = json["seq"];
 			if (json.contains("stun"))
 				bStun = json["stun"];
+			if (json.contains("stunRemain"))
+				stunRemainingMs = json["stunRemain"];
 		}
 	public:
 		std::string spawnerUUID;
@@ -67,5 +70,6 @@ namespace sh::game
 		uint32_t hp;
 		uint32_t seq;
 		bool bStun = false;
+		uint32_t stunRemainingMs;
 	};
 }//namespace

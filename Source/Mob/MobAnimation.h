@@ -1,7 +1,6 @@
 ﻿#pragma once
-#if !SH_SERVER
-#include "Export.h"
-#include "Animation.h"
+#include "../Export.h"
+#include "../Animation.h"
 
 #include "Game/Component/Component.h"
 #include "Game/Component/MeshRenderer.h"
@@ -57,4 +56,3 @@ namespace sh::game
 		bool bAnimLock = false;
 	};
 }//namespace
-#endif

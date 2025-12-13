@@ -1,0 +1,24 @@
+{
+    "Constant": [
+        []
+    ],
+    "Material": {
+        "shader": "d0a2c22d4118802c4e5205175221d77f"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": null,
+        "vector": {
+            "color": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        }
+    },
+    "name": "HpBackground2",
+    "type": "Material",
+    "uuid": "1cab763a731132866f5569af49188b66",
+    "version": 1
+}

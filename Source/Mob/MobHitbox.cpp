@@ -1,9 +1,9 @@
 ﻿#include "MobHitbox.h"
-#include "CollisionTag.hpp"
-#include "SkillHitbox.h"
 #include "Mob.h"
-#include "Player.h"
-#include "Skill.h"
+#include "../CollisionTag.hpp"
+#include "../Player.h"
+#include "../Skill.h"
+#include "../SkillHitbox.h"
 
 #include "Game/GameObject.h"
 #include "Game/Component/Collider.h"

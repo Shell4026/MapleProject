@@ -163,6 +163,10 @@ namespace sh::game
 #endif
 		}
 	}
+	SH_USER_API auto Skill::GetDamage() const -> float
+	{
+		return damage;
+	}
 #if !SH_SERVER
 	SH_USER_API void Skill::SetKey(Input::KeyCode keyCode)
 	{

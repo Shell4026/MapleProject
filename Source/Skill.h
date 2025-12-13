@@ -36,6 +36,7 @@ namespace sh::game
 
 		SH_USER_API virtual void Use();
 
+		SH_USER_API auto GetDamage() const -> float;
 #if !SH_SERVER
 		SH_USER_API void SetKey(Input::KeyCode keyCode);
 		SH_USER_API void ProcessState(const SkillStatePacket& packet);

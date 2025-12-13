@@ -1,5 +1,4 @@
 ﻿#include "MobAnimation.h"
-#if !SH_SERVER
 #include "Game/GameObject.h"
 namespace sh::game
 {
@@ -95,4 +94,3 @@ namespace sh::game
 		return bAnimLock;
 	}
 }//namespace
-#endif

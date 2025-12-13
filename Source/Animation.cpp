@@ -1,5 +1,4 @@
 ﻿#include "Animation.h"
-#if !SH_SERVER
 #include "Game/World.h"
 namespace sh::game
 {
@@ -97,7 +96,10 @@ namespace sh::game
 			t = 0.0f;
 		}
 		if (meshRenderer.IsValid())
+		{
 			meshRenderer->GetMaterialPropertyBlock()->SetProperty("tex", textures[idx]);
+			meshRenderer->UpdatePropertyBlockData();
+		}
 		
 		if (target.IsValid())
 		{
@@ -112,4 +114,3 @@ namespace sh::game
 		t += world.deltaTime;
 	}
 }//namespace
-#endif
