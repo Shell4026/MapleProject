@@ -112,6 +112,7 @@ namespace sh::game
 			uint32_t seq = 0;
 		} lastSent;
 		bool bSend = false;
+		bool bFirst = false;
 #endif
 		bool bGround = false;
 		bool bProne = false;

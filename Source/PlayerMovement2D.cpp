@@ -133,8 +133,6 @@ namespace sh::game
 		const glm::vec2 serverPos{ pos.x, pos.y };
 		const glm::vec2 serverVel = { v.x, v.y };
 
-		static bool bFirst = true;
-
 		if (bFirst)
 		{
 			bSend = true;

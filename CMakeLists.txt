@@ -21,15 +21,9 @@ project (
  LANGUAGES CXX
 )
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-if(WIN32)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-elseif(UNIX)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-endif()
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
+set(COMMON_DLL_NAME "ShellEngineUser")
 
 include(FetchContent)
 
@@ -59,11 +53,22 @@ FETCHCONTENT_MAKEAVAILABLE(JSON)
 foreach(TGT ${TARGETS})
 	add_library(${TGT} SHARED ${SRC} ${HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
 
+	set_target_properties(${TGT} PROPERTIES OUTPUT_NAME ${COMMON_DLL_NAME})
+
 	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 		target_compile_definitions(${TGT} PUBLIC SH_DEBUG)
 	endif()
 	if ("${TGT}" STREQUAL "${SERVER}")
 		target_compile_definitions(${SERVER} PUBLIC SH_SERVER)
+		set_target_properties(${TGT} PROPERTIES 
+			ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/Server"
+			RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Server"
+			LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Server")
+	else()
+		set_target_properties(${TGT} PROPERTIES 
+			ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/Client"
+			RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Client"
+			LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Client")
 	endif()
 
 	target_precompile_headers(${TGT} PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)

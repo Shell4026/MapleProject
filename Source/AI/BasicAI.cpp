@@ -7,10 +7,11 @@
 
 namespace sh::game
 {
+	std::mt19937 BasicAI::rng{ std::random_device{}() };
+
 	BasicAI::BasicAI(GameObject& owner) :
 		AIStrategy(owner)
 	{
-		rng.seed(std::random_device{}());
 	}
 	SH_USER_API void BasicAI::Run(Mob& mob)
 	{
@@ -50,10 +51,18 @@ namespace sh::game
 	}
 	SH_USER_API void BasicAI::OnAttacked(Player& player)
 	{
+		
 	}
 	SH_USER_API auto BasicAI::GetState() const -> uint32_t
 	{
 		return static_cast<uint32_t>(state);
+	}
+	SH_USER_API void BasicAI::Reset()
+	{
+		state = State::Idle;
+		stateTimer = 0.0f;
+		dir = 0.0f;
+		target = nullptr;
 	}
 	void BasicAI::UpdateIdle()
 	{

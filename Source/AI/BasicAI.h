@@ -20,13 +20,15 @@ namespace sh::game
 		SH_USER_API void Run(Mob& mob) override;
 		SH_USER_API void OnAttacked(Player& player) override;
 		SH_USER_API auto GetState() const -> uint32_t override;
+		SH_USER_API void Reset() override;
 	private:
 		enum class State
 		{
 			Idle,
 			Move,
 			Attack,
-			Chase
+			Chase,
+			Dead
 		};
 		void UpdateIdle();
 		void UpdateMove();
@@ -43,7 +45,7 @@ namespace sh::game
 		float stateTimer = 0.0f;
 		float dir = 0.0f;
 
-		std::mt19937 rng;
+		static std::mt19937 rng;
 
 		core::SObjWeakPtr<Player> target = nullptr;
 	};

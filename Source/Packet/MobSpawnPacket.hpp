@@ -20,20 +20,20 @@ namespace sh::game
 		auto Serialize() const -> core::Json
 		{
 			auto mainJson = network::Packet::Serialize();
-			mainJson["spawner"] = spawnerUUID;
-			mainJson["mob"] = mobUUID;
+			mainJson["idx"] = idx;
+			mainJson["uuid"] = mobUUID;
 			return mainJson;
 		}
 		void Deserialize(const core::Json& json)
 		{
 			network::Packet::Deserialize(json);
-			if (json.contains("spawner"))
-				spawnerUUID = json["spawner"];
-			if (json.contains("mob"))
-				mobUUID = json["mob"];
+			if (json.contains("idx"))
+				idx = json["idx"];
+			if (json.contains("uuid"))
+				mobUUID = json["uuid"];
 		}
 	public:
-		std::string spawnerUUID;
+		int idx;
 		std::string mobUUID;
 	};
 }//namespace

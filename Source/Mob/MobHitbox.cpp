@@ -7,7 +7,6 @@
 
 #include "Game/GameObject.h"
 #include "Game/Component/Collider.h"
-#include "Game/Component/RigidBody.h"
 namespace sh::game
 {
 	MobHitbox::MobHitbox(GameObject& owner) :

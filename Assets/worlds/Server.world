@@ -1,4 +1,35 @@
 {
+    "cam": {
+        "Camera": {
+            "depth": 0,
+            "fov": 60.0,
+            "lookPos": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": 0,
+            "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
+        },
+        "Component": {
+            "hideInspector": false,
+            "priority": 0
+        },
+        "EditorCamera": {
+            "distance": 5.0
+        },
+        "SObject": {},
+        "name": "EditorCamera",
+        "type": "EditorCamera",
+        "uuid": "32a5a6527b241d7dd9b882b05f049478",
+        "version": 1
+    },
+    "camPos": [
+        2.886751413345337,
+        2.886751174926758,
+        2.886751413345337
+    ],
+    "editorObjs": [],
     "name": "World",
     "objs": [
         {
@@ -59,6 +90,7 @@
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
                 "hideInspector": false,
                 "transform": "fe743c447b2742f83f5fe7e82f6f8173"
@@ -66,6 +98,75 @@
             "name": "Server",
             "type": "GameObject",
             "uuid": "6777cbb839f0c2d4c7aed2ee99994e86",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            2.0,
+                            10.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "54f2aac8fe06ec4b96b56ed9cf81f6af",
+                    "version": 1
+                },
+                {
+                    "Camera": {
+                        "depth": 0,
+                        "fov": 60.0,
+                        "lookPos": [
+                            0.0,
+                            2.0,
+                            0.0
+                        ],
+                        "projection": 0
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "Camera",
+                    "type": "Camera",
+                    "uuid": "1783615c3a2953253ae34d1ea1585050",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "54f2aac8fe06ec4b96b56ed9cf81f6af"
+            },
+            "name": "Camera",
+            "type": "GameObject",
+            "uuid": "68cfc3a48d738039db02e859ec2772de",
             "version": 1
         }
     ],

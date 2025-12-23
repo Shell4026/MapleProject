@@ -1,10 +1,13 @@
 {
+    "Constant": [
+        []
+    ],
     "Material": {
         "shader": "d25ded1fee143a364c8b97b6bb2a1b5b"
     },
     "MaterialPropertyBlock": {
         "scalar": {
-            "ambient": 0.019999999552965164
+            "ambient": 1.0
         },
         "textures": {
             "normalTex": "60fa36899b5740075616eb35e06216ba",

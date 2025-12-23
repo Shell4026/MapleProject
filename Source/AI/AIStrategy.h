@@ -16,5 +16,6 @@ namespace sh::game
 		virtual void Run(Mob& mob) {}
 		virtual void OnAttacked(Player& player) {}
 		virtual auto GetState() const -> uint32_t { return 0; }
+		virtual void Reset() = 0;
 	};
 }//namespace

@@ -78,7 +78,7 @@ namespace sh::game
 		client->bus.Subscribe(packetEventSubscriber);
 
 		PlayerJoinWorldPacket packet{};
-		packet.worldUUID = GetUUID().ToString();
+		packet.worldUUID = world.GetUUID().ToString();
 
 		client->SendPacket(packet);
 		SH_INFO_FORMAT("Join the world {}", world.GetUUID().ToString());
@@ -101,14 +101,14 @@ namespace sh::game
 		if (userWorldUUID.IsEmpty())
 		{
 			// 이 월드에 조인 했음
-			if (GetUUID() == core::UUID{ packet.worldUUID })
+			if (world.GetUUID() == core::UUID{ packet.worldUUID })
 			{
 				if (playerSpawnPoint == nullptr)
 				{
 					SH_ERROR("Invalid spawn point!");
 					return;
 				}
-				userPtr->SetCurrentWorldUUID(GetUUID());
+				userPtr->SetCurrentWorldUUID(world.GetUUID());
 
 				const auto& spawnPos = playerSpawnPoint->GetWorldPosition();
 				// 접속한 플레이어에게 다른 플레이어 동기화

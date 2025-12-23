@@ -1,11 +1,12 @@
 {
-    "metaHash": 3425779754158852877,
+    "metaHash": 17884416203813977314,
     "name": "cat",
     "obj": {
         "Texture": {
             "aniso": 12,
             "bGenerateMipmap": true,
-            "bSRGB": true
+            "bSRGB": true,
+            "filtering": 1
         },
         "name": "cat",
         "type": "Texture",

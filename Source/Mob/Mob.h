@@ -10,6 +10,7 @@
 
 #include "Core/SContainer.hpp"
 #include "Core/EventSubscriber.h"
+#include "Core/EventBus.h"
 
 #include "Game/Component/NetworkComponent.h"
 #include "Game/Component/RigidBody.h"
@@ -30,21 +31,24 @@ namespace sh::game
 
 #if !SH_SERVER
         SH_USER_API void SetAnimation(MobAnimation& anim);
-#endif
-
-#if SH_SERVER
+#else
         SH_USER_API void Hit(Skill& skill, Player& player);
+        SH_USER_API void BroadcastStatePacket();
 #endif
+        SH_USER_API void Reset();
         SH_USER_API void SetAIStrategy(AIStrategy* strategy);
 
+        SH_USER_API auto GetMaxHP() const -> uint32_t { return maxHp; }
         SH_USER_API auto GetRigidbody() const -> RigidBody* { return rigidbody; }
         SH_USER_API auto GetStatus() const -> const MobStatus& { return status; }
         SH_USER_API auto GetStatus() -> MobStatus& { return status; }
         SH_USER_API auto GetSpeed() const -> float { return speed; }
-
-        SH_USER_API void SetSpawnerUUID(const core::UUID& uuid) { spawnerUUID = uuid; }
     private:
+#if !SH_SERVER
         void ProcessState(const MobStatePacket& packet);
+#endif
+    public:
+        core::EventBus evtBus;
     protected:
         PROPERTY(maxHp)
         uint32_t maxHp = 10;
@@ -62,10 +66,11 @@ namespace sh::game
     private:
         MobStatus status;
 
-        core::UUID spawnerUUID;
         uint32_t netSeq = 0;
 
         core::EventSubscriber<PacketEvent> packetSubscriber;
+
+        game::Vec3 initPos;
 #if SH_SERVER
         float netAccum = 0.f;
         uint32_t snapshotSeq = 1;

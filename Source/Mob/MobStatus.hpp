@@ -8,8 +8,9 @@ namespace sh::game
         uint32_t hp = 15;
         uint32_t maxHp = 15;
 
-        bool bStun = false;
         float stunRemainingMs = 0.f;
+
+        bool bStun = false;
 
         void Reset(uint32_t inMaxHp)
         {

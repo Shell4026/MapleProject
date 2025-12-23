@@ -20,7 +20,6 @@ namespace sh::game
 		auto Serialize() const -> core::Json
 		{
 			auto mainJson = network::Packet::Serialize();
-			mainJson["spawner"] = spawnerUUID;
 			mainJson["mob"] = mobUUID;
 			mainJson["x"] = x;
 			mainJson["y"] = y;
@@ -36,8 +35,6 @@ namespace sh::game
 		void Deserialize(const core::Json& json)
 		{
 			network::Packet::Deserialize(json);
-			if (json.contains("spawner"))
-				spawnerUUID = json["spawner"];
 			if (json.contains("mob"))
 				mobUUID = json["mob"];
 			if (json.contains("x"))
@@ -60,7 +57,6 @@ namespace sh::game
 				stunRemainingMs = json["stunRemain"];
 		}
 	public:
-		std::string spawnerUUID;
 		std::string mobUUID;
 		float x;
 		float y;

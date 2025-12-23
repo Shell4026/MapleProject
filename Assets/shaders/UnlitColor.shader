@@ -9,7 +9,7 @@ Shader "Unlit Color Shader"
 	
 	Pass
 	{
-		LightingPass "Forward"
+		LightingPass "Opaque"
 		
 		Stage Vertex
 		{
