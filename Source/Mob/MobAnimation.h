@@ -30,11 +30,6 @@ namespace sh::game
 
 		SH_USER_API void SetMeshRenderer(MeshRenderer& meshRenderer);
 		SH_USER_API auto GetMeshRenderer() const -> MeshRenderer*;
-
-		/// @brief 락이 걸려 있으면 다른 상태로 바뀌지 않음
-		/// @param lock 락을 걸건지
-		SH_USER_API void SetLock(bool bLock);
-		SH_USER_API auto IsLock() const -> bool;
 	public:
 		bool bRight = false;
 	private:
@@ -52,7 +47,5 @@ namespace sh::game
 
 		Pose curPose = Pose::Idle;
 		core::SObjWeakPtr<Animation> curAnim = nullptr;
-
-		bool bAnimLock = false;
 	};
 }//namespace

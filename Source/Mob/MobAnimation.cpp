@@ -14,6 +14,7 @@ namespace sh::game
 		{
 			idle->SetTarget(*gameObject.transform);
 			idle->Play(*meshRenderer);
+			curAnim = idle;
 		}
 		if (move != nullptr)
 			move->SetTarget(*gameObject.transform);
@@ -31,7 +32,7 @@ namespace sh::game
 	}
 	SH_USER_API void MobAnimation::SetPose(Pose pose)
 	{
-		if (curPose == pose || bAnimLock)
+		if (curPose == pose)
 			return;
 		curPose = pose;
 		if (!core::IsValid(meshRenderer))
@@ -43,6 +44,7 @@ namespace sh::game
 		switch (pose)
 		{
 		case Pose::Idle:
+			SH_INFO("Idle!");
 			if (core::IsValid(idle))
 			{
 				curAnim = idle;
@@ -50,6 +52,7 @@ namespace sh::game
 			}
 			break;
 		case Pose::Move:
+			SH_INFO("Move!");
 			if (core::IsValid(move))
 			{
 				curAnim = move;
@@ -84,13 +87,5 @@ namespace sh::game
 	SH_USER_API auto MobAnimation::GetMeshRenderer() const -> MeshRenderer*
 	{
 		return meshRenderer;
-	}
-	SH_USER_API void MobAnimation::SetLock(bool bLock)
-	{
-		bAnimLock = bLock;
-	}
-	SH_USER_API auto MobAnimation::IsLock() const -> bool
-	{
-		return bAnimLock;
 	}
 }//namespace
