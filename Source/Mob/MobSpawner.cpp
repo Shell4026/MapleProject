@@ -150,9 +150,9 @@ namespace sh::game
 			mob->SetUUID(core::UUID{ packet.mobUUID });
 		}
 
+		mob->gameObject.SetActive(true);
 		mob->GetStatus().Reset(mob->GetMaxHP());
 		mob->Reset();
-		mob->gameObject.SetActive(true);
 	}
 #endif
 }//namespace

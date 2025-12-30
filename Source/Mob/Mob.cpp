@@ -40,16 +40,18 @@ namespace sh::game
 
         gameObject.SetActive(false);
 #if SH_SERVER
-        initPos = gameObject.transform->GetWorldPosition();
+        
         MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
 #else
         MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
         animator.SetAnimation(anim);
 #endif
+        initPos = gameObject.transform->GetWorldPosition();
     }
 
     void Mob::Update()
     {
+        const auto& pos = gameObject.transform->GetWorldPosition();
         status.Tick(world.deltaTime);
 
 #if SH_SERVER
@@ -66,7 +68,7 @@ namespace sh::game
         }
 #else
         // 클라 보정
-        const auto& pos = gameObject.transform->GetWorldPosition();
+
         glm::vec2 curPos{ pos.x, pos.y };
         glm::vec2 curVel{};
         if (core::IsValid(rigidbody))
@@ -83,15 +85,14 @@ namespace sh::game
         if (d2 > snapDistance * snapDistance)
         {
             correctedPos = serverPos;
-            correctedVel = serverVel;
         }
         else
         {
             correctedPos = glm::mix(curPos, serverPos, 0.1f);
-            correctedVel = glm::mix(curVel, serverVel, 0.1f);
         }
+        correctedVel = serverVel;
 
-        gameObject.transform->SetWorldPosition({ correctedPos.x, correctedPos.y, 0.01f });
+        gameObject.transform->SetWorldPosition({ correctedPos.x, correctedPos.y, pos.z });
         gameObject.transform->UpdateMatrix();
 
         if (core::IsValid(rigidbody))
