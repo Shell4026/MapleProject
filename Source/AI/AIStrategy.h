@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "../Export.h"
-#include "../Player.h"
+#include "Export.h"
+#include "Player/Player.h"
 
 #include "Game/Component/Component.h"
 

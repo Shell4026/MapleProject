@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "Export.h"
 #include "Animation.h"
-#include "PlayerMovement2D.h"
-#include "PlayerSkillManager.h"
+#include "Player/PlayerMovement2D.h"
+#include "Player/PlayerSkillManager.h"
 #include "SkillHitbox.h"
 
 #include "Core/SContainer.hpp"

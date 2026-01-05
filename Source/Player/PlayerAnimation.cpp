@@ -27,10 +27,8 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerAnimation::BeginUpdate()
 	{
-#if !SH_SERVER
 		if (curAnim.IsValid() && core::IsValid(player))
 			curAnim->InverseX(player->IsRight());
-#endif
 	}
 	SH_USER_API void PlayerAnimation::SetPose(Pose pose)
 	{

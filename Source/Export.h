@@ -1,7 +1,5 @@
 ﻿#include "Core/Config.h"
 
-//#define SH_SERVER 0
-
 #if !SH_SERVER
 	#ifdef ShellEngineUser_EXPORTS
 		#define SH_USER_API SH_API_EXPORT

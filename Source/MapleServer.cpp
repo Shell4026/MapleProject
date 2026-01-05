@@ -1,6 +1,6 @@
-#include "MapleServer.h"
-#if SH_SERVER
+ï»¿#include "MapleServer.h"
 #include "MapleWorld.h"
+#include "ItemDropManager.h"
 #include "PacketEvent.hpp"
 #include "Packet/PlayerJoinPacket.h"
 #include "Packet/ChangeWorldPacket.h"
@@ -11,6 +11,7 @@
 #include "Packet/HeartbeatPacket.hpp"
 
 #include "Core/Util.h"
+#include "Core/ThreadPool.h"
 
 #include "Game/GameObject.h"
 #include "Game/GameManager.h"
@@ -20,10 +21,11 @@
 #include "Network/StringPacket.h"
 namespace sh::game
 {
+#if SH_SERVER
 	MapleServer* MapleServer::instance = nullptr;
 
 	MapleServer::MapleServer(GameObject& owner) :
-		UdpServer(owner)
+		UdpServer(owner), db("Item.db")
 	{
 		componentSubscriber.SetCallback
 		(
@@ -41,6 +43,17 @@ namespace sh::game
 
 		if (instance == nullptr)
 			instance = this;
+
+		ItemDropManager::GetInstance()->LoadData("itemDrop.json");
+
+		core::ThreadPool::GetInstance()->AddContinousTask(
+			[this]()
+			{
+				SH_INFO("excute");
+				std::string sql = fmt::format("INSERT INTO UserInventory (instanceId, itemId, ownerId, slotIdx, count) VALUES ({}, 2, 3, 4, 5);", core::Util::RandomRange(0, 0xfffffff));
+				SH_INFO_FORMAT("DB result: {}", db.Execute(sql));
+			}
+		);
 	}
 	SH_USER_API auto MapleServer::GetUser(const Endpoint& ep) -> User*
 	{
@@ -175,14 +188,14 @@ namespace sh::game
 
 			auto& [resultIt, success] = users.insert({ user.GetUserUUID(), std::move(user)});
 			{
-				// À¯Àú¿¡°Ô UUID Àü¼Û
+				// ìœ ì €ì—ê²Œ UUID ì „ì†¡
 				PlayerJoinSuccessPacket packet{};
 				packet.uuid = resultIt->second.GetUserUUID().ToString();
 
 				server.Send(packet, endpoint.ip, endpoint.port);
 			}
 			{
-				// À¯Àú ¿ùµå ÀÌµ¿
+				// ìœ ì € ì›”ë“œ ì´ë™
 				World* firstWorld = loadedWorlds[0];
 
 				ChangeWorldPacket packet{};
@@ -213,5 +226,10 @@ namespace sh::game
 			uuids.erase(uuidIt);
 		}
 	}
-}//namespace
+#else
+	MapleServer::MapleServer(GameObject& owner) :
+		UdpServer(owner)
+	{
+	}
 #endif
+}//namespace

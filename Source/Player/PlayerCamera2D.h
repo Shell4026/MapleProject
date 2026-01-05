@@ -1,4 +1,5 @@
 ﻿#pragma once
+#if !SH_SERVER
 #include "Export.h"
 
 #include "Game/Component/Component.h"
@@ -41,3 +42,4 @@ namespace sh::game
 		float centerY = 0.f;
 	};
 }
+#endif

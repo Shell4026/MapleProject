@@ -1,4 +1,4 @@
-#include "Login.h"
+Ôªø#include "Login.h"
 #if !SH_SERVER
 #include "Packet/PlayerJoinPacket.h"
 #include "MapleClient.h"
@@ -29,9 +29,9 @@ namespace sh::game
 		ImGui::SetNextWindowSize({ width, height }, ImGuiCond_::ImGuiCond_Appearing);
 		ImGui::Begin("Login", nullptr, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoMove);
 
-		ImGui::Text(u8"¥–≥◊¿”");
+		ImGui::Text(u8"ÎãâÎÑ§ÏûÑ");
 		ImGui::InputText("##inputNickname", &nickname);
-		if (ImGui::Button(u8"¡¢º”"))
+		if (ImGui::Button(u8"Ï†ëÏÜç"))
 		{
 			auto client = MapleClient::GetInstance();
 			assert(client != nullptr);

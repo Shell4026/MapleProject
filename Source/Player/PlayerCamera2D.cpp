@@ -1,5 +1,5 @@
 ﻿#include "PlayerCamera2D.h"
-
+#if !SH_SERVER
 #include "Game/GameObject.h"
 
 #include "Window/Window.h"
@@ -11,7 +11,6 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerCamera2D::Start()
 	{
-#if !SH_SERVER
 		world.renderer.GetWindow().SetSize(1366, 768);
 
 		if (core::IsValid(player))
@@ -21,28 +20,23 @@ namespace sh::game
 			centerX = px;
 			centerY = py + 0.81f;
 		}
-#endif
 	}
 	SH_USER_API void PlayerCamera2D::BeginUpdate()
 	{
-#if !SH_SERVER
 		Super::BeginUpdate();
 
 		if (!core::IsValid(targetCamera))
 			return;
 
 		SetCameraZ();
-#endif
 	}
 	SH_USER_API void PlayerCamera2D::Update()
 	{
-#if !SH_SERVER
 		if (!core::IsValid(player))
 			return;
 
 		MoveY();
 		MoveToPlayer();
-#endif
 	}
 	SH_USER_API void PlayerCamera2D::SetPlayer(GameObject& player)
 	{
@@ -99,7 +93,6 @@ namespace sh::game
 	}
 	void PlayerCamera2D::MoveToPlayer()
 	{
-#if !SH_SERVER
 		float width = world.renderer.GetWidth() / 100.f;
 		float height = dis;
 
@@ -140,6 +133,6 @@ namespace sh::game
 		pos.y = std::clamp(pos.y, minY, maxY);
 
 		gameObject.transform->SetWorldPosition(pos);
-#endif
 	}
 }//namespace
+#endif

@@ -1,8 +1,7 @@
-﻿#include "PlayerMovement2D.h"
+﻿#include "Player/PlayerMovement2D.h"
 #include "CollisionTag.hpp"
 
 #include "Game/GameObject.h"
-#include "Game/Input.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/norm.hpp"
@@ -14,8 +13,6 @@ namespace sh::game
 		Component(owner)
 	{
 		// 이벤트들은 BeginUpdate전에 호출됨
-
-#if SH_SERVER
 		packetEventSubscriber.SetCallback
 		(
 			[&](const PacketEvent& evt)
@@ -27,19 +24,6 @@ namespace sh::game
 					ProcessInputPacket(static_cast<const PlayerInputPacket&>(*evt.packet), ep);
 			}
 		);
-#else
-		
-		packetEventSubscriber.SetCallback
-		(
-			[&](const PacketEvent& evt)
-			{
-				if (evt.packet->GetId() == PlayerStatePacket::ID)
-				{
-					ProcessStatePacket(static_cast<const PlayerStatePacket&>(*evt.packet));
-				}
-			}
-		);
-#endif
 	}
 	SH_USER_API void PlayerMovement2D::Awake()
 	{
@@ -55,40 +39,15 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement2D::Start()
 	{
-#if SH_SERVER
 		server = MapleServer::GetInstance();
 		assert(server != nullptr);
 		server->bus.Subscribe(packetEventSubscriber);
-#else
-		client = MapleClient::GetInstance();
-		assert(client != nullptr);
-		client->bus.Subscribe(packetEventSubscriber);
-
-		serverPos = gameObject.transform->GetWorldPosition();
-#endif
 	}
 	SH_USER_API void PlayerMovement2D::BeginUpdate()
 	{
-#if SH_SERVER
 		if (!core::IsValid(rigidBody))
 			return;
 		ProcessInput();
-#else
-		if (!core::IsValid(player))
-			return;
-
-		++tick;
-
-		if (player->IsLocal())
-		{
-			ProcessLocalInput();
-			ProcessLocalAnim(lastSent.inputX);
-		}
-		else
-		{
-			ProcessRemoteAnim();
-		}
-#endif
 	}
 	SH_USER_API void PlayerMovement2D::FixedUpdate()
 	{
@@ -125,8 +84,6 @@ namespace sh::game
 				gameObject.transform->SetPosition(pos.x, floorY, pos.z);
 			gameObject.transform->UpdateMatrix();
 		}
-#if SH_SERVER
-		
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		const auto v = rigidBody->GetLinearVelocity();
 
@@ -181,22 +138,6 @@ namespace sh::game
 			serverTick = 0;
 			bSend = false;
 		}
-#else
-		// 단순 보간
-		glm::vec2 corrected = serverPos;
-		glm::vec2 correctedVel = serverVel;
-		
-		const float difSqr = glm::distance2(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos);
-		if (difSqr < 1.0f * 1.0f)
-		{
-			corrected = glm::mix(glm::vec2{ gameObject.transform->GetWorldPosition() }, serverPos, 0.2f);
-			correctedVel = glm::mix(glm::vec2{ rigidBody->GetLinearVelocity() }, serverVel, 1.0f);
-		}
-		gameObject.transform->SetWorldPosition({ corrected.x, corrected.y, player->IsLocal() ? 0.025f : 0.02f });
-		gameObject.transform->UpdateMatrix();
-		rigidBody->SetLinearVelocity({ correctedVel.x, correctedVel.y, 0.f });
-		rigidBody->ResetPhysicsTransform();
-#endif
 	}
 	SH_USER_API void PlayerMovement2D::OnCollisionEnter(Collider& collider)
 	{
@@ -204,10 +145,6 @@ namespace sh::game
 			return;
 		if (floor->GetCollider() == &collider)
 			bGround = true;
-	}
-	SH_USER_API auto PlayerMovement2D::GetPlayer() const -> Player*
-	{
-		return player;
 	}
 	SH_USER_API void PlayerMovement2D::Lock()
 	{
@@ -217,22 +154,14 @@ namespace sh::game
 			auto vel = rigidBody->GetLinearVelocity();
 			rigidBody->SetLinearVelocity({ 0.0f, vel.y, 0.0f });
 		}
-#if SH_SERVER
 		bSend = true;
-#endif
 	}
 	SH_USER_API void PlayerMovement2D::Unlock()
 	{
 		bLock = false;
-#if SH_SERVER
 		bSend = true;
-#endif
 	}
-	SH_USER_API auto PlayerMovement2D::IsLock() const -> bool
-	{
-		return bLock;
-	}
-#if SH_SERVER
+
 	void PlayerMovement2D::ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint)
 	{
 		if (!core::IsValid(rigidBody))
@@ -297,144 +226,4 @@ namespace sh::game
 		lastProcessedSeq = lastInput.seq;
 		lastTick = lastInput.tick;
 	}
-#else
-	void PlayerMovement2D::ProcessLocalInput()
-	{
-		const auto& pos = gameObject.transform->GetWorldPosition();
-		yVelocity = rigidBody->GetLinearVelocity().y;
-
-		float xInput = 0.f;
-		bool bJump = false;
-		bool bProne = false;
-		if (Input::GetKeyDown(Input::KeyCode::Down))
-			bProne = true;
-		if (!bProne)
-		{
-			if (Input::GetKeyDown(Input::KeyCode::Right))
-				xInput += 1;
-			if (Input::GetKeyDown(Input::KeyCode::Left))
-				xInput += -1;
-			if (Input::GetKeyDown(Input::KeyCode::F))
-				bJump = true;
-		}
-		// 움직임 예측 코드
-		if (bGround)
-		{
-			if (xInput == 0 || bLock)
-				xVelocity = 0;
-			else
-				xVelocity = std::clamp(xInput * speed, -speed, speed);
-
-			if (bJump && !bLock)
-			{
-				yVelocity = jumpSpeed;
-				bGround = false;
-			}
-		}
-		else
-		{
-			float airSpeed = 0.1f;
-			if (xInput != 0 && !bLock)
-			{
-				// 현재 속도에서 목표 속도로 보간
-				float targetSpeed = xInput * speed;
-				xVelocity = glm::mix(xVelocity, targetSpeed, airSpeed);
-			}
-		}
-		rigidBody->SetLinearVelocity({ xVelocity, yVelocity, 0.f });
-
-		bool bInputChanged = false;
-		bInputChanged = (xInput != lastSent.inputX) || (bJump != lastSent.bJump || (bProne != lastSent.bProne));
-
-		if (bInputChanged)
-		{
-			PlayerInputPacket packet{};
-			packet.inputX = xInput;
-			packet.bJump = bJump;
-			packet.seq = inputSeqCounter++;
-			packet.playerUUID = client->GetUser().GetUserUUID().ToString();
-			packet.timestamp = tick;
-			packet.bProne = bProne;
-
-			lastSent = std::move(packet);
-
-			client->SendPacket(lastSent);
-
-			SH_INFO_FORMAT("send (tick:{})", tick);
-		}
-	}
-	void PlayerMovement2D::ProcessStatePacket(const PlayerStatePacket& packet)
-	{
-		if (packet.playerUUID != player->GetUserUUID().ToString())
-			return;
-
-		if (!core::IsValid(rigidBody))
-			return;
-
-		const auto& pos = gameObject.transform->GetWorldPosition();
-
-		serverPos = { packet.px, packet.py };
-		serverVel = { packet.vx, packet.vy };
-
-		bGround = packet.bGround;
-		floorY = packet.floor;
-		bProne = packet.bProne;
-		player->SetRight(packet.bRight);
-
-		xVelocity = serverVel.x;
-		yVelocity = serverVel.y;
-
-		if (packet.bLock)
-			Lock();
-		else
-			Unlock();
-	}
-	void PlayerMovement2D::ProcessLocalAnim(float xInput)
-	{
-		if (!core::IsValid(anim) || bLock)
-			return;
-
-		if (xInput == 0.0f)
-		{
-			if (bProne)
-				anim->SetPose(PlayerAnimation::Pose::Prone);
-			else
-				anim->SetPose(PlayerAnimation::Pose::Idle);
-		}
-		else
-			anim->SetPose(PlayerAnimation::Pose::Walk);
-
-		if (!bGround)
-			anim->SetPose(PlayerAnimation::Pose::Jump);
-
-		// 방향
-		if (!bProne && !bLock)
-		{
-			if (xInput > 0)
-				player->SetRight(true);
-			else if (xInput < 0)
-				player->SetRight(false);
-		}
-	}
-	void PlayerMovement2D::ProcessRemoteAnim()
-	{
-		if (!core::IsValid(anim) || bLock)
-			return;
-
-		if (bGround)
-		{
-			if (!bProne)
-			{
-				if (std::abs(xVelocity) > 0.5f)
-					anim->SetPose(PlayerAnimation::Pose::Walk);
-				else
-					anim->SetPose(PlayerAnimation::Pose::Idle);
-			}
-			else
-				anim->SetPose(PlayerAnimation::Pose::Prone);
-		}
-		else
-			anim->SetPose(PlayerAnimation::Pose::Jump);
-	}
-#endif
 }//namespace

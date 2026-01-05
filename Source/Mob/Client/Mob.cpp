@@ -1,9 +1,8 @@
-﻿#include "Mob.h"
-#include "MobEvents.hpp"
-#include "../MapleServer.h"
+﻿#include "Mob/Mob.h"
+
 #include "../MapleClient.h"
-#include "../Packet/MobStatePacket.hpp"
 #include "../CollisionTag.hpp"
+#include "../Packet/MobStatePacket.hpp"
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
@@ -19,15 +18,13 @@ namespace sh::game
         packetSubscriber.SetCallback(
             [&](const PacketEvent& evt)
             {
-#if !SH_SERVER
                 if (evt.packet->GetId() == MobStatePacket::ID)
                     ProcessState(static_cast<const MobStatePacket&>(*evt.packet));
-#endif
             }
         );
     }
 
-    void Mob::Awake()
+    SH_USER_API void Mob::Awake()
     {
         SetPriority(-1);
         status.Reset(maxHp);
@@ -37,15 +34,10 @@ namespace sh::game
             rigidbody->GetCollider()->SetCollisionTag(tag::entityTag);
             rigidbody->GetCollider()->SetAllowCollisions(tag::groundTag);
         }
-
         gameObject.SetActive(false);
-#if SH_SERVER
-        
-        MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
-#else
+
         MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
         animator.SetAnimation(anim);
-#endif
         initPos = gameObject.transform->GetWorldPosition();
     }
 
@@ -54,21 +46,7 @@ namespace sh::game
         const auto& pos = gameObject.transform->GetWorldPosition();
         status.Tick(world.deltaTime);
 
-#if SH_SERVER
-        if (core::IsValid(ai) && !status.bStun)
-            ai->Run(*this);
-
-        // 1초에 10번 전송
-        netAccum += world.deltaTime;
-        if (netAccum >= 0.1f)
-        {
-            netAccum -= 0.1f;
-
-            BroadcastStatePacket();
-        }
-#else
         // 클라 보정
-
         glm::vec2 curPos{ pos.x, pos.y };
         glm::vec2 curVel{};
         if (core::IsValid(rigidbody))
@@ -107,79 +85,19 @@ namespace sh::game
             animator.SetFacingFromVelocity(serverVel);
             animator.Update(status, serverVel, world.deltaTime);
         }
-#endif
     }
 
-#if !SH_SERVER
     SH_USER_API void Mob::SetAnimation(MobAnimation& anim)
     {
         this->anim = &anim;
         animator.SetAnimation(this->anim);
     }
-#else
-    void Mob::Hit(Skill& skill, Player& player)
-    {
-        status.ApplyDamage(skill.GetDamage());
-        status.ApplyStun(1000.f);
-
-        if (status.hp == 0)
-        {
-            MobDeathEvent evt{ *this };
-
-            evtBus.Publish(evt);
-            BroadcastStatePacket();
-            gameObject.SetActive(false);
-            return;
-        }
-
-        // 넉백
-        const auto& playerPos = player.gameObject.transform->GetWorldPosition();
-        const auto& mobPos = gameObject.transform->GetWorldPosition();
-        float dx = (mobPos.x - playerPos.x) < 0 ? -1.f : 1.f;
-
-        if (core::IsValid(rigidbody))
-        {
-            auto v = rigidbody->GetLinearVelocity();
-            rigidbody->SetLinearVelocity({ 0.f, v.y, v.z });
-            rigidbody->AddForce({ dx * 100.f, 0.f, 0.f });
-        }
-
-        netAccum = 0.1f; // 즉시 state 패킷 전송
-    }
-    SH_USER_API void Mob::BroadcastStatePacket()
-    {
-        const auto& pos = gameObject.transform->GetWorldPosition();
-        game::Vec3 vel{};
-        if (core::IsValid(rigidbody))
-            vel = rigidbody->GetLinearVelocity();
-
-        MobStatePacket packet{};
-        packet.mobUUID = GetUUID().ToString();
-
-        packet.x = pos.x; packet.y = pos.y;
-        packet.vx = vel.x; packet.vy = vel.y;
-
-        packet.hp = status.hp;
-        packet.seq = snapshotSeq++;
-
-        packet.bStun = status.bStun;
-        packet.stunRemainingMs = static_cast<uint32_t>(status.stunRemainingMs);
-
-        if (ai != nullptr)
-            packet.state = ai->GetState();
-
-        MapleServer::GetInstance()->BroadCast(packet);
-    }
-#endif
 
     SH_USER_API void Mob::Reset()
     {
-#if SH_SERVER
-        netAccum = 0.f;
-#else
         serverPos = { initPos.x, initPos.y };
         serverVel = { 0.f, 0.f };
-#endif
+
         gameObject.transform->SetWorldPosition(initPos);
         gameObject.transform->UpdateMatrix();
         if (core::IsValid(rigidbody))
@@ -191,12 +109,6 @@ namespace sh::game
             ai->Reset();
     }
 
-    void Mob::SetAIStrategy(AIStrategy* strategy)
-    {
-        ai = strategy;
-    }
-
-#if !SH_SERVER
     void Mob::ProcessState(const MobStatePacket& packet)
     {
         if (packet.mobUUID != GetUUID().ToString())
@@ -224,5 +136,4 @@ namespace sh::game
             healthBar->SetHp(status.hp);
         }
     }
-#endif
 }

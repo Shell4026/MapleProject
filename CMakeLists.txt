@@ -10,15 +10,21 @@ set(SERVER ShellEngineUserServer)
 set(TARGETS ${CLIENT} ${SERVER})
 
 file(GLOB_RECURSE SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
-
 file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h  ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp)
+
+set(CLIENT_SRC ${SRC})
+list(FILTER CLIENT_SRC EXCLUDE REGEX ".*[/\\]Server[/\\].*")
+
+
+set(SERVER_SRC ${SRC})
+list(FILTER SERVER_SRC EXCLUDE REGEX ".*[/\\]Client[/\\].*")
 
 cmake_minimum_required (VERSION 3.8)
 
 project (
  ${PROJECT_NAME}
  VERSION 0.1
- LANGUAGES CXX
+ LANGUAGES C CXX
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -49,31 +55,34 @@ FETCHCONTENT_DECLARE(
 )
 FETCHCONTENT_MAKEAVAILABLE(JSON)
 
+add_library(sqlite3 STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Sqlite/sqlite3.c)
+target_include_directories(sqlite3 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Sqlite)
 
 foreach(TGT ${TARGETS})
-	add_library(${TGT} SHARED ${SRC} ${HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
-
-	set_target_properties(${TGT} PROPERTIES OUTPUT_NAME ${COMMON_DLL_NAME})
-
-	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-		target_compile_definitions(${TGT} PUBLIC SH_DEBUG)
-	endif()
 	if ("${TGT}" STREQUAL "${SERVER}")
+		add_library(${TGT} SHARED ${SERVER_SRC} ${HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
 		target_compile_definitions(${SERVER} PUBLIC SH_SERVER)
 		set_target_properties(${TGT} PROPERTIES 
 			ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/Server"
 			RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Server"
 			LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Server")
 	else()
+		add_library(${TGT} SHARED ${CLIENT_SRC} ${HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
 		set_target_properties(${TGT} PROPERTIES 
 			ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/Client"
 			RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Client"
 			LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Client")
 	endif()
 
+	set_target_properties(${TGT} PROPERTIES OUTPUT_NAME ${COMMON_DLL_NAME})
+	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+		target_compile_definitions(${TGT} PUBLIC SH_DEBUG)
+	endif()
+
 	target_precompile_headers(${TGT} PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
 	target_compile_definitions(${TGT} PUBLIC SH_PROJECT_NAME="${PROJECT_NAME}")
 
+	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/Source)
 	target_include_directories(${TGT} PRIVATE ${ENGINE_DIR}/include)
 	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/include/external)
 
@@ -90,4 +99,5 @@ foreach(TGT ${TARGETS})
 	target_link_libraries(${TGT} PRIVATE fmt)
 	target_link_libraries(${TGT} PRIVATE glm)
 	target_link_libraries(${TGT} PRIVATE nlohmann_json)
+	target_link_libraries(${TGT} PRIVATE sqlite3)
 endforeach()

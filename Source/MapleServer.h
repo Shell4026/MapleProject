@@ -1,8 +1,8 @@
 ﻿#pragma once
-#if SH_SERVER
 #include "Export.h"
 #include "User.h"
 #include "EndPoint.hpp"
+#include "Database.h"
 
 #include "Core/EventBus.h"
 #include "Core/EventSubscriber.h"
@@ -23,7 +23,7 @@ namespace sh::game
 		COMPONENT(MapleServer, "user")
 	public:
 		SH_USER_API MapleServer(GameObject& owner);
-
+#if SH_SERVER
 		SH_USER_API auto GetUserUUID(const Endpoint& ep) -> core::UUID*;
 		SH_USER_API auto GetUser(const Endpoint& ep) -> User*;
 		SH_USER_API auto GetUser(const core::UUID& uuid) -> User*;
@@ -55,6 +55,8 @@ namespace sh::game
 		core::EventSubscriber<events::ComponentEvent> componentSubscriber;
 
 		static MapleServer* instance;
+
+		Database db;
+#endif
 	};
 }//namespace
-#endif

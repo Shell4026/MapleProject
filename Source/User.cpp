@@ -1,4 +1,4 @@
-#include "User.h"
+﻿#include "User.h"
 
 namespace sh::game
 {
@@ -18,7 +18,7 @@ namespace sh::game
 	{
 	}
 	User::User(User&& other) noexcept :
-		ip(std::move(other.ip)), port(other.port),
+		ip(other.ip), port(other.port),
 		uuid(std::move(other.uuid)), currentWorld(std::move(other.currentWorld))
 	{
 	}

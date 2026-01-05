@@ -1,10 +1,14 @@
 ﻿#include "MapleWorld.h"
-#include "Player.h"
+#include "Player/Player.h"
+#include "Item.h"
+#include "ItemDB.h"
+
 #include "Packet/PlayerJoinWorldPacket.h"
 #include "Packet/PlayerSpawnPacket.hpp"
 #include "Packet/PlayerDespawnPacket.hpp"
 #include "Packet/PlayerLeavePacket.h"
 #include "Packet/HeartbeatPacket.hpp"
+#include "Packet/ItemDropPacket.hpp"
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
@@ -62,6 +66,19 @@ namespace sh::game
 		else
 			SH_ERROR("Invalid player prefab!");
 		return nullptr;
+	}
+	SH_USER_API void MapleWorld::Awake()
+	{
+		if (itemPrefab == nullptr)
+		{
+			itemPrefab = static_cast<Prefab*>(core::SObject::GetSObjectUsingResolver(core::UUID{ Item::PREFAB_UUID }));
+			if (itemPrefab == nullptr)
+				SH_ERROR_FORMAT("Item prefab is not valid!: {}", Item::PREFAB_UUID);
+			else
+			{
+				core::GarbageCollection::GetInstance()->SetRootSet(itemPrefab);
+			}
+		}
 	}
 	SH_USER_API void MapleWorld::Start()
 	{
@@ -197,6 +214,46 @@ namespace sh::game
 		}
 
 		players.insert_or_assign(packet.playerUUID, player);
+	}
+	void MapleWorld::ProcessItemDrop(const ItemDropPacket& packet)
+	{
+		if (itemPrefab == nullptr)
+		{
+			SH_ERROR("Item prefab is not valid!");
+			return;
+		}
+
+		const core::Json* itemInfo = ItemDB::GetInstance()->GetItemInfo(packet.itemId);
+		if (itemInfo == nullptr)
+		{
+			SH_ERROR_FORMAT("Item {} is not valid!", packet.itemId);
+			return;
+		}
+
+		SH_INFO_FORMAT("Drop item: {}", packet.itemId);
+		GameObject* itemObj = itemPrefab->AddToWorld(world);
+		itemObj->SetUUID(core::UUID{ packet.itemUUID });
+		auto pos = itemObj->transform->GetWorldPosition();
+		pos.x = packet.x;
+		pos.y = packet.y;
+		itemObj->transform->SetWorldPosition(pos);
+
+		Item* item = itemObj->GetComponent<Item>();
+		item->itemId = packet.itemId;
+		item->GetRigidBody()->ResetPhysicsTransform();
+		item->GetRigidBody()->SetLinearVelocity({ 0.f, 5.f, 0.f });
+
+		if (!itemInfo->contains("tex"))
+			return;
+
+		const std::string& texUUID = (*itemInfo)["tex"];
+		auto texPtr = static_cast<render::Texture*>(core::SObject::GetSObjectUsingResolver(core::UUID{ texUUID }));
+		if (texPtr == nullptr)
+		{
+			SH_ERROR_FORMAT("texture {} is not valid!", texUUID);
+			return;
+		}
+		item->SetTexture(texPtr);
 	}
 #endif
 	void MapleWorld::ProcessPlayerDespawn(const PlayerDespawnPacket& packet)

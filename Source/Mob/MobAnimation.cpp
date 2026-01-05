@@ -44,7 +44,6 @@ namespace sh::game
 		switch (pose)
 		{
 		case Pose::Idle:
-			SH_INFO("Idle!");
 			if (core::IsValid(idle))
 			{
 				curAnim = idle;
@@ -52,7 +51,6 @@ namespace sh::game
 			}
 			break;
 		case Pose::Move:
-			SH_INFO("Move!");
 			if (core::IsValid(move))
 			{
 				curAnim = move;
