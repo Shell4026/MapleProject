@@ -3,7 +3,5 @@ bin
 Library
 out
 temp
-Assets/textures
-Assets/tile
-Assets/Mob/*/tex
-Assets/Player/texture
+*.png
+*.jpg

@@ -1,0 +1,19 @@
+{
+    "metaHash": 7095071712973651940,
+    "name": "die (6)",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "die (6)",
+        "type": "Texture",
+        "uuid": "124fe7aa7203130a59d8a996e3ae327f",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "124fe7aa7203130a59d8a996e3ae327f",
+    "version": 1
+}

@@ -1,0 +1,23 @@
+{
+    "Material": {
+        "shader": "089d8842bfa9932827da7d0fcc393b59"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": {
+            "tex": "e81c5b68825058af8c9da5a60fd429c7"
+        },
+        "vector": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                0.0
+            ]
+        }
+    },
+    "name": "testing2",
+    "type": "Material",
+    "uuid": "9948582d473ca7a81a5f8d5f53f2fce1",
+    "version": 1
+}

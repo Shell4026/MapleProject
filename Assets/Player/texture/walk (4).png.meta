@@ -1,0 +1,19 @@
+{
+    "metaHash": 4929984959537827911,
+    "name": "walk (4)",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "walk (4)",
+        "type": "Texture",
+        "uuid": "caa3a362c2f71a563feb3af8b8a7f8e5",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "caa3a362c2f71a563feb3af8b8a7f8e5",
+    "version": 1
+}

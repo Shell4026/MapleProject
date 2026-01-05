@@ -1,0 +1,19 @@
+{
+    "metaHash": 14390745819443337747,
+    "name": "bsc.1",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "bsc.1",
+        "type": "Texture",
+        "uuid": "9dab15944d0f1e8b88cd8e0d25f0e1d2",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "9dab15944d0f1e8b88cd8e0d25f0e1d2",
+    "version": 1
+}

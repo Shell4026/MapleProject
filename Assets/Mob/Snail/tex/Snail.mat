@@ -1,0 +1,23 @@
+{
+    "Material": {
+        "shader": "38c9cad5714e57e7188346e334a1e90a"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": {
+            "tex": "270909f319de43afc5de03cd2c0cb591"
+        },
+        "vector": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                0.0
+            ]
+        }
+    },
+    "name": "Snail",
+    "type": "Material",
+    "uuid": "b55023119dacbba39c6af542bc728c6d",
+    "version": 1
+}

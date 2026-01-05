@@ -1,0 +1,19 @@
+{
+    "metaHash": 5517349257966245982,
+    "name": "Tiles107_2K-JPG_Roughness",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "Tiles107_2K-JPG_Roughness",
+        "type": "Texture",
+        "uuid": "659227a87bf0dc4e7614a15bba2b36ca",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "659227a87bf0dc4e7614a15bba2b36ca",
+    "version": 1
+}

@@ -1,0 +1,23 @@
+{
+    "Material": {
+        "shader": "38c9cad5714e57e7188346e334a1e90a"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": {
+            "tex": "bfc92262c62e977cb24fba23451b69a7"
+        },
+        "vector": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                0.0
+            ]
+        }
+    },
+    "name": "playerMat",
+    "type": "Material",
+    "uuid": "5158ea71df5ba712acdc345aa4185bf2",
+    "version": 1
+}

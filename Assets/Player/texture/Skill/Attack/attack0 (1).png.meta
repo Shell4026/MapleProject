@@ -1,0 +1,19 @@
+{
+    "metaHash": 12299559689574385176,
+    "name": "attack0 (1)",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "attack0 (1)",
+        "type": "Texture",
+        "uuid": "05d76dab603cb40d72332e0e47b98c01",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "05d76dab603cb40d72332e0e47b98c01",
+    "version": 1
+}

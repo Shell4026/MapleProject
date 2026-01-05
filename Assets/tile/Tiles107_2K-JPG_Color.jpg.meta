@@ -1,0 +1,19 @@
+{
+    "metaHash": 13006159550132688595,
+    "name": "Tiles107_2K-JPG_Color",
+    "obj": {
+        "Texture": {
+            "aniso": 8,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "Tiles107_2K-JPG_Color",
+        "type": "Texture",
+        "uuid": "a1463ef55315d9b1968d4aad26e8b161",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "a1463ef55315d9b1968d4aad26e8b161",
+    "version": 1
+}

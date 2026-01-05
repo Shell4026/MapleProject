@@ -1,0 +1,19 @@
+{
+    "metaHash": 1733763201999322236,
+    "name": "stabO1 (2)",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "stabO1 (2)",
+        "type": "Texture",
+        "uuid": "cfc4955dc73b2a4a0e15bf18adbdb280",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "cfc4955dc73b2a4a0e15bf18adbdb280",
+    "version": 1
+}

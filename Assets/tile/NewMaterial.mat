@@ -1,0 +1,19 @@
+{
+    "Material": {
+        "shader": "d25ded1fee143a364c8b97b6bb2a1b5b"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": {
+            "ambient": 0.0
+        },
+        "textures": {
+            "normalTex": "0c172db5a1efc34fcdbd12a0518509c8",
+            "tex": "a1463ef55315d9b1968d4aad26e8b161"
+        },
+        "vector": null
+    },
+    "name": "NewMaterial",
+    "type": "Material",
+    "uuid": "67372129d52a613d919de6be19420a89",
+    "version": 1
+}

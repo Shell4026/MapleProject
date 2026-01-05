@@ -1,0 +1,19 @@
+{
+    "metaHash": 17028869491480397037,
+    "name": "move1",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "move1",
+        "type": "Texture",
+        "uuid": "ee46dfe7eefebf71860a70672fa2f9bc",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "ee46dfe7eefebf71860a70672fa2f9bc",
+    "version": 1
+}

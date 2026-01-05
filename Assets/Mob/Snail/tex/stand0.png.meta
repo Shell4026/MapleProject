@@ -1,0 +1,19 @@
+{
+    "metaHash": 18175769647208681566,
+    "name": "stand0",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "stand0",
+        "type": "Texture",
+        "uuid": "8ace5ae1522e9d5c12db48bf6fb5ad45",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "8ace5ae1522e9d5c12db48bf6fb5ad45",
+    "version": 1
+}
