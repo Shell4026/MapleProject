@@ -40,6 +40,7 @@ namespace sh::game
 		SH_USER_API void Kick(const User& user);
 		SH_USER_API void Kick(const core::UUID& user);
 
+		SH_USER_API auto GetDB() -> Database& { return db; }
 		SH_USER_API static auto GetInstance() -> MapleServer*;
 	private:
 		void ProcessPlayerJoin(const PlayerJoinPacket& packet, const Endpoint& endpoint);

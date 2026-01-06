@@ -3,6 +3,7 @@
 
 #include "MapleServer.h"
 #include "CollisionTag.hpp"
+#include "Item/ItemDropManager.h"
 
 #include "Packet/MobStatePacket.hpp"
 
@@ -98,6 +99,12 @@ namespace sh::game
         BroadcastStatePacket();
         gameObject.SetActive(false);
 
+        std::vector<int> dropItems = ItemDropManager::GetInstance()->DropItem(mobId);
+        if (!dropItems.empty())
+        {
+            auto& pos = gameObject.transform->GetWorldPosition();
+            mapleWorld->SpawnItem(dropItems, pos.x, pos.y, player.GetUserUUID());
+        }
     }
 
     SH_USER_API void Mob::BroadcastStatePacket()
@@ -124,5 +131,4 @@ namespace sh::game
 
         MapleServer::GetInstance()->BroadCast(packet);
     }
-
 }//namespace

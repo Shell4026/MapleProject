@@ -1,0 +1,19 @@
+{
+    "metaHash": 18192105901893344156,
+    "name": "달팽이껍질",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "달팽이껍질",
+        "type": "Texture",
+        "uuid": "e70a6d6ca57b4f03f600d4c6c7947f3c",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "e70a6d6ca57b4f03f600d4c6c7947f3c",
+    "version": 1
+}

@@ -1,7 +1,7 @@
 ﻿#include "MapleWorld.h"
 #include "Player/Player.h"
-#include "Item.h"
-#include "ItemDB.h"
+#include "Item/Item.h"
+#include "Item/ItemDB.h"
 
 #include "Packet/PlayerJoinWorldPacket.hpp"
 #include "Packet/PlayerSpawnPacket.hpp"
@@ -26,6 +26,8 @@ namespace sh::game
 					ProcessPlayerSpawn(static_cast<const PlayerSpawnPacket&>(*evt.packet), ep);
 				else if (evt.packet->GetId() == PlayerDespawnPacket::ID)
 					ProcessPlayerDespawn(static_cast<const PlayerDespawnPacket&>(*evt.packet));
+				else if (evt.packet->GetId() == ItemDropPacket::ID)
+					ProcessItemDrop(static_cast<const ItemDropPacket&>(*evt.packet));
 			}
 		);
 	}
@@ -76,6 +78,7 @@ namespace sh::game
 	SH_USER_API void MapleWorld::LateUpdate()
 	{
 	}
+
 	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet, const Endpoint& endpoint)
 	{
 		core::UUID playerUUID{ packet.playerUUID };
@@ -137,7 +140,7 @@ namespace sh::game
 		if (it == players.end())
 			return;
 
-		Player* player = it->second.Get();
+		Player* player = it->second;
 		players.erase(it);
 
 		if (player == localPlayer.Get())

@@ -17,6 +17,7 @@ namespace sh::game
 	Test2::Test2(GameObject& owner) :
 		Component(owner)
 	{
+		canPlayInEditor = true;
 	}
 
 	SH_USER_API void Test2::Awake()
@@ -67,6 +68,14 @@ namespace sh::game
 				}
 				prop->SetProperty("tex", tex);
 				renderer->UpdatePropertyBlockData();
+			}
+		}
+		if (Input::GetKeyPressed(Input::KeyCode::Enter))
+		{
+			for (int i = 0; i < 10000; ++i)
+			{
+				auto obj = world.AddGameObject("test" + std::to_string(i));
+				obj->transform->SetParent(gameObject.transform);
 			}
 		}
 	}

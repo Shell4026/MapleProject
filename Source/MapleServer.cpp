@@ -1,6 +1,6 @@
 ﻿#include "MapleServer.h"
 #include "MapleWorld.h"
-#include "ItemDropManager.h"
+#include "Item/ItemDropManager.h"
 #include "PacketEvent.hpp"
 #include "Packet/PlayerJoinPacket.hpp"
 #include "Packet/ChangeWorldPacket.hpp"

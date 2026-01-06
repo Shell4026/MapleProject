@@ -6,7 +6,6 @@
 #include "MobStatus.hpp"
 #include "MobAnimation.h"
 #include "MobAnimationController.h"
-#include "MobStatus.hpp"
 
 #include "AI/AIStrategy.h"
 #include "UI/HPUI.h"
@@ -16,11 +15,11 @@
 
 #include "Game/Component/NetworkComponent.h"
 #include "Game/Component/RigidBody.h"
-#include "Game/Prefab.h"
 
 namespace sh::game
 {
     class MobStatePacket;
+    class ItemDropPacket;
 
     class Mob : public NetworkComponent
     {
@@ -37,7 +36,6 @@ namespace sh::game
         SH_USER_API void Kill(const Player& player);
         SH_USER_API void BroadcastStatePacket();
         SH_USER_API void Hit(Skill& skill, Player& player);
-        SH_USER_API void BroadcastDropItemPacket(const std::vector<int>& items, const core::UUID& owner);
 #else
         SH_USER_API void SetAnimation(MobAnimation& anim);
 #endif
@@ -47,6 +45,7 @@ namespace sh::game
         SH_USER_API auto GetRigidbody() const -> RigidBody* { return rigidbody; }
         SH_USER_API auto GetStatus() const -> const MobStatus& { return status; }
         SH_USER_API auto GetStatus() -> MobStatus& { return status; }
+        SH_USER_API auto GetMapleWorld() const -> MapleWorld* { return mapleWorld; }
     private:
 #if !SH_SERVER
         void ProcessState(const MobStatePacket& packet);
@@ -68,6 +67,8 @@ namespace sh::game
         PROPERTY(rigidbody)
         RigidBody* rigidbody = nullptr;
     private:
+        PROPERTY(mapleWorld)
+        MapleWorld* mapleWorld = nullptr;
         PROPERTY(mobId)
         int mobId = 0;
         MobStatus status;

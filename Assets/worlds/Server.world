@@ -30,76 +30,8 @@
         2.886751413345337
     ],
     "editorObjs": [],
-    "name": "World",
+    "name": "Server",
     "objs": [
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "fe743c447b2742f83f5fe7e82f6f8173",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "MapleServer": {
-                        "loadedWorlds": [
-                            "1c2428b8720cab83b1b46f7cd7408592"
-                        ]
-                    },
-                    "NetworkComponent": {},
-                    "SObject": {},
-                    "UdpServer": {
-                        "port": 4026
-                    },
-                    "name": "user/MapleServer",
-                    "type": "MapleServer",
-                    "uuid": "f9fc71fc9c488082469ac926c70d70bf",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "hideInspector": false,
-                "transform": "fe743c447b2742f83f5fe7e82f6f8173"
-            },
-            "name": "Server",
-            "type": "GameObject",
-            "uuid": "6777cbb839f0c2d4c7aed2ee99994e86",
-            "version": 1
-        },
         {
             "Components": [
                 {
@@ -161,12 +93,131 @@
             "GameObject": {
                 "bEditorOnly": false,
                 "bEnable": true,
+                "bStatic": false,
                 "hideInspector": false,
                 "transform": "54f2aac8fe06ec4b96b56ed9cf81f6af"
             },
             "name": "Camera",
             "type": "GameObject",
             "uuid": "68cfc3a48d738039db02e859ec2772de",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "fe743c447b2742f83f5fe7e82f6f8173",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MapleServer": {
+                        "loadedWorlds": [
+                            "1c2428b8720cab83b1b46f7cd7408592"
+                        ]
+                    },
+                    "NetworkComponent": {},
+                    "SObject": {},
+                    "UdpServer": {
+                        "port": 4026
+                    },
+                    "name": "user/MapleServer",
+                    "type": "MapleServer",
+                    "uuid": "207ca77a1e1aeaf0863a7046f92e9b82",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false,
+                "transform": "fe743c447b2742f83f5fe7e82f6f8173"
+            },
+            "name": "Server",
+            "type": "GameObject",
+            "uuid": "6777cbb839f0c2d4c7aed2ee99994e86",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "465b655bb29316cddeeddf60401e2d52",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false,
+                "transform": "465b655bb29316cddeeddf60401e2d52"
+            },
+            "name": "Assets",
+            "type": "GameObject",
+            "uuid": "2c702dc846fe770244d85f76af2545a9",
             "version": 1
         }
     ],

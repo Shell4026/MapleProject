@@ -1,0 +1,26 @@
+{
+    "Constant": [
+        []
+    ],
+    "Material": {
+        "shader": "089d8842bfa9932827da7d0fcc393b59"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": {
+            "tex": "c287519505364a412bda4e76cf0e14a3"
+        },
+        "vector": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                0.0
+            ]
+        }
+    },
+    "name": "InventoryBackground",
+    "type": "Material",
+    "uuid": "b3063b4ec8203a20dcf0481cd81b9991",
+    "version": 1
+}

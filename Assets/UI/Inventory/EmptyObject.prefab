@@ -1,0 +1,122 @@
+{
+    "Prefab": {
+        "30227116f56a685b8c5be17745149553": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            189.5,
+                            97.0,
+                            0.5
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            242.0,
+                            593.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "db56f1dfcbdadbe1e6f3f90d2ec40bdd",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "db56f1dfcbdadbe1e6f3f90d2ec40bdd"
+            },
+            "name": "EmptyObject",
+            "type": "GameObject",
+            "uuid": "30227116f56a685b8c5be17745149553",
+            "version": 1
+        },
+        "ecab30da1219828464a5f63c6bb1d667": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "db56f1dfcbdadbe1e6f3f90d2ec40bdd",
+                        "quat": [
+                            0.7071068286895752,
+                            0.0,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "vPosition": [
+                            0.5,
+                            0.5,
+                            0.0
+                        ],
+                        "vRotation": [
+                            90.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "04862f454607b701778ac9f32931917c",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "b3063b4ec8203a20dcf0481cd81b9991",
+                        "mesh": "72f9acd3af22ed09541de7ae11c8930a",
+                        "renderTag": 1
+                    },
+                    "SObject": {},
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "3d09759a9e85cdbc92cd7846ecd9245e",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "hideInspector": false,
+                "transform": "04862f454607b701778ac9f32931917c"
+            },
+            "name": "평면",
+            "type": "GameObject",
+            "uuid": "ecab30da1219828464a5f63c6bb1d667",
+            "version": 1
+        }
+    },
+    "name": "EmptyObject",
+    "rootObj": "30227116f56a685b8c5be17745149553",
+    "type": "Prefab",
+    "uuid": "b56a69abb7a57cfc384d7ee30ac9bb33",
+    "version": 1
+}

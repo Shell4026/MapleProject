@@ -33,7 +33,7 @@ namespace sh::game
 			rigidBody->SetAngularLock({ 1, 1, 1 });
 			rigidBody->SetAxisLock({ 0, 0, 1 });
 			rigidBody->GetCollider()->SetCollisionTag(tag::entityTag);
-			rigidBody->GetCollider()->SetAllowCollisions(tag::groundTag);
+			rigidBody->GetCollider()->SetAllowCollisions(tag::groundTag | tag::itemTag);
 			SetPriority(-1);
 		}
 	}
@@ -145,6 +145,9 @@ namespace sh::game
 			return;
 		if (floor->GetCollider() == &collider)
 			bGround = true;
+	}
+	SH_USER_API void PlayerMovement2D::OnTriggerEnter(Collider& collider)
+	{
 	}
 	SH_USER_API void PlayerMovement2D::Lock()
 	{

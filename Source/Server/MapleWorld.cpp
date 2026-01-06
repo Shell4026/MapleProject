@@ -1,7 +1,6 @@
 ﻿#include "MapleWorld.h"
 #include "Player/Player.h"
-#include "Item.h"
-#include "ItemDB.h"
+#include "Item/Item.h"
 
 #include "Packet/PlayerJoinWorldPacket.hpp"
 #include "Packet/PlayerSpawnPacket.hpp"
@@ -78,6 +77,71 @@ namespace sh::game
 	{
 		CheckHeartbeats();
 	}
+	SH_USER_API void MapleWorld::SpawnItem(int itemId, float x, float y, const core::UUID& owner)
+	{
+		SH_INFO_FORMAT("Drop item: {}", itemId);
+		GameObject* itemObj = nullptr;
+		Item* item = nullptr;
+		if (sleepItems.empty())
+		{
+			itemObj = itemPrefab->AddToWorld(world);
+			item = itemObj->GetComponent<Item>();
+		}
+		else
+		{
+			do
+			{
+				item = sleepItems.front().Get();
+				sleepItems.pop();
+			} 
+			while (!core::IsValid(item) && !sleepItems.empty());
+
+			if (!core::IsValid(item))
+			{
+				itemObj = itemPrefab->AddToWorld(world);
+				item = itemObj->GetComponent<Item>();
+			}
+			else
+			{
+				itemObj = &item->gameObject;
+				itemObj->SetActive(true);
+			}
+		}
+		auto pos = itemObj->transform->GetWorldPosition();
+		pos.x = x;
+		pos.y = y;
+		itemObj->transform->SetWorldPosition(pos);
+		
+		item->GetRigidBody()->ResetPhysicsTransform();
+		item->GetRigidBody()->SetLinearVelocity({ 0.f, 0.f, 0.f });
+		item->instanceId = nextItemIdx;
+		item->itemId = itemId;
+		item->owner = owner;
+
+		// ItemDropPacket은 MapleWorld(client)클래스에서 처리
+		ItemDropPacket packet{};
+
+		packet.itemId = itemId;
+		packet.x = x;
+		packet.y = y;
+		packet.cnt = 1;
+		packet.itemUUID = itemObj->GetUUID();
+		packet.ownerUUID = owner;
+
+		MapleServer::GetInstance()->BroadCast(packet);
+	}
+	SH_USER_API void MapleWorld::SpawnItem(const std::vector<int>& itemIds, float x, float y, const core::UUID& owner)
+	{
+		for (int id : itemIds)
+			SpawnItem(id, x, y, owner);
+	}
+
+	SH_USER_API void MapleWorld::DestroyItem(Item& item)
+	{
+		item.gameObject.SetActive(false);
+		sleepItems.push(&item);
+	}
+
 	void MapleWorld::ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const Endpoint& endpoint)
 	{
 		auto userPtr = server->GetUser(endpoint);
@@ -101,11 +165,11 @@ namespace sh::game
 				// 접속한 플레이어에게 다른 플레이어 동기화
 				for (auto& [uuid, playerPtr] : players)
 				{
-					const auto& playerPos = playerPtr->gameObject.transform->position;
+					const auto& playerPos = playerPtr->gameObject.transform->GetWorldPosition();
 					PlayerSpawnPacket packet;
 					packet.x = playerPos.x;
 					packet.y = playerPos.y;
-					packet.playerUUID = playerPtr->GetUserUUID().ToString();
+					packet.playerUUID = playerPtr->GetUserUUID();
 
 					server->Send(packet, endpoint.ip, endpoint.port);
 				}
@@ -154,10 +218,10 @@ namespace sh::game
 		std::vector<Player*> dead{};
 		for (auto& [uuidStr, player] : players)
 		{
-			if (!player.IsValid())
+			if (!core::IsValid(player))
 				continue;
 			if (player->GetHeartbeat() <= 0)
-				dead.push_back(player.Get());
+				dead.push_back(player);
 		}
 		for (auto player : dead)
 		{
@@ -169,16 +233,13 @@ namespace sh::game
 			server->Kick(player->GetUserUUID());
 		}
 	}
-	void MapleWorld::SpawnItem(int itemId, float x, float y, const core::UUID& owner)
-	{
-	}
 	void MapleWorld::ProcessPlayerDespawn(const PlayerDespawnPacket& packet)
 	{
 		auto it = players.find(packet.playerUUID);
 		if (it == players.end())
 			return;
 
-		Player* player = it->second.Get();
+		Player* player = it->second;
 		players.erase(it);
 
 		if (player == localPlayer.Get())
