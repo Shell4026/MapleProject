@@ -121,7 +121,7 @@ namespace sh::game
 			packet.vx = v.x;
 			packet.vy = v.y;
 			packet.lastProcessedInputSeq = lastProcessedSeq;
-			packet.playerUUID = player->GetUserUUID().ToString();
+			packet.playerUUID = player->GetUserUUID();
 			packet.serverTick = serverTick;
 			packet.timestamp = lastTick;
 			packet.bGround = bGround;
@@ -166,7 +166,7 @@ namespace sh::game
 	{
 		if (!core::IsValid(rigidBody))
 			return;
-		if (packet.playerUUID != player->GetUserUUID().ToString())
+		if (player->GetUserUUID() != packet.playerUUID)
 			return;
 		if (lastInput.seq >= packet.seq) // 과거 패킷임
 			return;

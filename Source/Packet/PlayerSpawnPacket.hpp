@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 #include "../Export.h"
 #include "Network/Packet.h"
 
 #include "Core/Reflection/TypeTraits.hpp"
 
-#include <string>
+#include <array>
 namespace sh::game
 {
 	class PlayerSpawnPacket : public network::Packet
@@ -39,6 +39,6 @@ namespace sh::game
 	public:
 		float x;
 		float y;
-		std::string playerUUID;
+		std::array<uint32_t, 4> playerUUID;
 	};
 }//namespace

@@ -1,6 +1,6 @@
 ﻿#include "Login.h"
 #if !SH_SERVER
-#include "Packet/PlayerJoinPacket.h"
+#include "Packet/PlayerJoinPacket.hpp"
 #include "MapleClient.h"
 
 #include "Game/ImGUImpl.h"

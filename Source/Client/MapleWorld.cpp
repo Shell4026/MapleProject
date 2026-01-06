@@ -3,10 +3,10 @@
 #include "Item.h"
 #include "ItemDB.h"
 
-#include "Packet/PlayerJoinWorldPacket.h"
+#include "Packet/PlayerJoinWorldPacket.hpp"
 #include "Packet/PlayerSpawnPacket.hpp"
 #include "Packet/PlayerDespawnPacket.hpp"
-#include "Packet/PlayerLeavePacket.h"
+#include "Packet/PlayerLeavePacket.hpp"
 #include "Packet/HeartbeatPacket.hpp"
 #include "Packet/ItemDropPacket.hpp"
 
@@ -68,7 +68,7 @@ namespace sh::game
 		client->bus.Subscribe(packetEventSubscriber);
 
 		PlayerJoinWorldPacket packet{};
-		packet.worldUUID = world.GetUUID().ToString();
+		packet.worldUUID = world.GetUUID();
 
 		client->SendPacket(packet);
 		SH_INFO_FORMAT("Join the world {}", world.GetUUID().ToString());

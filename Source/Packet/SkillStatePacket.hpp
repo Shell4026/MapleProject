@@ -4,7 +4,7 @@
 
 #include "Core/Reflection/TypeTraits.hpp"
 
-#include <string>
+#include <array>
 namespace sh::game
 {
 	class SkillStatePacket : public network::Packet
@@ -36,7 +36,7 @@ namespace sh::game
 				bUsing = json["using"];
 		}
 	public:
-		std::string userUUID;
+		std::array<uint32_t, 4> userUUID;
 		uint32_t skillId;
 		bool bUsing;
 	};

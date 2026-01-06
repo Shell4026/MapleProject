@@ -187,7 +187,7 @@ namespace sh::game
 			packet.inputX = xInput;
 			packet.bJump = bJump;
 			packet.seq = inputSeqCounter++;
-			packet.playerUUID = client->GetUser().GetUserUUID().ToString();
+			packet.playerUUID = client->GetUser().GetUserUUID();
 			packet.timestamp = tick;
 			packet.bProne = bProne;
 
@@ -200,7 +200,7 @@ namespace sh::game
 	}
 	void PlayerMovement2D::ProcessStatePacket(const PlayerStatePacket& packet)
 	{
-		if (packet.playerUUID != player->GetUserUUID().ToString())
+		if (player->GetUserUUID() != packet.playerUUID)
 			return;
 
 		if (!core::IsValid(rigidBody))

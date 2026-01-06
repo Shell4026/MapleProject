@@ -1,17 +1,14 @@
 ﻿#pragma once
-#include "../Export.h"
 #include "Network/Packet.h"
 
 #include "Core/Reflection/TypeTraits.hpp"
-
-#include <string>
 namespace sh::game
 {
-	class SkillUsingPacket : public network::Packet
+	class EntityRemovePacket : public network::Packet
 	{
-		SPACKET(SkillUsingPacket, ID)
+		SPACKET(EntityRemovePacket, ID)
 	public:
-		constexpr static uint32_t ID = (core::reflection::TypeTraits::GetTypeHash<SkillUsingPacket>() >> 32);
+		constexpr static uint32_t ID = (core::reflection::TypeTraits::GetTypeHash<EntityRemovePacket>() >> 32);
 	public:
 		auto GetId() const -> uint32_t override
 		{
@@ -20,20 +17,16 @@ namespace sh::game
 		auto Serialize() const -> core::Json override
 		{
 			core::Json json = network::Packet::Serialize();
-			json["pid"] = userUUID;
-			json["sid"] = skillId;
+			json["uuid"] = uuid;
 			return json;
 		}
 		void Deserialize(const core::Json& json) override
 		{
 			network::Packet::Deserialize(json);
-			if (json.contains("pid"))
-				userUUID = json["pid"];
-			if (json.contains("sid"))
-				skillId = json["sid"];
+			if (json.contains("uuid"))
+				uuid = json["uuid"];
 		}
 	public:
-		std::string userUUID;
-		uint32_t skillId;
+		std::string uuid;
 	};
 }//namespace

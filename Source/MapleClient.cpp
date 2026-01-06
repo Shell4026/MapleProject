@@ -1,9 +1,9 @@
 ﻿#include "MapleClient.h"
 #if !SH_SERVER
 #include "PacketEvent.hpp"
-#include "Packet/ChangeWorldPacket.h"
-#include "Packet/PlayerJoinSuccessPacket.h"
-#include "Packet/PlayerLeavePacket.h"
+#include "Packet/ChangeWorldPacket.hpp"
+#include "Packet/PlayerJoinSuccessPacket.hpp"
+#include "Packet/PlayerLeavePacket.hpp"
 
 #include "Game/GameObject.h"
 #include "Game/GameManager.h"
@@ -21,7 +21,7 @@ namespace sh::game
 	SH_USER_API void MapleClient::OnDestroy()
 	{
 		PlayerLeavePacket packet{};
-		packet.playerUUID = user.GetUserUUID().ToString();
+		packet.playerUUID = user.GetUserUUID();
 
 		client.Send(packet);
 		Super::OnDestroy();
@@ -52,7 +52,7 @@ namespace sh::game
 			if (id == ChangeWorldPacket::ID)
 			{
 				auto packet = static_cast<ChangeWorldPacket*>(receivedPacket.get());
-				SH_INFO_FORMAT("Move world to {}", packet->worldUUID);
+				SH_INFO_FORMAT("Move world to {}", core::UUID{ packet->worldUUID }.ToString());
 				GameManager::GetInstance()->LoadWorld(core::UUID{ packet->worldUUID }, GameManager::LoadMode::Single, true);
 			}
 			else if (id == PlayerJoinSuccessPacket::ID)

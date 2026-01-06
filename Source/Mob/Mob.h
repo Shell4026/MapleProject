@@ -1,15 +1,16 @@
 ﻿#pragma once
-#include "../Export.h"
-#include "../PacketEvent.hpp"
-#include "../Skill.h"
-#include "../AI/AIStrategy.h"
-#include "../UI/HPUI.h"
-
+#include "Export.h"
+#include "PacketEvent.hpp"
+#include "Skill.h"
+#include "MapleWorld.h"
+#include "MobStatus.hpp"
 #include "MobAnimation.h"
 #include "MobAnimationController.h"
 #include "MobStatus.hpp"
 
-#include "Core/SContainer.hpp"
+#include "AI/AIStrategy.h"
+#include "UI/HPUI.h"
+
 #include "Core/EventSubscriber.h"
 #include "Core/EventBus.h"
 

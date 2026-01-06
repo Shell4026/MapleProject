@@ -111,7 +111,7 @@ namespace sh::game
 
     void Mob::ProcessState(const MobStatePacket& packet)
     {
-        if (packet.mobUUID != GetUUID().ToString())
+        if (GetUUID() != packet.mobUUID)
             return;
         if (netSeq >= packet.seq)
             return;

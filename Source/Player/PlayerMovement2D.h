@@ -6,8 +6,8 @@
 #include "MapleServer.h"
 #include "MapleClient.h"
 #include "PacketEvent.hpp"
-#include "Packet/PlayerInputPacket.h"
-#include "Packet/PlayerStatePacket.h"
+#include "Packet/PlayerInputPacket.hpp"
+#include "Packet/PlayerStatePacket.hpp"
 
 #include "Core/SContainer.hpp"
 #include "Core/EventSubscriber.h"

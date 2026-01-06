@@ -108,7 +108,7 @@ namespace sh::game
             vel = rigidbody->GetLinearVelocity();
 
         MobStatePacket packet{};
-        packet.mobUUID = GetUUID().ToString();
+        packet.mobUUID = GetUUID();
 
         packet.x = pos.x; packet.y = pos.y;
         packet.vx = vel.x; packet.vy = vel.y;

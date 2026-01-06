@@ -2,11 +2,11 @@
 #include "MapleWorld.h"
 #include "ItemDropManager.h"
 #include "PacketEvent.hpp"
-#include "Packet/PlayerJoinPacket.h"
-#include "Packet/ChangeWorldPacket.h"
-#include "Packet/PlayerJoinSuccessPacket.h"
-#include "Packet/PlayerJoinPacket.h"
-#include "Packet/PlayerLeavePacket.h"
+#include "Packet/PlayerJoinPacket.hpp"
+#include "Packet/ChangeWorldPacket.hpp"
+#include "Packet/PlayerJoinSuccessPacket.hpp"
+#include "Packet/PlayerJoinPacket.hpp"
+#include "Packet/PlayerLeavePacket.hpp"
 #include "Packet/PlayerDespawnPacket.hpp"
 #include "Packet/HeartbeatPacket.hpp"
 
@@ -45,15 +45,6 @@ namespace sh::game
 			instance = this;
 
 		ItemDropManager::GetInstance()->LoadData("itemDrop.json");
-
-		core::ThreadPool::GetInstance()->AddContinousTask(
-			[this]()
-			{
-				SH_INFO("excute");
-				std::string sql = fmt::format("INSERT INTO UserInventory (instanceId, itemId, ownerId, slotIdx, count) VALUES ({}, 2, 3, 4, 5);", core::Util::RandomRange(0, 0xfffffff));
-				SH_INFO_FORMAT("DB result: {}", db.Execute(sql));
-			}
-		);
 	}
 	SH_USER_API auto MapleServer::GetUser(const Endpoint& ep) -> User*
 	{
@@ -190,7 +181,7 @@ namespace sh::game
 			{
 				// 유저에게 UUID 전송
 				PlayerJoinSuccessPacket packet{};
-				packet.uuid = resultIt->second.GetUserUUID().ToString();
+				packet.uuid = resultIt->second.GetUserUUID();
 
 				server.Send(packet, endpoint.ip, endpoint.port);
 			}
@@ -199,7 +190,7 @@ namespace sh::game
 				World* firstWorld = loadedWorlds[0];
 
 				ChangeWorldPacket packet{};
-				packet.worldUUID = firstWorld->GetUUID().ToString();
+				packet.worldUUID = firstWorld->GetUUID();
 
 				server.Send(packet, endpoint.ip, endpoint.port);
 			}

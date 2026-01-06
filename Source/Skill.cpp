@@ -1,6 +1,6 @@
 ﻿#include "Skill.h"
-#include "Packet/SkillUsingPacket.h"
-#include "Packet/SkillStatePacket.h"
+#include "Packet/SkillUsingPacket.hpp"
+#include "Packet/SkillStatePacket.hpp"
 #include "MapleClient.h"
 #include "MapleServer.h"
 #include "SkillHitbox.h"
@@ -18,7 +18,6 @@ namespace sh::game
 	{
 		if (skillManager != nullptr)
 			skillManager->Register(*this);
-		SH_INFO_FORMAT("hitboxes?: {}", hitboxes.size());
 #if !SH_SERVER
 		if (animator != nullptr)
 		{
@@ -134,7 +133,7 @@ namespace sh::game
 		if (bCanUse && !bUsing)
 		{
 			SkillUsingPacket packet{};
-			packet.userUUID = client->GetUser().GetUserUUID().ToString();
+			packet.userUUID = client->GetUser().GetUserUUID();
 			packet.skillId = id;
 			client->SendPacket(packet);
 			PlayAnim();
@@ -143,7 +142,6 @@ namespace sh::game
 #endif
 		if (bCanUse && !bUsing)
 		{
-			SH_INFO("Use!");
 			if (core::IsValid(playerMovement) && !bCanMove)
 				playerMovement->Lock();
 			delay = delayMs;
@@ -154,7 +152,7 @@ namespace sh::game
 			hitboxt = hitBoxMs;
 
 			SkillStatePacket packet{};
-			packet.userUUID = skillManager->GetPlayer()->GetUserUUID().ToString();
+			packet.userUUID = skillManager->GetPlayer()->GetUserUUID();
 			packet.skillId = id;
 			packet.bUsing = true;
 
@@ -180,13 +178,10 @@ namespace sh::game
 		if (!core::IsValid(player))
 			return;
 
-		SH_INFO_FORMAT("me: {}, packet: {}", player->GetUserUUID().ToString(), packet.userUUID);
-
 		if (player->IsLocal())
 			return;
-		if (player->GetUserUUID().ToString() == packet.userUUID)
+		if (player->GetUserUUID() == packet.userUUID)
 		{
-			SH_INFO("remote");
 			if (!bUsing)
 				PlayAnim();
 		}

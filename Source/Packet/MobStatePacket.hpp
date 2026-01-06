@@ -4,7 +4,7 @@
 
 #include "Core/Reflection/TypeTraits.hpp"
 
-#include <string>
+#include <array>
 namespace sh::game
 {
 	class MobStatePacket : public network::Packet
@@ -57,7 +57,7 @@ namespace sh::game
 				stunRemainingMs = json["stunRemain"];
 		}
 	public:
-		std::string mobUUID;
+		std::array<uint32_t, 4> mobUUID;
 		float x;
 		float y;
 		float vx;

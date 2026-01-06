@@ -1,7 +1,7 @@
 ﻿#include "PlayerSkillManager.h"
 #include "MapleServer.h"
-#include "Packet/SkillUsingPacket.h"
-#include "Packet/SkillStatePacket.h"
+#include "Packet/SkillUsingPacket.hpp"
+#include "Packet/SkillStatePacket.hpp"
 #include "Skill.h"
 namespace sh::game
 {
@@ -15,7 +15,7 @@ namespace sh::game
 				if (evt.packet->GetId() == SkillUsingPacket::ID)
 				{
 					auto packet = static_cast<const SkillUsingPacket*>(evt.packet);
-					if (player->GetUserUUID().ToString() == packet->userUUID)
+					if (player->GetUserUUID() == packet->userUUID)
 						UseSkill(packet->skillId);
 				}
 			}

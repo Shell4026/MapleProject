@@ -44,6 +44,7 @@ namespace sh::game
 	private:
 		void ProcessPlayerJoin(const PlayerJoinPacket& packet, const Endpoint& endpoint);
 		void ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& endpoint);
+#endif
 	public:
 		core::EventBus bus;
 	private:
@@ -57,6 +58,5 @@ namespace sh::game
 		static MapleServer* instance;
 
 		Database db;
-#endif
 	};
 }//namespace

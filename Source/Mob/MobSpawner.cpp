@@ -115,7 +115,7 @@ namespace sh::game
 
 			MobSpawnPacket spawnPacket{};
 			spawnPacket.idx = spawnIdx;
-			spawnPacket.mobUUID = mob->GetUUID().ToString();
+			spawnPacket.mobUUID = mob->GetUUID();
 			MapleServer::GetInstance()->BroadCast(spawnPacket);
 
 			mob->BroadcastStatePacket();
@@ -133,7 +133,7 @@ namespace sh::game
 
 			MobSpawnPacket spawnPacket{};
 			spawnPacket.idx = i;
-			spawnPacket.mobUUID = mobs[i]->GetUUID().ToString();
+			spawnPacket.mobUUID = mobs[i]->GetUUID();
 
 			MapleServer::GetInstance()->Send(spawnPacket, ip, port);
 		}

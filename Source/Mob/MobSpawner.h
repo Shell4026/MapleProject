@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include "../Export.h"
+#include "Export.h"
 #include "Mob.h"
 #include "MobEvents.hpp"
-#include "../PacketEvent.hpp"
-#include "../Packet/MobSpawnPacket.hpp"
-#include "../Packet/PlayerJoinWorldPacket.h"
+#include "PacketEvent.hpp"
+#include "Packet/MobSpawnPacket.hpp"
+#include "Packet/PlayerJoinWorldPacket.hpp"
 
 #include "Game/Component/Component.h"
 

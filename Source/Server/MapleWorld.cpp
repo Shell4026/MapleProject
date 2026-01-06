@@ -3,10 +3,10 @@
 #include "Item.h"
 #include "ItemDB.h"
 
-#include "Packet/PlayerJoinWorldPacket.h"
+#include "Packet/PlayerJoinWorldPacket.hpp"
 #include "Packet/PlayerSpawnPacket.hpp"
 #include "Packet/PlayerDespawnPacket.hpp"
-#include "Packet/PlayerLeavePacket.h"
+#include "Packet/PlayerLeavePacket.hpp"
 #include "Packet/HeartbeatPacket.hpp"
 #include "Packet/ItemDropPacket.hpp"
 
@@ -112,12 +112,12 @@ namespace sh::game
 				// 접속한 플레이어 생성
 				{
 					auto player = SpawnPlayer(userPtr->GetUserUUID(), spawnPos.x, spawnPos.y);
-					players[userPtr->GetUserUUID().ToString()] = player;
+					players[userPtr->GetUserUUID()] = player;
 
 					PlayerSpawnPacket packet;
 					packet.x = spawnPos.x;
 					packet.y = spawnPos.y;
-					packet.playerUUID = userPtr->GetUserUUID().ToString();
+					packet.playerUUID = userPtr->GetUserUUID();
 
 					server->BroadCast(packet);
 				}
@@ -127,7 +127,7 @@ namespace sh::game
 	void MapleWorld::ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& endpoint)
 	{
 		User* user = server->GetUser(endpoint);
-		if (user == nullptr || user->GetUserUUID().ToString() != packet.playerUUID)
+		if (user == nullptr || user->GetUserUUID() != packet.playerUUID)
 			return;
 
 		PlayerDespawnPacket despawnPacket{};
@@ -142,7 +142,7 @@ namespace sh::game
 		if (user == nullptr)
 			return;
 
-		auto it = players.find(user->GetUserUUID().ToString());
+		auto it = players.find(user->GetUserUUID());
 		if (it == players.end())
 			return;
 
@@ -162,7 +162,7 @@ namespace sh::game
 		for (auto player : dead)
 		{
 			PlayerDespawnPacket despawnPacket{};
-			despawnPacket.playerUUID = player->GetUserUUID().ToString();
+			despawnPacket.playerUUID = player->GetUserUUID();
 			ProcessPlayerDespawn(despawnPacket);
 
 			server->BroadCast(despawnPacket);
