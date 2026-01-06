@@ -2,13 +2,15 @@
 #include "Network/Packet.h"
 
 #include "Core/Reflection/TypeTraits.hpp"
+
+#include <array>
 namespace sh::game
 {
-	class EntityRemovePacket : public network::Packet
+	class ItemDespawnPacket : public network::Packet
 	{
-		SPACKET(EntityRemovePacket, ID)
+		SPACKET(ItemDespawnPacket, ID)
 	public:
-		constexpr static uint32_t ID = (core::reflection::TypeTraits::GetTypeHash<EntityRemovePacket>() >> 32);
+		constexpr static uint32_t ID = (core::reflection::TypeTraits::GetTypeHash<ItemDespawnPacket>() >> 32);
 	public:
 		auto GetId() const -> uint32_t override
 		{
@@ -17,16 +19,16 @@ namespace sh::game
 		auto Serialize() const -> core::Json override
 		{
 			core::Json json = network::Packet::Serialize();
-			json["uuid"] = uuid;
+			json["uuid"] = itemObjectUUID;
 			return json;
 		}
 		void Deserialize(const core::Json& json) override
 		{
 			network::Packet::Deserialize(json);
 			if (json.contains("uuid"))
-				uuid = json["uuid"];
+				itemObjectUUID = json["uuid"];
 		}
 	public:
-		std::string uuid;
+		std::array<uint32_t, 4> itemObjectUUID;
 	};
 }//namespace

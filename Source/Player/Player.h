@@ -5,6 +5,7 @@
 
 namespace sh::game
 {
+	class MapleWorld;
 	class Player : public NetworkComponent
 	{
 		COMPONENT(Player, "user")
@@ -25,10 +26,15 @@ namespace sh::game
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
 		SH_USER_API void Update() override;
+
+		SH_USER_API void SetCurrentWorld(MapleWorld& world) { currentWorld = &world; }
+		SH_USER_API auto GetCurrentWorld() const -> MapleWorld* { return currentWorld; }
 	private:
 		core::UUID userUUID;
 
 		uint32_t heartbeat;
+
+		MapleWorld* currentWorld = nullptr;
 
 		bool bLocal = true;
 		bool bRight = false;

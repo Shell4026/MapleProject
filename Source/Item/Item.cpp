@@ -32,6 +32,12 @@ namespace sh::game
 	{
 		rb->SetLinearVelocity({ 0.f, 0.f, 0.f });
 	}
+	SH_USER_API void Item::BeginUpdate()
+	{
+		if (trigger == nullptr)
+			return;
+		trigger->ResetPhysicsTransform();
+	}
 	SH_USER_API void Item::SetTexture(const render::Texture* texture)
 	{
 		this->texture = texture;

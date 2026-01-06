@@ -2,7 +2,7 @@
 #include "Packet/KeyPacket.hpp"
 #include "MapleServer.h"
 #include "CollisionTag.hpp"
-
+#include "MapleWorld.h"
 
 #include "Game/GameObject.h"
 #include "Game/Component/Collider.h"
@@ -97,7 +97,7 @@ namespace sh::game
 			if (db.Execute("COMMIT;"))
 			{
 				SH_INFO_FORMAT("User: {}, Item: {}", player.GetUserUUID().ToString(), item.itemId);
-				item.gameObject.Destroy();
+				player.GetCurrentWorld()->DestroyItem(item);
 			}
 		}
 		else

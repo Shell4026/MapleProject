@@ -9,6 +9,7 @@
 #include "Packet/PlayerLeavePacket.hpp"
 #include "Packet/HeartbeatPacket.hpp"
 #include "Packet/ItemDropPacket.hpp"
+#include "Packet/ItemDespawnPacket.hpp"
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
@@ -28,6 +29,8 @@ namespace sh::game
 					ProcessPlayerDespawn(static_cast<const PlayerDespawnPacket&>(*evt.packet));
 				else if (evt.packet->GetId() == ItemDropPacket::ID)
 					ProcessItemDrop(static_cast<const ItemDropPacket&>(*evt.packet));
+				else if (evt.packet->GetId() == ItemDespawnPacket::ID)
+					ProcessItemDespawn(static_cast<const ItemDespawnPacket&>(*evt.packet));
 			}
 		);
 	}
@@ -42,6 +45,7 @@ namespace sh::game
 
 			auto player = playerObj->GetComponent<Player>();
 			player->SetUserUUID(playerUUID);
+			player->SetCurrentWorld(const_cast<MapleWorld&>(*this));
 
 			return player;
 		}
@@ -87,10 +91,7 @@ namespace sh::game
 		player = SpawnPlayer(playerUUID, packet.x, packet.y);
 
 		if (playerUUID == client->GetUser().GetUserUUID())
-		{
-			localPlayer = player;
-			camera->SetPlayer(localPlayer->gameObject);
-		}
+			camera->SetPlayer(player->gameObject);
 
 		players.insert_or_assign(packet.playerUUID, player);
 	}
@@ -134,6 +135,15 @@ namespace sh::game
 		}
 		item->SetTexture(texPtr);
 	}
+	void MapleWorld::ProcessItemDespawn(const ItemDespawnPacket& packet)
+	{
+		core::UUID itemObjUUID = packet.itemObjectUUID;
+		SH_INFO_FORMAT("Despawn: {}", itemObjUUID.ToString());
+		auto obj = core::SObjectManager::GetInstance()->GetSObject(itemObjUUID);
+		if (!core::IsValid(obj))
+			return;
+		obj->Destroy();
+	}
 	void MapleWorld::ProcessPlayerDespawn(const PlayerDespawnPacket& packet)
 	{
 		auto it = players.find(packet.playerUUID);
@@ -143,7 +153,7 @@ namespace sh::game
 		Player* player = it->second;
 		players.erase(it);
 
-		if (player == localPlayer.Get())
+		if (player->IsLocal())
 		{
 			SH_INFO("Bye");
 		}

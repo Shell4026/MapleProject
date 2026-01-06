@@ -18,6 +18,7 @@ namespace sh::game
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void OnDisable() override;
+		SH_USER_API void BeginUpdate() override;
 
 		SH_USER_API void SetTexture(const render::Texture* texture);
 

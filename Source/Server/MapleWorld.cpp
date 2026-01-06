@@ -8,6 +8,7 @@
 #include "Packet/PlayerLeavePacket.hpp"
 #include "Packet/HeartbeatPacket.hpp"
 #include "Packet/ItemDropPacket.hpp"
+#include "Packet/ItemDespawnPacket.hpp"
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
@@ -45,6 +46,7 @@ namespace sh::game
 
 			auto player = playerObj->GetComponent<Player>();
 			player->SetUserUUID(playerUUID);
+			player->SetCurrentWorld(const_cast<MapleWorld&>(*this));
 
 			return player;
 		}
@@ -76,6 +78,8 @@ namespace sh::game
 	SH_USER_API void MapleWorld::LateUpdate()
 	{
 		CheckHeartbeats();
+		TryClearSleepItems();
+		++worldTick;
 	}
 	SH_USER_API void MapleWorld::SpawnItem(int itemId, float x, float y, const core::UUID& owner)
 	{
@@ -104,6 +108,7 @@ namespace sh::game
 			else
 			{
 				itemObj = &item->gameObject;
+				itemObj->SetUUID(core::UUID::Generate());
 				itemObj->SetActive(true);
 			}
 		}
@@ -129,6 +134,8 @@ namespace sh::game
 		packet.ownerUUID = owner;
 
 		MapleServer::GetInstance()->BroadCast(packet);
+
+		lastItemSpawnTick = worldTick;
 	}
 	SH_USER_API void MapleWorld::SpawnItem(const std::vector<int>& itemIds, float x, float y, const core::UUID& owner)
 	{
@@ -140,6 +147,11 @@ namespace sh::game
 	{
 		item.gameObject.SetActive(false);
 		sleepItems.push(&item);
+
+		ItemDespawnPacket packet{};
+		packet.itemObjectUUID = item.gameObject.GetUUID();
+
+		server->BroadCast(packet);
 	}
 
 	void MapleWorld::ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const Endpoint& endpoint)
@@ -233,6 +245,28 @@ namespace sh::game
 			server->Kick(player->GetUserUUID());
 		}
 	}
+	void MapleWorld::TryClearSleepItems()
+	{
+		if (sleepItems.empty())
+			return;
+
+		const uint64_t noSpawnTicks = worldTick - lastItemSpawnTick;
+		if (noSpawnTicks < clearSleepItemsAfterTicks)
+			return;
+
+		while (!sleepItems.empty())
+		{
+			Item* item = sleepItems.front().Get();
+			sleepItems.pop();
+
+			if (!core::IsValid(item))
+				continue;
+
+			item->gameObject.Destroy();
+		}
+		sleepItems = std::queue<core::SObjWeakPtr<Item>>();
+		SH_INFO("Clear sleepItems...");
+	}
 	void MapleWorld::ProcessPlayerDespawn(const PlayerDespawnPacket& packet)
 	{
 		auto it = players.find(packet.playerUUID);
@@ -241,11 +275,6 @@ namespace sh::game
 
 		Player* player = it->second;
 		players.erase(it);
-
-		if (player == localPlayer.Get())
-		{
-			SH_INFO("Bye");
-		}
 
 		player->gameObject.Destroy();
 	}
