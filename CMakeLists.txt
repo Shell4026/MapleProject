@@ -9,15 +9,15 @@ set(CLIENT ShellEngineUser)
 set(SERVER ShellEngineUserServer)
 set(TARGETS ${CLIENT} ${SERVER})
 
-file(GLOB_RECURSE SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
+file(GLOB_RECURSE CLIENT_SRC CONFIGURE_DEPENDS 
+	${CMAKE_CURRENT_SOURCE_DIR}/Source/client/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Source/common/*.cpp
+)
+file(GLOB_RECURSE SERVER_SRC CONFIGURE_DEPENDS 
+	${CMAKE_CURRENT_SOURCE_DIR}/Source/server/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Source/common/*.cpp
+)
 file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h  ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp)
-
-set(CLIENT_SRC ${SRC})
-list(FILTER CLIENT_SRC EXCLUDE REGEX ".*[/\\]Server[/\\].*")
-
-
-set(SERVER_SRC ${SRC})
-list(FILTER SERVER_SRC EXCLUDE REGEX ".*[/\\]Client[/\\].*")
 
 cmake_minimum_required (VERSION 3.8)
 
@@ -55,8 +55,8 @@ FETCHCONTENT_DECLARE(
 )
 FETCHCONTENT_MAKEAVAILABLE(JSON)
 
-add_library(sqlite3 STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Sqlite/sqlite3.c)
-target_include_directories(sqlite3 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Sqlite)
+add_library(sqlite3 STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/common/SQLite/sqlite3.c)
+target_include_directories(sqlite3 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/include/SQLite)
 
 foreach(TGT ${TARGETS})
 	if ("${TGT}" STREQUAL "${SERVER}")
@@ -82,7 +82,7 @@ foreach(TGT ${TARGETS})
 	target_precompile_headers(${TGT} PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
 	target_compile_definitions(${TGT} PUBLIC SH_PROJECT_NAME="${PROJECT_NAME}")
 
-	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/Source)
+	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/Source/include)
 	target_include_directories(${TGT} PRIVATE ${ENGINE_DIR}/include)
 	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/include/external)
 

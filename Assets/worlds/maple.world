@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                -0.06296443194150925,
-                3.558136463165283,
-                0.0002020935353357345
+                -1.8249939680099487,
+                3.0791056156158447,
+                -0.0001376825530314818
             ],
             "projection": 1,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 8.734655380249023
+            "distance": 6.271233558654785
         },
         "SObject": {},
         "name": "EditorCamera",
@@ -25,9 +25,9 @@
         "version": 1
     },
     "camPos": [
-        -0.06475472450256348,
-        3.5585267543792725,
-        8.734857559204102
+        -1.8262794017791748,
+        3.079385757446289,
+        6.2710957527160645
     ],
     "editorObjs": [
         {
@@ -2787,7 +2787,7 @@
                     "MapleWorld": {
                         "camera": "a7139789dbfc15a66e6c665b91f13093",
                         "itemPrefab": "ee1bee2efec5a690531dd2812a6192b7",
-                        "playerPrefab": "4b76281a47ef2af9048212e11ef0e6e0",
+                        "playerPrefab": "3627e56ca0c4ec9642b233813be981aa",
                         "playerSpawnPoint": "7050afab470dd6fd43c1a99f5eac6e7c"
                     },
                     "NetworkComponent": {},

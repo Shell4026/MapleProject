@@ -1,6 +1,101 @@
 {
+    "cam": {
+        "Camera": {
+            "depth": 0,
+            "fov": 60.0,
+            "lookPos": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": 0,
+            "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
+        },
+        "Component": {
+            "hideInspector": false,
+            "priority": 0
+        },
+        "EditorCamera": {
+            "distance": 8.052550315856934
+        },
+        "SObject": {},
+        "name": "EditorCamera",
+        "type": "EditorCamera",
+        "uuid": "ffec26b9a990e8a37b33c19898fda7d1",
+        "version": 1
+    },
+    "camPos": [
+        4.649142265319824,
+        4.649141311645508,
+        4.649142265319824
+    ],
+    "editorObjs": [],
     "name": "World",
     "objs": [
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "ad3026b2e12602524d7dc99cd877764e",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Login": {
+                        "nextWorld": "1c2428b8720cab83b1b46f7cd7408592"
+                    },
+                    "NetworkComponent": {},
+                    "SObject": {},
+                    "name": "user/Login",
+                    "type": "Login",
+                    "uuid": "53617c5461c1c27ff57f7450192bb3fc",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false,
+                "transform": "ad3026b2e12602524d7dc99cd877764e"
+            },
+            "name": "Login",
+            "type": "GameObject",
+            "uuid": "597aad149d8c22e7002f2b4f48665410",
+            "version": 1
+        },
         {
             "Components": [
                 {
@@ -60,7 +155,9 @@
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
+                "bStatic": false,
                 "hideInspector": false,
                 "transform": "93b12da106989f845ee38b9790f8dd0f"
             },
@@ -78,6 +175,7 @@
                     },
                     "SObject": {},
                     "Transform": {
+                        "parent": "5551df43e40fe51b2d313ac559491493",
                         "quat": [
                             0.0,
                             0.0,
@@ -91,7 +189,7 @@
                         ],
                         "vRotation": [
                             0.0,
-                            0.0,
+                            -0.0,
                             0.0
                         ],
                         "vScale": [
@@ -102,33 +200,98 @@
                     },
                     "name": "Transform",
                     "type": "Transform",
-                    "uuid": "ad3026b2e12602524d7dc99cd877764e",
+                    "uuid": "e59881aa3cefdb0e1a8b974ce1fcb5d0",
                     "version": 1
                 },
+                {
+                    "AssetExportHelper": {
+                        "text": "5a5005649a0ad5aef3872acee30b2cfb"
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "user/AssetExportHelper",
+                    "type": "AssetExportHelper",
+                    "uuid": "94c089f4bb41d088f6a866f067b53209",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false,
+                "transform": "e59881aa3cefdb0e1a8b974ce1fcb5d0"
+            },
+            "name": "Items",
+            "type": "GameObject",
+            "uuid": "e276682d8e2c0f0a924e0135209c6f28",
+            "version": 1
+        },
+        {
+            "Components": [
                 {
                     "Component": {
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "Login": {
-                        "nextWorld": "1c2428b8720cab83b1b46f7cd7408592"
-                    },
-                    "NetworkComponent": {},
                     "SObject": {},
-                    "name": "user/Login",
-                    "type": "Login",
-                    "uuid": "53617c5461c1c27ff57f7450192bb3fc",
+                    "Transform": {
+                        "parent": "e59881aa3cefdb0e1a8b974ce1fcb5d0",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "8ca9e69d1b7fefd7fcc1d57745a0d17d",
+                    "version": 1
+                },
+                {
+                    "AssetExportHelper": {
+                        "texture": "e70a6d6ca57b4f03f600d4c6c7947f3c"
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "user/AssetExportHelper",
+                    "type": "AssetExportHelper",
+                    "uuid": "c991fcb77960433debf760917c55d8c3",
                     "version": 1
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
+                "bStatic": false,
                 "hideInspector": false,
-                "transform": "ad3026b2e12602524d7dc99cd877764e"
+                "transform": "8ca9e69d1b7fefd7fcc1d57745a0d17d"
             },
-            "name": "Login",
+            "name": "Item0",
             "type": "GameObject",
-            "uuid": "597aad149d8c22e7002f2b4f48665410",
+            "uuid": "aab01aeaa6c3c6e5568542a0f855f991",
             "version": 1
         },
         {
@@ -186,13 +349,64 @@
                 }
             ],
             "GameObject": {
+                "bEditorOnly": false,
                 "bEnable": true,
+                "bStatic": false,
                 "hideInspector": false,
                 "transform": "fdfb9962a345070dc2f9a654b3509e69"
             },
             "name": "Client",
             "type": "GameObject",
             "uuid": "e24a59fbe22135c5a5c61ccb0690735c",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "5551df43e40fe51b2d313ac559491493",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false,
+                "transform": "5551df43e40fe51b2d313ac559491493"
+            },
+            "name": "Assets",
+            "type": "GameObject",
+            "uuid": "3813e4c33cdb1063704f3b4bd6f2a663",
             "version": 1
         }
     ],
