@@ -1,6 +1,6 @@
 ﻿#include "UserManager.h"
-#include "UserManager.h"
 #include "Packet/PlayerJoinPacket.hpp"
+#include "DBThread.h"
 
 #include "Core/ThreadPool.h"
 #include "Core/Logger.h"
@@ -8,20 +8,33 @@
 #include <string>
 namespace sh::game
 {
-	UserManager::UserManager() :
-		db("users.db")
+	UserManager::UserManager()
 	{
-		if (db.IsOpen())
+		auto dbThread = DBThread::GetInstance();
+		if (dbThread->Init("users.db"))
 		{
-			queryUserSQL = db.CreateSQL("SELECT * FROM Users WHERE nickname = ?;");
-			insertUserSQL = db.CreateSQL("INSERT INTO Users (nickname, lastIp, lastPort) VALUES (?, ?, ?);");
-			updateUserSQL = db.CreateSQL("UPDATE Users SET lastIp = ?, lastPort = ? WHERE id = ?;");
+			queryUserSQL = dbThread->CreateSQL("SELECT id, nickname, lastWorld, lastX, lastY, lastIP, lastPort FROM Users WHERE nickname = ?;");
+			insertUserSQL = dbThread->CreateSQL("INSERT INTO Users (nickname, lastIp, lastPort) VALUES (?, ?, ?);");
+			updateUserSQL = dbThread->CreateSQL("UPDATE Users SET lastIp = ?, lastPort = ? WHERE id = ?;");
+			queryUserInventorySQL = dbThread->CreateSQL("SELECT ownerId, slotIdx, itemId, count, instanceId FROM UserInventory WHERE ownerId = ?;");
+			upsertItemSQL = dbThread->CreateSQL(
+				R"(
+					INSERT INTO UserInventory (ownerId, slotIdx, itemId, count)
+					VALUES (?, ?, ?, ?)
+					ON CONFLICT(ownerId, slotIdx)
+					DO UPDATE SET itemId = excluded.itemId, count = excluded.count;)");
+			deleteItemSQL = dbThread->CreateSQL("DELETE FROM UserInventory WHERE ownerId = ? AND slotIdx = ?;");
 		}
 	}
 	UserManager::~UserManager()
 	{
 		for (auto& [ep, pending] : pendingJoin)
 			pending.future.get();
+		while (!pendingInventory.empty())
+		{
+			pendingInventory.front().future.get();
+			pendingInventory.pop();
+		}
 	}
 	SH_USER_API auto UserManager::ProcessPlayerJoin(const PlayerJoinPacket& packet, const Endpoint& ep) -> bool
 	{
@@ -33,8 +46,8 @@ namespace sh::game
 		{
 			SH_INFO_FORMAT("A player({}) has joined - {}:{}", packet.GetNickName(), ep.ip, ep.port);
 
-			auto future = core::ThreadPool::GetInstance()->AddContinousTask(
-				[this, nickname = packet.GetNickName(), ep = ep]() -> User*
+			auto future = DBThread::GetInstance()->AddTask(
+				[this, nickname = packet.GetNickName(), ep = ep, &db = DBThread::GetInstance()->GetDB()]() -> User*
 				{
 					auto result = db.Query(queryUserSQL, nickname);
 					int64_t userId = 0;
@@ -65,6 +78,8 @@ namespace sh::game
 
 					new (user) User{ userId, ep.ip, ep.port };
 					user->SetNickname(std::move(nickname));
+					user->SetInventory(LoadInventory(db, userId));
+
 					return user;
 				}
 			);
@@ -88,6 +103,7 @@ namespace sh::game
 			return false;
 
 		User* const userPtr = users[it->second];
+		UpdateInventoryDB(*userPtr);
 
 		UserEvent evt{};
 		evt.user = userPtr;
@@ -146,49 +162,64 @@ namespace sh::game
 
 	SH_USER_API void UserManager::Update()
 	{
-		if (pendingJoin.empty())
-			return;
-		for (auto it = pendingJoin.begin(); it != pendingJoin.end();)
+		if (!pendingJoin.empty())
 		{
-			const Endpoint& ep = it->first;
-			std::future<User*>& future = it->second.future;
-			if (future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready)
+			for (auto it = pendingJoin.begin(); it != pendingJoin.end();)
 			{
-				++it;
-				continue;
-			}
-			User* user = future.get();
-			if (user == nullptr)
-			{
+				const Endpoint& ep = it->first;
+				std::future<User*>& future = it->second.future;
+				if (future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready)
+				{
+					++it;
+					continue;
+				}
+				User* user = future.get();
+				if (user == nullptr)
+				{
+					it = pendingJoin.erase(it);
+					continue;
+				}
+
+				if (it->second.bLeave) // 들어오던 중 나감
+				{
+					user->~User();
+					std::lock_guard<std::mutex> lock{ poolMutex };
+					userPool.DeAllocate(user);
+				}
+				else
+				{
+					UserIdx idx = users.size();
+					users.push_back(user);
+
+					userUUIDs.insert_or_assign(user->GetUserUUID(), idx);
+					userEndpoints.insert_or_assign(ep, idx);
+
+					UserEvent evt{};
+					evt.user = user;
+					evt.type = UserEvent::Type::JoinUser;
+
+					bus.Publish(evt);
+				}
 				it = pendingJoin.erase(it);
+			}
+		}
+		while (!pendingInventory.empty())
+		{
+			if (pendingInventory.front().future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready)
+				break;
+			auto pending = std::move(pendingInventory.front());
+			pendingInventory.pop();
+			auto userPtr = GetUser(pending.userUUID);
+			if (userPtr == nullptr)
 				continue;
-			}
-
-			if (it->second.bLeave) // 들어오던 중 나감
-			{
-				user->~User();
-				std::lock_guard<std::mutex> lock{ poolMutex };
-				userPool.DeAllocate(user);
-			}
-			else
-			{
-				UserIdx idx = users.size();
-				users.push_back(user);
-
-				userUUIDs.insert_or_assign(user->GetUserUUID(), idx);
-				userEndpoints.insert_or_assign(ep, idx);
-
-				UserEvent evt{};
-				evt.user = user;
-				evt.type = UserEvent::Type::JoinUser;
-
-				bus.Publish(evt);
-			}
-			it = pendingJoin.erase(it);
+			Inventory& inven = userPtr->GetInventory();
+			bool bSuccess = pending.future.get();
+			if (bSuccess)
+				inven.ClearDirtySlots();
 		}
 	}
 
-	SH_USER_API auto UserManager::GetUser(const Endpoint& ep) -> User*
+	SH_USER_API auto UserManager::GetUser(const Endpoint& ep) const -> User*
 	{
 		auto it = userEndpoints.find(ep);
 		if (it == userEndpoints.end())
@@ -198,7 +229,7 @@ namespace sh::game
 
 		return users[idx];
 	}
-	SH_USER_API auto UserManager::GetUser(const core::UUID& uuid) -> User*
+	SH_USER_API auto UserManager::GetUser(const core::UUID& uuid) const -> User*
 	{
 		auto it = userUUIDs.find(uuid);
 		if (it == userUUIDs.end())
@@ -239,5 +270,65 @@ namespace sh::game
 		userPtr->~User();
 		std::lock_guard<std::mutex> lock{ poolMutex };
 		userPool.DeAllocate(userPtr);
+	}
+	auto UserManager::LoadInventory(Database& db, uint64_t userId) const -> Inventory
+	{
+		auto result = db.Query(queryUserInventorySQL, userId);
+		if (result.empty())
+			return {};
+
+		Inventory inventory{};
+		for (auto& row : result)
+		{
+			int ownerId = std::get<0>(row[0]);
+			int slotIdx = std::get<0>(row[1]);
+			int itemId = std::get<0>(row[2]);
+			int quantity = std::get<0>(row[3]);
+			int64_t instanceId = std::get<0>(row[4]);
+			inventory.SetItem(itemId, slotIdx, quantity);
+		}
+		return inventory;
+	}
+	void UserManager::UpdateInventoryDB(User& user)
+	{
+		const int64_t userId = user.GetId();
+		Inventory& inventory = user.GetInventory();
+
+		auto future = DBThread::GetInstance()->AddTask(
+			[this, userId, slots = inventory.GetSlots(), dirtySlots = inventory.GetDirtySlots(), &db = DBThread::GetInstance()->GetDB()]() -> bool
+			{
+				if (!db.Execute("BEGIN TRANSACTION;"))
+				{
+					SH_ERROR("BEGIN TRANSACTION;");
+					return false;
+				}
+
+				bool bSuccess = true;
+				for (int slotIdx : dirtySlots)
+				{
+					const auto& slot = slots[slotIdx];
+					if (slot.quantity <= 0)
+						bSuccess = db.Execute(deleteItemSQL, userId, slotIdx);
+					else
+						bSuccess = db.Execute(upsertItemSQL, userId, slotIdx, slot.itemId, slot.quantity);
+
+					if (!bSuccess)
+						break;
+				}
+				if (bSuccess)
+					bSuccess = db.Execute("Commit;");
+				if (!bSuccess)
+				{
+					SH_ERROR_FORMAT("Failed to update inventory: user({})", userId);
+					db.Execute("ROLLBACK;");
+					return false;
+				}
+				return true;
+			}
+		);
+		PendingInventory pending{};
+		pending.userUUID = user.GetUserUUID();
+		pending.future = std::move(future);
+		pendingInventory.push(std::move(pending));
 	}
 }//namespace

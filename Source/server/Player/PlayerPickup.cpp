@@ -85,26 +85,16 @@ namespace sh::game
 		{
 			if (!core::IsValid(item))
 				continue;
-			InsertItemToDB(MapleServer::GetInstance()->GetUserManager().GetDB(), *item, *player);
+			InsertItemToInventory(*item, *player);
 		}
 	}
-	void PlayerPickup::InsertItemToDB(Database& db, Item& item, Player& player)
+	void PlayerPickup::InsertItemToInventory(Item& item, Player& player)
 	{
-		static Database::SQL insertSQL = db.CreateSQL("INSERT INTO UserInventory (itemId, ownerId, slotIdx, count) VALUES (?, ?, ?, ?);");
-		if (!db.Execute("BEGIN TRANSACTION;"))
-			SH_ERROR("BEGIN TRANSACTION;");
-		if (db.Execute(insertSQL, item.itemId, 0, 0, 1))
-		{
-			if (db.Execute("COMMIT;"))
-			{
-				SH_INFO_FORMAT("User: {}, Item: {}", player.GetUserUUID().ToString(), item.itemId);
-				player.GetCurrentWorld()->DestroyItem(item);
-			}
-		}
-		else
-		{
-			SH_ERROR("Rollback;");
-			db.Execute("ROLLBACK;");
-		}
+		User* user = MapleServer::GetInstance()->GetUserManager().GetUser(player.GetUserUUID());
+		if (user == nullptr)
+			return;
+
+		if (user->GetInventory().AddItem(item.itemId, 1))
+			player.GetCurrentWorld()->DestroyItem(item);
 	}
 }//namespace

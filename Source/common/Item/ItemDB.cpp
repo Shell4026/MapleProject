@@ -5,7 +5,7 @@
 #include "Game/TextObject.h"
 namespace sh::game
 {
-    auto ItemDB::GetItemInfo(int id) const -> const core::Json*
+    auto ItemDB::GetItemInfo(int id) const -> const ItemInfo*
     {
         auto it = items.find(id);
         if (it == items.end())
@@ -28,8 +28,20 @@ namespace sh::game
         {
             if (!json.contains("id"))
                 continue;
-            int id = json["id"];
-            items[id] = json;
+            ItemInfo info{};
+            info.itemId = json["id"];;
+            if (json.contains("stack"))
+                info.maxStack = json["stack"];
+#if !SH_SERVER
+            if (json.contains("tex"))
+                info.texUUID = core::UUID{ json["tex"].get_ref<const std::string&>()};
+            if (json.contains("name"))
+                info.name = json["name"];
+            if (json.contains("desc"))
+                info.desc = json["desc"];
+#endif
+
+            items.insert({ info.itemId, std::move(info) });
         }
 	}
 }//namespace

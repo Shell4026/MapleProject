@@ -103,7 +103,7 @@ namespace sh::game
 			return;
 		}
 
-		const core::Json* itemInfo = ItemDB::GetInstance()->GetItemInfo(packet.itemId);
+		const ItemInfo* itemInfo = ItemDB::GetInstance()->GetItemInfo(packet.itemId);
 		if (itemInfo == nullptr)
 		{
 			SH_ERROR_FORMAT("Item {} is not valid!", packet.itemId);
@@ -123,14 +123,10 @@ namespace sh::game
 		item->GetRigidBody()->ResetPhysicsTransform();
 		item->GetRigidBody()->SetLinearVelocity({ 0.f, 5.f, 0.f });
 
-		if (!itemInfo->contains("tex"))
-			return;
-
-		const std::string& texUUID = (*itemInfo)["tex"];
-		auto texPtr = static_cast<render::Texture*>(core::SObject::GetSObjectUsingResolver(core::UUID{ texUUID }));
+		auto texPtr = static_cast<render::Texture*>(core::SObject::GetSObjectUsingResolver(itemInfo->texUUID));
 		if (texPtr == nullptr)
 		{
-			SH_ERROR_FORMAT("texture {} is not valid!", texUUID);
+			SH_ERROR_FORMAT("texture {} is not valid!", itemInfo->texUUID.ToString());
 			return;
 		}
 		item->SetTexture(texPtr);

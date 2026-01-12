@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "Export.h"
-#if !SH_SERVER
-#include "Core/Singleton.hpp"
+#include "ItemInfo.hpp"
 
+#include "Core/Singleton.hpp"
 #include "Core/ISerializable.h"
 
 #include <unordered_map>
@@ -12,11 +12,10 @@ namespace sh::game
 	{
 		friend core::Singleton<ItemDB>;
 	public:
-		auto GetItemInfo(int id) const -> const core::Json*;
+		auto GetItemInfo(int id) const -> const ItemInfo*;
 	protected:
 		SH_USER_API ItemDB();
 	private:
-		std::unordered_map<int, core::Json> items;
+		std::unordered_map<int, ItemInfo> items;
 	};
 }//namespace
-#endif

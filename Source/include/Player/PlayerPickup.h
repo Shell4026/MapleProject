@@ -28,7 +28,7 @@ namespace sh::game
 	private:
 #if SH_SERVER
 		void ProcessPickup();
-		static void InsertItemToDB(Database& db, Item& item, Player& player);
+		void InsertItemToInventory(Item& item, Player& player);
 #endif
 	private:
 		core::EventSubscriber<PacketEvent> packetSubscriber;

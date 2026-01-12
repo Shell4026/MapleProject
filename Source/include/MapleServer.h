@@ -2,7 +2,6 @@
 #include "Export.h"
 #include "User.h"
 #include "EndPoint.hpp"
-#include "Database.h"
 #include "UserManager.h"
 
 #include "Core/EventBus.h"
@@ -12,6 +11,7 @@
 #include "Game/Component/Component.h"
 #include "Game/Component/UdpServer.h"
 #include "Game/WorldEvents.hpp"
+#include "Game/World.h"
 
 #include <vector>
 #include <unordered_map>

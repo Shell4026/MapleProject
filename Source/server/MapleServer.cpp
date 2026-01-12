@@ -1,6 +1,7 @@
 ﻿#include "MapleServer.h"
 #include "MapleWorld.h"
 #include "Item/ItemDropManager.h"
+#include "Item/ItemDB.h"
 #include "PacketEvent.hpp"
 #include "Packet/PlayerJoinPacket.hpp"
 #include "Packet/ChangeWorldPacket.hpp"
@@ -74,6 +75,7 @@ namespace sh::game
 			instance = this;
 
 		ItemDropManager::GetInstance()->LoadData("itemDrop.json");
+		ItemDB::GetInstance();
 
 		userManager.bus.Subscribe(userEventSubscriber);
 	}
