@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Export.h"
 #if !SH_SERVER
 #include "MapleClient.h"

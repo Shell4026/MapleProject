@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include "Export.h"
+#include "PacketEvent.hpp"
+
+#include "Core/EventSubscriber.h"
 
 #include "Game/Component/Component.h"
 #include "Game/Component/MeshRenderer.h"
@@ -10,6 +13,8 @@
 #include <cstdint>
 namespace sh::game
 {
+	class PlayerJoinPacket;
+
 	class Item : public Component
 	{
 		COMPONENT(Item, "user")
@@ -40,5 +45,7 @@ namespace sh::game
 		RigidBody* rb = nullptr;
 		PROPERTY(trigger)
 		RigidBody* trigger = nullptr;
+
+		core::EventSubscriber<PacketEvent> packetSubscriber;
 	};
 }//namespace

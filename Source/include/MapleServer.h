@@ -3,9 +3,11 @@
 #include "User.h"
 #include "EndPoint.hpp"
 #include "Database.h"
+#include "UserManager.h"
 
 #include "Core/EventBus.h"
 #include "Core/EventSubscriber.h"
+#include "Core/EngineThread.h"
 
 #include "Game/Component/Component.h"
 #include "Game/Component/UdpServer.h"
@@ -13,6 +15,9 @@
 
 #include <vector>
 #include <unordered_map>
+#include <list>
+#include <optional>
+#include <future>
 namespace sh::game
 {
 	class PlayerJoinPacket;
@@ -24,40 +29,31 @@ namespace sh::game
 	public:
 		SH_USER_API MapleServer(GameObject& owner);
 #if SH_SERVER
-		SH_USER_API auto GetUserUUID(const Endpoint& ep) -> core::UUID*;
-		SH_USER_API auto GetUser(const Endpoint& ep) -> User*;
-		SH_USER_API auto GetUser(const core::UUID& uuid) -> User*;
-
 		SH_USER_API void BroadCast(const network::Packet& packet);
 		SH_USER_API void BroadCast(const network::Packet& packet, const Endpoint& ignore);
 		SH_USER_API void BroadCast(const network::Packet& packet, const std::vector<Endpoint>& ignores);
+
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
 		SH_USER_API void BeginUpdate() override;
 		SH_USER_API void Update() override;
 
-		SH_USER_API void Kick(const User& user);
-		SH_USER_API void Kick(const core::UUID& user);
-
-		SH_USER_API auto GetDB() -> Database& { return db; }
+		SH_USER_API auto GetUserManager() -> UserManager& { return userManager; }
 		SH_USER_API static auto GetInstance() -> MapleServer*;
-	private:
-		void ProcessPlayerJoin(const PlayerJoinPacket& packet, const Endpoint& endpoint);
-		void ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& endpoint);
 #endif
 	public:
 		core::EventBus bus;
 	private:
-		std::unordered_map<core::UUID, User> users;
-		std::unordered_map<Endpoint, core::UUID> uuids;
+		static MapleServer* instance;
+
 		PROPERTY(loadedWorlds)
 		std::vector<World*> loadedWorlds;
 
+#if SH_SERVER
 		core::EventSubscriber<events::ComponentEvent> componentSubscriber;
-
-		static MapleServer* instance;
-
-		Database db;
+		core::EventSubscriber<UserEvent> userEventSubscriber;
+		UserManager userManager;
+#endif
 	};
 }//namespace

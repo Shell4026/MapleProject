@@ -18,7 +18,7 @@ namespace sh::game
 			[&](const PacketEvent& evt)
 			{
 				Endpoint ep = { evt.senderIp, evt.senderPort };
-				if (server->GetUser(ep) == nullptr)
+				if (server->GetUserManager().GetUser(ep) == nullptr)
 					return;
 				if (evt.packet->GetId() == PlayerInputPacket::ID)
 					ProcessInputPacket(static_cast<const PlayerInputPacket&>(*evt.packet), ep);

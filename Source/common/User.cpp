@@ -2,52 +2,56 @@
 
 namespace sh::game
 {
-	User::User(const std::string& ip, uint16_t port) :
-		ip(ip), port(port), 
-		uuid(core::UUID::Generate()), currentWorld(core::UUID::GenerateEmptyUUID())
+	User::User(int64_t id, const std::string& ip, uint16_t port, const core::UUID& uuid) :
+		id(id), ip(ip), port(port), uuid(uuid),
+		currentWorld(core::UUID::GenerateEmptyUUID())
 	{
 	}
-	User::User(std::string&& ip, uint16_t port) :
-		ip(std::move(ip)), port(port), 
-		uuid(core::UUID::Generate()), currentWorld(core::UUID::Generate())
+	User::User(int64_t id, std::string&& ip, uint16_t port, const core::UUID& uuid) :
+		id(id), ip(std::move(ip)), port(port), uuid(uuid),
+		currentWorld(core::UUID::Generate())
 	{
 	}
 	User::User(const User& other) :
-		ip(other.ip), port(other.port),
+		id(other.id), ip(other.ip), port(other.port),
 		uuid(other.uuid), currentWorld(other.currentWorld)
 	{
 	}
 	User::User(User&& other) noexcept :
-		ip(other.ip), port(other.port),
+		id(other.id), ip(other.ip), port(other.port),
 		uuid(std::move(other.uuid)), currentWorld(std::move(other.currentWorld))
 	{
+	}
+	SH_USER_API auto User::operator=(const User& other) -> User&
+	{
+		id = other.id;
+		ip = other.ip;
+		port = other.port;
+		uuid = other.uuid;
+		currentWorld = other.currentWorld;
+		nickname = other.nickname;
+		return *this;
+	}
+	SH_USER_API auto User::operator=(User&& other) noexcept -> User&
+	{
+		id = other.id;
+		ip = std::move(other.ip);
+		port = other.port;
+		uuid = other.uuid;
+		currentWorld = other.currentWorld;
+		nickname = std::move(other.nickname);
+		return *this;
 	}
 	SH_USER_API void User::SetNickname(const std::string& name)
 	{
 		nickname = name;
 	}
-	SH_USER_API void User::SetNickname(std::string&& name)
+	SH_USER_API void User::SetNickname(std::string&& name) noexcept
 	{
 		nickname = std::move(name);
-	}
-	SH_USER_API auto User::GetNickName() const -> const std::string&
-	{
-		return nickname;
-	}
-	SH_USER_API void User::SetUserUUID(const core::UUID& uuid)
-	{
-		this->uuid = uuid;
-	}
-	SH_USER_API auto User::GetUserUUID() const -> const core::UUID&
-	{
-		return uuid;
 	}
 	SH_USER_API void User::SetCurrentWorldUUID(const core::UUID& worldUUID)
 	{
 		currentWorld = worldUUID;
-	}
-	SH_USER_API auto User::GetCurrentWorldUUID() const -> const core::UUID&
-	{
-		return currentWorld;
 	}
 }//namespace

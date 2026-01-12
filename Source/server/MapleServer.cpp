@@ -19,12 +19,13 @@
 #include "Game/Component/Camera.h"
 
 #include "Network/StringPacket.h"
+
 namespace sh::game
 {
 	MapleServer* MapleServer::instance = nullptr;
 
 	MapleServer::MapleServer(GameObject& owner) :
-		UdpServer(owner), db("Item.db")
+		UdpServer(owner)
 	{
 		componentSubscriber.SetCallback
 		(
@@ -39,62 +40,72 @@ namespace sh::game
 				}
 			}
 		);
+		userEventSubscriber.SetCallback(
+			[this](const UserEvent& evt)
+			{
+				const User* user = evt.user;
+				if (evt.type == UserEvent::Type::JoinUser)
+				{
+					{
+						// 유저에게 UUID 전송
+						PlayerJoinSuccessPacket packet{};
+						packet.uuid = user->GetUserUUID();
+
+						server.Send(packet, user->GetIp(), user->GetPort());
+					}
+					{
+						// 유저 월드 이동
+						World* firstWorld = loadedWorlds[0];
+
+						ChangeWorldPacket packet{};
+						packet.worldUUID = firstWorld->GetUUID();
+
+						server.Send(packet, user->GetIp(), user->GetPort());
+					}
+				}
+				else if (evt.type == UserEvent::Type::LeaveUser)
+				{
+					SH_INFO_FORMAT("A player({}) has leave - {}:{}", user->GetNickName(), user->GetIp(), user->GetPort());
+				}
+			}
+		);
 
 		if (instance == nullptr)
 			instance = this;
 
 		ItemDropManager::GetInstance()->LoadData("itemDrop.json");
-	}
-	SH_USER_API auto MapleServer::GetUser(const Endpoint& ep) -> User*
-	{
-		auto uuidPtr = GetUserUUID(ep);
-		if (uuidPtr == nullptr)
-			return nullptr;
-		return GetUser(*uuidPtr);
-	}
-	SH_USER_API auto MapleServer::GetUserUUID(const Endpoint& ep) -> core::UUID*
-	{
-		auto it = uuids.find(ep);
-		if (it == uuids.end())
-			return nullptr;
-		return &it->second;
-	}
-	SH_USER_API auto MapleServer::GetUser(const core::UUID& uuid) -> User*
-	{
-		auto it = users.find(uuid);
-		if (it == users.end())
-			return nullptr;
-		return &it->second;
+
+		userManager.bus.Subscribe(userEventSubscriber);
 	}
 	SH_USER_API void MapleServer::BroadCast(const network::Packet& packet)
 	{
-		for (auto& [endpoint, user] : users)
-			Send(packet, user.ip, user.port);
+		for (User* user : userManager.GetUsers())
+			Send(packet, user->GetIp(), user->GetPort());
 	}
 	SH_USER_API void MapleServer::BroadCast(const network::Packet& packet, const Endpoint& ignore)
 	{
-		for (auto& [uuid, user] : users)
+		for (User* user : userManager.GetUsers())
 		{
-			if (user.ip == ignore.ip && user.port == ignore.port)
+			if (user->GetIp() == ignore.ip && user->GetPort() == ignore.port)
 				continue;
-			Send(packet, user.ip, user.port);
+			Send(packet, user->GetIp(), user->GetPort());
 		}
 	}
 	SH_USER_API void MapleServer::BroadCast(const network::Packet& packet, const std::vector<Endpoint>& ignore)
 	{
-		for (auto& [uuid, user] : users)
+		for (User* user : userManager.GetUsers())
 		{
 			bool bPass = true;
 			for (auto& ignoreEndpoint : ignore)
 			{
-				if (user.ip == ignoreEndpoint.ip && user.port == ignoreEndpoint.port)
+				if (user->GetIp() == ignoreEndpoint.ip && user->GetPort() == ignoreEndpoint.port)
 				{
 					bPass = false;
 					break;
 				}
 			}
 			if (bPass)
-				Send(packet, user.ip, user.port);
+				Send(packet, user->GetIp(), user->GetPort());
 		}
 	}
 	SH_USER_API void MapleServer::Awake()
@@ -118,102 +129,45 @@ namespace sh::game
 	SH_USER_API void MapleServer::BeginUpdate()
 	{
 		Super::BeginUpdate();
-		if (server.IsOpen())
+		if (!server.IsOpen())
+			return;
+		auto opt = server.GetReceivedMessage();
+		while (opt.has_value())
 		{
-			auto opt = server.GetReceivedMessage();
-			while (opt.has_value())
+			auto& message = opt.value();
+			//SH_INFO_FORMAT("Received packet (id: {})", message.packet->GetId());
+			const std::string& ip = message.senderIp;
+			const uint16_t port = message.senderPort;
+			const Endpoint endpoint{ ip, port };
+
+			if (message.packet->GetId() == PlayerJoinPacket::ID)
 			{
-				auto& message = opt.value();
-				//SH_INFO_FORMAT("Received packet (id: {})", message.packet->GetId());
-				const std::string& ip = message.senderIp;
-				const uint16_t port = message.senderPort;
-				const Endpoint endpoint{ ip, port };
-
-				PacketEvent evt{};
-				evt.packet = message.packet.get();
-				evt.senderIp = ip;
-				evt.senderPort = port;
-
-				bus.Publish(evt);
-
-				if (message.packet->GetId() == PlayerJoinPacket::ID)
-					ProcessPlayerJoin(static_cast<PlayerJoinPacket&>(*message.packet), endpoint);
-				else if (message.packet->GetId() == PlayerLeavePacket::ID)
-					ProcessPlayerLeave(static_cast<PlayerLeavePacket&>(*message.packet), endpoint);
-
-				opt = server.GetReceivedMessage();
+				if (!userManager.ProcessPlayerJoin(static_cast<PlayerJoinPacket&>(*message.packet), endpoint))
+				{
+					network::StringPacket packet{};
+					packet.SetString("The same IP address is already connected to the server.");
+					server.Send(packet, endpoint.ip, endpoint.port);
+				}
 			}
+			else if (message.packet->GetId() == PlayerLeavePacket::ID)
+				userManager.ProcessPlayerLeave(static_cast<PlayerLeavePacket&>(*message.packet), endpoint);
+
+			PacketEvent evt{};
+			evt.packet = message.packet.get();
+			evt.senderIp = ip;
+			evt.senderPort = port;
+
+			bus.Publish(evt);
+			opt = server.GetReceivedMessage();
 		}
+
+		userManager.Update();
 	}
 	SH_USER_API void MapleServer::Update()
 	{
 	}
-	SH_USER_API void MapleServer::Kick(const User& user)
-	{
-		uuids.erase({ user.ip, user.port });
-		users.erase(user.GetUserUUID());
-	}
-	SH_USER_API void MapleServer::Kick(const core::UUID& user)
-	{
-		auto userPtr = GetUser(user);
-		if (userPtr == nullptr)
-			return;
-		Kick(*userPtr);
-	}
 	SH_USER_API auto MapleServer::GetInstance() -> MapleServer*
 	{
 		return instance;
-	}
-	void MapleServer::ProcessPlayerJoin(const PlayerJoinPacket& packet, const Endpoint& endpoint)
-	{
-		auto it = uuids.find(endpoint);
-		if (it == uuids.end())
-		{
-			std::string nickname{ packet.GetNickName() };
-			SH_INFO_FORMAT("A player({}) has joined - {}:{}", nickname, endpoint.ip, endpoint.port);
-
-			User user{ endpoint.ip, endpoint.port };
-			user.SetNickname(std::move(nickname));
-			uuids.insert_or_assign(endpoint, user.GetUserUUID());
-
-			auto& [resultIt, success] = users.insert({ user.GetUserUUID(), std::move(user)});
-			{
-				// 유저에게 UUID 전송
-				PlayerJoinSuccessPacket packet{};
-				packet.uuid = resultIt->second.GetUserUUID();
-
-				server.Send(packet, endpoint.ip, endpoint.port);
-			}
-			{
-				// 유저 월드 이동
-				World* firstWorld = loadedWorlds[0];
-
-				ChangeWorldPacket packet{};
-				packet.worldUUID = firstWorld->GetUUID();
-
-				server.Send(packet, endpoint.ip, endpoint.port);
-			}
-		}
-		else
-		{
-			network::StringPacket packet{};
-			packet.SetString("The same IP address is already connected to the server.");
-			server.Send(packet, endpoint.ip, endpoint.port);
-		}
-	}
-	void MapleServer::ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& endpoint)
-	{
-		auto uuidIt = uuids.find(endpoint);
-		if (uuidIt == uuids.end())
-			return;
-
-		auto it = users.find(uuidIt->second);
-		const User& user = it->second;
-		if (user.ip == endpoint.ip && user.port == endpoint.port)
-		{
-			SH_INFO_FORMAT("A player({}) has leave - {}:{}", user.GetNickName(), endpoint.ip, endpoint.port);
-			users.erase(it);
-			uuids.erase(uuidIt);
-		}
 	}
 }//namespace

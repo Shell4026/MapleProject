@@ -42,7 +42,8 @@ namespace sh::game
 		{
 			SH_ERROR("Not found Player component!");
 		}
-		MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
+		if (player->IsLocal())
+			MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
 	}
 	SH_USER_API void PlayerPickup::BeginUpdate()
 	{
@@ -84,7 +85,7 @@ namespace sh::game
 		{
 			if (!core::IsValid(item))
 				continue;
-			InsertItemToDB(MapleServer::GetInstance()->GetDB(), *item, *player);
+			InsertItemToDB(MapleServer::GetInstance()->GetUserManager().GetDB(), *item, *player);
 		}
 	}
 	void PlayerPickup::InsertItemToDB(Database& db, Item& item, Player& player)

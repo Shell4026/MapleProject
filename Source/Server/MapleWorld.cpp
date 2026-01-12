@@ -156,7 +156,7 @@ namespace sh::game
 
 	void MapleWorld::ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const Endpoint& endpoint)
 	{
-		auto userPtr = server->GetUser(endpoint);
+		auto userPtr = server->GetUserManager().GetUser(endpoint);
 		if (userPtr == nullptr)
 			return;
 
@@ -202,7 +202,7 @@ namespace sh::game
 	}
 	void MapleWorld::ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& endpoint)
 	{
-		User* user = server->GetUser(endpoint);
+		User* user = server->GetUserManager().GetUser(endpoint);
 		if (user == nullptr || user->GetUserUUID() != packet.playerUUID)
 			return;
 
@@ -214,7 +214,7 @@ namespace sh::game
 	}
 	void MapleWorld::ProcessHeartbeat(const Endpoint& ep)
 	{
-		User* user = server->GetUser(ep);
+		User* user = server->GetUserManager().GetUser(ep);
 		if (user == nullptr)
 			return;
 
@@ -242,7 +242,7 @@ namespace sh::game
 			ProcessPlayerDespawn(despawnPacket);
 
 			server->BroadCast(despawnPacket);
-			server->Kick(player->GetUserUUID());
+			server->GetUserManager().KickUser(player->GetUserUUID());
 		}
 	}
 	void MapleWorld::TryClearSleepItems()

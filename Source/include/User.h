@@ -10,22 +10,29 @@ namespace sh::game
 	class User
 	{
 	public:
-		SH_USER_API User(const std::string& ip, uint16_t port);
-		SH_USER_API User(std::string&& ip, uint16_t port);
+		SH_USER_API User(int64_t id, const std::string& ip, uint16_t port, const core::UUID& uuid = core::UUID::Generate());
+		SH_USER_API User(int64_t id, std::string&& ip, uint16_t port, const core::UUID& uuid = core::UUID::Generate());
 		SH_USER_API User(const User& other);
 		SH_USER_API User(User&& other) noexcept;
 
+		SH_USER_API auto operator=(const User& other) -> User&;
+		SH_USER_API auto operator=(User&& other) noexcept -> User&;
+
 		SH_USER_API void SetNickname(const std::string& name);
-		SH_USER_API void SetNickname(std::string&& name);
-		SH_USER_API auto GetNickName() const -> const std::string&;
-		SH_USER_API void SetUserUUID(const core::UUID& uuid);
-		SH_USER_API auto GetUserUUID() const -> const core::UUID&;
+		SH_USER_API void SetNickname(std::string&& name) noexcept;
 		SH_USER_API void SetCurrentWorldUUID(const core::UUID& worldUUID);
-		SH_USER_API auto GetCurrentWorldUUID() const -> const core::UUID&;
-	public:
-		const std::string ip;
-		const uint16_t port;
+
+		SH_USER_API auto GetId() const -> int64_t { return id; }
+		SH_USER_API auto GetIp() const -> const std::string& { return ip; }
+		SH_USER_API auto GetPort() const -> uint16_t { return port; }
+		SH_USER_API auto GetUserUUID() const -> const core::UUID& { return uuid; }
+		SH_USER_API auto GetCurrentWorldUUID() const -> const core::UUID& { return currentWorld; }
+		SH_USER_API auto GetNickName() const -> const std::string& { return nickname; }
 	private:
+		int64_t id = 0;
+		std::string ip;
+		uint16_t port;
+
 		core::UUID uuid;
 		core::UUID currentWorld;
 

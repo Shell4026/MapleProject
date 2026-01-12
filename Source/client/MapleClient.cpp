@@ -10,7 +10,7 @@
 
 namespace sh::game
 {
-	User MapleClient::user{ "127.0.0.1", 0 };
+	User MapleClient::user{ 0, "127.0.0.1", 0 };
 	MapleClient* MapleClient::instance = nullptr;
 
 	MapleClient::MapleClient(GameObject& owner) :
@@ -58,7 +58,7 @@ namespace sh::game
 			else if (id == PlayerJoinSuccessPacket::ID)
 			{
 				auto pakcet = static_cast<PlayerJoinSuccessPacket*>(receivedPacket.get());
-				user.SetUserUUID(core::UUID{ pakcet->uuid });
+				user = User{ 0, "127.0.0.1", 0, core::UUID{ pakcet->uuid } };
 			}
 
 			receivedPacket = client.GetReceivedPacket();

@@ -4,6 +4,7 @@
 
 #include "Sqlite/sqlite3.h"
 
+#include <limits>
 namespace sh::game
 {
 	struct Database::Impl
@@ -11,13 +12,41 @@ namespace sh::game
 		sqlite3* db = nullptr;
 	};
 
+	Database::SQL::SQL(SQL&& other) noexcept
+	{
+		handle = other.handle;
+		other.handle = nullptr;
+	}
+
 	Database::SQL::~SQL()
 	{
+		std::lock_guard<std::mutex> lock{ mu };
 		if (handle != nullptr)
 		{
 			sqlite3_finalize(reinterpret_cast<sqlite3_stmt*>(handle));
 			handle = nullptr;
 		}
+	}
+
+	SH_USER_API auto Database::SQL::operator=(SQL&& other) noexcept -> SQL&
+	{
+		if (this == &other)
+			return *this;
+
+		if (handle != nullptr)
+		{
+			sqlite3_finalize(reinterpret_cast<sqlite3_stmt*>(handle));
+			handle = nullptr;
+		}
+
+		handle = other.handle;
+		other.handle = nullptr;
+		return *this;
+	}
+
+	SH_USER_API auto Database::SQL::IsVaild() const -> bool
+	{
+		return handle != nullptr;
 	}
 
 	Database::Database(const std::filesystem::path& path)
@@ -27,18 +56,24 @@ namespace sh::game
 		if (sqlite3_open(path.u8string().c_str(), &impl->db) != SQLITE_OK)
 		{
 			SH_ERROR_FORMAT("Failed to load DB: {}", path.u8string());
+			if (impl->db != nullptr)
+				sqlite3_close(impl->db);
+			impl->db = nullptr;
 		}
 		else
 			SH_INFO_FORMAT("Open DB: {}", path.u8string());
+
+		SH_INFO_FORMAT("sqlite3_threadsafe() = {}", sqlite3_threadsafe());
 	}
 	Database::Database()
 	{
+		impl = std::make_unique<Impl>();
 	}
 	Database::~Database()
 	{
 		if (impl->db != nullptr)
 		{
-			sqlite3_close(impl->db);
+			sqlite3_close_v2(impl->db);
 			impl->db = nullptr;
 		}
 	}
@@ -60,22 +95,24 @@ namespace sh::game
 	}
 	SH_USER_API auto Database::CreateSQL(const std::string& sql) const -> SQL
 	{
-		sqlite3_stmt* stmt;
+		sqlite3_stmt* stmt = nullptr;
 		if (sqlite3_prepare_v2(impl->db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
 		{
 			SH_ERROR_FORMAT("Failed to create SQL: {}", sql);
-			return SQL{ nullptr };
+			SQL sql{};
+			sql.handle = nullptr;
+			return sql;
 		}
-
-		return SQL{ stmt };
+		SQL resultSQL{};
+		resultSQL.handle = stmt;
+		return resultSQL;
 	}
 
-	void Database::BindParameter(const SQL& sql, int n, int param) const
+	SH_USER_API auto Database::IsOpen() const -> bool
 	{
-		if (sql.handle == nullptr)
-			return;
-		sqlite3_bind_int(reinterpret_cast<sqlite3_stmt*>(sql.handle), n, param);
+		return impl->db != nullptr;
 	}
+
 	void Database::BindParameter(const SQL& sql, int n, int64_t param) const
 	{
 		if (sql.handle == nullptr)
@@ -98,7 +135,6 @@ namespace sh::game
 	{
 		if (sql.handle == nullptr)
 			return;
-
 		int len = (str.size() > static_cast<size_t>(std::numeric_limits<int>::max())) ? 
 			std::numeric_limits<int>::max() : static_cast<int>(str.size());
 
@@ -109,6 +145,7 @@ namespace sh::game
 		int result = sqlite3_step(reinterpret_cast<sqlite3_stmt*>(sql.handle));
 
 		sqlite3_reset(reinterpret_cast<sqlite3_stmt*>(sql.handle));
+		sqlite3_clear_bindings(reinterpret_cast<sqlite3_stmt*>(sql.handle));
 
 		if (result != SQLITE_DONE && result != SQLITE_ROW)
 		{
@@ -118,29 +155,46 @@ namespace sh::game
 		}
 		return true;
 	}
-	auto Database::QuerySQL(const SQL& sql) const ->std::vector<std::vector<std::string>>
+	auto Database::QuerySQL(const SQL& sql) const ->std::vector<std::vector<QueryResult>>
 	{
-		std::vector<std::vector<std::string>> fullResult;
+		std::vector<std::vector<QueryResult>> fullResult;
 		sqlite3_stmt* stmt = reinterpret_cast<sqlite3_stmt*>(sql.handle);
 
-		int columnCount = sqlite3_column_count(stmt);
+		const int columnCount = sqlite3_column_count(stmt);
 
-		while (sqlite3_step(stmt) == SQLITE_ROW)
+		int rc = 0;
+		while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 		{
-			std::vector<std::string> rowData;
+			std::vector<QueryResult> rowData;
+			rowData.reserve(columnCount);
 
 			for (int i = 0; i < columnCount; ++i)
 			{
-				const unsigned char* text = sqlite3_column_text(stmt, i);
+				const int type = sqlite3_column_type(stmt, i);
+				if (type == SQLITE_INTEGER)
+					rowData.push_back(sqlite3_column_int64(stmt, i));
+				else if (type == SQLITE_FLOAT)
+					rowData.push_back(sqlite3_column_double(stmt, i));
+				else if (type == SQLITE_TEXT)
+				{
+					const unsigned char* text = sqlite3_column_text(stmt, i);
 
-				if (text)
-					rowData.push_back(std::string(reinterpret_cast<const char*>(text)));
+					if (text)
+						rowData.push_back(std::string(reinterpret_cast<const char*>(text)));
+					else
+						rowData.push_back(nullptr);
+				}
 				else
-					rowData.push_back(""); // null
+					rowData.push_back(nullptr);
+
 			}
 			fullResult.push_back(std::move(rowData));
 		}
+		if (rc != SQLITE_DONE)
+			SH_ERROR_FORMAT("SQLite Query Error: {}", sqlite3_errmsg(impl->db));
+
 		sqlite3_reset(stmt);
+		sqlite3_clear_bindings(stmt);
 
 		return fullResult;
 	}
