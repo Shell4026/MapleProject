@@ -55,8 +55,7 @@ FETCHCONTENT_DECLARE(
 )
 FETCHCONTENT_MAKEAVAILABLE(JSON)
 
-add_library(sqlite3 STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/common/SQLite/sqlite3.c)
-target_include_directories(sqlite3 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/include/SQLite)
+add_subdirectory(External/SQLite)
 
 foreach(TGT ${TARGETS})
 	if ("${TGT}" STREQUAL "${SERVER}")
@@ -75,6 +74,7 @@ foreach(TGT ${TARGETS})
 	endif()
 
 	set_target_properties(${TGT} PROPERTIES OUTPUT_NAME ${COMMON_DLL_NAME})
+
 	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 		target_compile_definitions(${TGT} PUBLIC SH_DEBUG)
 	endif()
@@ -84,7 +84,7 @@ foreach(TGT ${TARGETS})
 
 	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/Source/include)
 	target_include_directories(${TGT} PRIVATE ${ENGINE_DIR}/include)
-	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/include/external)
+	target_include_directories(${TGT} PRIVATE ${CMAKE_SOURCE_DIR}/External)
 
 	target_link_directories(${TGT} PRIVATE ${ENGINE_DIR})
 	target_link_directories(${TGT} PRIVATE ${ENGINE_DIR}/lib)
