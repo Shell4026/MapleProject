@@ -29,7 +29,6 @@ namespace sh::game
 			SH_USER_API auto IsVaild() const -> bool;
 		private:
 			void* handle = nullptr;
-			mutable std::mutex mu;
 		};
 		using QueryResult = std::variant<int64_t, double, std::string, std::nullptr_t>;
 	public:
@@ -37,16 +36,17 @@ namespace sh::game
 		SH_USER_API Database();
 		SH_USER_API ~Database();
 
+		SH_USER_API auto Open(const std::filesystem::path& path) -> bool;
 		SH_USER_API auto Execute(const std::string& sql) const -> bool;
 
-		SH_USER_API auto CreateSQL(const std::string& sql) const -> SQL;
+		SH_USER_API auto CreateSQL(std::string_view sql) const -> SQL;
 
 		SH_USER_API auto IsOpen() const -> bool;
 
 		template<typename... Args>
-		SH_USER_API auto Execute(const SQL& sql, Args&&... args) const -> bool;
+		auto Execute(const SQL& sql, Args&&... args) const -> bool;
 		template<typename... Args>
-		SH_USER_API auto Query(const SQL& sql, Args&&... args) const -> std::vector<std::vector<QueryResult>>;
+		auto Query(const SQL& sql, Args&&... args) const -> std::vector<std::vector<QueryResult>>;
 	private:
 
 		void BindParameter(const SQL& sql, int n, int64_t param) const;
@@ -64,7 +64,6 @@ namespace sh::game
 	template<typename... Args>
 	inline auto Database::Execute(const SQL& sql, Args&&... args) const -> bool
 	{
-		std::lock_guard<std::mutex> lock{ sql.mu };
 		int idx = 1;
 
 		const auto loopFn = 
@@ -87,7 +86,6 @@ namespace sh::game
 	template<typename... Args>
 	inline auto Database::Query(const SQL& sql, Args&& ...args) const -> std::vector<std::vector<Database::QueryResult>>
 	{
-		std::lock_guard<std::mutex> lock{ sql.mu };
 		int idx = 1;
 
 		const auto loopFn =

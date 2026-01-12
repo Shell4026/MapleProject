@@ -20,7 +20,6 @@ namespace sh::game
 
 	Database::SQL::~SQL()
 	{
-		std::lock_guard<std::mutex> lock{ mu };
 		if (handle != nullptr)
 		{
 			sqlite3_finalize(reinterpret_cast<sqlite3_stmt*>(handle));
@@ -52,18 +51,7 @@ namespace sh::game
 	Database::Database(const std::filesystem::path& path)
 	{
 		impl = std::make_unique<Impl>();
-
-		if (sqlite3_open(path.u8string().c_str(), &impl->db) != SQLITE_OK)
-		{
-			SH_ERROR_FORMAT("Failed to load DB: {}", path.u8string());
-			if (impl->db != nullptr)
-				sqlite3_close(impl->db);
-			impl->db = nullptr;
-		}
-		else
-			SH_INFO_FORMAT("Open DB: {}", path.u8string());
-
-		SH_INFO_FORMAT("sqlite3_threadsafe() = {}", sqlite3_threadsafe());
+		Open(path);
 	}
 	Database::Database()
 	{
@@ -76,6 +64,19 @@ namespace sh::game
 			sqlite3_close_v2(impl->db);
 			impl->db = nullptr;
 		}
+	}
+	SH_USER_API auto Database::Open(const std::filesystem::path& path) -> bool
+	{
+		if (sqlite3_open(path.u8string().c_str(), &impl->db) != SQLITE_OK)
+		{
+			SH_ERROR_FORMAT("Failed to load DB: {}", path.u8string());
+			if (impl->db != nullptr)
+				sqlite3_close(impl->db);
+			impl->db = nullptr;
+			return false;
+		}
+		SH_INFO_FORMAT("Open DB: {}", path.u8string());
+		return true;
 	}
 	SH_USER_API auto Database::Execute(const std::string& sql) const -> bool
 	{
@@ -93,10 +94,10 @@ namespace sh::game
 		}
 		return true;
 	}
-	SH_USER_API auto Database::CreateSQL(const std::string& sql) const -> SQL
+	SH_USER_API auto Database::CreateSQL(std::string_view sql) const -> SQL
 	{
 		sqlite3_stmt* stmt = nullptr;
-		if (sqlite3_prepare_v2(impl->db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
+		if (sqlite3_prepare_v2(impl->db, sql.data(), sql.size(), &stmt, nullptr) != SQLITE_OK)
 		{
 			SH_ERROR_FORMAT("Failed to create SQL: {}", sql);
 			SQL sql{};
