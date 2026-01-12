@@ -219,6 +219,70 @@
             "type": "GameObject",
             "uuid": "2c702dc846fe770244d85f76af2545a9",
             "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "465b655bb29316cddeeddf60401e2d52",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "b8a1d492c75692b18267674e2d928872",
+                    "version": 1
+                },
+                {
+                    "AssetExportHelper": {
+                        "text": "5a5005649a0ad5aef3872acee30b2cfb"
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "user/AssetExportHelper",
+                    "type": "AssetExportHelper",
+                    "uuid": "dee9b9742217482b307c0e6aca04351c",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false,
+                "transform": "b8a1d492c75692b18267674e2d928872"
+            },
+            "name": "Items",
+            "type": "GameObject",
+            "uuid": "6c805addf7a6b2d56a12904921fa2f33",
+            "version": 1
         }
     ],
     "type": "EditorWorld",
