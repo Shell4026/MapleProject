@@ -14,13 +14,10 @@ namespace sh::game
 		SH_USER_API PlayerCamera2D(GameObject& owner);
 
 		SH_USER_API void Start() override;
-		SH_USER_API void BeginUpdate() override;
-		SH_USER_API void Update() override;
+		SH_USER_API void LateUpdate() override;
 
 		SH_USER_API void SetPlayer(GameObject& player);
 	private:
-		void SetCameraZ();
-		void MoveY();
 		auto SmoothDamp(float current, float target, float& currentVelocity, float smoothTime, float deltaTime) const -> float;
 		void MoveToPlayer();
 	private:
@@ -29,8 +26,8 @@ namespace sh::game
 		PROPERTY(player)
 		GameObject* player = nullptr;
 		float dis = 1.0f;
-		float velocityX = 1.0f;
-		float velocityY = 1.0f;
+		float velocityX = 0.0f;
+		float velocityY = 0.0f;
 		PROPERTY(smoothTime)
 		float smoothTime = 1.0f;
 		PROPERTY(camlimitMin)

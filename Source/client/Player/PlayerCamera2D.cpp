@@ -21,62 +21,21 @@ namespace sh::game
 			centerY = py + 0.81f;
 		}
 	}
-	SH_USER_API void PlayerCamera2D::BeginUpdate()
+	SH_USER_API void PlayerCamera2D::LateUpdate()
 	{
 		Super::BeginUpdate();
 
 		if (!core::IsValid(targetCamera))
 			return;
-
-		SetCameraZ();
-	}
-	SH_USER_API void PlayerCamera2D::Update()
-	{
 		if (!core::IsValid(player))
 			return;
 
-		MoveY();
 		MoveToPlayer();
+		targetCamera->GetNative().UpdateMatrix();
 	}
 	SH_USER_API void PlayerCamera2D::SetPlayer(GameObject& player)
 	{
 		this->player = &player;
-	}
-	void PlayerCamera2D::SetCameraZ()
-	{
-		const Vec3& camPos = targetCamera->gameObject.transform->GetWorldPosition();
-		Vec3 lookPos = targetCamera->GetLookPos();
-		lookPos.x = camPos.x;
-		lookPos.y = camPos.y;
-		lookPos.z = 0;
-		targetCamera->SetLookPos(lookPos);
-
-		const float w = gameObject.world.renderer.GetWidth();
-		const float h = gameObject.world.renderer.GetHeight();
-		const float worldWidth = (camlimitMax.x - camlimitMin.x) * 100;
-		const float worldHeight = (camlimitMax.y - camlimitMin.y) * 100;
-
-		dis = std::min(h, worldHeight) * 0.01f;
-		Vec3 pos = camPos;
-		pos.z = lookPos.z + dis;
-
-		targetCamera->gameObject.transform->SetWorldPosition(pos);
-	}
-	void PlayerCamera2D::MoveY()
-	{
-		const float py = player->transform->GetWorldPosition().y;
-
-		constexpr float upOffset = 0.81f; // 플레이어가 centerY보다 upOffset 위로 가면 카메라를 올림 (playerY + upOffset)
-		constexpr float downOffset = upOffset * 2.0f; // centerY가 playerY보다 이만큼 더 높으면 카메라를 내림 (playerY + downOffset)
-
-		float desiredCenterY = centerY;
-
-		if (py > centerY + upOffset)
-			desiredCenterY = py + upOffset;
-		else if (centerY > py + downOffset)
-			desiredCenterY = py + downOffset;
-
-		centerY = desiredCenterY;
 	}
 	auto PlayerCamera2D::SmoothDamp(float current, float target, float& currentVelocity, float smoothTime, float deltaTime) const -> float
 	{
@@ -93,46 +52,53 @@ namespace sh::game
 	}
 	void PlayerCamera2D::MoveToPlayer()
 	{
-		float width = world.renderer.GetWidth() / 100.f;
-		float height = dis;
+		const float width = world.renderer.GetWidth() * 0.01f;
+		const float height = world.renderer.GetHeight() * 0.01f;
 
-		auto pos = gameObject.transform->GetWorldPosition();
-		centerX = pos.x;
+		const float px = player->transform->GetWorldPosition().x;
+		const float py = player->transform->GetWorldPosition().y;
+		const float upOffset = 0.81f; // 플레이어가 centerY보다 upOffset 위로 가면 카메라를 올림 (playerY + upOffset)
+		const float downOffset = upOffset * 2.0f; // centerY가 playerY보다 이만큼 더 높으면 카메라를 내림 (playerY + downOffset)
 
-		const float worldWidth = camlimitMax.x - camlimitMin.x;
-		const float worldHeight = camlimitMax.y - camlimitMin.y;
+		centerX = px;
+		if (py > centerY + upOffset)
+			centerY = py + upOffset;
+		else if (centerY > py + downOffset)
+			centerY = py + downOffset;
 
-		float minX = camlimitMin.x;
-		float maxX = camlimitMax.x;
-		float minY = camlimitMin.y;
-		float maxY = camlimitMax.y;
+		const float minX = camlimitMin.x + width * 0.5f;
+		const float maxX = camlimitMax.x - width * 0.5f;
+		const float minY = camlimitMin.y + height * 0.5f;
+		const float maxY = camlimitMax.y - height * 0.5f;
 
-		if (worldWidth <= width)
-			minX = maxX = (minX + maxX) * 0.5f;
-		else 
-		{
-			minX = minX + width * 0.5f;
-			maxX = maxX - width * 0.5f;
-		}
+		if (minX < maxX)
+			centerX = std::clamp(centerX, minX, maxX);
+		else
+			centerX = (camlimitMin.x + camlimitMax.x) * 0.5f;
 
-		if (worldHeight <= height)
-			minY = maxY = (minY + maxY) * 0.5f;
-		else 
-		{
-			minY = minY + height * 0.5f;
-			maxY = maxY - height * 0.5f;
-		}
+		if (minY < maxY)
+			centerY = std::clamp(centerY, minY, maxY);
+		else
+			centerY = (camlimitMin.y + camlimitMax.y) * 0.5f;
 
-		if (pos.x >= minX && pos.x <= maxX)
-			pos.x = SmoothDamp(pos.x, centerX, velocityX, smoothTime, world.deltaTime);
+		auto pos = targetCamera->gameObject.transform->GetWorldPosition();
+		pos.x = SmoothDamp(pos.x, centerX, velocityX, smoothTime, world.deltaTime);
+		pos.y = SmoothDamp(pos.y, centerY, velocityY, smoothTime, world.deltaTime);
+		const float unitsPerPixel = 0.001f;
+		pos.x = std::round(pos.x / unitsPerPixel) * unitsPerPixel;
+		pos.y = std::round(pos.y / unitsPerPixel) * unitsPerPixel;
+		pos.z = 0;
 
-		if (pos.y >= minY && pos.y <= maxY)
-			pos.y = SmoothDamp(pos.y, centerY, velocityY, smoothTime, world.deltaTime);
+		targetCamera->SetLookPos(pos);
 
-		pos.x = std::clamp(pos.x, minX, maxX);
-		pos.y = std::clamp(pos.y, minY, maxY);
+		const float w = gameObject.world.renderer.GetWidth();
+		const float h = gameObject.world.renderer.GetHeight();
 
-		gameObject.transform->SetWorldPosition(pos);
+		dis = h * 0.01f;
+		pos.z = dis;
+
+		targetCamera->gameObject.transform->SetWorldPosition(pos);
+		targetCamera->gameObject.transform->UpdateMatrix();
 	}
 }//namespace
 #endif
