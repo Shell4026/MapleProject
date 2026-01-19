@@ -4,7 +4,6 @@
 #include "Item/ItemDB.h"
 #include "Packet/PlayerJoinPacket.hpp"
 #include "Packet/ChangeWorldPacket.hpp"
-#include "Packet/PlayerJoinSuccessPacket.hpp"
 #include "Packet/PlayerJoinPacket.hpp"
 #include "Packet/PlayerLeavePacket.hpp"
 #include "Packet/PlayerDespawnPacket.hpp"
@@ -51,19 +50,19 @@ namespace sh::game
 				if (evt.type == UserEvent::Type::JoinUser)
 				{
 					{
-						//InventorySyncPacket packet{};
-						//packet.inventoryJson = user->GetInventory().Serialize();
+						InventorySyncPacket packet{};
+						packet.inventoryJson = user->GetInventory().Serialize();
 
-						//socket.Send(packet, user->GetIp(), user->GetPort());
+						user->GetTcpSocket()->Send(packet);
 					}
 					{
 						// 유저 월드 이동
 						World* firstWorld = loadedWorlds[0];
+						user->SetCurrentWorldUUID(firstWorld->GetUUID());
 
 						ChangeWorldPacket packet{};
 						packet.worldUUID = firstWorld->GetUUID();
 
-						user->SetCurrentWorldUUID(firstWorld->GetUUID());
 						user->GetTcpSocket()->Send(packet);
 					}
 				}

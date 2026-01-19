@@ -1,7 +1,6 @@
 ﻿#include "MapleClient.h"
 #if !SH_SERVER
 #include "Packet/ChangeWorldPacket.hpp"
-#include "Packet/PlayerJoinSuccessPacket.hpp"
 #include "Packet/PlayerLeavePacket.hpp"
 #include "Packet/InventorySyncPacket.hpp"
 #include "Packet/PlayerTokenPacket.hpp"
@@ -107,15 +106,6 @@ namespace sh::game
 					ci.nickname = "local";
 					user = User{ std::move(ci) };
 				}
-				else if (id == PlayerJoinSuccessPacket::ID)
-				{
-					//auto pakcet = static_cast<const PlayerJoinSuccessPacket*>(receivedPacket);
-					//user = User{ 0, "127.0.0.1", 0, core::UUID{ pakcet->uuid } };
-				}
-				else if (id == InventorySyncPacket::ID)
-				{
-
-				}
 				received = socket.GetReceivedMessage();
 			}
 		}
@@ -129,7 +119,12 @@ namespace sh::game
 			{
 				const network::Packet* receivedPacket = received.value().packet.get();
 				uint32_t id = receivedPacket->GetId();
-				if (id == ChangeWorldPacket::ID)
+				if (id == InventorySyncPacket::ID)
+				{
+					auto packet = static_cast<const InventorySyncPacket*>(receivedPacket);
+					user.GetInventory().Deserialize(packet->inventoryJson);
+				}
+				else if (id == ChangeWorldPacket::ID)
 				{
 					auto packet = static_cast<const ChangeWorldPacket*>(receivedPacket);
 					SH_INFO_FORMAT("Move world to {}", core::UUID{ packet->worldUUID }.ToString());
