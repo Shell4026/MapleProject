@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
 #include "Player.h"
-#include "PacketEvent.hpp"
 #include "Packet/PlayerInputPacket.hpp"
 #include "Packet/PlayerStatePacket.hpp"
 #if SH_SERVER
@@ -14,6 +13,8 @@
 
 #include "Core/SContainer.hpp"
 #include "Core/EventSubscriber.h"
+
+#include "Network/PacketEvent.hpp"
 
 #include "Game/Component/Component.h"
 #include "Game/Component/RigidBody.h"
@@ -47,7 +48,7 @@ namespace sh::game
 	private:
 		
 #if SH_SERVER
-		void ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint);
+		void ProcessInputPacket(const PlayerInputPacket& packet);
 		/// @brief 이전에 왔던 입력 기반 움직임 적용 함수
 		void ProcessInput();
 #else
@@ -81,7 +82,7 @@ namespace sh::game
 		float rayDistance = 1.0f;
 		float floorY = -1000.0f;
 
-		core::EventSubscriber<PacketEvent> packetEventSubscriber;
+		core::EventSubscriber<network::PacketEvent> packetEventSubscriber;
 		
 #if !SH_SERVER
 		MapleClient* client = nullptr;
@@ -91,7 +92,6 @@ namespace sh::game
 		PlayerInputPacket lastSent;
 
 		uint64_t inputSeqCounter = 1;
-		uint64_t tick = 0;
 
 		bool bReceived = false;
 #else

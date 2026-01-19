@@ -1,10 +1,4 @@
 ﻿#include "Inventory.h"
-#include "Inventory.h"
-#include "Inventory.h"
-#include "Inventory.h"
-#include "Inventory.h"
-#include "Inventory.h"
-#include "Inventory.h"
 #include "Item/ItemDB.h"
 
 #include "Core/Logger.h"
@@ -26,11 +20,30 @@ namespace sh::game
 		}
 	}
 
+	Inventory::Inventory(const Inventory& other) :
+		slots(other.slots),
+		dirtySlots(other.dirtySlots),
+		dirtyMask(other.dirtyMask)
+	{
+	}
+
 	Inventory::Inventory(Inventory&& other) noexcept :
 		slots(std::move(other.slots)),
 		dirtySlots(std::move(other.dirtySlots)),
 		dirtyMask(std::move(other.dirtyMask))
 	{
+	}
+
+	SH_USER_API auto Inventory::operator=(const Inventory& other) -> Inventory&
+	{
+		if (this == &other)
+			return *this;
+
+		slots = other.slots;
+		dirtySlots = other.dirtySlots;
+		dirtyMask = other.dirtyMask;
+
+		return *this;
 	}
 
 	SH_USER_API auto Inventory::operator=(Inventory&& other) noexcept -> Inventory&
@@ -43,6 +56,63 @@ namespace sh::game
 		dirtyMask = std::move(other.dirtyMask);
 
 		return *this;
+	}
+
+	SH_USER_API auto Inventory::Serialize() const -> core::Json
+	{
+		core::Json json;
+		core::Json& slotsJson = json["slots"];
+
+		int slotIdx = 0;
+		for (auto& slot : slots)
+		{
+			core::Json slotJson;
+			slotJson["idx"] = slotIdx++;
+			slotJson["itemInstanceId"] = slot.itemInstanceId;
+			slotJson["itemId"] = slot.itemId;
+			slotJson["quantity"] = slot.quantity;
+
+			slotsJson.push_back(std::move(slotJson));
+		}
+		return json;
+	}
+
+	SH_USER_API auto Inventory::SerializeDirtySlots() const -> core::Json
+	{
+		core::Json json;
+		core::Json& slotsJson = json["slots"];
+
+		for (int i = 0; i < dirtySlots.size(); ++i)
+		{
+			const int slotIdx = dirtySlots[i];
+			const Slot& slot = slots[slotIdx];
+
+			core::Json slotJson;
+			slotJson["idx"] = slotIdx;
+			slotJson["itemInstanceId"] = slot.itemInstanceId;
+			slotJson["itemId"] = slot.itemId;
+			slotJson["quantity"] = slot.quantity;
+
+			slotsJson.push_back(std::move(slotJson));
+		}
+		return json;
+	}
+
+	SH_USER_API void Inventory::Deserialize(const core::Json& json)
+	{
+		auto it = json.find("slots");
+		if (it == json.end())
+			return;
+		const core::Json& slotsJson = it.value();
+
+		for (auto& slotJson : slotsJson)
+		{
+			const int slotIdx = slotJson.value("idx", 0);
+			auto& slot = slots[slotIdx];
+			slot.itemInstanceId = slotJson.value("itemInstanceId", 0);
+			slot.itemId = slotJson.value("itemId", -1);
+			slot.quantity = slotJson.value("quantity", 0);
+		}
 	}
 
 	void Inventory::SetItem(int itemId, int slotIdx, int quantity)

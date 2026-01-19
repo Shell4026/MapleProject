@@ -1,11 +1,13 @@
 ﻿#pragma once
 #include "Export.h"
 
+#include "Core/ISerializable.h"
+
 #include <vector>
 #include <cstdint>
 namespace sh::game
 {
-	class Inventory
+	class Inventory : public core::ISerializable
 	{
 	public:
 		struct Slot
@@ -16,11 +18,15 @@ namespace sh::game
 		};
 	public:
 		SH_USER_API Inventory();
-		SH_USER_API Inventory(const Inventory& other) = delete;
+		SH_USER_API Inventory(const Inventory& other);
 		SH_USER_API Inventory(Inventory&& other) noexcept;
 
-		SH_USER_API auto operator=(const Inventory& other) -> Inventory & = delete;
+		SH_USER_API auto operator=(const Inventory& other) -> Inventory&;
 		SH_USER_API auto operator=(Inventory&& other) noexcept -> Inventory&;
+
+		SH_USER_API auto Serialize() const -> core::Json override;
+		SH_USER_API auto SerializeDirtySlots() const -> core::Json;
+		SH_USER_API void Deserialize(const core::Json& json) override;
 
 		SH_USER_API void SetItem(int itemId, int slotIdx, int quantity);
 		SH_USER_API auto AddItem(int itemId, int quantity) -> bool;

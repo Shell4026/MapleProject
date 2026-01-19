@@ -16,7 +16,7 @@ namespace sh::game
         NetworkComponent(owner)
     {
         packetSubscriber.SetCallback(
-            [&](const PacketEvent& evt)
+            [&](const network::PacketEvent& evt)
             {
                 if (evt.packet->GetId() == MobStatePacket::ID)
                     ProcessState(static_cast<const MobStatePacket&>(*evt.packet));

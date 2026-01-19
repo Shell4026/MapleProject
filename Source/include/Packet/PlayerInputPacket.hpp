@@ -23,8 +23,7 @@ namespace sh::game
 			json["inputX"] = inputX;
 			json["jump"] = bJump;
 			json["seq"] = seq;
-			json["player"] = playerUUID;
-			json["ts"] = timestamp;
+			json["user"] = user;
 			json["prone"] = bProne;
 			return json;
 		}
@@ -37,18 +36,15 @@ namespace sh::game
 				bJump = json["jump"];
 			if (json.contains("seq"))
 				seq = json["seq"];
-			if (json.contains("player"))
-				playerUUID = json["player"];
-			if (json.contains("ts"))
-				timestamp = json["ts"];
+			if (json.contains("user"))
+				user = json["user"];
 			if (json.contains("prone"))
 				bProne = json["prone"];
 		}
 	public:
+		std::array<uint32_t, 4> user;
 		float inputX = 0.0f; // -1..1
 		uint32_t seq = 0;
-		uint64_t timestamp = 0; // 나중에 쓸지도
-		std::array<uint32_t, 4> playerUUID;
 		bool bJump = false;
 		bool bProne = false;
 	};

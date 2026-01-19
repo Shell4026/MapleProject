@@ -15,13 +15,10 @@ namespace sh::game
 		// 이벤트들은 BeginUpdate전에 호출됨
 		packetEventSubscriber.SetCallback
 		(
-			[&](const PacketEvent& evt)
+			[&](const network::PacketEvent& evt)
 			{
-				Endpoint ep = { evt.senderIp, evt.senderPort };
-				if (server->GetUserManager().GetUser(ep) == nullptr)
-					return;
 				if (evt.packet->GetId() == PlayerInputPacket::ID)
-					ProcessInputPacket(static_cast<const PlayerInputPacket&>(*evt.packet), ep);
+					ProcessInputPacket(static_cast<const PlayerInputPacket&>(*evt.packet));
 			}
 		);
 	}
@@ -165,11 +162,11 @@ namespace sh::game
 		bSend = true;
 	}
 
-	void PlayerMovement2D::ProcessInputPacket(const PlayerInputPacket& packet, const Endpoint& endpoint)
+	void PlayerMovement2D::ProcessInputPacket(const PlayerInputPacket& packet)
 	{
 		if (!core::IsValid(rigidBody))
 			return;
-		if (player->GetUserUUID() != packet.playerUUID)
+		if (player->GetUserUUID() != packet.user)
 			return;
 		if (lastInput.seq >= packet.seq) // 과거 패킷임
 			return;
@@ -180,7 +177,6 @@ namespace sh::game
 			lastInput.bJump = packet.bJump;
 		if (lastInput.bProne != packet.bProne)
 			lastInput.bProne = packet.bProne;
-		lastInput.tick = packet.timestamp;
 		lastInput.seq = packet.seq;
 	}
 	void PlayerMovement2D::ProcessInput()

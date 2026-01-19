@@ -1,11 +1,12 @@
 ﻿#pragma once
 #include "Export.h"
-#include "PacketEvent.hpp"
 #include "Skill/Skill.h"
 #include "MapleWorld.h"
 #include "MobStatus.hpp"
 
 #include "AI/AIStrategy.h"
+
+#include "Network/PacketEvent.hpp"
 
 #if !SH_SERVER
 #include "MobAnimation.h"
@@ -80,7 +81,7 @@ namespace sh::game
 
         uint32_t netSeq = 0;
 
-        core::EventSubscriber<PacketEvent> packetSubscriber;
+        core::EventSubscriber<network::PacketEvent> packetSubscriber;
 
         game::Vec3 initPos;
 #if SH_SERVER

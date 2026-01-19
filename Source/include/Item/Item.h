@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include "Export.h"
-#include "PacketEvent.hpp"
 
 #include "Core/EventSubscriber.h"
+
+#include "Network/PacketEvent.hpp"
 
 #include "Game/Component/Component.h"
 #include "Game/Component/MeshRenderer.h"
@@ -46,6 +47,6 @@ namespace sh::game
 		PROPERTY(trigger)
 		RigidBody* trigger = nullptr;
 
-		core::EventSubscriber<PacketEvent> packetSubscriber;
+		core::EventSubscriber<network::PacketEvent> packetSubscriber;
 	};
 }//namespace

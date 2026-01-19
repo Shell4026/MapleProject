@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Export.h"
-#include "PacketEvent.hpp"
+
+#include "Network/PacketEvent.hpp"
 
 #include "Game/Component/Component.h"
 
@@ -36,6 +37,6 @@ namespace sh::game
 
 		core::SMap<uint32_t, Skill*> skills;
 
-		core::EventSubscriber<PacketEvent> packetSubscriber;
+		core::EventSubscriber<network::PacketEvent> packetSubscriber;
 	};
 }

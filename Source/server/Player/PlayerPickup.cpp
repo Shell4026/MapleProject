@@ -13,7 +13,7 @@ namespace sh::game
 		Component(owner)
 	{
 		packetSubscriber.SetCallback(
-			[this](const PacketEvent& evt)
+			[this](const network::PacketEvent& evt)
 			{
 				if (player == nullptr)
 					return;

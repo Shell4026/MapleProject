@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "../Export.h"
 #include "Network/Packet.h"
 
 #include "Core/Reflection/TypeTraits.hpp"
@@ -7,11 +6,11 @@
 #include <array>
 namespace sh::game
 {
-	class PlayerLeavePacket : public network::Packet
+	class InventorySyncPacket : public network::Packet
 	{
-		SPACKET(PlayerLeavePacket, ID)
+		SPACKET(InventorySyncPacket, ID)
 	public:
-		constexpr static uint32_t ID = (core::reflection::TypeTraits::GetTypeHash<PlayerLeavePacket>() >> 32);
+		constexpr static uint32_t ID = (core::reflection::TypeTraits::GetTypeHash<InventorySyncPacket>() >> 32);
 	public:
 		auto GetId() const -> uint32_t override
 		{
@@ -20,16 +19,15 @@ namespace sh::game
 		auto Serialize() const -> core::Json override
 		{
 			core::Json json = network::Packet::Serialize();
-			json["p"] = user;
+			json["inventory"] = inventoryJson;
 			return json;
 		}
 		void Deserialize(const core::Json& json) override
 		{
 			network::Packet::Deserialize(json);
-			if (json.contains("p"))
-				user = json["p"];
+			inventoryJson = json.value("inventory", core::Json());
 		}
 	public:
-		std::array<uint32_t, 4> user;
+		core::Json inventoryJson;
 	};
 }//namespace

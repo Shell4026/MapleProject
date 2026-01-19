@@ -38,6 +38,7 @@ namespace sh::game
 			PlayerJoinPacket packet{};
 			packet.SetNickname(nickname);
 
+			client->ConnectServer();
 			client->SendPacket(packet);
 		}
 

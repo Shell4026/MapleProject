@@ -2,7 +2,6 @@
 #include "Export.h"
 #include "User.h"
 #include "EndPoint.hpp"
-#include "PacketEvent.hpp"
 #include "MapleServer.h"
 #include "MapleClient.h"
 #include "Player/PlayerCamera2D.h"
@@ -10,6 +9,8 @@
 
 #include "Core/SContainer.hpp"
 #include "Core/EventSubscriber.h"
+
+#include "Network/PacketEvent.hpp"
 
 #include "Game/Component/NetworkComponent.h"
 #include "Game/Component/Transform.h"
@@ -35,7 +36,8 @@ namespace sh::game
 	public:
 		SH_USER_API MapleWorld(GameObject& owner);
 
-		SH_USER_API auto SpawnPlayer(const core::UUID& playerUUID, float x, float y) const -> Player*;
+		SH_USER_API auto SpawnPlayer(const core::UUID& userUUID, float x, float y) -> Player*;
+		SH_USER_API auto DespawnPlayer(const core::UUID& userUUID) -> bool;
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
@@ -46,20 +48,21 @@ namespace sh::game
 		SH_USER_API void SpawnItem(int itemId, float x, float y, const core::UUID& owner);
 		SH_USER_API void SpawnItem(const std::vector<int>& itemIds, float x, float y, const core::UUID& owner);
 		SH_USER_API void DestroyItem(Item& item);
+		/// @brief 월드에 존재하는 메이플 월드 컴포넌트를 가져오는 함수
+		/// @param worldUUID 월드 UUID (메이플 월드 UUID가 아님!)
+		/// @return 월드에 없으면 nullptr
+		SH_USER_API static auto GetMapleWorld(const core::UUID& worldUUID) -> MapleWorld*;
 #endif
 	private:
 #if SH_SERVER
-		void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const Endpoint& endpoint);
-		void ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& endpoint);
-		void ProcessHeartbeat(const Endpoint& ep);
-		void CheckHeartbeats();
+		void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet);
+		void ProcessPlayerLeave(const PlayerLeavePacket& packet);
 		void TryClearSleepItems();
 #else
-		void ProcessPlayerSpawn(const PlayerSpawnPacket& packet, const Endpoint& endpoint);
+		void ProcessPlayerSpawn(const PlayerSpawnPacket& packet);
 		void ProcessItemDrop(const ItemDropPacket& packet);
 		void ProcessItemDespawn(const ItemDespawnPacket& packet);
 #endif
-		void ProcessPlayerDespawn(const PlayerDespawnPacket& packet);
 	public:
 		PROPERTY(playerSpawnPoint)
 		Transform* playerSpawnPoint = nullptr;
@@ -72,7 +75,7 @@ namespace sh::game
 		std::unordered_map<core::UUID, Player*> players;
 		std::queue<core::SObjWeakPtr<Item>> sleepItems;
 
-		core::EventSubscriber<PacketEvent> packetEventSubscriber;
+		core::EventSubscriber<network::PacketEvent> packetEventSubscriber;
 
 		uint64_t worldTick = 0;
 #if SH_SERVER
@@ -80,7 +83,8 @@ namespace sh::game
 		uint64_t nextItemIdx = 0;
 		uint64_t clearSleepItemsAfterTicks = 600;
 		uint64_t lastItemSpawnTick = 0;
-		
+
+		static std::unordered_map<core::UUID, MapleWorld*> mapleWorlds;
 #else
 		PROPERTY(camera)
 		PlayerCamera2D* camera = nullptr;

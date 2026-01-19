@@ -22,6 +22,6 @@ namespace sh::game
 			LeaveUser,
 			KickUser
 		} type;
-		const User* user = nullptr;
+		User* user = nullptr;
 	};
 }//namespace;

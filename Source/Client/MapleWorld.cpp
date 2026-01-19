@@ -20,13 +20,13 @@ namespace sh::game
 	{
 		packetEventSubscriber.SetCallback
 		(
-			[&](const PacketEvent& evt)
+			[&](const network::PacketEvent& evt)
 			{
 				Endpoint ep{ evt.senderIp, evt.senderPort };
 				if (evt.packet->GetId() == PlayerSpawnPacket::ID)
-					ProcessPlayerSpawn(static_cast<const PlayerSpawnPacket&>(*evt.packet), ep);
+					ProcessPlayerSpawn(static_cast<const PlayerSpawnPacket&>(*evt.packet));
 				else if (evt.packet->GetId() == PlayerDespawnPacket::ID)
-					ProcessPlayerDespawn(static_cast<const PlayerDespawnPacket&>(*evt.packet));
+					DespawnPlayer(static_cast<const PlayerDespawnPacket&>(*evt.packet).user);
 				else if (evt.packet->GetId() == ItemDropPacket::ID)
 					ProcessItemDrop(static_cast<const ItemDropPacket&>(*evt.packet));
 				else if (evt.packet->GetId() == ItemDespawnPacket::ID)
@@ -34,7 +34,7 @@ namespace sh::game
 			}
 		);
 	}
-	SH_USER_API auto MapleWorld::SpawnPlayer(const core::UUID& playerUUID, float x, float y) const -> Player*
+	SH_USER_API auto MapleWorld::SpawnPlayer(const core::UUID& userUUID, float x, float y) -> Player*
 	{
 		if (playerPrefab != nullptr)
 		{
@@ -44,14 +44,31 @@ namespace sh::game
 			playerObj->transform->UpdateMatrix();
 
 			auto player = playerObj->GetComponent<Player>();
-			player->SetUserUUID(playerUUID);
-			player->SetCurrentWorld(const_cast<MapleWorld&>(*this));
+			player->SetUserUUID(userUUID);
+			players[userUUID] = player;
 
 			return player;
 		}
 		else
 			SH_ERROR("Invalid player prefab!");
 		return nullptr;
+	}
+	SH_USER_API auto MapleWorld::DespawnPlayer(const core::UUID& userUUID) -> bool
+	{
+		auto it = players.find(userUUID);
+		if (it == players.end())
+			return false;
+
+		Player* player = it->second;
+		players.erase(it);
+
+		if (player->IsLocal())
+		{
+			SH_INFO("Bye");
+		}
+
+		player->gameObject.Destroy();
+		return true;
 	}
 	SH_USER_API void MapleWorld::Awake()
 	{
@@ -75,25 +92,25 @@ namespace sh::game
 
 		PlayerJoinWorldPacket packet{};
 		packet.worldUUID = world.GetUUID();
+		packet.user = client->GetUser().GetUserUUID();
 
-		client->SendPacket(packet);
+		client->SendTcp(packet);
 		SH_INFO_FORMAT("Join the world {}", world.GetUUID().ToString());
 	}
 	SH_USER_API void MapleWorld::LateUpdate()
 	{
 	}
 
-	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet, const Endpoint& endpoint)
+	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet)
 	{
 		core::UUID playerUUID{ packet.playerUUID };
 
 		Player* player = nullptr;
 		player = SpawnPlayer(playerUUID, packet.x, packet.y);
+		player->SetCurrentWorld(*this);
 
 		if (playerUUID == client->GetUser().GetUserUUID())
 			camera->SetPlayer(player->gameObject);
-
-		players.insert_or_assign(packet.playerUUID, player);
 	}
 	void MapleWorld::ProcessItemDrop(const ItemDropPacket& packet)
 	{
@@ -139,21 +156,5 @@ namespace sh::game
 		if (!core::IsValid(obj))
 			return;
 		obj->Destroy();
-	}
-	void MapleWorld::ProcessPlayerDespawn(const PlayerDespawnPacket& packet)
-	{
-		auto it = players.find(packet.playerUUID);
-		if (it == players.end())
-			return;
-
-		Player* player = it->second;
-		players.erase(it);
-
-		if (player->IsLocal())
-		{
-			SH_INFO("Bye");
-		}
-
-		player->gameObject.Destroy();
 	}
 }//namespace

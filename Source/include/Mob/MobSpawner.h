@@ -2,9 +2,10 @@
 #include "Export.h"
 #include "Mob.h"
 #include "MobEvents.hpp"
-#include "PacketEvent.hpp"
 #include "Packet/MobSpawnPacket.hpp"
 #include "Packet/PlayerJoinWorldPacket.hpp"
+
+#include "Network/PacketEvent.hpp"
 
 #include "Game/Component/Component.h"
 
@@ -23,7 +24,7 @@ namespace sh::game
 		SH_USER_API void Update() override;
 #if SH_SERVER
 		SH_USER_API void SpawnMob();
-		SH_USER_API void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const std::string ip, uint16_t port);
+		SH_USER_API void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet);
 #else
 		SH_USER_API void ProcessMobSpawn(const MobSpawnPacket& packet);
 #endif
@@ -40,6 +41,6 @@ namespace sh::game
 		std::queue<int> mobQueue;
 		float ms = 0.f;
 #endif
-		core::EventSubscriber<PacketEvent> packetSubscriber;
+		core::EventSubscriber<network::PacketEvent> packetSubscriber;
 	};
 }//namespace

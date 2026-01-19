@@ -16,7 +16,7 @@ namespace sh::game
 		// 이벤트들은 BeginUpdate전에 호출됨
 		packetEventSubscriber.SetCallback
 		(
-			[&](const PacketEvent& evt)
+			[&](const network::PacketEvent& evt)
 			{
 				if (evt.packet->GetId() == PlayerStatePacket::ID)
 				{
@@ -49,8 +49,6 @@ namespace sh::game
 	{
 		if (!core::IsValid(player))
 			return;
-
-		++tick;
 
 		if (player->IsLocal())
 		{
@@ -190,15 +188,12 @@ namespace sh::game
 			packet.inputX = xInput;
 			packet.bJump = bJump;
 			packet.seq = inputSeqCounter++;
-			packet.playerUUID = client->GetUser().GetUserUUID();
-			packet.timestamp = tick;
+			packet.user = client->GetUser().GetUserUUID();
 			packet.bProne = bProne;
 
 			lastSent = std::move(packet);
 
 			client->SendPacket(lastSent);
-
-			SH_INFO_FORMAT("send (tick:{})", tick);
 		}
 	}
 	void PlayerMovement2D::ProcessStatePacket(const PlayerStatePacket& packet)

@@ -20,7 +20,7 @@ namespace sh::game
 		auto Serialize() const -> core::Json
 		{
 			auto mainJson = network::Packet::Serialize();
-			mainJson["p"] = playerUUID;
+			mainJson["p"] = user;
 
 			return mainJson;
 		}
@@ -28,9 +28,9 @@ namespace sh::game
 		{
 			network::Packet::Deserialize(json);
 			if (json.contains("p"))
-				playerUUID = json["p"];
+				user = json["p"];
 		}
 	public:
-		std::array<uint32_t, 4> playerUUID;
+		std::array<uint32_t, 4> user;
 	};
 }//namespace

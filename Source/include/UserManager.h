@@ -9,12 +9,14 @@
 #include "Core/Memory/MemoryPool.hpp"
 #include "Core/EventBus.h"
 
+#include "Network/TcpSocket.h"
+
 #include <unordered_map>
 #include <list>
 #include <future>
 #include <cstdint>
-#include <mutex>
 #include <queue>
+#include <memory>
 namespace sh::game
 {
 	class PlayerJoinPacket;
@@ -25,15 +27,15 @@ namespace sh::game
 		SH_USER_API UserManager();
 		SH_USER_API ~UserManager();
 
-		SH_USER_API auto ProcessPlayerJoin(const PlayerJoinPacket& packet, const Endpoint& ep) -> bool;
-		SH_USER_API auto ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& ep) -> bool;
+		SH_USER_API auto ProcessPlayerJoinUdp(const PlayerJoinPacket& packet, const core::UUID& token, const Endpoint& ep) -> bool;
+		SH_USER_API auto ProcessPlayerJoinTcp(std::unique_ptr<network::TcpSocket>&& tcpSocket, const core::UUID& token, const Endpoint& ep) -> bool;
+		SH_USER_API auto ProcessPlayerLeave(const PlayerLeavePacket& packet) -> bool;
+		SH_USER_API auto ProcessPlayerLeave(User& user) -> bool;
 		SH_USER_API void KickUser(User& user);
-		SH_USER_API void KickUser(const Endpoint& ep);
 		SH_USER_API void KickUser(const core::UUID& userUUID);
 
-		SH_USER_API void Update();
+		SH_USER_API void Tick(float dt);
 
-		SH_USER_API auto GetUser(const Endpoint& ep) const -> User*;
 		SH_USER_API auto GetUser(const core::UUID& uuid) const -> User*;
 		SH_USER_API auto GetUsers() const -> const std::vector<User*>& { return users; }
 	private:
@@ -54,20 +56,21 @@ namespace sh::game
 		std::vector<User*> users;
 		using UserIdx = uint64_t;
 		std::unordered_map<core::UUID, UserIdx> userUUIDs;
-		std::unordered_map<Endpoint, UserIdx> userEndpoints;
+		std::unordered_map<Endpoint, core::UUID> userUdpEndpoints;
 
+		std::unordered_map<core::UUID, User::CreateInfo> pendingUsers;
 		struct PendingJoin
 		{
-			std::future<User*> future;
-			bool bLeave = false;
+			core::UUID userUUID;
+			int64_t id;
+			Inventory inventory;
 		};
-		std::unordered_map<Endpoint, PendingJoin> pendingJoin;
+		std::list<std::future<PendingJoin>> pendingJoins;
 		struct PendingInventory
 		{
 			core::UUID userUUID = core::UUID::GenerateEmptyUUID();
 			std::future<bool> future;
 		};
 		std::queue<PendingInventory> pendingInventory;
-		std::mutex poolMutex;
 	};
 }//namespace

@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 #include "../Export.h"
 #include "Network/Packet.h"
 
 #include "Core/Reflection/TypeTraits.hpp"
 
-#include <string>
+#include <array>
 namespace sh::game
 {
 	class HeartbeatPacket : public network::Packet
@@ -20,11 +20,16 @@ namespace sh::game
 		auto Serialize() const -> core::Json
 		{
 			auto mainJson = network::Packet::Serialize();
+			mainJson["user"] = user;
 			return mainJson;
 		}
 		void Deserialize(const core::Json& json)
 		{
 			network::Packet::Deserialize(json);
+			if (json.contains("user"))
+				user = json["user"];
 		}
+	public:
+		std::array<uint32_t, 4> user;
 	};
 }//namespace

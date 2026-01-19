@@ -1,15 +1,15 @@
 ﻿#pragma once
 #include "Export.h"
-#include "PacketEvent.hpp"
 #include "Player.h"
 #include "Item/Item.h"
 #include "Database.h"
 
 #include "Core/EventSubscriber.h"
+#include <Core/SContainer.hpp>
 
 #include "Game/Component/Component.h"
 
-#include <Core/SContainer.hpp>
+#include "Network/PacketEvent.hpp"
 
 #include <cstdint>
 namespace sh::game
@@ -31,7 +31,7 @@ namespace sh::game
 		void InsertItemToInventory(Item& item, Player& player);
 #endif
 	private:
-		core::EventSubscriber<PacketEvent> packetSubscriber;
+		core::EventSubscriber<network::PacketEvent> packetSubscriber;
 		Player* player = nullptr;
 #if SH_SERVER
 		core::SMap<uint64_t, Item*> hitItems;

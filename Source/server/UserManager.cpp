@@ -1,6 +1,8 @@
 ﻿#include "UserManager.h"
-#include "Packet/PlayerJoinPacket.hpp"
+#include "UserManager.h"
 #include "DBThread.h"
+#include "Packet/PlayerJoinPacket.hpp"
+#include "Packet/PlayerLeavePacket.hpp"
 
 #include "Core/ThreadPool.h"
 #include "Core/Logger.h"
@@ -28,89 +30,117 @@ namespace sh::game
 	}
 	UserManager::~UserManager()
 	{
-		for (auto& [ep, pending] : pendingJoin)
-			pending.future.get();
+		for (auto& future : pendingJoins)
+			future.get();
 		while (!pendingInventory.empty())
 		{
 			pendingInventory.front().future.get();
 			pendingInventory.pop();
 		}
 	}
-	SH_USER_API auto UserManager::ProcessPlayerJoin(const PlayerJoinPacket& packet, const Endpoint& ep) -> bool
+	SH_USER_API auto UserManager::ProcessPlayerJoinUdp(const PlayerJoinPacket& packet, const core::UUID& token, const Endpoint& ep) -> bool
 	{
-		if (pendingJoin.find(ep) != pendingJoin.end())
-			return false;
-
-		auto it = userEndpoints.find(ep);
-		if (it == userEndpoints.end())
 		{
-			SH_INFO_FORMAT("A player({}) has joined - {}:{}", packet.GetNickName(), ep.ip, ep.port);
+			auto it = userUUIDs.find(token);
+			if (it != userUUIDs.end())
+				return false;
+		}
 
-			auto future = DBThread::GetInstance()->AddTask(
-				[this, nickname = packet.GetNickName(), ep = ep, &db = DBThread::GetInstance()->GetDB()]() -> User*
-				{
-					auto result = db.Query(queryUserSQL, nickname);
-					int64_t userId = 0;
-					if (result.empty())
-					{
-						if (!db.Execute(insertUserSQL, nickname, ep.ip, ep.port))
-						{
-							SH_ERROR_FORMAT("Failed to insert into users: ({})", nickname);
-							return nullptr;
-						}
-						result = db.Query(queryUserSQL, nickname);
-						if (result.empty())
-							return nullptr;
-						userId = std::get<0>(result[0][0]);
-					}
-					else
-					{
-						userId = std::get<0>(result[0][0]);
-						if (!db.Execute(updateUserSQL, ep.ip, ep.port, userId))
-						{
-							SH_ERROR_FORMAT("Failed to update user: ({})", nickname);
-							return nullptr;
-						}
-					}
-					std::unique_lock<std::mutex> lock{ poolMutex };
-					User* user = userPool.Allocate();
-					lock.unlock();
+		auto it = userUdpEndpoints.find(ep);
+		if (it == userUdpEndpoints.end())
+		{
+			const std::string nickname = packet.GetNickName();
+			SH_INFO_FORMAT("A player({}) has joined - {}:{}", nickname, ep.ip, ep.port);
 
-					new (user) User{ userId, ep.ip, ep.port };
-					user->SetNickname(std::move(nickname));
-					user->SetInventory(LoadInventory(db, userId));
+			User::CreateInfo userInfo{};
+			userInfo.nickname = nickname;
+			userInfo.ip = ep.ip;
+			userInfo.port = ep.port;
+			userInfo.uuid = token;
 
-					return user;
-				}
-			);
-			pendingJoin[ep] = PendingJoin{ std::move(future), false };
+			auto& [pair, success] = pendingUsers.insert({ token, std::move(userInfo) });
+			if (!success)
+				return false;
+
+			userUdpEndpoints.insert({ ep, token });
 		}
 		else
 			return false;
 		return true;
 	}
 
-	SH_USER_API auto UserManager::ProcessPlayerLeave(const PlayerLeavePacket& packet, const Endpoint& ep) -> bool
+	SH_USER_API auto UserManager::ProcessPlayerJoinTcp(std::unique_ptr<network::TcpSocket>&& tcpSocket, const core::UUID& token, const Endpoint& ep) -> bool
 	{
-		if (auto it = pendingJoin.find(ep); it != pendingJoin.end())
-		{
-			it->second.bLeave = true;
-			return true;
-		}
-
-		auto it = userEndpoints.find(ep);
-		if (it == userEndpoints.end())
+		auto it = pendingUsers.find(token);
+		if (it == pendingUsers.end())
 			return false;
 
-		User* const userPtr = users[it->second];
-		UpdateInventoryDB(*userPtr);
+		auto& userInfo = it->second;
+		userInfo.tcpSocket = std::move(tcpSocket);
+
+		auto future = DBThread::GetInstance()->AddTask(
+			[this, &db = DBThread::GetInstance()->GetDB(), ep, token, nickname = userInfo.nickname]() -> PendingJoin
+			{
+				int64_t userId = 0;
+				PendingJoin pendingJoin{ core::UUID::GenerateEmptyUUID() };
+
+				auto result = db.Query(queryUserSQL, nickname);
+				if (result.empty())
+				{
+					if (!db.Execute(insertUserSQL, nickname, ep.ip, ep.port))
+					{
+						SH_ERROR_FORMAT("Failed to insert into users: ({})", nickname);
+						return pendingJoin;
+					}
+					result = db.Query(queryUserSQL, nickname);
+					if (result.empty())
+						return pendingJoin;
+					userId = std::get<0>(result[0][0]);
+				}
+				else
+				{
+					userId = std::get<0>(result[0][0]);
+					if (!db.Execute(updateUserSQL, ep.ip, ep.port, userId))
+					{
+						SH_ERROR_FORMAT("Failed to update user: ({})", nickname);
+						return pendingJoin;
+					}
+				}
+				pendingJoin.id = userId;
+				pendingJoin.userUUID = token;
+				pendingJoin.inventory = LoadInventory(db, userId);
+
+				return pendingJoin;
+			}
+		);
+		pendingJoins.push_back(std::move(future));
+		return true;
+	}
+
+	SH_USER_API auto UserManager::ProcessPlayerLeave(const PlayerLeavePacket& packet) -> bool
+	{
+		if (auto it = pendingUsers.find(packet.user); it != pendingUsers.end())
+		{
+			pendingUsers.erase(it);
+			return true;
+		}
+		User* const userPtr = GetUser(packet.user);
+		if (userPtr == nullptr)
+			return false;
+
+		return ProcessPlayerLeave(*userPtr);
+	}
+
+	SH_USER_API auto UserManager::ProcessPlayerLeave(User& user) -> bool
+	{
+		UpdateInventoryDB(user);
 
 		UserEvent evt{};
-		evt.user = userPtr;
+		evt.user = &user;
 		evt.type = UserEvent::Type::LeaveUser;
 		bus.Publish(evt);
 
-		EraseUser(*userPtr);
+		EraseUser(user);
 		return true;
 	}
 
@@ -126,22 +156,6 @@ namespace sh::game
 		bus.Publish(evt);
 
 		EraseUser(user);
-	}
-
-	SH_USER_API void UserManager::KickUser(const Endpoint& ep)
-	{
-		auto it = userEndpoints.find(ep);
-		if (it == userEndpoints.end())
-			return;
-
-		User* user = users[it->second];
-
-		UserEvent evt{};
-		evt.user = user;
-		evt.type = UserEvent::Type::KickUser;
-		bus.Publish(evt);
-
-		EraseUser(*user);
 	}
 
 	SH_USER_API void UserManager::KickUser(const core::UUID& userUUID)
@@ -160,47 +174,54 @@ namespace sh::game
 		EraseUser(*user);
 	}
 
-	SH_USER_API void UserManager::Update()
+	SH_USER_API void UserManager::Tick(float dt)
 	{
-		if (!pendingJoin.empty())
+		if (!pendingJoins.empty())
 		{
-			for (auto it = pendingJoin.begin(); it != pendingJoin.end();)
+			for (auto it = pendingJoins.begin(); it != pendingJoins.end();)
 			{
-				const Endpoint& ep = it->first;
-				std::future<User*>& future = it->second.future;
+				std::future<PendingJoin>& future = *it;
 				if (future.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready)
 				{
 					++it;
 					continue;
 				}
-				User* user = future.get();
-				if (user == nullptr)
+				PendingJoin pendingJoin = future.get();
+				const core::UUID& token = pendingJoin.userUUID;
+				if (token.IsEmpty()) // 실패
 				{
-					it = pendingJoin.erase(it);
+					it = pendingJoins.erase(it);
 					continue;
 				}
 
-				if (it->second.bLeave) // 들어오던 중 나감
+				auto pendingUsersIt = pendingUsers.find(token);
+				if (pendingUsersIt == pendingUsers.end())
 				{
-					user->~User();
-					std::lock_guard<std::mutex> lock{ poolMutex };
-					userPool.DeAllocate(user);
+					it = pendingJoins.erase(it);
+					continue;
 				}
-				else
-				{
-					UserIdx idx = users.size();
-					users.push_back(user);
 
-					userUUIDs.insert_or_assign(user->GetUserUUID(), idx);
-					userEndpoints.insert_or_assign(ep, idx);
+				User::CreateInfo& ci = pendingUsersIt->second;
+				ci.id = pendingJoin.id;
+				ci.uuid = token;
+				ci.inventory = std::move(pendingJoin.inventory);
 
-					UserEvent evt{};
-					evt.user = user;
-					evt.type = UserEvent::Type::JoinUser;
+				User* user = userPool.Allocate();
+				new (user) User(std::move(ci));
 
-					bus.Publish(evt);
-				}
-				it = pendingJoin.erase(it);
+				UserIdx idx = users.size();
+				users.push_back(user);
+
+				userUUIDs.insert_or_assign(user->GetUserUUID(), idx);
+
+				UserEvent evt{};
+				evt.user = user;
+				evt.type = UserEvent::Type::JoinUser;
+
+				bus.Publish(evt);
+
+				pendingUsers.erase(pendingUsersIt);
+				it = pendingJoins.erase(it);
 			}
 		}
 		while (!pendingInventory.empty())
@@ -217,18 +238,23 @@ namespace sh::game
 			if (bSuccess)
 				inven.ClearDirtySlots();
 		}
+
+		std::queue<User*> deadUser;
+		for (auto user : users)
+		{
+			user->Tick(dt);
+			if (user->GetHeartbeat() == 0)
+				deadUser.push(user);
+		}
+		while (!deadUser.empty())
+		{
+			User* user = deadUser.front();
+			deadUser.pop();
+
+			ProcessPlayerLeave(*user);
+		}
 	}
 
-	SH_USER_API auto UserManager::GetUser(const Endpoint& ep) const -> User*
-	{
-		auto it = userEndpoints.find(ep);
-		if (it == userEndpoints.end())
-			return nullptr;
-
-		UserIdx idx = it->second;
-
-		return users[idx];
-	}
 	SH_USER_API auto UserManager::GetUser(const core::UUID& uuid) const -> User*
 	{
 		auto it = userUUIDs.find(uuid);
@@ -244,11 +270,7 @@ namespace sh::game
 		auto itUUID = userUUIDs.find(user.GetUserUUID());
 		if (itUUID == userUUIDs.end())
 			return;
-		auto itEp = userEndpoints.find(Endpoint{ user.GetIp(), user.GetPort() });
-		if (itEp == userEndpoints.end())
-			return;
-		if (itUUID->second != itEp->second)
-			return;
+		userUdpEndpoints.erase(Endpoint{ user.GetIp(), user.GetPort() });
 
 		UserIdx idx = itUUID->second;
 		UserIdx last = users.size() - 1;
@@ -256,19 +278,16 @@ namespace sh::game
 		User* const userPtr = users[idx];
 
 		userUUIDs.erase(itUUID);
-		userEndpoints.erase(itEp);
 
 		if (idx != last)
 		{
 			User* lastUser = users[last];
 			users[idx] = lastUser;
 			userUUIDs[lastUser->GetUserUUID()] = idx;
-			userEndpoints[Endpoint{ lastUser->GetIp(), lastUser->GetPort() }] = idx;
 		}
 		users.pop_back();
 
 		userPtr->~User();
-		std::lock_guard<std::mutex> lock{ poolMutex };
 		userPool.DeAllocate(userPtr);
 	}
 	auto UserManager::LoadInventory(Database& db, uint64_t userId) const -> Inventory

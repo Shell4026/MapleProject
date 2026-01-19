@@ -10,7 +10,7 @@ namespace sh::game
 	{
 #if SH_SERVER
 		packetSubscriber.SetCallback(
-			[&](const PacketEvent& evt)
+			[&](const network::PacketEvent& evt)
 			{
 				if (evt.packet->GetId() == SkillUsingPacket::ID)
 				{
@@ -22,7 +22,7 @@ namespace sh::game
 		);
 #else
 		packetSubscriber.SetCallback(
-			[&](const PacketEvent& evt)
+			[&](const network::PacketEvent& evt)
 			{
 				if (evt.packet->GetId() == SkillStatePacket::ID)
 				{

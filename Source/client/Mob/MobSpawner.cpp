@@ -10,7 +10,7 @@ namespace sh::game
 		Component(owner)
 	{
 		packetSubscriber.SetCallback(
-			[&](const PacketEvent& evt)
+			[&](const network::PacketEvent& evt)
 			{
 				if (evt.packet->GetId() == MobSpawnPacket::ID)
 				{

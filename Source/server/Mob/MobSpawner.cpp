@@ -25,11 +25,11 @@ namespace sh::game
 			}
 		);
 		packetSubscriber.SetCallback(
-			[&](const PacketEvent& evt)
+			[&](const network::PacketEvent& evt)
 			{
 				if (evt.packet->GetId() == PlayerJoinWorldPacket::ID)
 				{
-					ProcessPlayerJoin(static_cast<const PlayerJoinWorldPacket&>(*evt.packet), evt.senderIp, evt.senderPort);
+					ProcessPlayerJoin(static_cast<const PlayerJoinWorldPacket&>(*evt.packet));
 				}
 			}
 		);
@@ -100,10 +100,12 @@ namespace sh::game
 			mob->BroadcastStatePacket();
 		}
 	}
-	SH_USER_API void MobSpawner::ProcessPlayerJoin(const PlayerJoinWorldPacket& packet, const std::string ip, uint16_t port)
+	SH_USER_API void MobSpawner::ProcessPlayerJoin(const PlayerJoinWorldPacket& packet)
 	{
 		if (world.GetUUID() != packet.worldUUID)
 			return;
+
+		const User* const userPtr = MapleServer::GetInstance()->GetUserManager().GetUser(packet.user);
 
 		for (int i = 0; i < spawnedMobs.size(); ++i)
 		{
@@ -114,7 +116,7 @@ namespace sh::game
 			spawnPacket.idx = i;
 			spawnPacket.mobUUID = mobs[i]->GetUUID();
 
-			MapleServer::GetInstance()->Send(spawnPacket, ip, port);
+			MapleServer::GetInstance()->Send(spawnPacket, userPtr->GetIp(), userPtr->GetPort());
 		}
 	}
 }//namespace
