@@ -208,9 +208,7 @@ namespace sh::game
 					if (user != nullptr)
 						user->IncreaseHeartbeat();
 				}
-				else if (message.packet->GetId() == PlayerLeavePacket::ID)
-					userManager.ProcessPlayerLeave(static_cast<PlayerLeavePacket&>(*message.packet));
-
+				
 				network::PacketEvent evt{ message.packet.get(), std::move(message.senderIp), port };
 				bus.Publish(evt);
 
@@ -238,6 +236,8 @@ namespace sh::game
 					pendingTcpSockets.erase(it);
 				}
 			}
+			else if (message.packet->GetId() == PlayerLeavePacket::ID)
+				userManager.ProcessPlayerLeave(static_cast<PlayerLeavePacket&>(*message.packet));
 
 			network::PacketEvent evt{ message.packet.get(), std::move(ip), port };
 			bus.Publish(evt);

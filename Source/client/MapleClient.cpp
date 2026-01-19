@@ -24,17 +24,19 @@ namespace sh::game
 		tcpMessageQueue = std::make_shared<network::MessageQueue>();
 		tcpSocket.SetReceiveQueue(tcpMessageQueue);
 	}
+	MapleClient::~MapleClient()
+	{
+		tcpSocket.Close();
+		if (tcpThread.joinable())
+			tcpThread.join();
+	}
 	SH_USER_API void MapleClient::OnDestroy()
 	{
 		PlayerLeavePacket packet{};
 		packet.user = user.GetUserUUID();
 
-		tcpSocket.Send(packet);
+		tcpSocket.SendBlocking(packet);
 		Super::OnDestroy();
-
-		tcpSocket.Close();
-		if (tcpThread.joinable())
-			tcpThread.join();
 	}
 	SH_USER_API void MapleClient::Awake()
 	{

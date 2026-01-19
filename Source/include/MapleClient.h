@@ -19,6 +19,7 @@ namespace sh::game
 		COMPONENT(MapleClient, "user")
 	public:
 		SH_USER_API MapleClient(GameObject& owner);
+		SH_USER_API ~MapleClient();
 
 		SH_USER_API void OnDestroy() override;
 		SH_USER_API void Awake() override;
