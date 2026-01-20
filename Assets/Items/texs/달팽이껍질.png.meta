@@ -1,9 +1,9 @@
 {
-    "metaHash": 18192105901893344156,
+    "metaHash": 6245185348092206993,
     "name": "달팽이껍질",
     "obj": {
         "Texture": {
-            "aniso": 1,
+            "aniso": 0,
             "bGenerateMipmap": false,
             "bSRGB": true,
             "filtering": 0
