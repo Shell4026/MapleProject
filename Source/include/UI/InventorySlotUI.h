@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
-#include "UI/UI.h"
+#include "UI/UIRect.h"
 #include "UI/NumberUI.h"
 
 #include "Core/Observer.hpp"
@@ -11,20 +11,18 @@
 #include <string>
 namespace sh::game
 {
-	class InventorySlotUI : public Component
+	class InventorySlotUI : public UIRect
 	{
 		COMPONENT(InventorySlotUI, "user")
 	public:
 		SH_USER_API InventorySlotUI(GameObject& owner);
 
-		SH_USER_API void BeginUpdate() override;
+		SH_USER_API void OnClick() override;
 
 		SH_USER_API void SetIndex(int idx) { this->idx = idx; }
-
+\
 		SH_USER_API auto GetRenderer() const -> MeshRenderer* { return renderer; }
 		SH_USER_API auto GetNumberUI() const -> NumberUI* { return numberUI; }
-	private:
-		void CheckClick();
 	public:
 		core::Observer<false, int> onClick;
 	private:

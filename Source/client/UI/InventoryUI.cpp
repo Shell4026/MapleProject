@@ -4,11 +4,13 @@
 #include "Packet/InventorySlotSwapPacket.hpp"
 
 #include "Game/GameObject.h"
+#include "Game/Input.h"
 
+#include <queue>
 namespace sh::game
 {
 	InventoryUI::InventoryUI(GameObject& owner) :
-		UI(owner)
+		UIRect(owner)
 	{
 		onClickListener.SetCallback(
 			[this](int idx)
@@ -48,9 +50,70 @@ namespace sh::game
 	{
 		//RenderInventory();
 	}
+	SH_USER_API void InventoryUI::BeginUpdate()
+	{
+		HitTest();
+	}
 	SH_USER_API void InventoryUI::Update()
 	{
+		Dragging();
 		RenderInventory();
+	}
+	SH_USER_API void InventoryUI::OnClick()
+	{
+		if (!bDragging && Input::GetMousePressed(Input::MouseType::Left))
+		{
+			clickedPos.x = Input::mousePosition.x;
+			clickedPos.y = Input::mousePosition.y;
+			lastPos = gameObject.transform->GetWorldPosition();
+			bDragging = true;
+		}
+		if (bDragging && Input::GetMouseReleased(Input::MouseType::Left))
+		{
+			clickedPos.x = Input::mousePosition.x;
+			clickedPos.y = Input::mousePosition.y;
+			bDragging = false;
+		}
+	}
+	void InventoryUI::HitTest()
+	{
+		if (!CheckMouseHit())
+			return;
+
+		std::queue<Transform*> bfs;
+
+		bfs.push(gameObject.transform);
+		UIRect* lastRect = nullptr;
+		while (!bfs.empty())
+		{
+			Transform* cur = bfs.front();
+			bfs.pop();
+			GameObject& obj = cur->gameObject;
+
+			bool bHitSuccess = true;
+			for (auto component : obj.GetComponents())
+			{
+				UIRect* rect = core::reflection::Cast<UIRect>(component);
+				if (rect != nullptr)
+				{
+					bHitSuccess = rect->CheckMouseHit();
+					if (bHitSuccess)
+					{
+						lastRect = rect;
+						break;
+					}
+				}
+			}
+			if (!bHitSuccess)
+				continue;
+			for (auto child : cur->GetChildren())
+				bfs.push(child);
+		}
+
+		if (lastRect == nullptr)
+			OnClick();
+		else
+			lastRect->OnClick();
 	}
 	void InventoryUI::RenderInventory()
 	{
@@ -98,5 +161,17 @@ namespace sh::game
 				}
 			}
 		}
+	}
+	void InventoryUI::Dragging()
+	{
+		if (!bDragging)
+			return;
+
+		glm::vec2 delta = Input::mousePosition - glm::vec2{ clickedPos };
+		delta *= 0.01f;
+		auto pos = gameObject.transform->GetWorldPosition();
+		pos.x = lastPos.x + delta.x;
+		pos.y = lastPos.y - delta.y; // 화면 좌표와 월드 좌표가 반전임
+		gameObject.transform->SetWorldPosition(pos);
 	}
 }//namespace
