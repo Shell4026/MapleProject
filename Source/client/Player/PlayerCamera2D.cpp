@@ -12,6 +12,7 @@ namespace sh::game
 	SH_USER_API void PlayerCamera2D::Start()
 	{
 		world.renderer.GetWindow().SetSize(1366, 768);
+		world.SetMainCamera(targetCamera);
 
 		if (core::IsValid(player))
 		{

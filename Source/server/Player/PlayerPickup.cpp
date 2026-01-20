@@ -1,8 +1,9 @@
 ﻿#include "Player/PlayerPickup.h"
-#include "Packet/KeyPacket.hpp"
 #include "MapleServer.h"
 #include "CollisionTag.hpp"
 #include "MapleWorld.h"
+#include "Packet/KeyPacket.hpp"
+#include "Packet/InventorySyncPacket.hpp"
 
 #include "Game/GameObject.h"
 #include "Game/Component/Collider.h"
@@ -90,11 +91,16 @@ namespace sh::game
 	}
 	void PlayerPickup::InsertItemToInventory(Item& item, Player& player)
 	{
-		User* user = MapleServer::GetInstance()->GetUserManager().GetUser(player.GetUserUUID());
-		if (user == nullptr)
+		User* userPtr = MapleServer::GetInstance()->GetUserManager().GetUser(player.GetUserUUID());
+		if (userPtr == nullptr)
 			return;
 
-		if (user->GetInventory().AddItem(item.itemId, 1))
+		if (userPtr->GetInventory().AddItem(item.itemId, 1))
+		{
 			player.GetCurrentWorld()->DestroyItem(item);
+			InventorySyncPacket packet{};
+			packet.inventoryJson = userPtr->GetInventory().SerializeDirtySlots();
+			userPtr->GetTcpSocket()->Send(packet);
+		}
 	}
 }//namespace

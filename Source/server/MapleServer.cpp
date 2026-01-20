@@ -10,6 +10,7 @@
 #include "Packet/HeartbeatPacket.hpp"
 #include "Packet/InventorySyncPacket.hpp"
 #include "Packet/PlayerTokenPacket.hpp"
+#include "Packet/InventorySlotSwapPacket.hpp"
 
 #include "Core/Util.h"
 #include "Core/ThreadPool.h"
@@ -238,6 +239,20 @@ namespace sh::game
 			}
 			else if (message.packet->GetId() == PlayerLeavePacket::ID)
 				userManager.ProcessPlayerLeave(static_cast<PlayerLeavePacket&>(*message.packet));
+			else if (message.packet->GetId() == InventorySlotSwapPacket::ID)
+			{
+				auto packet = static_cast<const InventorySlotSwapPacket*>(message.packet.get());
+				auto userPtr = userManager.GetUser(packet->user);
+				if (userPtr != nullptr)
+				{
+					if (packet->slotA != -1 && packet->slotB != -1)
+						userPtr->GetInventory().SwapSlot(packet->slotA, packet->slotB);
+
+					InventorySyncPacket syncPacket{};
+					syncPacket.inventoryJson = userPtr->GetInventory().SerializeDirtySlots();
+					userPtr->GetTcpSocket()->Send(syncPacket);
+				}
+			}
 
 			network::PacketEvent evt{ message.packet.get(), std::move(ip), port };
 			bus.Publish(evt);

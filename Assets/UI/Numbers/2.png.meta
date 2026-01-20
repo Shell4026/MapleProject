@@ -1,0 +1,19 @@
+{
+    "metaHash": 8039008260046254502,
+    "name": "2",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "2",
+        "type": "Texture",
+        "uuid": "aa4044e7f9f71a35a757d0f61352091e",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "aa4044e7f9f71a35a757d0f61352091e",
+    "version": 1
+}
