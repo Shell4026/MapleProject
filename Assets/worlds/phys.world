@@ -93,8 +93,8 @@
             "GameObject": {
                 "bEditorOnly": false,
                 "bEnable": true,
-                "hideInspector": false,
-                "transform": "d748954d136a4d866f38b70177925d98"
+                "bStatic": false,
+                "hideInspector": false
             },
             "name": "cam",
             "type": "GameObject",
@@ -194,8 +194,8 @@
             "GameObject": {
                 "bEditorOnly": false,
                 "bEnable": true,
-                "hideInspector": false,
-                "transform": "664952e9ab84ddc9a1031bd620f17f6b"
+                "bStatic": false,
+                "hideInspector": false
             },
             "name": "floor",
             "type": "GameObject",
@@ -292,8 +292,8 @@
             "GameObject": {
                 "bEditorOnly": false,
                 "bEnable": true,
-                "hideInspector": false,
-                "transform": "859ea5e5cd9e7cee18fc04e4b971245c"
+                "bStatic": false,
+                "hideInspector": false
             },
             "name": "Capsule0",
             "type": "GameObject",
@@ -385,27 +385,13 @@
                     "type": "RigidBody",
                     "uuid": "a15aa1a133efd18225653a6bd146d869",
                     "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Test": {
-                        "num": 10
-                    },
-                    "name": "user/Test",
-                    "type": "Test",
-                    "uuid": "d8fcceb92d9decb04d68e213c25c70f3",
-                    "version": 1
                 }
             ],
             "GameObject": {
                 "bEditorOnly": false,
                 "bEnable": true,
-                "hideInspector": false,
-                "transform": "e87ccdd7aa924b68c42da27a976127c7"
+                "bStatic": false,
+                "hideInspector": false
             },
             "name": "Capsule1",
             "type": "GameObject",
@@ -501,8 +487,8 @@
             "GameObject": {
                 "bEditorOnly": false,
                 "bEnable": true,
-                "hideInspector": false,
-                "transform": "f03d10fdba26896b70c5862ab29995b3"
+                "bStatic": false,
+                "hideInspector": false
             },
             "name": "Sphere",
             "type": "GameObject",
@@ -602,8 +588,8 @@
             "GameObject": {
                 "bEditorOnly": false,
                 "bEnable": true,
-                "hideInspector": false,
-                "transform": "215d8fc89c1d12c68b10588bef10efc9"
+                "bStatic": false,
+                "hideInspector": false
             },
             "name": "Trigger",
             "type": "GameObject",
