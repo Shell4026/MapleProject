@@ -5,6 +5,8 @@
 
 #include "Game/GameObject.h"
 #include "Game/Input.h"
+#include "Game/ImGUImpl.h"
+#include "Game/Component/Camera.h"
 
 #include <queue>
 namespace sh::game
@@ -12,10 +14,10 @@ namespace sh::game
 	InventoryUI::InventoryUI(GameObject& owner) :
 		UIRect(owner)
 	{
+		ImGui::SetCurrentContext(world.GetUiContext().GetContext());
 		onClickListener.SetCallback(
 			[this](int idx)
 			{
-				SH_INFO_FORMAT("click: {}", idx);
 				User& user = MapleClient::GetInstance()->GetUser();
 				auto& inventory = user.GetInventory();
 				if (selectedSlotIdx == idx)
@@ -40,6 +42,7 @@ namespace sh::game
 	}
 	SH_USER_API void InventoryUI::Awake()
 	{
+		SetPriority(-3);
 		for (int i = 0; i < slots.size(); ++i)
 		{
 			slots[i]->SetIndex(i);
@@ -58,6 +61,7 @@ namespace sh::game
 	{
 		Dragging();
 		RenderInventory();
+		RenderDropWindow();
 	}
 	SH_USER_API void InventoryUI::OnClick()
 	{
@@ -78,7 +82,17 @@ namespace sh::game
 	void InventoryUI::HitTest()
 	{
 		if (!CheckMouseHit())
+		{
+			if (Input::GetMouseReleased(Input::MouseType::Left))
+			{
+				if (selectedSlotIdx != -1)
+				{
+
+				}
+				selectedSlotIdx = -1;
+			}
 			return;
+		}
 
 		std::queue<Transform*> bfs;
 
@@ -173,5 +187,19 @@ namespace sh::game
 		pos.x = lastPos.x + delta.x;
 		pos.y = lastPos.y - delta.y; // 화면 좌표와 월드 좌표가 반전임
 		gameObject.transform->SetWorldPosition(pos);
+	}
+	void InventoryUI::RenderDropWindow()
+	{
+		if (!bShowDropWindow)
+			return;
+		const float windowWidth = world.renderer.GetWidth();
+		const float windowHeight = world.renderer.GetHeight();
+		const float width = 500;
+		const float height = 300;
+
+		ImGui::SetNextWindowPos({ windowWidth / 2 - width / 2, windowHeight / 2 - height / 2 }, ImGuiCond_::ImGuiCond_Appearing);
+		ImGui::SetNextWindowSize({ width, height }, ImGuiCond_::ImGuiCond_Appearing);
+		ImGui::Begin("DropWindow", nullptr, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoMove);
+		ImGui::End();
 	}
 }//namespace

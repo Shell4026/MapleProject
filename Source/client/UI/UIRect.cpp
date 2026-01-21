@@ -8,7 +8,7 @@
 namespace sh::game
 {
 	UIRect::UIRect(GameObject& owner) :
-		Component(owner)
+		UI(owner)
 	{
 	}
 	SH_USER_API auto UIRect::CheckMouseHit() const -> bool
@@ -25,7 +25,12 @@ namespace sh::game
 			SH_ERROR("Main camera is nullptr!");
 			return false;
 		}
-		const auto worldMousePos = camera->ScreenPointToRayOrtho(Input::mousePosition).origin;
+		glm::vec2 worldMousePos = Input::mousePosition;
+		worldMousePos.y = world.renderer.GetHeight() - worldMousePos.y;
+		worldMousePos /= 100.f;
+
+		//SH_INFO_FORMAT("mouseX: {}, mouseY: {}", worldMousePos.x, worldMousePos.y);
+		//SH_INFO_FORMAT("minY: {}, maxY: {}", minY, maxY);
 		if (minX <= worldMousePos.x && worldMousePos.x <= maxX &&
 			minY <= worldMousePos.y && worldMousePos.y <= maxY)
 		{

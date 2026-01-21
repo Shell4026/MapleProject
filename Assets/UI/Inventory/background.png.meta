@@ -1,12 +1,12 @@
 {
-    "metaHash": 3418117918800838981,
+    "metaHash": 6168854656503926584,
     "name": "background",
     "obj": {
         "Texture": {
             "aniso": 0,
             "bGenerateMipmap": false,
             "bSRGB": true,
-            "filtering": 1
+            "filtering": 0
         },
         "name": "background",
         "type": "Texture",
