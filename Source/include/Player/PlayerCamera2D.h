@@ -13,8 +13,9 @@ namespace sh::game
 	public:
 		SH_USER_API PlayerCamera2D(GameObject& owner);
 
+		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
-		SH_USER_API void LateUpdate() override;
+		SH_USER_API void Update() override;
 
 		SH_USER_API void SetPlayer(GameObject& player);
 	private:
@@ -35,6 +36,10 @@ namespace sh::game
 		PROPERTY(camlimitMax)
 		Vec2 camlimitMax;
 
+		float lastWidth = 0.f;
+		float lastHeight = 0.f;
+		float cameraRawX = 0.f;
+		float cameraRawY = 0.f;
 		float centerX = 0.f;
 		float centerY = 0.f;
 	};

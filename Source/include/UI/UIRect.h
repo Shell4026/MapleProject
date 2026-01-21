@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
+#include "UI/UI.h"
 
 #include "Game/Component/Component.h"
 #include "Game/Vector.h"
@@ -7,7 +8,7 @@
 #include <vector>
 namespace sh::game
 {
-	class UIRect : public Component
+	class UIRect : public UI
 	{
 		SCLASS(UIRect)
 	public:

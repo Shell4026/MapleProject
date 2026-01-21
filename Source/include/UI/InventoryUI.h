@@ -26,6 +26,7 @@ namespace sh::game
 		void HitTest();
 		void RenderInventory();
 		void Dragging();
+		void RenderDropWindow();
 	private:
 		PROPERTY(slots)
 		std::vector<InventorySlotUI*> slots;
@@ -38,5 +39,6 @@ namespace sh::game
 		int selectedSlotIdx = -1;
 
 		bool bDragging = false;
+		bool bShowDropWindow = false;
 	};
 }//namespace

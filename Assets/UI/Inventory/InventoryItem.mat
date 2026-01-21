@@ -3,13 +3,11 @@
         []
     ],
     "Material": {
-        "shader": "ec48cf37dcf5f93b6837f5b4a54240ab"
+        "shader": "48fe865f77df566cc8e1c4737b434b85"
     },
     "MaterialPropertyBlock": {
         "scalar": null,
-        "textures": {
-            "tex": "c287519505364a412bda4e76cf0e14a3"
-        },
+        "textures": null,
         "vector": {
             "color": [
                 1.0,
@@ -19,8 +17,8 @@
             ]
         }
     },
-    "name": "InventoryBackground",
+    "name": "InventoryItem",
     "type": "Material",
-    "uuid": "b3063b4ec8203a20dcf0481cd81b9991",
+    "uuid": "2adbf7506785574b380f351bddad5294",
     "version": 1
 }
