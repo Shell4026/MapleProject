@@ -17,6 +17,8 @@ namespace sh::game
 	public:
 		SH_USER_API InventorySlotUI(GameObject& owner);
 
+		SH_USER_API void BeginUpdate() override;
+
 		SH_USER_API void OnClick() override;
 
 		SH_USER_API void SetIndex(int idx) { this->idx = idx; }

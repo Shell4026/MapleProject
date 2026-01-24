@@ -11,6 +11,10 @@ namespace sh::game
 		UI(owner)
 	{
 	}
+	SH_USER_API void UIRect::BeginUpdate()
+	{
+		HitTest();
+	}
 	SH_USER_API auto UIRect::CheckMouseHit() const -> bool
 	{
 		const auto& pos = gameObject.transform->GetWorldPosition();
@@ -37,5 +41,45 @@ namespace sh::game
 			return true;
 		}
 		return false;
+	}
+	void UIRect::HitTest()
+	{
+		if (!CheckMouseHit())
+			return;
+
+		std::queue<Transform*> bfs;
+
+		bfs.push(gameObject.transform);
+		UIRect* lastRect = nullptr;
+		while (!bfs.empty())
+		{
+			Transform* cur = bfs.front();
+			bfs.pop();
+			GameObject& obj = cur->gameObject;
+
+			bool bHitSuccess = true;
+			for (auto component : obj.GetComponents())
+			{
+				UIRect* rect = core::reflection::Cast<UIRect>(component);
+				if (rect != nullptr)
+				{
+					bHitSuccess = rect->CheckMouseHit();
+					if (bHitSuccess)
+					{
+						lastRect = rect;
+						break;
+					}
+				}
+			}
+			if (!bHitSuccess)
+				continue;
+			for (auto child : cur->GetChildren())
+				bfs.push(child);
+		}
+
+		if (lastRect == nullptr)
+			OnClick();
+		else
+			lastRect->OnClick();
 	}
 }//namespace

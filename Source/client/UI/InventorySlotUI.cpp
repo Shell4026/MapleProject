@@ -12,9 +12,16 @@ namespace sh::game
 		UIRect(owner)
 	{
 	}
+	SH_USER_API void InventorySlotUI::BeginUpdate()
+	{
+		// Inventory에서 처리하게
+	}
 	SH_USER_API void InventorySlotUI::OnClick()
 	{
 		if (Input::GetMouseReleased(Input::MouseType::Left))
+		{
+			SH_INFO("click!");
 			onClick.Notify(idx);
+		}
 	}
 }//namespace

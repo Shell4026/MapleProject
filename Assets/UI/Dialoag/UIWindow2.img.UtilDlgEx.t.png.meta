@@ -1,0 +1,19 @@
+{
+    "metaHash": 11307922467858737425,
+    "name": "UIWindow2.img.UtilDlgEx.t",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "UIWindow2.img.UtilDlgEx.t",
+        "type": "Texture",
+        "uuid": "5f74941220b9592173f6c9a62b6af9dc",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "5f74941220b9592173f6c9a62b6af9dc",
+    "version": 1
+}

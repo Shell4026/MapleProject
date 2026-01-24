@@ -49,14 +49,6 @@ namespace sh::game
 			slots[i]->onClick.Register(onClickListener);
 		}
 	}
-	SH_USER_API void InventoryUI::OnEnable()
-	{
-		//RenderInventory();
-	}
-	SH_USER_API void InventoryUI::BeginUpdate()
-	{
-		HitTest();
-	}
 	SH_USER_API void InventoryUI::Update()
 	{
 		Dragging();
@@ -78,57 +70,7 @@ namespace sh::game
 			clickedPos.y = Input::mousePosition.y;
 			bDragging = false;
 		}
-	}
-	void InventoryUI::HitTest()
-	{
-		if (!CheckMouseHit())
-		{
-			if (Input::GetMouseReleased(Input::MouseType::Left))
-			{
-				if (selectedSlotIdx != -1)
-				{
-
-				}
-				selectedSlotIdx = -1;
-			}
-			return;
-		}
-
-		std::queue<Transform*> bfs;
-
-		bfs.push(gameObject.transform);
-		UIRect* lastRect = nullptr;
-		while (!bfs.empty())
-		{
-			Transform* cur = bfs.front();
-			bfs.pop();
-			GameObject& obj = cur->gameObject;
-
-			bool bHitSuccess = true;
-			for (auto component : obj.GetComponents())
-			{
-				UIRect* rect = core::reflection::Cast<UIRect>(component);
-				if (rect != nullptr)
-				{
-					bHitSuccess = rect->CheckMouseHit();
-					if (bHitSuccess)
-					{
-						lastRect = rect;
-						break;
-					}
-				}
-			}
-			if (!bHitSuccess)
-				continue;
-			for (auto child : cur->GetChildren())
-				bfs.push(child);
-		}
-
-		if (lastRect == nullptr)
-			OnClick();
-		else
-			lastRect->OnClick();
-	}
+	}	
 	void InventoryUI::RenderInventory()
 	{
 		User& user = MapleClient::GetInstance()->GetUser();

@@ -17,7 +17,7 @@
             ]
         }
     },
-    "name": "InventoryItem",
+    "name": "UITransparentLocal",
     "type": "Material",
     "uuid": "2adbf7506785574b380f351bddad5294",
     "version": 1
