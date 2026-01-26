@@ -10,8 +10,8 @@
 
 #include "Core/SContainer.hpp"
 
-#include "Game/Component/NetworkComponent.h"
-#include "Game/Component/MeshRenderer.h"
+#include "Game/Component/Component.h"
+#include "Game/Component/Render/MeshRenderer.h"
 #include "Game/Input.h"
 
 #include <random>
@@ -20,7 +20,7 @@ namespace sh::game
 {
 	class SkillStatePacket;
 
-	class Skill : public NetworkComponent
+	class Skill : public Component
 	{
 		COMPONENT(Skill, "user")
 	public:

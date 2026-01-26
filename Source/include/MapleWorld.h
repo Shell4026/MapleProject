@@ -12,7 +12,7 @@
 
 #include "Network/PacketEvent.hpp"
 
-#include "Game/Component/NetworkComponent.h"
+#include "Game/Component/Component.h"
 #include "Game/Component/Transform.h"
 #include "Game/Prefab.h"
 
@@ -30,7 +30,7 @@ namespace sh::game
 	class ItemDespawnPacket;
 
 	/// @brief 맵의 단위
-	class MapleWorld : public NetworkComponent
+	class MapleWorld : public Component
 	{
 		COMPONENT(MapleWorld, "user")
 	public:

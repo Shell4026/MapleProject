@@ -9,7 +9,7 @@
 #include "Core/EngineThread.h"
 
 #include "Game/Component/Component.h"
-#include "Game/Component/UdpServer.h"
+#include "Game/Component/Network/UdpServer.h"
 #include "Game/WorldEvents.hpp"
 #include "Game/World.h"
 

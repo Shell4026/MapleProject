@@ -3,7 +3,7 @@
 #include "Export.h"
 #include "User.h"
 
-#include "Game/Component/UdpClient.h"
+#include "Game/Component/Network/UdpClient.h"
 
 #include "Network/TcpSocket.h"
 #include "Network/MessageQueue.h"

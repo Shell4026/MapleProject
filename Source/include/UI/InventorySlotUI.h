@@ -6,7 +6,7 @@
 #include "Core/Observer.hpp"
 
 #include "Game/Component/Component.h"
-#include "Game/Component/MeshRenderer.h"
+#include "Game/Component/Render/MeshRenderer.h"
 
 #include <string>
 namespace sh::game

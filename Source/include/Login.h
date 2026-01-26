@@ -3,12 +3,12 @@
 #if !SH_SERVER
 #include "MapleClient.h"
 
-#include "Game/Component/NetworkComponent.h"
+#include "Game/Component/Component.h"
 
 #include <string>
 namespace sh::game
 {
-	class Login : public NetworkComponent
+	class Login : public Component
 	{
 		COMPONENT(Login, "user")
 	public:

@@ -6,7 +6,7 @@
 namespace sh::game
 {
 	Player::Player(GameObject& owner) :
-		NetworkComponent(owner), userUUID(core::UUID::GenerateEmptyUUID())
+		Component(owner), userUUID(core::UUID::GenerateEmptyUUID())
 	{
 	}
 	SH_USER_API void Player::SetUserUUID(const core::UUID& uuid)

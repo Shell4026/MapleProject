@@ -17,8 +17,8 @@
 
 #include "Game/GameObject.h"
 #include "Game/GameManager.h"
-#include "Game/Component/MeshRenderer.h"
-#include "Game/Component/Camera.h"
+#include "Game/Component/Render/MeshRenderer.h"
+#include "Game/Component/Render/Camera.h"
 
 #include "Network/StringPacket.h"
 #include "Network/PacketEvent.hpp"

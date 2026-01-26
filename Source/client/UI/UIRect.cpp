@@ -2,7 +2,7 @@
 
 #include "Game/GameObject.h"
 #include "Game/Input.h"
-#include "Game/Component/Camera.h"
+#include "Game/Component/Render/Camera.h"
 
 #include <stack>
 namespace sh::game

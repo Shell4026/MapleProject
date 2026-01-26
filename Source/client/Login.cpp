@@ -10,7 +10,7 @@
 namespace sh::game
 {
 	Login::Login(GameObject& owner) :
-		NetworkComponent(owner)
+		Component(owner)
 	{
 		ImGui::SetCurrentContext(world.GetUiContext().GetContext());
 	}

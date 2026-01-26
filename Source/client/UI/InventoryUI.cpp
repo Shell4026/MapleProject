@@ -6,7 +6,6 @@
 #include "Game/GameObject.h"
 #include "Game/Input.h"
 #include "Game/ImGUImpl.h"
-#include "Game/Component/Camera.h"
 
 #include <queue>
 namespace sh::game

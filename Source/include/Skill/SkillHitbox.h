@@ -2,7 +2,7 @@
 #include "Export.h"
 
 #include "Game/Component/Component.h"
-#include "Game/Component/RigidBody.h"
+#include "Game/Component/Phys/RigidBody.h"
 #include "Game/Vector.h"
 
 namespace sh::game

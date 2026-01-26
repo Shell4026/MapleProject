@@ -1,8 +1,8 @@
 ﻿#include "Skill/SkillHitbox.h"
 #include "CollisionTag.hpp"
 
-#include "Game/Component/Collider.h"
-#include "Game/Component/RigidBody.h"
+#include "Game/Component/Phys/Collider.h"
+#include "Game/Component/Phys/RigidBody.h"
 namespace sh::game
 {
 	SkillHitbox::SkillHitbox(GameObject& owner) :

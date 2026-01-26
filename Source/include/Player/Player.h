@@ -1,12 +1,12 @@
 ﻿#pragma once
 #include "Export.h"
 
-#include "Game/Component/NetworkComponent.h"
+#include "Game/Component/Component.h"
 
 namespace sh::game
 {
 	class MapleWorld;
-	class Player : public NetworkComponent
+	class Player : public Component
 	{
 		COMPONENT(Player, "user")
 	public:

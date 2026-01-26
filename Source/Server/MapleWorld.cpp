@@ -17,7 +17,7 @@ namespace sh::game
 	std::unordered_map<core::UUID, MapleWorld*> MapleWorld::mapleWorlds;
 
 	MapleWorld::MapleWorld(GameObject& owner) :
-		NetworkComponent(owner)
+		Component(owner)
 	{
 		packetEventSubscriber.SetCallback
 		(

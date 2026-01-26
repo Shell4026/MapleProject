@@ -5,7 +5,7 @@
 
 #include "Game/Component/Transform.h"
 #include "Game/Component/Component.h"
-#include "Game/Component/MeshRenderer.h"
+#include "Game/Component/Render/MeshRenderer.h"
 #include "Game/Vector.h"
 
 #include "Render/Texture.h"

@@ -6,7 +6,7 @@
 #include "Skill/SkillHitbox.h"
 
 #include "Game/GameObject.h"
-#include "Game/Component/Collider.h"
+#include "Game/Component/Phys/Collider.h"
 namespace sh::game
 {
 	MobHitbox::MobHitbox(GameObject& owner) :

@@ -17,15 +17,15 @@
 #include "Core/EventSubscriber.h"
 #include "Core/EventBus.h"
 
-#include "Game/Component/NetworkComponent.h"
-#include "Game/Component/RigidBody.h"
+#include "Game/Component/Component.h"
+#include "Game/Component/Phys/RigidBody.h"
 
 namespace sh::game
 {
     class MobStatePacket;
     class ItemDropPacket;
 
-    class Mob : public NetworkComponent
+    class Mob : public Component
     {
         COMPONENT(Mob, "user")
     public:

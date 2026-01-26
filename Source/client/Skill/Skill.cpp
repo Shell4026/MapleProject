@@ -12,7 +12,7 @@
 namespace sh::game
 {
 	Skill::Skill(GameObject& owner) :
-		NetworkComponent(owner)
+		Component(owner)
 	{
 	}
 	SH_USER_API void Skill::Awake()

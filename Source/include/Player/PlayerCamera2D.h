@@ -3,7 +3,7 @@
 #include "Export.h"
 
 #include "Game/Component/Component.h"
-#include "Game/Component/Camera.h"
+#include "Game/Component/Render/Camera.h"
 
 namespace sh::game
 {

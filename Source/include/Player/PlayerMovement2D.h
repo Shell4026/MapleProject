@@ -17,7 +17,7 @@
 #include "Network/PacketEvent.hpp"
 
 #include "Game/Component/Component.h"
-#include "Game/Component/RigidBody.h"
+#include "Game/Component/Phys/RigidBody.h"
 
 #include <deque>
 

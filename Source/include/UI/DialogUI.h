@@ -7,7 +7,7 @@
 #include "Render/Texture.h"
 
 #include "Game/Vector.h"
-#include "Game/Component/MeshRenderer.h"
+#include "Game/Component/Render/MeshRenderer.h"
 
 #include <vector>
 namespace sh::game

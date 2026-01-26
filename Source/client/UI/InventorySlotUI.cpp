@@ -4,7 +4,6 @@
 
 #include "Game/GameObject.h"
 #include "Game/Input.h"
-#include "Game/Component/Camera.h"
 
 namespace sh::game
 {
@@ -20,7 +19,6 @@ namespace sh::game
 	{
 		if (Input::GetMouseReleased(Input::MouseType::Left))
 		{
-			SH_INFO("click!");
 			onClick.Notify(idx);
 		}
 	}

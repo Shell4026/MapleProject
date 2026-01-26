@@ -13,7 +13,7 @@
 namespace sh::game
 {
     Mob::Mob(GameObject& owner) : 
-        NetworkComponent(owner)
+        Component(owner)
     {
         packetSubscriber.SetCallback(
             [&](const network::PacketEvent& evt)

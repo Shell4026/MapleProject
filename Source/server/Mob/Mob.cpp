@@ -12,7 +12,7 @@
 namespace sh::game
 {
     Mob::Mob(GameObject& owner) :
-        NetworkComponent(owner)
+        Component(owner)
     {
     }
 

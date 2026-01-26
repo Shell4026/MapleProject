@@ -6,7 +6,7 @@
 #include "Packet/InventorySyncPacket.hpp"
 
 #include "Game/GameObject.h"
-#include "Game/Component/Collider.h"
+#include "Game/Component/Phys/Collider.h"
 #include "Game/Input.h"
 namespace sh::game
 {

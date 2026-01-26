@@ -16,7 +16,7 @@
 namespace sh::game
 {
 	MapleWorld::MapleWorld(GameObject& owner) :
-		NetworkComponent(owner)
+		Component(owner)
 	{
 		packetEventSubscriber.SetCallback
 		(

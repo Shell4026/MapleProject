@@ -3,7 +3,7 @@
 
 #include "Game/GameObject.h"
 #include "Game/World.h"
-#include "Game/Component/RigidBody.h"
+#include "Game/Component/Phys/RigidBody.h"
 
 namespace sh::game
 {
