@@ -14,12 +14,11 @@ namespace sh::game
 	public:
 		SH_USER_API UIRect(GameObject& owner);
 
-		SH_USER_API void BeginUpdate() override;
+		SH_USER_API void Awake() override;
+		SH_USER_API void OnDestroy() override;
 
-		SH_USER_API auto CheckMouseHit() const -> bool;
-		SH_USER_API virtual void OnClick() {};
-	private:
-		void HitTest();
+		SH_USER_API auto IsContainsMouse() const -> bool;
+		SH_USER_API virtual void OnHover() {};
 	private:
 		PROPERTY(origin)
 		game::Vec2 origin{0.f, 0.f};

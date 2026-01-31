@@ -54,7 +54,7 @@ namespace sh::game
 		RenderInventory();
 		RenderDropWindow();
 	}
-	SH_USER_API void InventoryUI::OnClick()
+	SH_USER_API void InventoryUI::OnHover()
 	{
 		if (!bDragging && Input::GetMousePressed(Input::MouseType::Left))
 		{
@@ -62,12 +62,6 @@ namespace sh::game
 			clickedPos.y = Input::mousePosition.y;
 			lastPos = gameObject.transform->GetWorldPosition();
 			bDragging = true;
-		}
-		if (bDragging && Input::GetMouseReleased(Input::MouseType::Left))
-		{
-			clickedPos.x = Input::mousePosition.x;
-			clickedPos.y = Input::mousePosition.y;
-			bDragging = false;
 		}
 	}	
 	void InventoryUI::RenderInventory()
@@ -128,6 +122,13 @@ namespace sh::game
 		pos.x = lastPos.x + delta.x;
 		pos.y = lastPos.y - delta.y; // 화면 좌표와 월드 좌표가 반전임
 		gameObject.transform->SetWorldPosition(pos);
+
+		if (bDragging && Input::GetMouseReleased(Input::MouseType::Left))
+		{
+			clickedPos.x = Input::mousePosition.x;
+			clickedPos.y = Input::mousePosition.y;
+			bDragging = false;
+		}
 	}
 	void InventoryUI::RenderDropWindow()
 	{

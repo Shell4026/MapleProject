@@ -21,7 +21,7 @@ namespace sh::game
 		SH_USER_API void Awake() override;
 		SH_USER_API void Update() override;
 
-		SH_USER_API void OnClick() override;
+		SH_USER_API void OnHover() override;
 
 		SH_USER_API void SetNpcTexture(const render::Texture& texture);
 	private:

@@ -13,6 +13,7 @@ Shader "Unlit Transparent Local UI Shader"
 		LightingPass "UI"
 		
 		Cull Off;
+		ZTest Off;
 		ZWrite Off;
 		Stage Vertex
 		{

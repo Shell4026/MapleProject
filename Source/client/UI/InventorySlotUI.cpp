@@ -11,11 +11,7 @@ namespace sh::game
 		UIRect(owner)
 	{
 	}
-	SH_USER_API void InventorySlotUI::BeginUpdate()
-	{
-		// Inventory에서 처리하게
-	}
-	SH_USER_API void InventorySlotUI::OnClick()
+	SH_USER_API void InventorySlotUI::OnHover()
 	{
 		if (Input::GetMouseReleased(Input::MouseType::Left))
 		{

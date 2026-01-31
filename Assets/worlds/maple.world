@@ -4,11 +4,11 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                7.969552040100098,
-                4.534041881561279,
-                -1.668519139289856
+                1.5987155437469482,
+                2.912774085998535,
+                -2.9122495651245117
             ],
-            "projection": 1,
+            "projection": 0,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
         },
         "Component": {
@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 5.009556770324707
+            "distance": 15.630194664001465
         },
         "SObject": {},
         "name": "EditorCamera",
@@ -25,9 +25,9 @@
         "version": 1
     },
     "camPos": [
-        7.968883991241455,
-        4.534700393676758,
-        3.3410377502441406
+        9.043961524963379,
+        5.250039100646973,
+        10.630590438842773
     ],
     "editorObjs": [
         {
@@ -1102,7 +1102,6 @@
                         "rigidbody": "cc1a2571d85c11325816d04c40d4f73e",
                         "speed": 0.6000000238418579
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Mob",
                     "type": "Mob",
@@ -2567,7 +2566,6 @@
                         "playerPrefab": "3627e56ca0c4ec9642b233813be981aa",
                         "playerSpawnPoint": "7050afab470dd6fd43c1a99f5eac6e7c"
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/MapleWorld",
                     "type": "MapleWorld",
@@ -3066,7 +3064,6 @@
                         "rigidbody": "14aecaa2a3704ecb6a52d16e74717884",
                         "speed": 0.6000000238418579
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Mob",
                     "type": "Mob",
@@ -3920,7 +3917,6 @@
                         "rigidbody": "eac188c3d38ac0a1ada9e47a0148c019",
                         "speed": 0.6000000238418579
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Mob",
                     "type": "Mob",
@@ -4958,7 +4954,6 @@
                         "rigidbody": "9db38521f452fdf30a3945e237191ea5",
                         "speed": 0.6000000238418579
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Mob",
                     "type": "Mob",
@@ -5385,7 +5380,6 @@
                         "rigidbody": "1d8d9568fdafa8175cf458afddcf180b",
                         "speed": 0.6000000238418579
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Mob",
                     "type": "Mob",
@@ -7062,7 +7056,6 @@
                         "rigidbody": "4e11f8fd12537334db2c3dccb4d46b4d",
                         "speed": 0.6000000238418579
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Mob",
                     "type": "Mob",
@@ -9009,7 +9002,6 @@
                         "rigidbody": "be6667d7544c8d82308165698030f4d1",
                         "speed": 0.6000000238418579
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Mob",
                     "type": "Mob",
@@ -11929,13 +11921,15 @@
                     },
                     "MeshRenderer": {
                         "mat": "fb4277633fc0617c7be095042d5f8e5c",
-                        "mesh": "08d51929f51c624de6aef759cff177b9",
+                        "mesh": "2028f4c427f9cfd49042e3072aeb813c",
                         "renderTag": 1
                     },
                     "SObject": {},
                     "TextRenderer": {
+                        "bDisplayArea": true,
                         "font": "4fc9557c54ed860f151b7b212fda4434",
-                        "txt": "나랑  같이  모험하자!"
+                        "txt": "나랑  같이  모험하자!",
+                        "width": 3.299999952316284
                     },
                     "name": "TextRenderer",
                     "type": "TextRenderer",

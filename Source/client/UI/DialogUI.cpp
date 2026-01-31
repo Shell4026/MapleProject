@@ -13,12 +13,13 @@ namespace sh::game
 	}
 	SH_USER_API void DialogUI::Awake()
 	{
+		Super::Awake();
 	}
 	SH_USER_API void DialogUI::Update()
 	{
 		Dragging();
 	}
-	SH_USER_API void DialogUI::OnClick()
+	SH_USER_API void DialogUI::OnHover()
 	{
 		if (!bDragging && Input::GetMousePressed(Input::MouseType::Left))
 		{
