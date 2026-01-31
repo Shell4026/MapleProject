@@ -23,6 +23,7 @@ namespace sh::game
 		SH_USER_API void Update() override;
 
 		SH_USER_API static auto GetInstance() -> UIInputManager&;
+		SH_USER_API static auto IsValidInstance() -> bool;
 
 		SH_USER_API void BuildRectList(const UIRect& rect);
 	private:

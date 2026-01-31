@@ -1,6 +1,6 @@
 ﻿#include "Player/PlayerCamera2D.h"
 #if !SH_SERVER
-#include "Game/GameObject.h"
+#include "Game/World.h"
 
 #include "Window/Window.h"
 namespace sh::game

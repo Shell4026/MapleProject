@@ -28,7 +28,7 @@ namespace sh::game
 	{
 		if (instance == nullptr)
 			instance = this;
-		else
+		else if (instance != this)
 		{
 			SH_ERROR("UIInputManager is already exist!");
 			Destroy();
@@ -84,6 +84,10 @@ namespace sh::game
 			instance = obj.AddComponent<UIInputManager>();
 		}
 		return *instance;
+	}
+	SH_USER_API auto UIInputManager::IsValidInstance() -> bool
+	{
+		return instance != nullptr;
 	}
 	void UIInputManager::BuildRectList(const UIRect& rect)
 	{

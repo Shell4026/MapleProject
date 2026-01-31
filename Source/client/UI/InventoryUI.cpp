@@ -3,7 +3,7 @@
 #include "Item/ItemDB.h"
 #include "Packet/InventorySlotSwapPacket.hpp"
 
-#include "Game/GameObject.h"
+#include "Game/World.h"
 #include "Game/Input.h"
 #include "Game/ImGUImpl.h"
 

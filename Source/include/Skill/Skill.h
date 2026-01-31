@@ -1,10 +1,10 @@
 ﻿#pragma once
 #include "Export.h"
 #include "Player/PlayerMovement2D.h"
-#include "Player/PlayerSkillManager.h"
 #include "SkillHitbox.h"
 
 #if !SH_SERVER
+#include "Player/PlayerAnimation.h"
 #include "Animation.h"
 #endif
 
@@ -59,8 +59,6 @@ namespace sh::game
 		PROPERTY(playerMovement)
 		PlayerMovement2D* playerMovement = nullptr;
 	private:
-		PROPERTY(skillManager)
-		PlayerSkillManager* skillManager = nullptr;
 		PROPERTY(id)
 		uint32_t id = 0;
 		PROPERTY(delayMs)
@@ -73,6 +71,8 @@ namespace sh::game
 		uint32_t hitBoxMs = 350;
 		PROPERTY(hitboxes)
 		std::vector<SkillHitbox*> hitboxes;
+
+		core::EventSubscriber<network::PacketEvent> packetSubscriber;
 
 		int hitboxt = 0;
 		int delay = 0;

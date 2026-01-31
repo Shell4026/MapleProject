@@ -1,6 +1,6 @@
 ﻿#include "RotateObject.h"
 
-#include "Game/GameObject.h"
+#include "Game/World.h"
 #include "Game/Vector.h"
 
 using namespace sh::game;

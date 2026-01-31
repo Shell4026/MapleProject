@@ -14,11 +14,19 @@ namespace sh::game
 	Skill::Skill(GameObject& owner) :
 		Component(owner)
 	{
+		packetSubscriber.SetCallback(
+			[&](const network::PacketEvent& evt)
+			{
+				if (evt.packet->GetId() == SkillStatePacket::ID)
+				{
+					auto packet = static_cast<const SkillStatePacket*>(evt.packet);
+					ProcessState(*packet);
+				}
+			}
+		);
 	}
 	SH_USER_API void Skill::Awake()
 	{
-		if (skillManager != nullptr)
-			skillManager->Register(*this);
 		if (animator != nullptr)
 		{
 			for (auto anim : anims)
@@ -28,6 +36,7 @@ namespace sh::game
 				anim->SetTarget(*animator->gameObject.transform);
 			}
 		}
+		MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
 	}
 	SH_USER_API void Skill::Start()
 	{
@@ -42,7 +51,7 @@ namespace sh::game
 	}
 	SH_USER_API void Skill::BeginUpdate()
 	{
-		if (skillManager == nullptr || !skillManager->GetPlayer()->IsLocal())
+		if (playerMovement == nullptr || !playerMovement->GetPlayer()->IsLocal())
 			return;
 		if (!keys.empty())
 		{
@@ -59,7 +68,6 @@ namespace sh::game
 		if (!core::IsValid(playerMovement))
 			return;
 
-		//static MapleServer* server = MapleServer::GetInstance();
 		if (bUsing)
 		{
 			delay -= static_cast<int>(world.deltaTime * 1000.f);
@@ -124,9 +132,7 @@ namespace sh::game
 	}
 	SH_USER_API void Skill::ProcessState(const SkillStatePacket& packet)
 	{
-		if (skillManager == nullptr)
-			return;
-		Player* player = skillManager->GetPlayer();
+		Player* player = playerMovement->GetPlayer();
 		if (!core::IsValid(player))
 			return;
 

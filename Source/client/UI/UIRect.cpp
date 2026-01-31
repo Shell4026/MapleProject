@@ -1,7 +1,7 @@
 ﻿#include "UI/UIRect.h"
 #include "UI/UIInputManager.h"
 
-#include "Game/GameObject.h"
+#include "Game/World.h"
 #include "Game/Input.h"
 namespace sh::game
 {
@@ -15,7 +15,8 @@ namespace sh::game
 	}
 	SH_USER_API void UIRect::OnDestroy()
 	{
-		UIInputManager::GetInstance().BuildRectList(*this);
+		if (UIInputManager::IsValidInstance())
+			UIInputManager::GetInstance().BuildRectList(*this);
 		Super::OnDestroy();
 	}
 	SH_USER_API auto UIRect::IsContainsMouse() const -> bool

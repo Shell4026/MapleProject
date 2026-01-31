@@ -1,6 +1,7 @@
 ﻿#include "Item/ItemDB.h"
 
 #include "Core/SObject.h"
+#include "Core/Logger.h"
 
 #include "Game/TextObject.h"
 namespace sh::game

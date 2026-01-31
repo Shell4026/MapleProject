@@ -13,11 +13,26 @@ namespace sh::game
 	Skill::Skill(GameObject& owner) :
 		Component(owner)
 	{
+		packetSubscriber.SetCallback(
+			[&](const network::PacketEvent& evt)
+			{
+				if (evt.packet->GetId() == SkillUsingPacket::ID)
+				{
+					auto packet = static_cast<const SkillUsingPacket*>(evt.packet);
+					if (playerMovement != nullptr && 
+						playerMovement->GetPlayer()->GetUserUUID() == packet->userUUID && 
+						packet->skillId == id)
+					{
+						Use();
+					}
+				}
+			}
+		);
 	}
 	SH_USER_API void Skill::Awake()
 	{
-		if (skillManager != nullptr)
-			skillManager->Register(*this);
+		MapleServer* server = MapleServer::GetInstance();
+		server->bus.Subscribe(packetSubscriber);
 	}
 	SH_USER_API void Skill::Start()
 	{
@@ -109,7 +124,7 @@ namespace sh::game
 			hitboxt = hitBoxMs;
 
 			SkillStatePacket packet{};
-			packet.userUUID = skillManager->GetPlayer()->GetUserUUID();
+			packet.userUUID = playerMovement->GetPlayer()->GetUserUUID();
 			packet.skillId = id;
 			packet.bUsing = true;
 

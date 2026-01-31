@@ -1,7 +1,7 @@
 ﻿#include "Player/PlayerMovement2D.h"
 #include "CollisionTag.hpp"
 
-#include "Game/GameObject.h"
+#include "Game/World.h"
 #include "Game/Input.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
