@@ -20,11 +20,10 @@ namespace sh::game
 		SH_USER_API void OnHover() override;
 
 		SH_USER_API void SetIndex(int idx) { this->idx = idx; }
+		SH_USER_API auto GetIndex() const -> int { return idx; }
 \
 		SH_USER_API auto GetRenderer() const -> MeshRenderer* { return renderer; }
 		SH_USER_API auto GetNumberUI() const -> NumberUI* { return numberUI; }
-	public:
-		core::Observer<false, int> onClick;
 	private:
 		int idx = 0;
 		PROPERTY(renderer)

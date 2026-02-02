@@ -15,7 +15,7 @@ namespace sh::game
 	{
 		if (Input::GetMouseReleased(Input::MouseType::Left))
 		{
-			onClick.Notify(idx);
+			onClick.Notify(this);
 		}
 	}
 }//namespace

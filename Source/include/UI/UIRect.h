@@ -19,10 +19,14 @@ namespace sh::game
 
 		SH_USER_API auto IsContainsMouse() const -> bool;
 		SH_USER_API virtual void OnHover() {};
+	public:
+		core::Observer<false, UIRect*> onClick;
 	private:
 		PROPERTY(origin)
 		game::Vec2 origin{0.f, 0.f};
 		PROPERTY(size)
 		game::Vec2 size{1.f, 1.f};
+		PROPERTY(bWorldPos)
+		bool bWorldPos = false;
 	};
 }//namespace

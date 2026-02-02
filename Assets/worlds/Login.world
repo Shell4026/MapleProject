@@ -76,7 +76,6 @@
                     "Login": {
                         "nextWorld": "1c2428b8720cab83b1b46f7cd7408592"
                     },
-                    "NetworkComponent": {},
                     "SObject": {},
                     "name": "user/Login",
                     "type": "Login",
@@ -88,8 +87,7 @@
                 "bEditorOnly": false,
                 "bEnable": true,
                 "bStatic": false,
-                "hideInspector": false,
-                "transform": "ad3026b2e12602524d7dc99cd877764e"
+                "hideInspector": false
             },
             "name": "Login",
             "type": "GameObject",
@@ -158,8 +156,7 @@
                 "bEditorOnly": false,
                 "bEnable": true,
                 "bStatic": false,
-                "hideInspector": false,
-                "transform": "93b12da106989f845ee38b9790f8dd0f"
+                "hideInspector": false
             },
             "name": "Camera",
             "type": "GameObject",
@@ -222,8 +219,7 @@
                 "bEditorOnly": false,
                 "bEnable": true,
                 "bStatic": false,
-                "hideInspector": false,
-                "transform": "e59881aa3cefdb0e1a8b974ce1fcb5d0"
+                "hideInspector": false
             },
             "name": "Items",
             "type": "GameObject",
@@ -286,8 +282,7 @@
                 "bEditorOnly": false,
                 "bEnable": true,
                 "bStatic": false,
-                "hideInspector": false,
-                "transform": "8ca9e69d1b7fefd7fcc1d57745a0d17d"
+                "hideInspector": false
             },
             "name": "Item0",
             "type": "GameObject",
@@ -352,8 +347,7 @@
                 "bEditorOnly": false,
                 "bEnable": true,
                 "bStatic": false,
-                "hideInspector": false,
-                "transform": "fdfb9962a345070dc2f9a654b3509e69"
+                "hideInspector": false
             },
             "name": "Client",
             "type": "GameObject",
@@ -401,12 +395,74 @@
                 "bEditorOnly": false,
                 "bEnable": true,
                 "bStatic": false,
-                "hideInspector": false,
-                "transform": "5551df43e40fe51b2d313ac559491493"
+                "hideInspector": false
             },
             "name": "Assets",
             "type": "GameObject",
             "uuid": "3813e4c33cdb1063704f3b4bd6f2a663",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "5551df43e40fe51b2d313ac559491493",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "107c491b22d93ed540888bc9ef6698a3",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "NPCDB": {
+                        "npcDB": "dbe3dce220e5ca106368317db36fbdc2"
+                    },
+                    "SObject": {},
+                    "name": "user/NPCDB",
+                    "type": "NPCDB",
+                    "uuid": "5f5539843fefbc05584a1e2592a4c8c5",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "NPCDB",
+            "type": "GameObject",
+            "uuid": "654af9376745d39df6f36ff5124584fc",
             "version": 1
         }
     ],

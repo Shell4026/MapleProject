@@ -1,7 +1,7 @@
 ﻿#include "UI/UIInputManager.h"
 #include "UI/UIRect.h"
 
-#include "Game/GameObject.h"
+#include "Game/World.h"
 #include "Game/GameManager.h"
 
 #include <limits>

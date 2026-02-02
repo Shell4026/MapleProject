@@ -28,7 +28,7 @@ namespace sh::game
 		PROPERTY(slots)
 		std::vector<InventorySlotUI*> slots;
 
-		core::Observer<false, int>::Listener onClickListener;
+		core::Observer<false, UIRect*>::Listener onClickListener;
 
 		Vec3 lastPos;
 		Vec2 clickedPos{0.f, 0.f};

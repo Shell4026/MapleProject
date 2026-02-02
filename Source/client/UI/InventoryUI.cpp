@@ -15,8 +15,11 @@ namespace sh::game
 	{
 		ImGui::SetCurrentContext(world.GetUiContext().GetContext());
 		onClickListener.SetCallback(
-			[this](int idx)
+			[this](UIRect* rect)
 			{
+				const InventorySlotUI* slotUI = static_cast<InventorySlotUI*>(rect);
+				const int idx = slotUI->GetIndex();
+
 				User& user = MapleClient::GetInstance()->GetUser();
 				auto& inventory = user.GetInventory();
 				if (selectedSlotIdx == idx)

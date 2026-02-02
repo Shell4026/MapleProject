@@ -13,14 +13,15 @@ namespace sh::game
 	SH_USER_API void PlayerCamera2D::Awake()
 	{
 		SetPriority(-2);
+		if (targetCamera != nullptr)
+			world.SetMainCamera(targetCamera);
 	}
 	SH_USER_API void PlayerCamera2D::Start()
 	{
 		world.renderer.GetWindow().SetSize(1366, 768);
 		world.GetUICamera().SetWidth(13.66f);
 		world.GetUICamera().SetHeight(7.68f);
-		world.SetMainCamera(targetCamera);
-
+		
 		lastWidth = world.renderer.GetWidth();
 		lastHeight = world.renderer.GetHeight();
 
