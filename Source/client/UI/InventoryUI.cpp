@@ -5,7 +5,6 @@
 
 #include "Game/World.h"
 #include "Game/Input.h"
-#include "Game/ImGUImpl.h"
 
 #include <queue>
 namespace sh::game
@@ -13,7 +12,6 @@ namespace sh::game
 	InventoryUI::InventoryUI(GameObject& owner) :
 		UIRect(owner)
 	{
-		ImGui::SetCurrentContext(world.GetUiContext().GetContext());
 		onClickListener.SetCallback(
 			[this](UIRect* rect)
 			{
@@ -50,9 +48,38 @@ namespace sh::game
 			slots[i]->SetIndex(i);
 			slots[i]->onClick.Register(onClickListener);
 		}
+		if (uiRoot == nullptr)
+			SH_ERROR("uiRoot is nullptr!");
+		else
+		{
+			if (uiRoot->IsActive())
+				bOpen = true;
+		}
+	}
+	SH_USER_API void InventoryUI::BeginUpdate()
+	{
+		if (!bOpen)
+		{
+			if (Input::GetKeyPressed(Input::KeyCode::I))
+			{
+				uiRoot->SetActive(true);
+				bOpen = true;
+			}
+		}
+		else
+		{
+			if (Input::GetKeyPressed(Input::KeyCode::Esc) || Input::GetKeyPressed(Input::KeyCode::I))
+			{
+				uiRoot->SetActive(false);
+				bOpen = false;
+			}
+		}
 	}
 	SH_USER_API void InventoryUI::Update()
 	{
+		if (!bOpen)
+			return;
+
 		Dragging();
 		RenderInventory();
 		RenderDropWindow();
@@ -141,10 +168,5 @@ namespace sh::game
 		const float windowHeight = world.renderer.GetHeight();
 		const float width = 500;
 		const float height = 300;
-
-		ImGui::SetNextWindowPos({ windowWidth / 2 - width / 2, windowHeight / 2 - height / 2 }, ImGuiCond_::ImGuiCond_Appearing);
-		ImGui::SetNextWindowSize({ width, height }, ImGuiCond_::ImGuiCond_Appearing);
-		ImGui::Begin("DropWindow", nullptr, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoMove);
-		ImGui::End();
 	}
 }//namespace

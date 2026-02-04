@@ -17,6 +17,7 @@ namespace sh::game
 		SH_USER_API InventoryUI(GameObject& owner);
 
 		SH_USER_API void Awake() override;
+		SH_USER_API void BeginUpdate() override;
 		SH_USER_API void Update() override;
 
 		SH_USER_API void OnHover() override;
@@ -25,6 +26,8 @@ namespace sh::game
 		void Dragging();
 		void RenderDropWindow();
 	private:
+		PROPERTY(uiRoot)
+		GameObject* uiRoot = nullptr;
 		PROPERTY(slots)
 		std::vector<InventorySlotUI*> slots;
 
@@ -35,6 +38,7 @@ namespace sh::game
 
 		int selectedSlotIdx = -1;
 
+		bool bOpen = false;
 		bool bDragging = false;
 		bool bShowDropWindow = false;
 	};
