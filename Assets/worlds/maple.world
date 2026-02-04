@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                -0.07598549127578735,
-                3.0066614151000977,
-                0.9284042119979858
+                1.2496752738952637,
+                2.3068127632141113,
+                0.9287399053573608
             ],
             "projection": 1,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 7.868827819824219
+            "distance": 17.08638572692871
         },
         "SObject": {},
         "name": "EditorCamera",
@@ -25,9 +25,9 @@
         "version": 1
     },
     "camPos": [
-        -0.07573256641626358,
-        3.0072505474090576,
-        8.797231674194336
+        1.2496745586395264,
+        2.3068156242370605,
+        18.015125274658203
     ],
     "editorObjs": [
         {
@@ -2973,7 +2973,7 @@
                     },
                     "SObject": {},
                     "Transform": {
-                        "parent": "f4c94c9bce7db77300320f5a0d1acf5d",
+                        "parent": "1d47bd27aa44a9d13f2deeeec65560c3",
                         "quat": [
                             0.0,
                             0.0,
@@ -4307,7 +4307,8 @@
                             "c16547e52fea31691fe735002d566b1f",
                             "941460e0e2318f667b78e0c2f4e72c38",
                             "13fea7b0b12ecb1d634f0f6fa5fb949d"
-                        ]
+                        ],
+                        "uiRoot": "9259ff71dad4523206262f6a79759b14"
                     },
                     "SObject": {},
                     "UI": {},
@@ -5242,7 +5243,7 @@
                     },
                     "SObject": {},
                     "Transform": {
-                        "parent": "f4c94c9bce7db77300320f5a0d1acf5d",
+                        "parent": "1d47bd27aa44a9d13f2deeeec65560c3",
                         "quat": [
                             0.0,
                             0.0,
@@ -5252,7 +5253,7 @@
                         "vPosition": [
                             0.0,
                             0.0,
-                            0.10000000149011612
+                            0.10000002384185791
                         ],
                         "vRotation": [
                             0.0,
@@ -9939,7 +9940,7 @@
                         "priority": 0
                     },
                     "NPC": {
-                        "dialogPrefab": "b2fd2729317eac163f719e442672c6ba",
+                        "dialogPrefab": "d7bcc7653c237ee9deb2deb2230c1e3b",
                         "id": 0,
                         "npcTexture": "5c545fca8fd0655c56b281cbd605bbdd"
                     },
@@ -11479,6 +11480,55 @@
             "name": "0",
             "type": "GameObject",
             "uuid": "bb659baf7cc4d7d165024cd79aac1a90",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "f4c94c9bce7db77300320f5a0d1acf5d",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "1d47bd27aa44a9d13f2deeeec65560c3",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": false,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "UI",
+            "type": "GameObject",
+            "uuid": "9259ff71dad4523206262f6a79759b14",
             "version": 1
         }
     ],

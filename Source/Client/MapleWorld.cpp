@@ -108,7 +108,7 @@ namespace sh::game
 		Player* player = nullptr;
 		player = SpawnPlayer(playerUUID, packet.x, packet.y);
 		player->SetCurrentWorld(*this);
-
+		player->GetNameTag()->SetNameStr(packet.nickname);
 		if (playerUUID == client->GetUser().GetUserUUID())
 			camera->SetPlayer(player->gameObject);
 	}

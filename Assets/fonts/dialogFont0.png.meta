@@ -1,0 +1,19 @@
+{
+    "metaHash": 12812758675750275233,
+    "name": "dialogFont0",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": false,
+            "bSRGB": false,
+            "filtering": 1
+        },
+        "name": "dialogFont0",
+        "type": "Texture",
+        "uuid": "ae5927d143cf540f1d223e3c2c99032c",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "ae5927d143cf540f1d223e3c2c99032c",
+    "version": 1
+}

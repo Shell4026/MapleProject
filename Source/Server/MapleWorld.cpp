@@ -210,24 +210,28 @@ namespace sh::game
 		// 접속한 플레이어에게 다른 플레이어 동기화
 		for (auto& [uuid, playerPtr] : players)
 		{
-			const auto& playerPos = playerPtr->gameObject.transform->GetWorldPosition();
-			PlayerSpawnPacket packet;
-			packet.x = playerPos.x;
-			packet.y = playerPos.y;
-			packet.playerUUID = playerPtr->GetUserUUID();
+			auto remoteUserPtr = server->GetUserManager().GetUser(playerPtr->GetUserUUID());
 
-			server->Send(packet, userPtr->GetIp(), userPtr->GetPort());
+			const auto& playerPos = playerPtr->gameObject.transform->GetWorldPosition();
+			PlayerSpawnPacket spawnPacket;
+			spawnPacket.x = playerPos.x;
+			spawnPacket.y = playerPos.y;
+			spawnPacket.playerUUID = playerPtr->GetUserUUID();
+			spawnPacket.nickname = remoteUserPtr->GetNickName();
+
+			server->Send(spawnPacket, userPtr->GetIp(), userPtr->GetPort());
 		}
 		// 접속한 플레이어 생성
 		{
 			auto player = SpawnPlayer(userPtr->GetUserUUID(), spawnPos.x, spawnPos.y);
 
-			PlayerSpawnPacket packet;
-			packet.x = spawnPos.x;
-			packet.y = spawnPos.y;
-			packet.playerUUID = userPtr->GetUserUUID();
+			PlayerSpawnPacket spawnPacket;
+			spawnPacket.x = spawnPos.x;
+			spawnPacket.y = spawnPos.y;
+			spawnPacket.playerUUID = userPtr->GetUserUUID();
+			spawnPacket.nickname = userPtr->GetNickName();
 
-			server->BroadCast(packet);
+			server->BroadCast(spawnPacket);
 		}
 	}
 	void MapleWorld::ProcessPlayerLeave(const PlayerLeavePacket& packet)

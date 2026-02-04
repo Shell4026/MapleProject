@@ -23,6 +23,7 @@ namespace sh::game
 			mainJson["x"] = x;
 			mainJson["y"] = y;
 			mainJson["player"] = playerUUID;
+			mainJson["nickname"] = nickname;
 
 			return mainJson;
 		}
@@ -35,10 +36,13 @@ namespace sh::game
 				y = json["y"];
 			if (json.contains("player"))
 				playerUUID = json["player"];
+			if (json.contains("nickname"))
+				nickname = json["nickname"];
 		}
 	public:
 		float x;
 		float y;
 		std::array<uint32_t, 4> playerUUID;
+		std::string nickname;
 	};
 }//namespace
