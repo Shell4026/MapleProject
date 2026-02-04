@@ -1,6 +1,7 @@
 ﻿#include "NameTag.h"
 
 #include "Core/Util.h"
+#include "Core/GarbageCollection.h"
 
 #include "Game/World.h"
 #include "Game/Asset/FontGenerator.h"
@@ -9,17 +10,30 @@ namespace sh::game
 	NameTag::NameTag(GameObject& owner) :
 		Component(owner)
 	{
+		globalFont = GlobalFont::GetInstance();
+		onUpdatedListener.SetCallback(
+			[this](render::Font* font)
+			{
+				textRenderer->SetFont(font);
+				textRenderer->SetText(nameStr);
+				SetBackgroundScale();
+			}
+		);
+		globalFont->onUpdated.Register(onUpdatedListener);
+	}
+	SH_USER_API void NameTag::OnDestroy()
+	{
+		globalFont.reset();
+		Super::OnDestroy();
 	}
 	SH_USER_API void NameTag::Start()
 	{
+		Setup();
 	}
 	SH_USER_API void NameTag::BeginUpdate()
 	{
 		if (bRequireNewFont)
-		{
 			CreateFont();
-			SetBackgroundScale();
-		}
 	}
 	SH_USER_API void NameTag::OnPropertyChanged(const core::reflection::Property& prop)
 	{
@@ -41,15 +55,18 @@ namespace sh::game
 		{
 			uint32_t unicode;
 			start = core::Util::UTF8ToUnicode(start, end, unicode);
-			if (unicodeSet.find(unicode) == unicodeSet.end())
+			if (globalFont->unicodeSet.find(unicode) == globalFont->unicodeSet.end())
 				bRequireNewFont = true;
-			unicodeSet.insert(unicode);
+			globalFont->unicodeSet.insert(unicode);
 		}
 
 		if (!bRequireNewFont)
 		{
 			if (textRenderer != nullptr)
+			{
+				textRenderer->SetFont(globalFont->GetFont());
 				textRenderer->SetText(nameStr);
+			}
 			SetBackgroundScale();
 		}
 	}
@@ -58,14 +75,11 @@ namespace sh::game
 		if (rawFont == nullptr)
 			return;
 
-		std::vector<uint32_t> unicodes(unicodeSet.begin(), unicodeSet.end());
+		std::vector<uint32_t> unicodes(globalFont->unicodeSet.begin(), globalFont->unicodeSet.end());
 		FontGenerator::Options opt{};
 		opt.atlasW = 256;
 		opt.atlasH = 256;
-		font = FontGenerator::GenerateFont(*world.renderer.GetContext(), rawFont->data, unicodes, opt);
-		assert(font != nullptr);
-		textRenderer->SetFont(font);
-		textRenderer->SetText(nameStr);
+		globalFont->SetFont(*FontGenerator::GenerateFont(*world.renderer.GetContext(), rawFont->data, unicodes, opt));
 
 		bRequireNewFont = false;
 	}
@@ -79,7 +93,7 @@ namespace sh::game
 			uint32_t unicode;
 			start = core::Util::UTF8ToUnicode(start, end, unicode);
 
-			auto glyphPtr = font->GetGlyph(unicode);
+			auto glyphPtr = globalFont->GetFont()->GetGlyph(unicode);
 			if (glyphPtr != nullptr)
 				length += glyphPtr->advance;
 		}
@@ -100,5 +114,29 @@ namespace sh::game
 			auto pos = textRenderer->gameObject.transform->position;
 			textRenderer->gameObject.transform->SetPosition(-width, pos.y, pos.z);
 		}
+	}
+	NameTag::GlobalFont::~GlobalFont()
+	{
+		if (font != nullptr)
+			font->Destroy();
+		SH_INFO("~font");
+	}
+	void NameTag::GlobalFont::SetFont(render::Font& font)
+	{
+		if (this->font != nullptr)
+			this->font->Destroy();
+		this->font = &font;
+		core::GarbageCollection::GetInstance()->SetRootSet(this->font);
+		onUpdated.Notify(this->font);
+	}
+	auto NameTag::GlobalFont::GetInstance() -> std::shared_ptr<GlobalFont>
+	{
+		auto ptr = instance.lock();
+		if (ptr == nullptr)
+		{
+			ptr = std::shared_ptr<GlobalFont>(new GlobalFont{});
+			instance = ptr;
+		}
+		return ptr;
 	}
 }//namespace
