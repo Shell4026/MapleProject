@@ -2,10 +2,11 @@
 #include "Export.h"
 #if !SH_SERVER
 #include "NameTag.h"
+#include "UI/InventoryUI.h"
 #endif
 
 #include "Game/Component/Component.h"
-
+#include "Game/Prefab.h"
 namespace sh::game
 {
 	class MapleWorld;
@@ -14,6 +15,8 @@ namespace sh::game
 		COMPONENT(Player, "user")
 	public:
 		SH_USER_API Player(GameObject& owner);
+
+		SH_USER_API void Start() override;
 
 		SH_USER_API void SetUserUUID(const core::UUID& uuid);
 		SH_USER_API auto GetUserUUID() const -> const core::UUID&;
@@ -36,6 +39,8 @@ namespace sh::game
 #if !SH_SERVER
 		PROPERTY(nametag)
 		NameTag* nametag = nullptr;
+		PROPERTY(inventoryPrefab)
+		Prefab* inventoryPrefab = nullptr;
 #endif
 
 		bool bLocal = true;

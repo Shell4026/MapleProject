@@ -9,6 +9,18 @@ namespace sh::game
 		Component(owner), userUUID(core::UUID::GenerateEmptyUUID())
 	{
 	}
+	SH_USER_API void Player::Start()
+	{
+#if !SH_SERVER
+		if (bLocal)
+		{
+			if (inventoryPrefab == nullptr)
+				SH_ERROR("Inventory prefab is nullptr");
+			else
+				inventoryPrefab->AddToWorld(world);
+		}
+#endif
+	}
 	SH_USER_API void Player::SetUserUUID(const core::UUID& uuid)
 	{
 		userUUID = uuid;
