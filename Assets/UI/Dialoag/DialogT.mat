@@ -15,11 +15,11 @@
                 1.0,
                 1.0,
                 1.0,
-                0.0
+                1.0
             ]
         }
     },
-    "name": "NewMaterial.mat",
+    "name": "DialogT",
     "type": "Material",
     "uuid": "5de43c151b97a03d368dc3e0ac85841a",
     "version": 1

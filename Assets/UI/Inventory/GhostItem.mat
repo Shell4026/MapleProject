@@ -3,24 +3,22 @@
         []
     ],
     "Material": {
-        "shader": "38c9cad5714e57e7188346e334a1e90a"
+        "shader": "48fe865f77df566cc8e1c4737b434b85"
     },
     "MaterialPropertyBlock": {
         "scalar": null,
-        "textures": {
-            "tex": "270909f319de43afc5de03cd2c0cb591"
-        },
+        "textures": null,
         "vector": {
             "color": [
                 1.0,
                 1.0,
                 1.0,
-                1.0
+                0.75
             ]
         }
     },
-    "name": "Snail",
+    "name": "NewMaterial.mat",
     "type": "Material",
-    "uuid": "b55023119dacbba39c6af542bc728c6d",
+    "uuid": "d231a6ee93ee87403c96c5a906cf2531",
     "version": 1
 }

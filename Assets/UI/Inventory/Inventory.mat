@@ -15,11 +15,11 @@
                 1.0,
                 1.0,
                 1.0,
-                0.0
+                1.0
             ]
         }
     },
-    "name": "InventoryBackground",
+    "name": "Inventory",
     "type": "Material",
     "uuid": "b3063b4ec8203a20dcf0481cd81b9991",
     "version": 1

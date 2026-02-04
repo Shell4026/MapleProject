@@ -4,7 +4,7 @@ Shader "Text Shader"
 {
 	Property
 	{
-		vec3 color;
+		vec4 color;
 		[Local] sampler2D tex;
 	}
 	
@@ -29,13 +29,13 @@ Shader "Text Shader"
 			layout(location = 0) out vec4 outColor;
 
 			layout(location = 0) in vec2 uvs;
-			uniform vec3 color;
+			uniform vec4 color;
 			uniform sampler2D tex;
 
 			void main() 
 			{
 				vec4 sampled = vec4(1.0, 1.0, 1.0, texture(tex, uvs).r);
-				outColor = vec4(color, 1.0) * sampled;
+				outColor = vec4(color) * sampled;
 			}
 		}
 	}

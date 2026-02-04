@@ -25,11 +25,15 @@ namespace sh::game
 		void RenderInventory();
 		void Dragging();
 		void RenderDropWindow();
+		void DisplayGhostItem(int itemId);
+		void MoveGhostItemToCursor();
 	private:
 		PROPERTY(uiRoot)
 		GameObject* uiRoot = nullptr;
 		PROPERTY(slots)
 		std::vector<InventorySlotUI*> slots;
+		PROPERTY(ghostItem)
+		MeshRenderer* ghostItem = nullptr;
 
 		core::Observer<false, UIRect*>::Listener onClickListener;
 

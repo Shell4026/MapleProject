@@ -15,11 +15,11 @@
                 1.0,
                 1.0,
                 1.0,
-                0.0
+                1.0
             ]
         }
     },
-    "name": "NewMaterial.mat",
+    "name": "Close",
     "type": "Material",
     "uuid": "e982b4907a7ba18afff3782d2cac626f",
     "version": 1

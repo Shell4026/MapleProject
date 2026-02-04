@@ -4,7 +4,7 @@ Shader "Unlit Transparent Shader2"
 {
 	Property
 	{
-		vec3 color;
+		vec4 color;
 		[Local] sampler2D tex;
 	}
 	
@@ -29,13 +29,13 @@ Shader "Unlit Transparent Shader2"
 			layout(location = 0) out vec4 outColor;
 
 			layout(location = 0) in vec2 uvs;
-			uniform vec3 color;
+			uniform vec4 color;
 			uniform sampler2D tex;
 
 			void main() 
 			{
 				outColor = texture(tex, uvs);
-				outColor.xyz *= color.xyz;
+				outColor.xyzw *= color.xyzw;
 			}
 		}
 	}

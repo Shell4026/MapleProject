@@ -15,11 +15,11 @@
                 1.0,
                 1.0,
                 1.0,
-                0.0
+                1.0
             ]
         }
     },
-    "name": "NewMaterial.mat",
+    "name": "DialogB",
     "type": "Material",
     "uuid": "b90646cd70153ac65794f5245f9cad54",
     "version": 1

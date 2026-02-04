@@ -21,11 +21,17 @@ namespace sh::game
 				User& user = MapleClient::GetInstance()->GetUser();
 				auto& inventory = user.GetInventory();
 				if (selectedSlotIdx == idx)
+				{
 					selectedSlotIdx = -1;
+					ghostItem->gameObject.SetActive(false);
+				}
 				else if (selectedSlotIdx == -1)
 				{
 					if (inventory.GetSlots()[idx].itemId != -1 && inventory.GetSlots()[idx].quantity != 0)
+					{
 						selectedSlotIdx = idx;
+						DisplayGhostItem(inventory.GetSlots()[idx].itemId);
+					}
 				}
 				else
 				{
@@ -36,12 +42,16 @@ namespace sh::game
 					MapleClient::GetInstance()->SendTcp(packet);
 
 					selectedSlotIdx = -1;
+					ghostItem->gameObject.SetActive(false);
 				}
 			}
 		);
 	}
 	SH_USER_API void InventoryUI::Awake()
 	{
+		if (ghostItem == nullptr)
+			SH_ERROR("GhostItem is nullptr");
+		
 		SetPriority(-3);
 		for (int i = 0; i < slots.size(); ++i)
 		{
@@ -83,6 +93,7 @@ namespace sh::game
 		Dragging();
 		RenderInventory();
 		RenderDropWindow();
+		MoveGhostItemToCursor();
 	}
 	SH_USER_API void InventoryUI::OnHover()
 	{
@@ -99,7 +110,7 @@ namespace sh::game
 		User& user = MapleClient::GetInstance()->GetUser();
 		const auto& inventory = user.GetInventory();
 		const auto& inventorySlots = inventory.GetSlots();
-		const ItemDB& itemDB = *ItemDB::GetInstance();
+		static const ItemDB& itemDB = *ItemDB::GetInstance();
 
 		for (int i = 0; i < slots.size(); ++i)
 		{
@@ -168,5 +179,24 @@ namespace sh::game
 		const float windowHeight = world.renderer.GetHeight();
 		const float width = 500;
 		const float height = 300;
+	}
+	void InventoryUI::DisplayGhostItem(int itemId)
+	{
+		static const ItemDB& itemDB = *ItemDB::GetInstance();
+		ghostItem->gameObject.SetActive(true);
+		const ItemInfo* const info = itemDB.GetItemInfo(itemId);
+		if (info == nullptr)
+			return;
+		render::Texture* itemTexture = static_cast<render::Texture*>(core::SObject::GetSObjectUsingResolver(core::UUID{ info->texUUID }));
+		if (itemTexture == nullptr)
+			SH_INFO_FORMAT("id: {} is null", itemId);
+		ghostItem->GetMaterialPropertyBlock()->SetProperty("tex", itemTexture);
+		ghostItem->UpdatePropertyBlockData();
+	}
+	void InventoryUI::MoveGhostItemToCursor()
+	{
+		auto mousePos = Input::mousePosition / 100.f;
+		mousePos.y = world.renderer.GetHeight() * 0.01f - mousePos.y; // 월드와 화면 y는 좌우반전
+		ghostItem->gameObject.transform->SetWorldPosition(mousePos.x, mousePos.y, -1.5f);
 	}
 }//namespace

@@ -1,4 +1,7 @@
 {
+    "Constant": [
+        []
+    ],
     "Material": {
         "shader": "38c9cad5714e57e7188346e334a1e90a"
     },
@@ -12,11 +15,11 @@
                 1.0,
                 1.0,
                 1.0,
-                0.0
+                1.0
             ]
         }
     },
-    "name": "playerMat",
+    "name": "unlit",
     "type": "Material",
     "uuid": "5158ea71df5ba712acdc345aa4185bf2",
     "version": 1
