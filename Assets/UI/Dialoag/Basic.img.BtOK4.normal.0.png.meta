@@ -1,0 +1,19 @@
+{
+    "metaHash": 7063949988771984363,
+    "name": "Basic.img.BtOK4.normal.0",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "Basic.img.BtOK4.normal.0",
+        "type": "Texture",
+        "uuid": "c36f84f41083b033f8c081925040b79c",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "c36f84f41083b033f8c081925040b79c",
+    "version": 1
+}

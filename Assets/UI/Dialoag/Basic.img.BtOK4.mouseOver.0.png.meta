@@ -1,0 +1,19 @@
+{
+    "metaHash": 17071223298989908937,
+    "name": "Basic.img.BtOK4.mouseOver.0",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "Basic.img.BtOK4.mouseOver.0",
+        "type": "Texture",
+        "uuid": "73345e157ca685afd2b6333fa6bcc342",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "73345e157ca685afd2b6333fa6bcc342",
+    "version": 1
+}

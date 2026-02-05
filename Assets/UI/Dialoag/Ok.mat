@@ -1,0 +1,26 @@
+{
+    "Constant": [
+        []
+    ],
+    "Material": {
+        "shader": "ec48cf37dcf5f93b6837f5b4a54240ab"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": {
+            "tex": "c36f84f41083b033f8c081925040b79c"
+        },
+        "vector": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        }
+    },
+    "name": "Ok",
+    "type": "Material",
+    "uuid": "613c116b2ea4f0501ae327a78ccddfd2",
+    "version": 1
+}

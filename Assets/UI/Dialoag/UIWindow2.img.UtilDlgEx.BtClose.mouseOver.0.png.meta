@@ -1,0 +1,19 @@
+{
+    "metaHash": 17552708374553916055,
+    "name": "UIWindow2.img.UtilDlgEx.BtClose.mouseOver.0",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 1
+        },
+        "name": "UIWindow2.img.UtilDlgEx.BtClose.mouseOver.0",
+        "type": "Texture",
+        "uuid": "858ff84a1c1dbb0ad4afb5f4319c9050",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "858ff84a1c1dbb0ad4afb5f4319c9050",
+    "version": 1
+}
