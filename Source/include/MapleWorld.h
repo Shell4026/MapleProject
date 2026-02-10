@@ -6,6 +6,7 @@
 #include "MapleClient.h"
 #include "Player/PlayerCamera2D.h"
 #include "Item/Item.h"
+#include "Physics/Foothold.h"
 
 #include "Core/SContainer.hpp"
 #include "Core/EventSubscriber.h"
@@ -44,6 +45,7 @@ namespace sh::game
 		SH_USER_API void LateUpdate() override;
 
 		SH_USER_API auto GetWorldTick() const -> uint64_t { return worldTick; }
+		SH_USER_API auto GetFoothold() const -> Foothold* { return foothold; }
 #if SH_SERVER
 		SH_USER_API void SpawnItem(int itemId, float x, float y, const core::UUID& owner);
 		SH_USER_API void SpawnItem(const std::vector<int>& itemIds, float x, float y, const core::UUID& owner);
@@ -67,6 +69,8 @@ namespace sh::game
 		PROPERTY(playerSpawnPoint)
 		Transform* playerSpawnPoint = nullptr;
 	private:
+		PROPERTY(foothold)
+		Foothold* foothold = nullptr;
 		PROPERTY(playerPrefab)
 		Prefab* playerPrefab = nullptr;
 		PROPERTY(itemPrefab)

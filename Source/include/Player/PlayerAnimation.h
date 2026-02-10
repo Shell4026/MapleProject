@@ -2,6 +2,7 @@
 #include "Export.h"
 #include "Player.h"
 #include "Animation.h"
+#include "PlayerMovement.h"
 
 #include "Game/Component/Component.h"
 #include "Game/Component/Render/MeshRenderer.h"
@@ -37,8 +38,12 @@ namespace sh::game
 		SH_USER_API void SetLock(bool bLock);
 		SH_USER_API auto IsLock() const -> bool;
 	private:
+		void DecidePose();
+	private:
 		PROPERTY(player)
 		Player* player = nullptr;
+		PROPERTY(movement)
+		PlayerMovement* movement = nullptr;
 		PROPERTY(meshRenderer)
 		MeshRenderer* meshRenderer = nullptr;
 

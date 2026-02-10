@@ -11,7 +11,12 @@ namespace sh::game
 	SH_USER_API void PlayerAnimation::Awake()
 	{
 		if (meshRenderer == nullptr)
+		{
+			SH_ERROR("meshRenderer is nullptr");
 			return;
+		}
+		if (movement == nullptr)
+			SH_ERROR("movement is nullptr");
 		if (idle != nullptr)
 		{
 			idle->SetTarget(*gameObject.transform);
@@ -26,6 +31,7 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerAnimation::BeginUpdate()
 	{
+		DecidePose();
 		if (curAnim.IsValid() && core::IsValid(player))
 			curAnim->InverseX(player->IsRight());
 	}
@@ -93,5 +99,18 @@ namespace sh::game
 	SH_USER_API auto PlayerAnimation::IsLock() const -> bool
 	{
 		return bAnimLock;
+	}
+	void PlayerAnimation::DecidePose()
+	{
+		if (movement != nullptr)
+		{
+			auto vel = movement->GetVelocity();
+			if (std::abs(vel.y) > 0.f)
+				SetPose(Pose::Jump);
+			else if (std::abs(vel.x) > 0.f)
+				SetPose(Pose::Walk);
+			else
+				SetPose(Pose::Idle);
+		}
 	}
 }//namespace

@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                -0.8477898240089417,
-                3.512601852416992,
-                0.0012818996328860521
+                0.3882940709590912,
+                5.049986362457275,
+                0.0024528533685952425
             ],
             "projection": 1,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 7.915409088134766
+            "distance": 17.49530792236328
         },
         "SObject": {},
         "name": "EditorCamera",
@@ -25,9 +25,9 @@
         "version": 1
     },
     "camPos": [
-        -0.8477882742881775,
-        3.5126051902770996,
-        7.916690826416016
+        0.3837633728981018,
+        5.050752639770508,
+        17.497758865356445
     ],
     "editorObjs": [
         {
@@ -39,7 +39,7 @@
                     },
                     "SObject": {},
                     "Transform": {
-                        "parent": "f57c1af0610b68ab95f70bcc3c43dec3",
+                        "parent": "c0638a2339fcd1466f2be2732592b2d0",
                         "quat": [
                             0.0,
                             0.0,
@@ -57,14 +57,14 @@
                             0.0
                         ],
                         "vScale": [
-                            0.5,
-                            0.5,
-                            0.5
+                            0.20000000298023224,
+                            0.20000000298023224,
+                            0.20000000298023224
                         ]
                     },
                     "name": "Unknown",
                     "type": "Transform",
-                    "uuid": "20ce72a7168c0d130f0b22a505a8aabb",
+                    "uuid": "296f65f220e040d2bfcd0d0f554831f5",
                     "version": 1
                 },
                 {
@@ -80,7 +80,7 @@
                     "SObject": {},
                     "name": "MeshRenderer",
                     "type": "MeshRenderer",
-                    "uuid": "dcdee84f21a83e1fa82535620be15714",
+                    "uuid": "6246960f51c568ef9f88ec9c8bc511c8",
                     "version": 1
                 }
             ],
@@ -92,7 +92,7 @@
             },
             "name": "Sphere",
             "type": "GameObject",
-            "uuid": "7a516ee886a4b8166db9b8380954c7ae",
+            "uuid": "0485107b191a742b13ced8588d50a271",
             "version": 1
         }
     ],
@@ -107,7 +107,6 @@
                     },
                     "SObject": {},
                     "Transform": {
-                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
                         "quat": [
                             0.0,
                             0.0,
@@ -115,192 +114,13 @@
                             1.0
                         ],
                         "vPosition": [
-                            -3.4289779663085938,
-                            2.5489587783813477,
-                            -0.0003756847290787846
+                            -1.0,
+                            0.0,
+                            2.038754161048928e-07
                         ],
                         "vRotation": [
                             0.0,
                             -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "f57c1af0610b68ab95f70bcc3c43dec3",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "SpawnPoint",
-            "type": "GameObject",
-            "uuid": "d0ae7b714f899d405da688bc92936545",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "82a7b3d4caafcbaa3f6f4b754d508ce3",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "MapleWorld": {
-                        "camera": "3dd405caf51d20cc8a184d8f34057e5e",
-                        "itemPrefab": "ee1bee2efec5a690531dd2812a6192b7",
-                        "playerPrefab": "3627e56ca0c4ec9642b233813be981aa",
-                        "playerSpawnPoint": "f57c1af0610b68ab95f70bcc3c43dec3"
-                    },
-                    "SObject": {},
-                    "name": "user/MapleWorld",
-                    "type": "MapleWorld",
-                    "uuid": "d14b480840fbfd3e1bbaefc197dc7b28",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "World",
-            "type": "GameObject",
-            "uuid": "ac10dff4b8b89107471a05c7bb22b01f",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "fa167c7691a0ebb3eee93d3cb14d7a6a",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "MobSpawner": {
-                        "mobLimit": 10,
-                        "mobs": [],
-                        "spawnDelayMs": 5000
-                    },
-                    "SObject": {},
-                    "name": "user/MobSpawner",
-                    "type": "MobSpawner",
-                    "uuid": "a7dcd2125ccbdc0a5c4fd1661438673c",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "MobSpawner",
-            "type": "GameObject",
-            "uuid": "08b90fc69f26a864d542f98b54e54bd8",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
                             0.0
                         ],
                         "vScale": [
@@ -311,7 +131,79 @@
                     },
                     "name": "Unknown",
                     "type": "Transform",
-                    "uuid": "005f4ffa1ef76453b10b3be25ef05f61",
+                    "uuid": "1e2f248d765828c54a32a7251a85f3c2",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Foothold": {},
+                    "SObject": {},
+                    "name": "user/Foothold",
+                    "paths": [
+                        {
+                            "points": [
+                                {
+                                    "x": -11.361432075500488,
+                                    "y": 3.688920021057129
+                                },
+                                {
+                                    "x": -9.256999969482422,
+                                    "y": 3.6870920658111572
+                                },
+                                {
+                                    "x": -9.256543159484863,
+                                    "y": 3.0536255836486816
+                                },
+                                {
+                                    "x": -8.440299987792969,
+                                    "y": 3.053999900817871
+                                },
+                                {
+                                    "x": -8.439373016357422,
+                                    "y": 2.4501399993896484
+                                },
+                                {
+                                    "x": 1.2651076316833496,
+                                    "y": 2.450139045715332
+                                },
+                                {
+                                    "x": 4.932007312774658,
+                                    "y": 4.892199993133545
+                                },
+                                {
+                                    "x": 11.363503456115723,
+                                    "y": 4.892000198364258
+                                }
+                            ],
+                            "tag": 1
+                        },
+                        {
+                            "points": [
+                                {
+                                    "x": -11.380000114440918,
+                                    "y": 4.859999656677246
+                                },
+                                {
+                                    "x": -8.609999656677246,
+                                    "y": 6.699999809265137
+                                },
+                                {
+                                    "x": 2.2300000190734863,
+                                    "y": 6.670000076293945
+                                },
+                                {
+                                    "x": 4.932000160217285,
+                                    "y": 4.892000198364258
+                                }
+                            ],
+                            "tag": 1
+                        }
+                    ],
+                    "type": "Foothold",
+                    "uuid": "91446d37ccd450840f5ba0ad3caa242c",
                     "version": 1
                 }
             ],
@@ -321,102 +213,9 @@
                 "bStatic": false,
                 "hideInspector": false
             },
-            "name": "MapleWorld",
+            "name": "colliders",
             "type": "GameObject",
-            "uuid": "73d513d87b70790314f3a810e3fa8d07",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
-                            3.799999952316284,
-                            4.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "fb04fa0589785a34f022984c6d27fbef",
-                    "version": 1
-                },
-                {
-                    "Camera": {
-                        "depth": 0,
-                        "fov": 60.0,
-                        "lookPos": [
-                            0.0,
-                            3.799999952316284,
-                            0.0
-                        ],
-                        "projection": 1
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "Camera",
-                    "type": "Camera",
-                    "uuid": "06819150523abf7ca56173f7244dd4d6",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "PlayerCamera2D": {
-                        "camlimitMax": [
-                            11.350000381469727,
-                            18.06999969482422
-                        ],
-                        "camlimitMin": [
-                            -11.350000381469727,
-                            0.0
-                        ],
-                        "smoothTime": 0.25,
-                        "targetCamera": "06819150523abf7ca56173f7244dd4d6"
-                    },
-                    "SObject": {},
-                    "name": "user/PlayerCamera2D",
-                    "type": "PlayerCamera2D",
-                    "uuid": "3dd405caf51d20cc8a184d8f34057e5e",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "Camera",
-            "type": "GameObject",
-            "uuid": "dc9321b1527d8cd894c16f2996050114",
+            "uuid": "443cfa66b4e04399e3228e79934ba6c3",
             "version": 1
         },
         {
@@ -493,10 +292,10 @@
                     "SObject": {},
                     "Transform": {
                         "quat": [
-                            0.7071068286895752,
                             0.0,
                             0.0,
-                            0.7071068286895752
+                            0.0,
+                            1.0
                         ],
                         "vPosition": [
                             0.0,
@@ -504,7 +303,56 @@
                             0.0
                         ],
                         "vRotation": [
-                            90.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "8a1553c2adc5c3509b8aed4ba762e6e2",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "MapleWorld",
+            "type": "GameObject",
+            "uuid": "39a17cb67f227d9ee44d3cbde8af2fd7",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
                             -0.0,
                             0.0
                         ],
@@ -514,9 +362,27 @@
                             1.0
                         ]
                     },
-                    "name": "Unknown",
+                    "name": "Transform",
                     "type": "Transform",
-                    "uuid": "1e2f248d765828c54a32a7251a85f3c2",
+                    "uuid": "4c3b30a24066316e61e387c9315aac3b",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MapleWorld": {
+                        "camera": "1ef9d26a1fa81f236f4acb7b5fc3d096",
+                        "foothold": "91446d37ccd450840f5ba0ad3caa242c",
+                        "itemPrefab": "ee1bee2efec5a690531dd2812a6192b7",
+                        "playerPrefab": "4fc3a2c15a9d28d7ded5fbb2c3c0a898",
+                        "playerSpawnPoint": "c0638a2339fcd1466f2be2732592b2d0"
+                    },
+                    "SObject": {},
+                    "name": "user/MapleWorld",
+                    "type": "MapleWorld",
+                    "uuid": "7c18287ed5aba31cb5bcde7f1a2e68bb",
                     "version": 1
                 }
             ],
@@ -526,9 +392,9 @@
                 "bStatic": false,
                 "hideInspector": false
             },
-            "name": "colliders",
+            "name": "World",
             "type": "GameObject",
-            "uuid": "443cfa66b4e04399e3228e79934ba6c3",
+            "uuid": "c6bfbf5e8b7aeee872f388c98b5d9b5b",
             "version": 1
         },
         {
@@ -540,7 +406,7 @@
                     },
                     "SObject": {},
                     "Transform": {
-                        "parent": "1e2f248d765828c54a32a7251a85f3c2",
+                        "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
                         "quat": [
                             0.0,
                             0.0,
@@ -548,13 +414,13 @@
                             1.0
                         ],
                         "vPosition": [
-                            -3.5299999713897705,
-                            -9.886678890325129e-05,
-                            -1.1999999284744263
+                            0.0,
+                            3.799999952316284,
+                            4.0
                         ],
                         "vRotation": [
                             0.0,
-                            0.0,
+                            -0.0,
                             0.0
                         ],
                         "vScale": [
@@ -563,9 +429,30 @@
                             1.0
                         ]
                     },
-                    "name": "Unknown",
+                    "name": "Transform",
                     "type": "Transform",
-                    "uuid": "e633e6b1aa0f93fc672d14a6e43b4b98",
+                    "uuid": "d978910e7d47281e601303be34acd40e",
+                    "version": 1
+                },
+                {
+                    "Camera": {
+                        "depth": 0,
+                        "fov": 60.0,
+                        "lookPos": [
+                            0.0,
+                            3.799999952316284,
+                            0.0
+                        ],
+                        "projection": 1
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "Camera",
+                    "type": "Camera",
+                    "uuid": "a4c681d5b264378259f633a1b4d79fc2",
                     "version": 1
                 },
                 {
@@ -573,52 +460,22 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            1.0,
-                            1.0,
-                            1.0
+                    "PlayerCamera2D": {
+                        "camlimitMax": [
+                            11.350000381469727,
+                            18.06999969482422
                         ],
-                        "axisLock": [
-                            1.0,
-                            1.0,
-                            1.0
+                        "camlimitMin": [
+                            -11.350000381469727,
+                            0.0
                         ],
-                        "bGravity": false,
-                        "bInterpolation": false,
-                        "bKinematic": true,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "5dc3b1fa65e84ca09f30e16425e527ca",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
+                        "smoothTime": 0.25,
+                        "targetCamera": "a4c681d5b264378259f633a1b4d79fc2"
                     },
                     "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "b84d734054f1c23c422daff764040881",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            10.0,
-                            1.0,
-                            2.5
-                        ]
-                    },
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "physics/BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "5dc3b1fa65e84ca09f30e16425e527ca",
+                    "name": "user/PlayerCamera2D",
+                    "type": "PlayerCamera2D",
+                    "uuid": "1ef9d26a1fa81f236f4acb7b5fc3d096",
                     "version": 1
                 }
             ],
@@ -628,9 +485,9 @@
                 "bStatic": false,
                 "hideInspector": false
             },
-            "name": "Quad",
+            "name": "Camera",
             "type": "GameObject",
-            "uuid": "8e1ea58c02cb9719b0390b5c33bbf9b3",
+            "uuid": "2d38318625cba238717581e87af26c8c",
             "version": 1
         },
         {
@@ -642,21 +499,21 @@
                     },
                     "SObject": {},
                     "Transform": {
-                        "parent": "1e2f248d765828c54a32a7251a85f3c2",
+                        "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
                         "quat": [
                             0.0,
-                            0.2885332405567169,
                             0.0,
-                            0.9574699401855469
+                            0.0,
+                            1.0
                         ],
                         "vPosition": [
-                            3.5727131366729736,
-                            0.0006404853775165975,
-                            -2.486804485321045
+                            0.0,
+                            0.0,
+                            0.0
                         ],
                         "vRotation": [
                             0.0,
-                            33.54032897949219,
+                            -0.0,
                             0.0
                         ],
                         "vScale": [
@@ -665,9 +522,9 @@
                             1.0
                         ]
                     },
-                    "name": "Unknown",
+                    "name": "Transform",
                     "type": "Transform",
-                    "uuid": "8183bb2ccbccdf525523eb164518501e",
+                    "uuid": "cdc9a4177b89119d337943a341c34688",
                     "version": 1
                 },
                 {
@@ -675,52 +532,15 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "axisLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "bGravity": false,
-                        "bInterpolation": false,
-                        "bKinematic": true,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "e4907f466cb8807cbb7d0bdc2d0737bb",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
+                    "MobSpawner": {
+                        "mobLimit": 10,
+                        "mobs": [],
+                        "spawnDelayMs": 5000
                     },
                     "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "49101d0a5148d4a2b9b25b71bdb02b5b",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            5.0,
-                            1.0,
-                            2.5
-                        ]
-                    },
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "physics/BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "e4907f466cb8807cbb7d0bdc2d0737bb",
+                    "name": "user/MobSpawner",
+                    "type": "MobSpawner",
+                    "uuid": "86cdf7e18e70f79a495045c9fc308da8",
                     "version": 1
                 }
             ],
@@ -730,9 +550,9 @@
                 "bStatic": false,
                 "hideInspector": false
             },
-            "name": "Quad",
+            "name": "MobSpawner",
             "type": "GameObject",
-            "uuid": "d0c60ab74b34ede3dab69c61f073c5a0",
+            "uuid": "924f7d8a9c5bfe82a97ad8093dfdd64e",
             "version": 1
         },
         {
@@ -744,7 +564,7 @@
                     },
                     "SObject": {},
                     "Transform": {
-                        "parent": "1e2f248d765828c54a32a7251a85f3c2",
+                        "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
                         "quat": [
                             0.0,
                             0.0,
@@ -752,13 +572,13 @@
                             1.0
                         ],
                         "vPosition": [
-                            8.215999603271484,
-                            0.0011834747856482863,
-                            -3.6600000858306885
+                            -0.29563474655151367,
+                            7.606643199920654,
+                            -0.00013041298370808363
                         ],
                         "vRotation": [
                             0.0,
-                            0.0,
+                            -0.0,
                             0.0
                         ],
                         "vScale": [
@@ -767,62 +587,9 @@
                             1.0
                         ]
                     },
-                    "name": "Unknown",
+                    "name": "Transform",
                     "type": "Transform",
-                    "uuid": "61b504e5f0e45c45ce73782f6d332b08",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "axisLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "bGravity": false,
-                        "bInterpolation": false,
-                        "bKinematic": true,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "edafaff1941ee2075856983e787d6b52",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "7628969d7e82ca1330b61bea52468080",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            6.5,
-                            1.0,
-                            2.5
-                        ]
-                    },
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "physics/BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "edafaff1941ee2075856983e787d6b52",
+                    "uuid": "c0638a2339fcd1466f2be2732592b2d0",
                     "version": 1
                 }
             ],
@@ -832,213 +599,9 @@
                 "bStatic": false,
                 "hideInspector": false
             },
-            "name": "Quad",
+            "name": "SpawnPoint",
             "type": "GameObject",
-            "uuid": "578550e3ccda70d86a6abab90ed5a314",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "parent": "1e2f248d765828c54a32a7251a85f3c2",
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            -9.186192512512207,
-                            0.0030203694477677345,
-                            -2.5855510234832764
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Unknown",
-                    "type": "Transform",
-                    "uuid": "46479b8ae885b5bc7eb19c579ec766b4",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "axisLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "bGravity": false,
-                        "bInterpolation": false,
-                        "bKinematic": true,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "9bcb0ec21910de0892370b7623b8b401",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "709cd64b35494f5c9fb87b3c222987d3",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            1.5,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "physics/BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "9bcb0ec21910de0892370b7623b8b401",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "Quad",
-            "type": "GameObject",
-            "uuid": "e2041ffc022dc58ec51f8664fb15ddcb",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "parent": "1e2f248d765828c54a32a7251a85f3c2",
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            -10.600369453430176,
-                            0.0030371060129255056,
-                            -3.1977365016937256
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Unknown",
-                    "type": "Transform",
-                    "uuid": "cac5aee6bb6cea14e171a6b359ec3781",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "axisLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "bGravity": false,
-                        "bInterpolation": false,
-                        "bKinematic": true,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "4a394686b77092f22b30fbcc5286d735",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "55679bea85e263f8464ad2a431cccfb5",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            2.5,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "physics/BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "4a394686b77092f22b30fbcc5286d735",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "Quad",
-            "type": "GameObject",
-            "uuid": "1469cf7a8433517fe0f9ec977a90b3c4",
+            "uuid": "5d91f0611b8feb933f9bfcc2e36838c4",
             "version": 1
         }
     ],

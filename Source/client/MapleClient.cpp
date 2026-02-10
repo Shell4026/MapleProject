@@ -41,6 +41,7 @@ namespace sh::game
 	SH_USER_API void MapleClient::Awake()
 	{
 		GameManager::GetInstance()->SetImmortalObject(gameObject);
+		SetPriority(100);
 	}
 	SH_USER_API void MapleClient::Start()
 	{
@@ -55,7 +56,7 @@ namespace sh::game
 			}
 		);
 	}
-	SH_USER_API void MapleClient::Update()
+	SH_USER_API void MapleClient::BeginUpdate()
 	{
 		user.Tick(world.deltaTime);
 		ProcessUdpPackets();
