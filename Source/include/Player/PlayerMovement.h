@@ -34,6 +34,7 @@ namespace sh::game
 		SH_USER_API auto GetSpeed() const -> float { return speed; }
 		SH_USER_API auto GetJumpSpeed() const -> float { return jumpSpeed; }
 		SH_USER_API auto GetVelocity() const -> Vec2 { return Vec2{ velX, velY }; }
+		SH_USER_API auto IsGround() const -> bool { return bGround; }
 	private:
 		void ApplyGravity();
 		void ApplyPos();

@@ -1,0 +1,22 @@
+{
+    "AnimationData": {
+        "bLoop": true,
+        "delayMs": [
+            180,
+            180,
+            180,
+            180
+        ],
+        "textures": [
+            "c1776fa25e8a4d228883faaa19983f72",
+            "bfbf20b9acc19faaad786769023ce4ee",
+            "4895748af0557dfe21f4283c73a2e163",
+            "caa3a362c2f71a563feb3af8b8a7f8e5"
+        ]
+    },
+    "fullType": "sh::game::AnimationData",
+    "name": "WalkAnimation",
+    "type": "AnimationData",
+    "uuid": "6ea50f88798d8057615d8f93409ce9b2",
+    "version": 1
+}

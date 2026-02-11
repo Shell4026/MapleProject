@@ -1,7 +1,6 @@
 ﻿#include "FootholdInspector.h"
 
 #include "Game/World.h"
-#include "Game/ImGUImpl.h"
 #include "Game/Component/Render/MeshRenderer.h"
 
 #include "Editor/EditorResource.h"
@@ -16,7 +15,11 @@ namespace sh::editor
 	}
 	SH_EDIT_API void FootholdInspector::RenderUI(void* obj, int idx)
 	{
+		CustomInspector::RenderUI(obj, idx);
+
 		game::Foothold& foothold = *reinterpret_cast<game::Foothold*>(obj);
+		if (foothold.IsPendingKill())
+			return;
 		ImGui::SetCurrentContext(foothold.world.GetUiContext().GetContext());
 		
 		ImGui::Text("Path");

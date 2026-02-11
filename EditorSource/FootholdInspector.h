@@ -11,7 +11,7 @@
 #include "Editor/UI/CustomInspector.h"
 namespace sh::editor
 {
-	class FootholdInspector : public ICustomInspector
+	class FootholdInspector : public CustomInspector
 	{
 		INSPECTOR(FootholdInspector, game::Foothold)
 	public:
