@@ -36,10 +36,12 @@ namespace sh::game
 		SH_USER_API auto GetVelocity() const -> Vec2 { return Vec2{ velX, velY }; }
 		SH_USER_API auto IsGround() const -> bool { return bGround; }
 	private:
+		void StepMovement();
 		void ApplyGravity();
 		void ApplyPos();
 		void CheckGround();
 		void MoveOnGround();
+		void ClampPos();
 #if SH_SERVER
 		void ProcessInput(const PlayerInputPacket& packet);
 #else
@@ -77,31 +79,34 @@ namespace sh::game
 		{
 			int xMove = 0;
 			uint32_t seq = 0;
-			uint64_t tick = 0;
+			uint64_t recvServerTick = 0; // 받았을 때 당시 서버 물리 틱
+			uint64_t clientTick = 0; // 해당 input을 요청 했을 당시 클라 물리 틱
 			bool bJump = false;
 			bool bProne = false;
 		} lastInput;
 
 		bool bSend = false;
 #else
-		uint64_t inputSeqCounter = 1;
+		uint64_t nextSeq = 1;
 		struct LastInput
 		{
+			uint32_t seq = 0;
 			int xMove = 0;
 			bool bJump = false;
 			bool bProne = false;
 		} lastInput;
-		struct SentState
+
+		struct StateHistory
 		{	
 			uint32_t seq = 0;
 			uint64_t tick = 0;
+			Vec2 pos;
+			Vec2 vel;
 			int xMove = 0;
-			float velX = 0.f;
-			float velY = 0.f;
 			bool bJump = false;
 			bool bProne = false;
 		};
-		std::deque<SentState> sentStates;
+		std::deque<StateHistory> history;
 #endif
 		bool bGround = false;
 		bool bProne = false;

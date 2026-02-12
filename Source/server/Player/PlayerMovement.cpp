@@ -45,9 +45,8 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::FixedUpdate()
 	{
-		ApplyGravity();
-		ApplyPos();
-		CheckGround();
+		StepMovement();
+
 		++tick;
 	}
 	SH_USER_API void PlayerMovement::Update()
@@ -64,6 +63,8 @@ namespace sh::game
 
 			packet.lastProcessedInputSeq = lastInput.seq;
 			packet.serverTick = tick;
+			packet.clientTickAtState = lastInput.clientTick + (tick - lastInput.recvServerTick);
+
 			packet.px = pos.x;
 			packet.py = pos.y;
 			packet.vx = velX;
@@ -85,7 +86,8 @@ namespace sh::game
 			return;
 
 		lastInput.seq = packet.seq;
-		lastInput.tick = packet.tick;
+		lastInput.clientTick = packet.tick;
+		lastInput.recvServerTick = tick;
 		lastInput.xMove = packet.inputX;
 		lastInput.bJump = packet.bJump;
 		lastInput.bProne = packet.bProne;

@@ -27,6 +27,7 @@ namespace sh::game
 			json["lastSeq"] = lastProcessedInputSeq;
 			json["player"] = playerUUID;
 			json["st"] = serverTick;
+			json["ct"] = clientTickAtState;
 			json["ground"] = bGround;
 			json["prone"] = bProne;
 			json["lock"] = bLock;
@@ -50,6 +51,8 @@ namespace sh::game
 				playerUUID = json["player"];
 			if (json.contains("st"))
 				serverTick = json["st"];
+			if (json.contains("ct"))
+				clientTickAtState = json["ct"];
 			if (json.contains("ground"))
 				bGround = json["ground"];
 			if (json.contains("prone"))
@@ -65,6 +68,7 @@ namespace sh::game
 
 		uint32_t lastProcessedInputSeq = 0;
 		uint64_t serverTick = 0;
+		uint64_t clientTickAtState = 0;
 
 		std::array<uint32_t, 4> playerUUID;
 

@@ -36,10 +36,21 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::FixedUpdate()
 	{
-		ApplyGravity();
-		ApplyPos();
-		CheckGround();
+		StepMovement();
+
 		++tick;
+
+		StateHistory state{};
+		state.seq = lastInput.seq;
+		state.tick = tick;
+		state.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
+		state.vel = { velX, velY };
+		state.xMove = lastInput.xMove;
+		state.bProne = lastInput.bProne;
+		state.bJump = lastInput.bJump;
+		history.push_back(state);
+		while (history.size() > 180)
+			history.pop_front();
 	}
 	SH_USER_API void PlayerMovement::Update()
 	{
@@ -70,30 +81,23 @@ namespace sh::game
 			bProne != lastInput.bProne ||
 			xInput != lastInput.xMove;
 
-		lastInput.xMove = xInput;
-		lastInput.bJump = bJump;
-		lastInput.bProne = bProne;
-
 		if (bInputChanged)
 		{
 			SH_INFO("send");
 			PlayerInputPacket packet{};
 			packet.user = client.GetUser().GetUserUUID();
-			packet.seq = inputSeqCounter++;
+			packet.seq = nextSeq++;
 			packet.tick = tick;
 			packet.inputX = xInput;
 			packet.bJump = bJump;
 			packet.bProne = bProne;
 			client.SendPacket(packet);
-
-			SentState state{};
-			state.seq = packet.seq;
-			state.tick = tick;
-			state.xMove = packet.inputX;
-			state.bProne = packet.bProne;
-			state.bJump = packet.bJump;
-			sentStates.push_back(state);
 		}
+
+		lastInput.seq = nextSeq - 1;
+		lastInput.xMove = xInput;
+		lastInput.bJump = bJump;
+		lastInput.bProne = bProne;
 
 		// 예측
 		if (xInput > 0)
@@ -111,70 +115,75 @@ namespace sh::game
 	}
 	void PlayerMovement::Reconciliation(const PlayerStatePacket& packet)
 	{
-		const auto& pos = gameObject.transform->GetWorldPosition();
-		gameObject.transform->SetWorldPosition(packet.px, packet.py, pos.z);
-		gameObject.transform->UpdateMatrix();
-
-		velX = packet.vx;
-		velY = packet.vy;
-		bGround = packet.bGround;
-		bProne = packet.bProne;
-		bInputLock = packet.bLock;
-
-		const auto& curPos = gameObject.transform->GetWorldPosition();
-		ground = foothold->GetExpectedFallContact({ curPos.x, curPos.y + offset });
-
-		if (sentStates.empty())
+		if (history.empty())
+			return;
+		if (packet.lastProcessedInputSeq < history.front().seq) // 오래된 패킷임
 		{
-			SentState base{};
-			base.seq = 0;
-			base.tick = 0;
-			base.xMove = 0;
-			base.bJump = false;
-			base.bProne = false;
-			sentStates.push_back(base);
+			//SH_INFO_FORMAT("packet seq: {}, seq: {}", packet.lastProcessedInputSeq, history.front().seq);
+			return;
 		}
 
-		while (sentStates.size() > 1)
+		while (!history.empty() && history.front().seq < packet.lastProcessedInputSeq)
+			history.pop_front();
+
+		if (history.empty())
 		{
-			const bool bAcked = (sentStates[1].seq <= packet.lastProcessedInputSeq);
-			const bool bBeforeOrAtSnapshot = (sentStates[1].tick <= packet.serverTick);
-			if (bAcked && bBeforeOrAtSnapshot)
-				sentStates.pop_front();
-			else
-				break;
+			//SH_INFO("empty");
+			return;
 		}
 
-		if (packet.serverTick >= tick) // 서버가 제일 최신 상태임
+		const uint64_t targetTick = packet.clientTickAtState;
+		auto it = std::lower_bound(history.begin(), history.end(), targetTick,
+			[&](const StateHistory& history, uint64_t tick) { return history.tick < tick; });
+
+		if (it == history.end() || it->tick != targetTick)
 			return;
 
-		std::size_t stateIdx = 0;
-		while (stateIdx + 1 < sentStates.size() && sentStates[stateIdx + 1].tick <= packet.serverTick)
-			++stateIdx;
+		const auto& pastHistory = *it;
+		const float dx = (pastHistory.pos.x - packet.px);
+		const float dy = (pastHistory.pos.y - packet.py);
+		const float difSqr = dx * dx + dy * dy;
+		if (difSqr < 0.5f * 0.5f) // 50픽셀 오차까진 허용
+			return;
 
-		for (uint64_t t = packet.serverTick; t < tick; ++t)
+		// 즉시 이동
 		{
-			while (stateIdx + 1 < sentStates.size() && sentStates[stateIdx + 1].tick <= t)
-				++stateIdx;
-	
-			SentState& pastState = sentStates[stateIdx];
-	
-			if (pastState.xMove > 0)
+			const auto& oldPos = gameObject.transform->GetWorldPosition();
+			gameObject.transform->SetWorldPosition(packet.px, packet.py, oldPos.z);
+			gameObject.transform->UpdateMatrix();
+
+			velX = packet.vx;
+			velY = packet.vy;
+			bGround = packet.bGround;
+			bProne = packet.bProne;
+			bInputLock = packet.bLock;
+
+			const auto& p = gameObject.transform->GetWorldPosition();
+			ground = foothold->GetExpectedFallContact({ p.x, p.y + offset });
+		}
+		// 리플레이
+		for (uint64_t t = std::distance(history.begin(), it); t < history.size(); ++t)
+		{
+			StateHistory& lastHistory = history[t];
+
+			if (lastHistory.xMove > 0)
 				velX = speed;
-			else if (pastState.xMove < 0)
+			else if (lastHistory.xMove < 0)
 				velX = -speed;
 			else
 				velX = 0.f;
 
-			if (pastState.bJump && bGround)
+			if (lastHistory.bJump && bGround)
 			{
 				bGround = false;
 				velY = jumpSpeed;
 			}
+			bProne = lastHistory.bProne;
 
-			ApplyGravity();
-			ApplyPos();
-			CheckGround();
+			StepMovement();
+
+			lastHistory.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
+			lastHistory.vel = { velX, velY };
 		}
 	}
 }//namespace

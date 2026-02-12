@@ -17,6 +17,13 @@ namespace sh::game
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		ground = foothold->GetExpectedFallContact({ pos.x, pos.y });
 	}
+	void PlayerMovement::StepMovement()
+	{
+		ApplyGravity();
+		ApplyPos();
+		CheckGround();
+		ClampPos();
+	}
 	void PlayerMovement::ApplyGravity()
 	{
 		if (bGround)
@@ -128,5 +135,13 @@ namespace sh::game
 			return;
 		}
 		gameObject.transform->SetWorldPosition({ targetX, targetY, pos.z });
+	}
+	void PlayerMovement::ClampPos()
+	{
+		auto pos = gameObject.transform->GetWorldPosition();
+		pos.x = std::roundf(pos.x * 100.0f) / 100.0f;
+		pos.y = std::roundf(pos.y * 100.0f) / 100.0f;
+		gameObject.transform->SetWorldPosition(pos);
+		gameObject.transform->UpdateMatrix();
 	}
 }//namespace
