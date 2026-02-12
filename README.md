@@ -38,6 +38,7 @@ https://youtu.be/-ZEik9VYwIc
   - shared_ptr을 통해 폰트 객체를 전역적으로 관리하고 모든 사용처가 사라질 시 제거
   
 ## 플레이어
+- 예측-재조정(Prediction - Reconciliation) 기반 움직임 [상세](https://github.com/Shell4026/MapleProject/blob/dev/anotherWorld/PlayerPrediction.md)
 - 입력 전송 최적화
   - 매 프레임 전송 대신 입력 상태가 변경될 때만 PlayerInputPacket을 전송
 - 서버 시뮬레이션
