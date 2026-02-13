@@ -48,6 +48,8 @@ namespace sh::game
 #else
 		void ProcessLocalInput();
 		void Reconciliation(const PlayerStatePacket& packet);
+		void ProcessRemote(const PlayerStatePacket& packet);
+		void InterpolateRemote();
 #endif
 	private:
 		constexpr static float G = 20.f;
@@ -108,6 +110,8 @@ namespace sh::game
 			bool bProne = false;
 		};
 		std::deque<StateHistory> history;
+
+		Vec2 serverPos{ 0.f, 0.f };
 #endif
 		bool bRight = false;
 		bool bGround = false;

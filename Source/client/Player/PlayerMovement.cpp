@@ -9,48 +9,59 @@ namespace sh::game
 	// 클라이언트 코드
 	SH_USER_API void PlayerMovement::Awake()
 	{
+		serverPos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
+
 		if (player == nullptr)
 			SH_ERROR("Player is nullptr!");
-		if (player->IsLocal())
-		{
-			// 이벤트들은 BeginUpdate전에 이뤄짐
-			packetSubscriber.SetCallback(
-				[this](const network::PacketEvent& evt)
-				{
-					if (evt.packet->GetId() == PlayerStatePacket::ID)
-						Reconciliation(static_cast<const PlayerStatePacket&>(*evt.packet));
-				}
-			);
-			MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
-		}
-		else
-		{
 
-		}
+		// 이벤트들은 BeginUpdate전에 이뤄짐
+		packetSubscriber.SetCallback(
+			[this](const network::PacketEvent& evt)
+			{
+				if (evt.packet->GetId() == PlayerStatePacket::ID)
+				{
+					auto& packet = static_cast<const PlayerStatePacket&>(*evt.packet);
+					if (player->GetUserUUID() == packet.playerUUID)
+					{
+						if (player->IsLocal())
+							Reconciliation(packet);
+						else
+							ProcessRemote(packet);
+					}
+				}
+			}
+		);
+		MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
+
 		foothold = player->GetCurrentWorld()->GetFoothold();
 	}
 	SH_USER_API void PlayerMovement::BeginUpdate()
 	{
 		if (player->IsLocal())
 			ProcessLocalInput();
+		else
+			InterpolateRemote();
 	}
 	SH_USER_API void PlayerMovement::FixedUpdate()
 	{
-		StepMovement();
+		if (player->IsLocal())
+		{
+			StepMovement();
 
-		++tick;
+			++tick;
 
-		StateHistory state{};
-		state.seq = lastInput.seq;
-		state.tick = tick;
-		state.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
-		state.vel = { velX, velY };
-		state.xMove = lastInput.xMove;
-		state.bProne = lastInput.bProne;
-		state.bJump = lastInput.bJump;
-		history.push_back(state);
-		while (history.size() > 180)
-			history.pop_front();
+			StateHistory state{};
+			state.seq = lastInput.seq;
+			state.tick = tick;
+			state.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
+			state.vel = { velX, velY };
+			state.xMove = lastInput.xMove;
+			state.bProne = lastInput.bProne;
+			state.bJump = lastInput.bJump;
+			history.push_back(state);
+			while (history.size() > 180)
+				history.pop_front();
+		}
 	}
 	SH_USER_API void PlayerMovement::Update()
 	{
@@ -191,5 +202,27 @@ namespace sh::game
 			lastHistory.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
 			lastHistory.vel = { velX, velY };
 		}
+	}
+	void PlayerMovement::ProcessRemote(const PlayerStatePacket& packet)
+	{
+		serverPos = { packet.px, packet.py };
+		velX = packet.vx;
+		velY = packet.vy;
+		if (velX > 0.01f)
+			bRight = true;
+		else if (velX < -0.01f)
+			bRight = false;
+
+		if (std::abs(packet.vy) > 0.01f)
+			bGround = false;
+		else
+			bGround = true;
+	}
+	void PlayerMovement::InterpolateRemote()
+	{
+		auto pos = gameObject.transform->GetWorldPosition();
+		pos = glm::mix(glm::vec2{ pos }, glm::vec2{ serverPos }, 0.2f);
+		gameObject.transform->SetWorldPosition(pos);
+		gameObject.transform->UpdateMatrix();
 	}
 }//namespace
