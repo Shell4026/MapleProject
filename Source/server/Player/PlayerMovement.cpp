@@ -30,18 +30,23 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::BeginUpdate()
 	{
-		if (lastInput.xMove > 0)
-			velX = speed;
-		else if (lastInput.xMove < 0)
-			velX = -speed;
+		if (!lastInput.bProne)
+		{
+			if (lastInput.xMove > 0)
+				velX = speed;
+			else if (lastInput.xMove < 0)
+				velX = -speed;
+			else
+				velX = 0.f;
+
+			if (lastInput.bJump && bGround)
+			{
+				velY = jumpSpeed;
+				bGround = false;
+			}
+		}
 		else
 			velX = 0.f;
-
-		if (lastInput.bJump && bGround)
-		{
-			velY = jumpSpeed;
-			bGround = false;
-		}
 	}
 	SH_USER_API void PlayerMovement::FixedUpdate()
 	{

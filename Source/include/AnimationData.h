@@ -23,15 +23,15 @@ namespace sh::game
 		SH_USER_API auto GetTexture(int idx) const -> render::Texture*;
 		SH_USER_API auto GetDelay(int idx) const -> uint32_t;
 		SH_USER_API auto GetSize() const -> std::size_t;
-		SH_USER_API auto GetOffset() const -> const Vec2& { return offset; }
+		SH_USER_API auto GetPos() const -> const Vec2& { return pos; }
 		SH_USER_API auto IsLoop() const -> bool { return bLoop; }
 	private:
 		PROPERTY(textures)
 		std::vector<render::Texture*> textures;
 		PROPERTY(delayMs)
 		std::vector<uint32_t> delayMs;
-		PROPERTY(offset)
-		Vec2 offset{ 0.f, 0.f };
+		PROPERTY(pos)
+		Vec2 pos{ 0.f, 0.f };
 		PROPERTY(bLoop)
 		bool bLoop = false;
 	};

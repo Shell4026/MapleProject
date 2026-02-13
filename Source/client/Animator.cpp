@@ -12,16 +12,6 @@ namespace sh::game
 	{
 		if (renderer == nullptr)
 			SH_ERROR("renderer is nullptr!");
-		else
-		{
-			const auto& pos = renderer->gameObject.transform->position;
-			const auto& scale = renderer->gameObject.transform->GetWorldScale();
-			rendererPos.x = pos.x;
-			rendererPos.y = pos.y;
-
-			rendererScale.x = scale.x;
-			rendererScale.y = scale.y;
-		}
 
 		for (auto& state : anims)
 		{
@@ -136,9 +126,8 @@ namespace sh::game
 			return;
 		nextT = curAnim->GetDelay(animIdx) / 1000.f;
 
-		const Vec2& offset = curAnim->GetOffset();
-		const auto& pos = renderer->gameObject.transform->GetWorldPosition();
-		renderer->gameObject.transform->SetPosition(rendererPos.x + offset.x, rendererPos.y + offset.y, pos.z);
+		const Vec2& animPos = curAnim->GetPos();
+		renderer->gameObject.transform->SetPosition(animPos.x, animPos.y, renderer->gameObject.transform->position.z);
 		float w = texPtr->GetWidth() * 0.01f;
 		float h = texPtr->GetHeight() * 0.01f;
 		renderer->gameObject.transform->SetScale(w, 1.f, h);

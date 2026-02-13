@@ -36,6 +36,7 @@ namespace sh::game
 		SH_USER_API auto GetVelocity() const -> Vec2 { return Vec2{ velX, velY }; }
 		SH_USER_API auto IsGround() const -> bool { return bGround; }
 		SH_USER_API auto IsRight() const -> bool { return bRight; }
+		SH_USER_API auto IsProne() const -> bool { return lastInput.bProne; }
 	private:
 		void StepMovement();
 		void ApplyGravity();

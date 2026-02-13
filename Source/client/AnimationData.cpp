@@ -1,7 +1,4 @@
 ﻿#include "AnimationData.h"
-#include "AnimationData.h"
-#include "AnimationData.h"
-#include "AnimationData.h"
 
 namespace sh::game
 {

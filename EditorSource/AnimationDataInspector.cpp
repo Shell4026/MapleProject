@@ -65,12 +65,12 @@ namespace sh::editor
 			bChanged = true;
 		}
 
-		ImGui::Text("Offset");
-		float offset[2] = { anim.offset.x, anim.offset.y };
-		if (ImGui::InputFloat2("##offset", offset))
+		ImGui::Text("Position");
+		float pos[2] = { anim.pos.x, anim.pos.y };
+		if (ImGui::InputFloat2("##position", pos))
 		{
-			anim.offset.x = offset[0];
-			anim.offset.y = offset[1];
+			anim.pos.x = pos[0];
+			anim.pos.y = pos[1];
 			bChanged = true;
 		}
 

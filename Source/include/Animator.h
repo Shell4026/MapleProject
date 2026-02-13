@@ -27,6 +27,7 @@ namespace sh::game
 
 		SH_USER_API void SetState(int state);
 		SH_USER_API auto GetState() const -> int { return state; }
+		SH_USER_API auto GetCurAnimation() const -> AnimationData* { return curAnim; }
 	private:
 		void DecideAnimation();
 		void Next();
@@ -39,9 +40,6 @@ namespace sh::game
 			AnimationData* anim = nullptr;
 			int condition = 0;
 		};
-		Vec2 rendererPos{ 0.f, 0.f };
-		Vec2 rendererScale{ 1.f, 1.f };
-
 		std::vector<AnimState> anims;
 
 		PROPERTY(curAnim, core::PropertyOption::invisible)

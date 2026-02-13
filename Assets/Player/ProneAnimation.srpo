@@ -5,18 +5,18 @@
             10
         ],
         "pos": [
-            0.0,
-            0.4099999964237213
+            -0.23000000417232513,
+            0.25999999046325684
         ],
         "textures": [
-            "f1ab8160b5c555ffd12e67d0b7c4f92e"
+            "7817ac8e38a71f3d52fd206632bbbdc8"
         ]
     },
     "SObject": null,
     "ScriptableObject": null,
     "fullType": "sh::game::AnimationData",
-    "name": "JumpAnimation",
+    "name": "ProneAnimation",
     "type": "AnimationData",
-    "uuid": "780d0ebe39dabf4a4fd230d9db8e62ca",
+    "uuid": "eb32db257ca65a495d91fb2265bca980",
     "version": 1
 }

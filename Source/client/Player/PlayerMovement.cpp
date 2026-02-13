@@ -111,23 +111,30 @@ namespace sh::game
 		lastInput.bProne = bProne;
 
 		// 예측
-		if (xInput > 0)
+		if (!bProne)
 		{
-			bRight = true;
-			velX = speed;
-		}
-		else if (xInput < 0)
-		{
-			bRight = false;
-			velX = -speed;
+			if (xInput > 0)
+			{
+				bRight = true;
+				velX = speed;
+			}
+			else if (xInput < 0)
+			{
+				bRight = false;
+				velX = -speed;
+			}
+			else
+				velX = 0.f;
+
+			if (bJump && bGround)
+			{
+				velY = jumpSpeed;
+				bGround = false;
+			}
 		}
 		else
-			velX = 0.f;
-
-		if (bJump && bGround)
 		{
-			velY = jumpSpeed;
-			bGround = false;
+			velX = 0.f;
 		}
 	}
 	void PlayerMovement::Reconciliation(const PlayerStatePacket& packet)
