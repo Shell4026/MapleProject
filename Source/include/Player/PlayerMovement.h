@@ -35,6 +35,7 @@ namespace sh::game
 		SH_USER_API auto GetJumpSpeed() const -> float { return jumpSpeed; }
 		SH_USER_API auto GetVelocity() const -> Vec2 { return Vec2{ velX, velY }; }
 		SH_USER_API auto IsGround() const -> bool { return bGround; }
+		SH_USER_API auto IsRight() const -> bool { return bRight; }
 	private:
 		void StepMovement();
 		void ApplyGravity();
@@ -108,6 +109,7 @@ namespace sh::game
 		};
 		std::deque<StateHistory> history;
 #endif
+		bool bRight = false;
 		bool bGround = false;
 		bool bProne = false;
 		bool bInputLock = false;

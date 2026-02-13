@@ -1,5 +1,7 @@
 ﻿#include "Player/PlayerAnimator.h"
 #include "Player/PlayerMovement.h"
+
+#include "Game/GameObject.h"
 namespace sh::game
 {
 	PlayerAnimator::PlayerAnimator(GameObject& owner) :
@@ -23,5 +25,12 @@ namespace sh::game
 			SetState(0);
 
 		Super::Update();
+
+		const bool bRight = movement->IsRight();
+		auto scale = renderer->gameObject.transform->scale;
+		if (bRight && scale.x > 0 || !bRight && scale.x < 0)
+			scale.x = -scale.x;
+		
+		renderer->gameObject.transform->SetScale(scale);
 	}
 }//namespace

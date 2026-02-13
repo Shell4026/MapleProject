@@ -30,14 +30,15 @@ namespace sh::game
 	private:
 		void DecideAnimation();
 		void Next();
+	protected:
+		PROPERTY(renderer)
+		MeshRenderer* renderer = nullptr;
 	private:
 		struct AnimState
 		{
 			AnimationData* anim = nullptr;
 			int condition = 0;
 		};
-		PROPERTY(renderer)
-		MeshRenderer* renderer = nullptr;
 		Vec2 rendererPos{ 0.f, 0.f };
 		Vec2 rendererScale{ 1.f, 1.f };
 

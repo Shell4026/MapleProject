@@ -55,7 +55,7 @@ namespace sh::game
 	SH_USER_API void PlayerMovement::Update()
 	{
 	}
-	void sh::game::PlayerMovement::ProcessLocalInput()
+	void PlayerMovement::ProcessLocalInput()
 	{
 		static MapleClient& client = *MapleClient::GetInstance();
 
@@ -101,9 +101,15 @@ namespace sh::game
 
 		// 예측
 		if (xInput > 0)
+		{
+			bRight = true;
 			velX = speed;
+		}
 		else if (xInput < 0)
+		{
+			bRight = false;
 			velX = -speed;
+		}
 		else
 			velX = 0.f;
 
