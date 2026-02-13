@@ -33,7 +33,10 @@ namespace sh::game
 	SH_USER_API void NameTag::BeginUpdate()
 	{
 		if (bRequireNewFont)
+		{
 			CreateFont();
+			Setup();
+		}
 	}
 	SH_USER_API void NameTag::OnPropertyChanged(const core::reflection::Property& prop)
 	{
@@ -103,7 +106,7 @@ namespace sh::game
 	}
 	void NameTag::SetBackgroundScale()
 	{
-		float width = GetTextWidth() * 0.5f;
+		const float width = GetTextWidth();
 		if (backgroundRenderer != nullptr)
 		{
 			auto scale = backgroundRenderer->gameObject.transform->scale;
@@ -112,9 +115,10 @@ namespace sh::game
 		if (textRenderer != nullptr)
 		{
 			auto pos = textRenderer->gameObject.transform->position;
-			textRenderer->gameObject.transform->SetPosition(-width, pos.y, pos.z);
+			textRenderer->gameObject.transform->SetPosition(-width * 0.5f, pos.y, pos.z);
 		}
 	}
+
 	NameTag::GlobalFont::~GlobalFont()
 	{
 		if (font != nullptr)
