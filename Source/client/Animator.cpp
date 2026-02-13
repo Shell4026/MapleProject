@@ -12,12 +12,6 @@ namespace sh::game
 	{
 		if (renderer == nullptr)
 			SH_ERROR("renderer is nullptr!");
-
-		for (auto& state : anims)
-		{
-			if (state.anim != nullptr)
-				core::GarbageCollection::GetInstance()->SetRootSet(state.anim);
-		}
 	}
 	SH_USER_API void Animator::Start()
 	{
@@ -135,5 +129,10 @@ namespace sh::game
 		auto prop = renderer->GetMaterialPropertyBlock();
 		prop->SetProperty("tex", texPtr);
 		renderer->UpdatePropertyBlockData();
+	}
+
+	SH_USER_API void Animator::AnimState::PushReferenceObjects(core::GarbageCollection& gc)
+	{
+		gc.PushReferenceObject(anim);
 	}
 }//namespace

@@ -2,6 +2,8 @@
 #include "Export.h"
 #include "AnimationData.h"
 
+#include "Core/GCObject.h"
+
 #include "Game/Component/Component.h"
 #include "Game/Component/Render/MeshRenderer.h"
 #include "Game/Vector.h"
@@ -35,10 +37,12 @@ namespace sh::game
 		PROPERTY(renderer)
 		MeshRenderer* renderer = nullptr;
 	private:
-		struct AnimState
+		struct AnimState : core::GCObject
 		{
 			AnimationData* anim = nullptr;
 			int condition = 0;
+
+			SH_USER_API void PushReferenceObjects(core::GarbageCollection& gc) override;
 		};
 		std::vector<AnimState> anims;
 
