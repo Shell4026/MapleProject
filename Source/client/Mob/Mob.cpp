@@ -10,6 +10,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/norm.hpp"
 
+// 클라
 namespace sh::game
 {
     Mob::Mob(GameObject& owner) : 
@@ -29,15 +30,9 @@ namespace sh::game
         SetPriority(-1);
         status.Reset(maxHp);
 
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->GetCollider()->SetCollisionTag(tag::entityTag);
-            rigidbody->GetCollider()->SetAllowCollisions(tag::groundTag);
-        }
         gameObject.SetActive(false);
 
         MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
-        animator.SetAnimation(anim);
         initPos = gameObject.transform->GetWorldPosition();
     }
 
@@ -78,19 +73,6 @@ namespace sh::game
             rigidbody->SetLinearVelocity({ correctedVel.x, correctedVel.y, 0.f });
             rigidbody->ResetPhysicsTransform();
         }
-
-        // 애니메이션
-        if (core::IsValid(anim))
-        {
-            animator.SetFacingFromVelocity(serverVel);
-            animator.Update(status, serverVel, world.deltaTime);
-        }
-    }
-
-    SH_USER_API void Mob::SetAnimation(MobAnimation& anim)
-    {
-        this->anim = &anim;
-        animator.SetAnimation(this->anim);
     }
 
     SH_USER_API void Mob::Reset()

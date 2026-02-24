@@ -1,0 +1,22 @@
+{
+    "AnimationData": {
+        "bLoop": false,
+        "delayMs": [
+            10
+        ],
+        "pos": [
+            0.0,
+            0.0
+        ],
+        "textures": [
+            "8ace5ae1522e9d5c12db48bf6fb5ad45"
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::AnimationData",
+    "name": "idle.srpo",
+    "type": "AnimationData",
+    "uuid": "2a6936146a2082485c70bf571e1d0793",
+    "version": 1
+}

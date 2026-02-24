@@ -21,11 +21,6 @@ namespace sh::game
         SetPriority(-1);
         status.Reset(maxHp);
 
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->GetCollider()->SetCollisionTag(tag::entityTag);
-            rigidbody->GetCollider()->SetAllowCollisions(tag::groundTag);
-        }
         gameObject.SetActive(false);
 
         MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);

@@ -40,8 +40,6 @@ namespace sh::game
         SH_USER_API void Kill(const Player& player);
         SH_USER_API void BroadcastStatePacket();
         SH_USER_API void Hit(Skill& skill, Player& player);
-#else
-        SH_USER_API void SetAnimation(MobAnimation& anim);
 #endif
 
         SH_USER_API auto GetMaxHP() const -> uint32_t { return maxHp; }
@@ -90,10 +88,6 @@ namespace sh::game
 #else
         glm::vec2 serverPos{};
         glm::vec2 serverVel{};
-        MobAnimationController animator;
-
-        PROPERTY(anim)
-        MobAnimation* anim = nullptr;
 #endif
     };
 }//namespace
