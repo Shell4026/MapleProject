@@ -1,6 +1,6 @@
 ﻿#include "Mob/Mob.h"
 #include "Mob/MobEvents.hpp"
-
+#include "Mob/MobMovement.h"
 #include "MapleServer.h"
 #include "CollisionTag.hpp"
 #include "Item/ItemDropManager.h"
@@ -9,6 +9,7 @@
 
 #include "Game/GameObject.h"
 
+// 서버 사이드
 namespace sh::game
 {
     Mob::Mob(GameObject& owner) :
@@ -51,11 +52,9 @@ namespace sh::game
 
         gameObject.transform->SetWorldPosition(initPos);
         gameObject.transform->UpdateMatrix();
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->SetLinearVelocity({ 0.f, 0.f, 0.f });
-            rigidbody->ResetPhysicsTransform();
-        }
+        if (core::IsValid(movement))
+            movement->SetVelocity(0.f, 0.f);
+
         if (ai != nullptr)
             ai->Reset();
     }
@@ -76,11 +75,11 @@ namespace sh::game
         const auto& mobPos = gameObject.transform->GetWorldPosition();
         float dx = (mobPos.x - playerPos.x) < 0 ? -1.f : 1.f;
 
-        if (core::IsValid(rigidbody))
+        if (core::IsValid(movement))
         {
-            auto v = rigidbody->GetLinearVelocity();
-            rigidbody->SetLinearVelocity({ 0.f, v.y, v.z });
-            rigidbody->AddForce({ dx * 100.f, 0.f, 0.f });
+            auto v = movement->GetVelocity();
+            movement->SetVelocity(0.f, v.y);
+            //rigidbody->AddForce({ dx * 100.f, 0.f, 0.f });
         }
 
         netAccum = 0.1f; // 즉시 state 패킷 전송
@@ -105,9 +104,9 @@ namespace sh::game
     SH_USER_API void Mob::BroadcastStatePacket()
     {
         const auto& pos = gameObject.transform->GetWorldPosition();
-        game::Vec3 vel{};
-        if (core::IsValid(rigidbody))
-            vel = rigidbody->GetLinearVelocity();
+        Vec2 vel{};
+        if (core::IsValid(movement))
+            vel = movement->GetVelocity();
 
         MobStatePacket packet{};
         packet.mobUUID = GetUUID();

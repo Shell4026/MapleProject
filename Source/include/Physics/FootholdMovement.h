@@ -23,12 +23,14 @@ namespace sh::game
 		SH_USER_API void SetSpeed(float speed) { this->speed = speed; }
 		SH_USER_API void SetJumpSpeed(float speed) { jumpSpeed = speed; }
 		SH_USER_API void SetIsGround(bool bGround) { this->bGround = bGround; }
+		SH_USER_API void SetCliffFall(bool bCliffFall) { this->bCliffFall = bCliffFall; }
 
 		SH_USER_API auto GetSpeed() const -> float { return speed; }
 		SH_USER_API auto GetJumpSpeed() const -> float { return jumpSpeed; }
 		SH_USER_API auto GetVelocity() const -> Vec2 { return Vec2{ velX, velY }; }
 		SH_USER_API auto GetFoothold() const -> const Foothold* { return foothold; }
 		SH_USER_API auto IsGround() const -> bool { return bGround; }
+		SH_USER_API auto IsCliffFall() const -> bool { return bCliffFall; }
 	private:
 		void ApplyGravity();
 		void ApplyPos();
@@ -56,5 +58,7 @@ namespace sh::game
 		float offset = 0.1f;
 
 		bool bGround = false;
+		PROPERTY(bCliffFall)
+		bool bCliffFall = true;
 	};
 }//namespace

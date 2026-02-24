@@ -9,8 +9,6 @@
 #include "Network/PacketEvent.hpp"
 
 #if !SH_SERVER
-#include "MobAnimation.h"
-#include "MobAnimationController.h"
 #include "UI/HPUI.h"
 #endif
 
@@ -22,6 +20,7 @@
 
 namespace sh::game
 {
+    class MobMovement;
     class MobStatePacket;
     class ItemDropPacket;
 
@@ -43,8 +42,7 @@ namespace sh::game
 #endif
 
         SH_USER_API auto GetMaxHP() const -> uint32_t { return maxHp; }
-        SH_USER_API auto GetSpeed() const -> float { return speed; }
-        SH_USER_API auto GetRigidbody() const -> RigidBody* { return rigidbody; }
+        SH_USER_API auto GetMovement() const -> MobMovement* { return movement; }
         SH_USER_API auto GetStatus() const -> const MobStatus& { return status; }
         SH_USER_API auto GetStatus() -> MobStatus& { return status; }
         SH_USER_API auto GetMapleWorld() const -> MapleWorld* { return mapleWorld; }
@@ -57,14 +55,11 @@ namespace sh::game
     protected:
         PROPERTY(maxHp)
         uint32_t maxHp = 10;
-        PROPERTY(speed)
-        float speed = 0.6f;
 
         PROPERTY(ai)
         AIStrategy* ai = nullptr;
-
-        PROPERTY(rigidbody)
-        RigidBody* rigidbody = nullptr;
+        PROPERTY(movement, core::PropertyOption::sobjPtr)
+        MobMovement* movement = nullptr;
 
 #if !SH_SERVER
         PROPERTY(healthBar)

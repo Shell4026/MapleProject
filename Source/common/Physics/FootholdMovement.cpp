@@ -95,9 +95,17 @@ namespace sh::game
 			}
 			else // 끝이 끊긴 지형
 			{
-				bGround = false;
-				pos.x = targetX;
-				gameObject.transform->SetWorldPosition(pos);
+				if (bCliffFall)
+				{
+					bGround = false;
+					pos.x = targetX;
+					gameObject.transform->SetWorldPosition(pos);
+				}
+				else
+				{
+					pos.x = std::max(p0.x, p1.x);
+					gameObject.transform->SetWorldPosition(pos);
+				}
 				return;
 			}
 		}
@@ -110,9 +118,17 @@ namespace sh::game
 			}
 			else // 끝이 끊긴 지형
 			{
-				bGround = false;
-				pos.x = targetX;
-				gameObject.transform->SetWorldPosition(pos);
+				if (bCliffFall)
+				{
+					bGround = false;
+					pos.x = targetX;
+					gameObject.transform->SetWorldPosition(pos);
+				}
+				else
+				{
+					pos.x = std::min(p0.x, p1.x);
+					gameObject.transform->SetWorldPosition(pos);
+				}
 				return;
 			}
 		}

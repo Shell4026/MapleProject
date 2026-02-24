@@ -1,4 +1,5 @@
 ﻿#include "Mob/Mob.h"
+#include "Mob/MobMovement.h"
 
 #include "MapleClient.h"
 #include "CollisionTag.hpp"
@@ -44,9 +45,9 @@ namespace sh::game
         // 클라 보정
         glm::vec2 curPos{ pos.x, pos.y };
         glm::vec2 curVel{};
-        if (core::IsValid(rigidbody))
+        if (core::IsValid(movement))
         {
-            auto v = rigidbody->GetLinearVelocity();
+            const auto v = movement->GetVelocity();
             curVel = { v.x, v.y };
         }
 
@@ -68,11 +69,8 @@ namespace sh::game
         gameObject.transform->SetWorldPosition({ correctedPos.x, correctedPos.y, pos.z });
         gameObject.transform->UpdateMatrix();
 
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->SetLinearVelocity({ correctedVel.x, correctedVel.y, 0.f });
-            rigidbody->ResetPhysicsTransform();
-        }
+        if (core::IsValid(movement))
+            movement->SetVelocity(correctedVel.x, correctedVel.y);
     }
 
     SH_USER_API void Mob::Reset()
@@ -82,11 +80,8 @@ namespace sh::game
 
         gameObject.transform->SetWorldPosition(initPos);
         gameObject.transform->UpdateMatrix();
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->SetLinearVelocity({ 0.f, 0.f, 0.f });
-            rigidbody->ResetPhysicsTransform();
-        }
+        if (core::IsValid(movement))
+            movement->SetVelocity(0.f, 0.f);
         if (ai != nullptr)
             ai->Reset();
     }

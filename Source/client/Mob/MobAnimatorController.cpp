@@ -1,5 +1,6 @@
 ﻿#include "Mob/MobAnimatorController.h"
 #include "Mob/Mob.h"
+#include "Mob/MobMovement.h"
 #include "Animator.h"
 
 namespace sh::game
@@ -26,14 +27,14 @@ namespace sh::game
 	}
     auto MobAnimatorController::DecideState() const -> int
     {
-        auto vel = mob->GetRigidbody()->GetLinearVelocity();
+        const auto vel = mob->GetMovement()->GetVelocity();
         if (std::abs(vel.x) > 0.1f)
             return 1;
         return 0;
     }
     void MobAnimatorController::ApplyRight()
     {
-        auto vel = mob->GetRigidbody()->GetLinearVelocity();
+        const auto vel = mob->GetMovement()->GetVelocity();
         if (bRight && vel.x < -0.1f)
             bRight = false;
         if (!bRight && vel.x > 0.1f)
