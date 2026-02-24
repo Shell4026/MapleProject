@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Export.h"
 #include "Player.h"
-#include "Physics/Foothold.h"
+#include "Physics/FootholdMovement.h"
 #include "Packet/PlayerStatePacket.hpp"
 #include "Packet/PlayerInputPacket.hpp"
 
@@ -14,7 +14,7 @@
 #include <deque>
 namespace sh::game
 {
-	class PlayerMovement : public Component
+	class PlayerMovement : public FootholdMovement
 	{
 		COMPONENT(PlayerMovement, "user")
 	public:
@@ -31,19 +31,9 @@ namespace sh::game
 
 		SH_USER_API auto IsInputLock() const -> bool { return bInputLock; }
 		SH_USER_API auto GetPlayer() const -> Player* { return player; }
-		SH_USER_API auto GetSpeed() const -> float { return speed; }
-		SH_USER_API auto GetJumpSpeed() const -> float { return jumpSpeed; }
-		SH_USER_API auto GetVelocity() const -> Vec2 { return Vec2{ velX, velY }; }
-		SH_USER_API auto IsGround() const -> bool { return bGround; }
 		SH_USER_API auto IsRight() const -> bool { return bRight; }
 		SH_USER_API auto IsProne() const -> bool { return lastInput.bProne; }
 	private:
-		void StepMovement();
-		void ApplyGravity();
-		void ApplyPos();
-		void CheckGround();
-		void MoveOnGround();
-		void ClampPos();
 #if SH_SERVER
 		void ProcessInput(const PlayerInputPacket& packet);
 #else
@@ -53,26 +43,9 @@ namespace sh::game
 		void InterpolateRemote();
 #endif
 	private:
-		constexpr static float G = 20.f;
-
 		PROPERTY(player)
 		Player* player = nullptr;
 
-		PROPERTY(speed)
-		float speed = 1.25f;
-		PROPERTY(jumpSpeed)
-		float jumpSpeed = 5.55f;
-		PROPERTY(maxFallSpeed)
-		float maxFallSpeed = 6.7f;
-		PROPERTY(maxStepHeight)
-		float maxStepHeight = 0.2f;
-
-		Foothold* foothold = nullptr;
-		Foothold::Contact ground;
-
-		float velX = 0.f;
-		float velY = 0.f;
-		float offset = 0.1f;
 		uint64_t tick = 0;
 
 		core::EventSubscriber<network::PacketEvent> packetSubscriber;
@@ -115,7 +88,6 @@ namespace sh::game
 		Vec2 serverPos{ 0.f, 0.f };
 #endif
 		bool bRight = false;
-		bool bGround = false;
 		bool bProne = false;
 		bool bInputLock = false;
 	};

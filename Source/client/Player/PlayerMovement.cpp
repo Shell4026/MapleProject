@@ -32,8 +32,6 @@ namespace sh::game
 			}
 		);
 		MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
-
-		foothold = player->GetCurrentWorld()->GetFoothold();
 	}
 	SH_USER_API void PlayerMovement::BeginUpdate()
 	{
@@ -116,20 +114,20 @@ namespace sh::game
 			if (xInput > 0)
 			{
 				bRight = true;
-				velX = speed;
+				velX = GetSpeed();
 			}
 			else if (xInput < 0)
 			{
 				bRight = false;
-				velX = -speed;
+				velX = -GetSpeed();
 			}
 			else
 				velX = 0.f;
 
-			if (bJump && bGround)
+			if (bJump && IsGround())
 			{
-				velY = jumpSpeed;
-				bGround = false;
+				velY = GetJumpSpeed();
+				SetIsGround(false);
 			}
 		}
 		else
@@ -178,12 +176,11 @@ namespace sh::game
 
 			velX = packet.vx;
 			velY = packet.vy;
-			bGround = packet.bGround;
+			SetIsGround(packet.bGround);
 			bProne = packet.bProne;
 			bInputLock = packet.bLock;
 
-			const auto& p = gameObject.transform->GetWorldPosition();
-			ground = foothold->GetExpectedFallContact({ p.x, p.y + offset });
+			SetExpectedGround();
 		}
 		// 리플레이
 		for (uint64_t t = std::distance(history.begin(), it); t < history.size(); ++t)
@@ -191,16 +188,16 @@ namespace sh::game
 			StateHistory& lastHistory = history[t];
 
 			if (lastHistory.xMove > 0)
-				velX = speed;
+				velX = GetSpeed();
 			else if (lastHistory.xMove < 0)
-				velX = -speed;
+				velX = -GetSpeed();
 			else
 				velX = 0.f;
 
-			if (lastHistory.bJump && bGround)
+			if (lastHistory.bJump && IsGround())
 			{
-				bGround = false;
-				velY = jumpSpeed;
+				SetIsGround(false);
+				velY = GetJumpSpeed();
 			}
 			bProne = lastHistory.bProne;
 
@@ -221,9 +218,9 @@ namespace sh::game
 			bRight = false;
 
 		if (std::abs(packet.vy) > 0.01f)
-			bGround = false;
+			SetIsGround(false);
 		else
-			bGround = true;
+			SetIsGround(true);
 	}
 	void PlayerMovement::InterpolateRemote()
 	{

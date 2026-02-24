@@ -25,24 +25,22 @@ namespace sh::game
 			}
 		);
 		MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
-
-		foothold = player->GetCurrentWorld()->GetFoothold();
 	}
 	SH_USER_API void PlayerMovement::BeginUpdate()
 	{
 		if (!lastInput.bProne)
 		{
 			if (lastInput.xMove > 0)
-				velX = speed;
+				velX = GetSpeed();
 			else if (lastInput.xMove < 0)
-				velX = -speed;
+				velX = -GetSpeed();
 			else
 				velX = 0.f;
 
-			if (lastInput.bJump && bGround)
+			if (lastInput.bJump && IsGround())
 			{
-				velY = jumpSpeed;
-				bGround = false;
+				velY = GetJumpSpeed();
+				SetIsGround(false);
 			}
 		}
 		else
@@ -75,7 +73,7 @@ namespace sh::game
 			packet.vx = velX;
 			packet.vy = velY;
 			packet.playerUUID = player->GetUserUUID();
-			packet.bGround = bGround;
+			packet.bGround = IsGround();
 			packet.bProne = lastInput.bProne;
 			packet.bLock = bInputLock;
 			packet.bRight = player->IsRight();
