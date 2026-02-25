@@ -72,7 +72,7 @@ namespace sh::game
 			packet.py = pos.y;
 			packet.vx = velX;
 			packet.vy = velY;
-			packet.playerUUID = player->GetUserUUID();
+			packet.playerUUID = player->GetUUID();
 			packet.bGround = IsGround();
 			packet.bProne = lastInput.bProne;
 			packet.bLock = bInputLock;

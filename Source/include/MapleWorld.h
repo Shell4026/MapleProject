@@ -37,8 +37,8 @@ namespace sh::game
 	public:
 		SH_USER_API MapleWorld(GameObject& owner);
 
-		SH_USER_API auto SpawnPlayer(const core::UUID& userUUID, float x, float y) -> Player*;
-		SH_USER_API auto DespawnPlayer(const core::UUID& userUUID) -> bool;
+		SH_USER_API auto SpawnPlayer(const core::UUID& uuid, float x, float y) -> Player*;
+		SH_USER_API auto DespawnPlayer(const core::UUID& uuid) -> bool;
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
@@ -76,6 +76,7 @@ namespace sh::game
 		PROPERTY(itemPrefab)
 		Prefab* itemPrefab = nullptr;
 
+		/// @brief 서버는 UserUUID가 키, 클라면 PlayerUUID가 키
 		std::unordered_map<core::UUID, Player*> players;
 		std::queue<core::SObjWeakPtr<Item>> sleepItems;
 

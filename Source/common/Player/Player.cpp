@@ -21,7 +21,7 @@ namespace sh::game
 		}
 #endif
 	}
-	SH_USER_API void Player::SetUserUUID(const core::UUID& uuid)
+	SH_USER_API void Player::SetUserUUID(const core::UUID& uuid, MapleWorldKey)
 	{
 		userUUID = uuid;
 #if !SH_SERVER

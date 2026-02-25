@@ -13,6 +13,8 @@
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
+
+// 클라 사이드
 namespace sh::game
 {
 	MapleWorld::MapleWorld(GameObject& owner) :
@@ -26,7 +28,7 @@ namespace sh::game
 				if (evt.packet->GetId() == PlayerSpawnPacket::ID)
 					ProcessPlayerSpawn(static_cast<const PlayerSpawnPacket&>(*evt.packet));
 				else if (evt.packet->GetId() == PlayerDespawnPacket::ID)
-					DespawnPlayer(static_cast<const PlayerDespawnPacket&>(*evt.packet).user);
+					DespawnPlayer(static_cast<const PlayerDespawnPacket&>(*evt.packet).player);
 				else if (evt.packet->GetId() == ItemDropPacket::ID)
 					ProcessItemDrop(static_cast<const ItemDropPacket&>(*evt.packet));
 				else if (evt.packet->GetId() == ItemDespawnPacket::ID)
@@ -34,7 +36,7 @@ namespace sh::game
 			}
 		);
 	}
-	SH_USER_API auto MapleWorld::SpawnPlayer(const core::UUID& userUUID, float x, float y) -> Player*
+	SH_USER_API auto MapleWorld::SpawnPlayer(const core::UUID& playerUUID, float x, float y) -> Player*
 	{
 		if (playerPrefab != nullptr)
 		{
@@ -45,8 +47,8 @@ namespace sh::game
 
 			auto player = playerObj->GetComponent<Player>();
 			player->SetCurrentWorld(*this);
-			player->SetUserUUID(userUUID);
-			players[userUUID] = player;
+			player->SetUUID(playerUUID);
+			players[playerUUID] = player;
 
 			return player;
 		}
@@ -54,9 +56,9 @@ namespace sh::game
 			SH_ERROR("Invalid player prefab!");
 		return nullptr;
 	}
-	SH_USER_API auto MapleWorld::DespawnPlayer(const core::UUID& userUUID) -> bool
+	SH_USER_API auto MapleWorld::DespawnPlayer(const core::UUID& playerUUID) -> bool
 	{
-		auto it = players.find(userUUID);
+		auto it = players.find(playerUUID);
 		if (it == players.end())
 			return false;
 
@@ -104,13 +106,15 @@ namespace sh::game
 
 	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet)
 	{
-		core::UUID playerUUID{ packet.playerUUID };
+		const core::UUID playerUUID{ packet.playerUUID };
 
-		Player* player = nullptr;
-		player = SpawnPlayer(playerUUID, packet.x, packet.y);
+		Player* const player = SpawnPlayer(playerUUID, packet.x, packet.y);
 		player->GetNameTag()->SetNameStr(packet.nickname);
-		if (playerUUID == client->GetUser().GetUserUUID())
+		if (packet.bLocal)
+		{
+			player->SetUserUUID(client->GetUser().GetUserUUID(), Player::MapleWorldKey{});
 			camera->SetPlayer(player->gameObject);
+		}
 	}
 	void MapleWorld::ProcessItemDrop(const ItemDropPacket& packet)
 	{

@@ -21,7 +21,7 @@ namespace sh::game
 				if (evt.packet->GetId() == PlayerStatePacket::ID)
 				{
 					auto& packet = static_cast<const PlayerStatePacket&>(*evt.packet);
-					if (player->GetUserUUID() == packet.playerUUID)
+					if (player->GetUUID() == packet.playerUUID)
 					{
 						if (player->IsLocal())
 							Reconciliation(packet);
@@ -68,9 +68,6 @@ namespace sh::game
 	{
 		static MapleClient& client = *MapleClient::GetInstance();
 
-		if (bInputLock)
-			return;
-
 		int xInput = 0;
 		bool bJump = false;
 		bool bProne = false;
@@ -84,6 +81,13 @@ namespace sh::game
 			xInput += 1;
 		if (Input::GetKeyDown(Input::KeyCode::Left))
 			xInput -= 1;
+
+		if (bInputLock)
+		{
+			xInput = 0;
+			bProne = false;
+			bJump = false;
+		}
 
 		const bool bInputChanged = 
 			bJump != lastInput.bJump ||
@@ -179,6 +183,7 @@ namespace sh::game
 			SetIsGround(packet.bGround);
 			bProne = packet.bProne;
 			bInputLock = packet.bLock;
+			bRight = packet.bRight;
 
 			SetExpectedGround();
 		}
@@ -188,9 +193,15 @@ namespace sh::game
 			StateHistory& lastHistory = history[t];
 
 			if (lastHistory.xMove > 0)
+			{
 				velX = GetSpeed();
+				bRight = true;
+			}
 			else if (lastHistory.xMove < 0)
+			{
 				velX = -GetSpeed();
+				bRight = false;
+			}
 			else
 				velX = 0.f;
 

@@ -24,6 +24,7 @@ namespace sh::game
 			mainJson["y"] = y;
 			mainJson["player"] = playerUUID;
 			mainJson["nickname"] = nickname;
+			mainJson["bLocal"] = bLocal;
 
 			return mainJson;
 		}
@@ -38,11 +39,14 @@ namespace sh::game
 				playerUUID = json["player"];
 			if (json.contains("nickname"))
 				nickname = json["nickname"];
+			if (json.contains("bLocal"))
+				bLocal = json["bLocal"];
 		}
 	public:
 		float x;
 		float y;
 		std::array<uint32_t, 4> playerUUID;
 		std::string nickname;
+		bool bLocal = false;
 	};
 }//namespace
