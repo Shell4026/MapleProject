@@ -7,6 +7,7 @@
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
+#include "Game/Component/Phys/Collider.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/norm.hpp"
@@ -28,6 +29,8 @@ namespace sh::game
 
     SH_USER_API void Mob::Awake()
     {
+        if (rigidbody == nullptr)
+            SH_INFO("rigidbody is nullptr!");
         SetPriority(-1);
         status.Reset(maxHp);
 
@@ -71,6 +74,12 @@ namespace sh::game
 
         if (core::IsValid(movement))
             movement->SetVelocity(correctedVel.x, correctedVel.y);
+
+        rigidbody->ResetPhysicsTransform();
+    }
+
+    SH_USER_API void Mob::OnTriggerEnter(Collider& collider)
+    {
     }
 
     SH_USER_API void Mob::Reset()

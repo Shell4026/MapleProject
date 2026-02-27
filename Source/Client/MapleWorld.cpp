@@ -1,4 +1,5 @@
 ﻿#include "MapleWorld.h"
+#include "Physics/FootholdMovement.h"
 #include "Player/Player.h"
 #include "Item/Item.h"
 #include "Item/ItemDB.h"
@@ -124,7 +125,7 @@ namespace sh::game
 			return;
 		}
 
-		const ItemInfo* itemInfo = ItemDB::GetInstance()->GetItemInfo(packet.itemId);
+		const ItemInfo* const itemInfo = ItemDB::GetInstance()->GetItemInfo(packet.itemId);
 		if (itemInfo == nullptr)
 		{
 			SH_ERROR_FORMAT("Item {} is not valid!", packet.itemId);
@@ -132,17 +133,17 @@ namespace sh::game
 		}
 
 		SH_INFO_FORMAT("Drop item: {}", packet.itemId);
-		GameObject* itemObj = itemPrefab->AddToWorld(world);
+		GameObject* const itemObj = itemPrefab->AddToWorld(world);
 		itemObj->SetUUID(core::UUID{ packet.itemUUID });
 		auto pos = itemObj->transform->GetWorldPosition();
 		pos.x = packet.x;
 		pos.y = packet.y;
 		itemObj->transform->SetWorldPosition(pos);
 
-		Item* item = itemObj->GetComponent<Item>();
+		Item* const item = itemObj->GetComponent<Item>();
+		item->SetCurrentWorld(*this);
+		item->GetMovement()->AddImpulse(0.f, 6.f);
 		item->itemId = packet.itemId;
-		item->GetRigidBody()->ResetPhysicsTransform();
-		item->GetRigidBody()->SetLinearVelocity({ 0.f, 5.f, 0.f });
 
 		auto texPtr = static_cast<render::Texture*>(core::SObject::GetSObjectUsingResolver(itemInfo->texUUID));
 		if (texPtr == nullptr)

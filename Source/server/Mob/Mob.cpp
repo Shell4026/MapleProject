@@ -3,12 +3,14 @@
 #include "Mob/MobMovement.h"
 #include "MapleServer.h"
 #include "CollisionTag.hpp"
+#include "Skill/ProjectileHitBox.h"
+#include "Skill/ProjectileInstance.h"
 #include "Item/ItemDropManager.h"
 
 #include "Packet/MobStatePacket.hpp"
 
 #include "Game/GameObject.h"
-
+#include "Game/Component/Phys/Collider.h"
 // 서버 사이드
 namespace sh::game
 {
@@ -19,6 +21,8 @@ namespace sh::game
 
     SH_USER_API void Mob::Awake()
     {
+        if (rigidbody == nullptr)
+            SH_INFO("rigidbody is nullptr!");
         SetPriority(-1);
         status.Reset(maxHp);
 
@@ -27,7 +31,6 @@ namespace sh::game
         MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
         initPos = gameObject.transform->GetWorldPosition();
     }
-
     SH_USER_API void Mob::Update()
     {
         const auto& pos = gameObject.transform->GetWorldPosition();
@@ -44,6 +47,26 @@ namespace sh::game
 
             BroadcastStatePacket();
         }
+        rigidbody->ResetPhysicsTransform();
+    }
+    SH_USER_API void Mob::OnTriggerEnter(Collider& collider)
+    {
+        if (collider.GetCollisionTag() != tag::projectileHitboxTag)
+            return;
+
+        auto& projectileHitbox = static_cast<ProjectileHitBox&>(collider);
+        ProjectileInstance* const ProjectileInstance = projectileHitbox.GetProjectileInstance();
+        if (!core::IsValid(ProjectileInstance))
+            return;
+
+        Entity* const owner = ProjectileInstance->GetOwner();
+        if (!core::IsValid(owner))
+            return;
+
+        if (owner->GetEntityType() == Entity::Type::Player)
+        {
+            Hit(*ProjectileInstance->GetProjectile(), static_cast<Player&>(*owner));
+        }
     }
 
     SH_USER_API void Mob::Reset()
@@ -59,9 +82,9 @@ namespace sh::game
             ai->Reset();
     }
 
-    SH_USER_API void Mob::Hit(Skill& skill, Player& player)
+    SH_USER_API void Mob::Hit(const Projectile& projectile, Player& player)
     {
-        status.ApplyDamage(skill.GetDamage());
+        status.ApplyDamage(projectile.GetDamage());
         status.ApplyStun(1000.f);
 
         if (status.hp == 0)
@@ -79,7 +102,7 @@ namespace sh::game
         {
             auto v = movement->GetVelocity();
             movement->SetVelocity(0.f, v.y);
-            //rigidbody->AddForce({ dx * 100.f, 0.f, 0.f });
+            movement->AddImpulse(dx * 2.5f, 0.f); // Impulse = 4*루트x (1초에x만큼 움직이는 근사)
         }
 
         netAccum = 0.1f; // 즉시 state 패킷 전송
@@ -97,7 +120,7 @@ namespace sh::game
         if (!dropItems.empty())
         {
             auto& pos = gameObject.transform->GetWorldPosition();
-            mapleWorld->SpawnItem(dropItems, pos.x, pos.y, player.GetUserUUID());
+            mapleWorld->SpawnItem(dropItems, pos.x, pos.y, &player);
         }
     }
 

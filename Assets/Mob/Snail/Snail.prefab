@@ -189,7 +189,8 @@
                         "mapleWorld": "da5427b39c40fbd3d1e391fae236b9da",
                         "maxHp": 15,
                         "mobId": 0,
-                        "movement": "7791a885ae98b4bcecc349e3db748c6c"
+                        "movement": "7791a885ae98b4bcecc349e3db748c6c",
+                        "rigidbody": "f74afbd9e848bdb9fde99b3154ecfa39"
                     },
                     "SObject": null,
                     "fullType": "sh::game::Mob",
@@ -263,6 +264,36 @@
                     "type": "MobMovement",
                     "uuid": "7791a885ae98b4bcecc349e3db748c6c",
                     "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "axisLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "bGravity": false,
+                        "bInterpolation": false,
+                        "bKinematic": true,
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "f74afbd9e848bdb9fde99b3154ecfa39",
+                    "version": 1
                 }
             ],
             "GameObject": {
@@ -312,61 +343,6 @@
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "f43cd9e1f132c0b2fe482fdfcb815e03",
-                    "version": 1
-                },
-                {
-                    "BoxCollider": {
-                        "bDisplayArea": true,
-                        "size": [
-                            0.3700000047683716,
-                            0.25999999046325684,
-                            1.0
-                        ]
-                    },
-                    "Collider": {
-                        "bTrigger": true,
-                        "bouncy": 0.20000000298023224,
-                        "friction": 0.20000000298023224
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": null,
-                    "fullType": "sh::game::BoxCollider",
-                    "name": "physics/BoxCollider",
-                    "type": "BoxCollider",
-                    "uuid": "bd48ccb5faa55b942ce09a9fc772a517",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "axisLock": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "bGravity": false,
-                        "bInterpolation": false,
-                        "bKinematic": true,
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "SObject": null,
-                    "fullType": "sh::game::RigidBody",
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "5fe9025738601e8e8124d0e9414caaff",
                     "version": 1
                 },
                 {

@@ -17,7 +17,7 @@ namespace sh::game
 	}
 	SH_USER_API void FootholdMovement::StepMovement()
 	{
-		ApplyGravity();
+		ApplyForce();
 		ApplyPos();
 		CheckGround();
 		ClampPos();
@@ -27,13 +27,59 @@ namespace sh::game
 		const auto& p = gameObject.transform->GetWorldPosition();
 		ground = foothold->GetExpectedFallContact({ p.x, p.y + offset });
 	}
-	void FootholdMovement::ApplyGravity()
+	void FootholdMovement::ApplyForce()
 	{
-		if (bGround)
-			return;
 		const float dt = world.FIXED_TIME;
-		velY -= G * dt;
-		velY = std::clamp(velY, -maxFallSpeed, maxFallSpeed);
+		const bool sameXdirForce = vel.x * force.x > 0;
+		if (!sameXdirForce) // 감속
+			vel.x += force.x * dt;
+		else
+		{
+			if (std::abs(vel.x) < speed)
+			{
+				vel.x += force.x * dt;
+				vel.x = std::clamp(vel.x, -speed, speed);
+			}
+		}
+		vel.x += impulse.x;
+
+		if (!bGround) // 중력
+			vel.y -= G * dt;
+		vel.y = std::clamp(vel.y, -maxFallSpeed, maxFallSpeed);
+		const bool sameYdirForce = vel.y * force.y > 0;
+		if (!sameYdirForce)
+			vel.y += force.y * dt;
+		else
+		{
+			if (std::abs(vel.y) < maxFallSpeed)
+			{
+				vel.y += force.y * dt;
+				vel.y = std::clamp(vel.y, -maxFallSpeed, maxFallSpeed);
+			}
+		}
+		vel.y += impulse.y;
+
+		if (bGround)
+		{
+			const float v = std::abs(vel.x);
+			if (v - groundDrag * dt < 0.f)
+				vel.x = 0.f;
+			else
+				vel.x -= std::copysignf(groundDrag * dt, vel.x);
+		}
+		else
+		{
+			const float v = std::abs(vel.x);
+			if (v - airDrag * dt < 0.f)
+				vel.x = 0.f;
+			else
+				vel.x -= std::copysignf(airDrag * dt, vel.x);
+		}
+
+		force.x = 0.f;
+		force.y = 0.f;
+		impulse.x = 0.f;
+		impulse.y = 0.f;
 	}
 	void FootholdMovement::ApplyPos()
 	{
@@ -42,9 +88,9 @@ namespace sh::game
 
 		if (!bGround)
 		{
-			pos.x += velX * dt;
+			pos.x += vel.x * dt;
 			ground = foothold->GetExpectedFallContact({ pos.x, pos.y + offset });
-			pos.y += velY * dt;
+			pos.y += vel.y * dt;
 
 			gameObject.transform->SetWorldPosition(pos);
 		}
@@ -59,10 +105,10 @@ namespace sh::game
 		const auto& pos = gameObject.transform->GetWorldPosition();
 		if (ground.pathIdx != -1)
 		{
-			if (pos.y <= ground.pos.y && velY < 0.f)
+			if (pos.y <= ground.pos.y && vel.y < 0.f)
 			{
 				gameObject.transform->SetWorldPosition({ pos.x, ground.pos.y, pos.z });
-				velY = 0.f;
+				vel.y = 0.f;
 				bGround = true;
 			}
 		}
@@ -83,7 +129,7 @@ namespace sh::game
 		const auto& p0 = pathPtr->points[ground.point0];
 		const auto& p1 = pathPtr->points[ground.point1];
 
-		const float targetX = pos.x + velX * dt;
+		const float targetX = pos.x + vel.x * dt;
 
 		// 현재 선 이탈
 		if (targetX > std::max(p0.x, p1.x))

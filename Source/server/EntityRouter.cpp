@@ -1,8 +1,10 @@
 ﻿#include "EntityRouter.h"
 #include "Player/PlayerMovement.h"
 #include "Player/PlayerPickup.h"
+#include "Skill/SkillManager.h"
 #include "Packet/PlayerInputPacket.hpp"
 #include "Packet/KeyPacket.hpp"
+#include "Packet/SkillUsingPacket.hpp"
 
 #include "Game/Input.h"
 namespace sh::game
@@ -12,14 +14,15 @@ namespace sh::game
 		packetSubscriber.SetCallback(
 			[this](const network::PacketEvent& evt)
 			{
-				if (evt.packet->GetId() == PlayerInputPacket::ID)
+				const uint32_t packetId = evt.packet->GetId();
+				if (packetId == PlayerInputPacket::ID)
 				{
 					const auto& packet = static_cast<const PlayerInputPacket&>(*evt.packet);
 					Player* player = GetPlayer(packet.user);
 					if (player != nullptr)
 						player->GetMovement()->ProcessInput(packet);
 				}
-				else if (evt.packet->GetId() == KeyPacket::ID)
+				else if (packetId == KeyPacket::ID)
 				{
 					const auto& keyPacket = static_cast<const KeyPacket&>(*evt.packet);
 
@@ -34,6 +37,13 @@ namespace sh::game
 						else
 							player->GetPickup()->SetPickupState(false);
 					}
+				}
+				else if (packetId == SkillUsingPacket::ID)
+				{
+					const auto& packet = static_cast<const SkillUsingPacket&>(*evt.packet);
+					Player* player = GetPlayer(packet.userUUID);
+					if (player != nullptr)
+						player->GetSkillManager()->ProcessPacket(packet);
 				}
 			}
 		);

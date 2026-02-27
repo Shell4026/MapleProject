@@ -1,53 +1,53 @@
 ﻿#include "Player/PlayerMovement.h"
 #include "MapleWorld.h"
-#include "MapleServer.h"
 #include "Packet/PlayerInputPacket.hpp"
 
 #include "Game/World.h"
 namespace sh::game
 {
-	// 서버 코드
+	// 서버 사이드
 	SH_USER_API void PlayerMovement::Awake()
 	{
 		if (player == nullptr)
 			SH_ERROR("Player is nullptr!");
-
-		// 이벤트들은 BeginUpdate전에 이뤄짐
-		packetSubscriber.SetCallback(
-			[this](const network::PacketEvent& evt)
-			{
-				if (evt.packet->GetId() == PlayerInputPacket::ID)
-				{
-					auto& packet = static_cast<const PlayerInputPacket&>(*evt.packet);
-					if (player->GetUserUUID() == packet.user)
-						ProcessInput(packet);
-				}
-			}
-		);
-		MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
 	}
 	SH_USER_API void PlayerMovement::BeginUpdate()
 	{
-		if (!lastInput.bProne)
+	}
+	SH_USER_API void PlayerMovement::FixedUpdate()
+	{
+		while (!inputs.empty() && inputs.front().applyServerTick <= tick)
 		{
-			if (lastInput.xMove > 0)
-				velX = GetSpeed();
-			else if (lastInput.xMove < 0)
-				velX = -GetSpeed();
-			else
-				velX = 0.f;
+			currentState = inputs.front();
+			inputs.pop_front();
+		}
 
-			if (lastInput.bJump && IsGround())
+		if (!currentState.bProne)
+		{
+			if (currentState.xMove > 0)
 			{
-				velY = GetJumpSpeed();
+				AddForce(14.f, 0.f);
+				//vel.x = GetSpeed();
+				bRight = true;
+			}
+			else if (currentState.xMove < 0)
+			{
+				AddForce(-14.f, 0.f);
+				//vel.x = -GetSpeed();
+				bRight = false;
+			}
+			//else
+			//	vel.x = 0.f;
+
+			if (currentState.bJump && IsGround())
+			{
+				vel.y = GetJumpSpeed();
 				SetIsGround(false);
 			}
 		}
 		else
-			velX = 0.f;
-	}
-	SH_USER_API void PlayerMovement::FixedUpdate()
-	{
+			vel.x = 0.f;
+
 		StepMovement();
 
 		++tick;
@@ -55,46 +55,61 @@ namespace sh::game
 	SH_USER_API void PlayerMovement::Update()
 	{
 		if (sendTick++ >= 2)
-			bSend = true;
+			bPendingSend = true;
 
-		if (bSend)
+		if (bPendingSend)
 		{
 			static auto& server = *MapleServer::GetInstance();
 			auto& pos = gameObject.transform->GetWorldPosition();
 
 			PlayerStatePacket packet;
 
-			packet.lastProcessedInputSeq = lastInput.seq;
+			packet.lastProcessedInputSeq = currentState.seq;
 			packet.serverTick = tick;
-			packet.clientTickAtState = lastInput.clientTick + (tick - lastInput.recvServerTick);
+			packet.clientTickAtState = currentState.clientTick + (tick - currentState.applyServerTick);
 
 			packet.px = pos.x;
 			packet.py = pos.y;
-			packet.vx = velX;
-			packet.vy = velY;
+			packet.vx = vel.x;
+			packet.vy = vel.y;
 			packet.playerUUID = player->GetUUID();
 			packet.bGround = IsGround();
-			packet.bProne = lastInput.bProne;
+			packet.bProne = currentState.bProne;
 			packet.bLock = bInputLock;
-			packet.bRight = player->IsRight();
+			packet.bRight = IsRight();
 			server.BroadCast(packet);
 
-			bSend = false;
+			bPendingSend = false;
 			sendTick = 0;
 		}
 	}
-	void PlayerMovement::ProcessInput(const PlayerInputPacket& packet)
+	SH_USER_API void PlayerMovement::ProcessInput(const PlayerInputPacket& packet)
 	{
-		if (lastInput.seq >= packet.seq)
+		if (!bOffsetInit)
+		{
+			offset = tick - packet.tick + 5;
+			bOffsetInit = true;
+		}
+		else
+		{
+			const uint64_t newOffset = tick - packet.tick + 5;
+			offset = (offset * 9 + newOffset) / 10;
+		}
+		// 패킷 이벤트들은 BeginUpdate전에 이뤄짐
+		if (!inputs.empty() && inputs.back().seq >= packet.seq)
 			return;
 
-		lastInput.seq = packet.seq;
-		lastInput.clientTick = packet.tick;
-		lastInput.recvServerTick = tick;
-		lastInput.xMove = packet.inputX;
-		lastInput.bJump = packet.bJump;
-		lastInput.bProne = packet.bProne;
+		//SH_INFO_FORMAT("recv seq: {}, tick: {}, serverTick: {}, offset: {}", packet.seq, packet.tick, tick, offset);
 
-		bSend = true;
+		InputState input{};
+		input.seq = packet.seq;
+		input.clientTick = packet.tick;
+		input.applyServerTick = packet.tick + offset;
+		input.xMove = packet.inputX;
+		input.bJump = packet.bJump;
+		input.bProne = bProne = packet.bProne;
+		inputs.push_back(input);
+
+		bPendingSend = true;
 	}
 }//namespace

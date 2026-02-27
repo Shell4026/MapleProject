@@ -15,6 +15,8 @@
 namespace sh::game
 {
 	class PlayerJoinPacket;
+	class FootholdMovement;
+	class MapleWorld;
 
 	class Item : public Component
 	{
@@ -24,17 +26,21 @@ namespace sh::game
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void OnDisable() override;
-		SH_USER_API void BeginUpdate() override;
+		SH_USER_API void FixedUpdate() override;
+		SH_USER_API void Update() override;
 
 		SH_USER_API void SetTexture(const render::Texture* texture);
+		SH_USER_API void SetCurrentWorld(MapleWorld& world);
 
 		SH_USER_API auto GetTexture() const -> const render::Texture* { return texture; }
 		SH_USER_API auto GetRigidBody() const -> RigidBody* { return rb; }
+		SH_USER_API auto GetCurrentWorld() const -> MapleWorld* { return mapleWorld; }
+		SH_USER_API auto GetMovement() const -> FootholdMovement* { return movement; }
 	public:
 		static constexpr const char* PREFAB_UUID = "ee1bee2efec5a690531dd2812a6192b7";
 	public:
 		PROPERTY(itemId)
-		int itemId;
+		int itemId = 0;
 		core::UUID owner = core::UUID::GenerateEmptyUUID();
 		uint64_t instanceId = 0;
 	private:
@@ -44,8 +50,10 @@ namespace sh::game
 		MeshRenderer* renderer = nullptr;
 		PROPERTY(rb)
 		RigidBody* rb = nullptr;
-		PROPERTY(trigger)
-		RigidBody* trigger = nullptr;
+		PROPERTY(mapleWorld, core::PropertyOption::sobjPtr, core::PropertyOption::invisible)
+		MapleWorld* mapleWorld = nullptr;
+		PROPERTY(movement, core::PropertyOption::sobjPtr)
+		FootholdMovement* movement = nullptr;
 
 		core::EventSubscriber<network::PacketEvent> packetSubscriber;
 	};

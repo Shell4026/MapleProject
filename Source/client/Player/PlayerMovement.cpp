@@ -6,7 +6,7 @@
 #include "Game/Input.h"
 namespace sh::game
 {
-	// 클라이언트 코드
+	// 클라 사이드
 	SH_USER_API void PlayerMovement::Awake()
 	{
 		serverPos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
@@ -42,35 +42,62 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::FixedUpdate()
 	{
-		if (player->IsLocal())
+		if (!player->IsLocal())
+			return;
+
+		// 예측
+		if (!bProne)
 		{
-			StepMovement();
+			if (lastInput.xMove > 0)
+			{
+				bRight = true;
+				AddForce(14.f, 0.f);
+				//vel.x = GetSpeed();
+			}
+			else if (lastInput.xMove < 0)
+			{
+				bRight = false;
+				AddForce(-14.f, 0.f);
+				//vel.x = -GetSpeed();
+			}
+			//else
+			//	vel.x = 0.f;
 
-			++tick;
-
-			StateHistory state{};
-			state.seq = lastInput.seq;
-			state.tick = tick;
-			state.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
-			state.vel = { velX, velY };
-			state.xMove = lastInput.xMove;
-			state.bProne = lastInput.bProne;
-			state.bJump = lastInput.bJump;
-			history.push_back(state);
-			while (history.size() > 180)
-				history.pop_front();
+			if (lastInput.bJump && IsGround())
+			{
+				vel.y = GetJumpSpeed();
+				SetIsGround(false);
+			}
 		}
+		else
+		{
+			vel.x = 0.f;
+		}
+
+		StepMovement();
+
+		StateHistory state{};
+		state.seq = lastInput.seq;
+		state.tick = tick;
+		state.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
+		state.vel = vel;
+		state.xMove = lastInput.xMove;
+		state.bProne = lastInput.bProne;
+		state.bJump = lastInput.bJump;
+		history.push_back(state);
+		while (history.size() > 180)
+			history.pop_front();
+
+		++tick;
 	}
 	SH_USER_API void PlayerMovement::Update()
 	{
 	}
 	void PlayerMovement::ProcessLocalInput()
 	{
-		static MapleClient& client = *MapleClient::GetInstance();
-
 		int xInput = 0;
 		bool bJump = false;
-		bool bProne = false;
+		bProne = false;
 
 		if (Input::GetKeyDown(Input::KeyCode::Down))
 			bProne = true;
@@ -89,55 +116,34 @@ namespace sh::game
 			bJump = false;
 		}
 
-		const bool bInputChanged = 
+		const bool bChanged =
 			bJump != lastInput.bJump ||
 			bProne != lastInput.bProne ||
 			xInput != lastInput.xMove;
 
-		if (bInputChanged)
+		if (bChanged)
 		{
-			SH_INFO("send");
+			static MapleClient& client = *MapleClient::GetInstance();
+			curSeq = nextSeq++;
+
 			PlayerInputPacket packet{};
 			packet.user = client.GetUser().GetUserUUID();
-			packet.seq = nextSeq++;
+			packet.seq = curSeq;
 			packet.tick = tick;
 			packet.inputX = xInput;
 			packet.bJump = bJump;
 			packet.bProne = bProne;
+
+			//SH_INFO_FORMAT("send seq: {}, tick: {}", packet.seq, packet.tick);
 			client.SendPacket(packet);
+
+			bPendingSend = false;
 		}
 
-		lastInput.seq = nextSeq - 1;
+		lastInput.seq = curSeq;
 		lastInput.xMove = xInput;
 		lastInput.bJump = bJump;
 		lastInput.bProne = bProne;
-
-		// 예측
-		if (!bProne)
-		{
-			if (xInput > 0)
-			{
-				bRight = true;
-				velX = GetSpeed();
-			}
-			else if (xInput < 0)
-			{
-				bRight = false;
-				velX = -GetSpeed();
-			}
-			else
-				velX = 0.f;
-
-			if (bJump && IsGround())
-			{
-				velY = GetJumpSpeed();
-				SetIsGround(false);
-			}
-		}
-		else
-		{
-			velX = 0.f;
-		}
 	}
 	void PlayerMovement::Reconciliation(const PlayerStatePacket& packet)
 	{
@@ -160,7 +166,7 @@ namespace sh::game
 
 		const uint64_t targetTick = packet.clientTickAtState;
 		auto it = std::lower_bound(history.begin(), history.end(), targetTick,
-			[&](const StateHistory& history, uint64_t tick) { return history.tick < tick; });
+			[](const StateHistory& history, uint64_t tick) { return history.tick < tick; });
 
 		if (it == history.end() || it->tick != targetTick)
 			return;
@@ -169,7 +175,7 @@ namespace sh::game
 		const float dx = (pastHistory.pos.x - packet.px);
 		const float dy = (pastHistory.pos.y - packet.py);
 		const float difSqr = dx * dx + dy * dy;
-		if (difSqr < 0.5f * 0.5f) // 50픽셀 오차까진 허용
+		if (difSqr < 0.05f * 0.05f) // 5픽셀 오차까진 허용
 			return;
 
 		// 즉시 이동
@@ -178,8 +184,8 @@ namespace sh::game
 			gameObject.transform->SetWorldPosition(packet.px, packet.py, oldPos.z);
 			gameObject.transform->UpdateMatrix();
 
-			velX = packet.vx;
-			velY = packet.vy;
+			vel.x = packet.vx;
+			vel.y = packet.vy;
 			SetIsGround(packet.bGround);
 			bProne = packet.bProne;
 			bInputLock = packet.bLock;
@@ -194,44 +200,44 @@ namespace sh::game
 
 			if (lastHistory.xMove > 0)
 			{
-				velX = GetSpeed();
+				AddForce(14.f, 0.f);
+				//vel.x = GetSpeed();
 				bRight = true;
 			}
 			else if (lastHistory.xMove < 0)
 			{
-				velX = -GetSpeed();
+				AddForce(-14.f, 0.f);
+				//vel.x = -GetSpeed();
 				bRight = false;
 			}
-			else
-				velX = 0.f;
+			//else
+			//	vel.x = 0.f;
 
 			if (lastHistory.bJump && IsGround())
 			{
 				SetIsGround(false);
-				velY = GetJumpSpeed();
+				vel.y = GetJumpSpeed();
 			}
 			bProne = lastHistory.bProne;
 
 			StepMovement();
 
 			lastHistory.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
-			lastHistory.vel = { velX, velY };
+			lastHistory.vel = vel;
 		}
 	}
 	void PlayerMovement::ProcessRemote(const PlayerStatePacket& packet)
 	{
 		serverPos = { packet.px, packet.py };
-		velX = packet.vx;
-		velY = packet.vy;
-		if (velX > 0.01f)
+		vel.x = packet.vx;
+		vel.y = packet.vy;
+		bProne = packet.bProne;
+		if (vel.x > 0.01f)
 			bRight = true;
-		else if (velX < -0.01f)
+		else if (vel.x < -0.01f)
 			bRight = false;
 
-		if (std::abs(packet.vy) > 0.01f)
-			SetIsGround(false);
-		else
-			SetIsGround(true);
+		SetIsGround(packet.bGround);
 	}
 	void PlayerMovement::InterpolateRemote()
 	{

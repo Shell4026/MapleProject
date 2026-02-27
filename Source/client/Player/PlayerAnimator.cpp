@@ -1,5 +1,7 @@
 ﻿#include "Player/PlayerAnimator.h"
 #include "Player/PlayerMovement.h"
+#include "Skill/Skill.h"
+#include "Skill/SkillManager.h"
 
 #include "Game/GameObject.h"
 namespace sh::game
@@ -13,18 +15,28 @@ namespace sh::game
 		Super::Awake();
 		if (movement == nullptr)
 			SH_ERROR("movement is nullptr!");
+		if (skillManager == nullptr)
+			SH_ERROR("skillManager is nullptr!");
 	}
 	SH_USER_API void PlayerAnimator::Update()
 	{
 		DecideState();
-
 		Super::Update();
-
 		ApplyRight();
 	}
 	void PlayerAnimator::DecideState()
 	{
-		const auto& vel = movement->GetVelocity();
+		auto skillState = skillManager->GetLastSkillState();
+		if (skillState != nullptr)
+		{
+			const Skill* const skill = skillState->skill;
+			if (core::IsValid(skill))
+			{
+				SetState(skill->GetAnimState());
+				return;
+			}
+		}
+
 		if (movement->IsProne())
 		{
 			SetState(3);
@@ -37,6 +49,7 @@ namespace sh::game
 			return;
 		}
 
+		const auto& vel = movement->GetVelocity();
 		if (std::abs(vel.x) > 0.1f)
 			SetState(1);
 		else
@@ -59,5 +72,6 @@ namespace sh::game
 				renderer->gameObject.transform->SetPosition(-animPos.x, animPos.y, renderer->gameObject.transform->position.z);
 			}
 		}
+		renderer->gameObject.transform->UpdateMatrix();
 	}
 }//namespace

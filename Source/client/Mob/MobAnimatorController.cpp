@@ -27,6 +27,9 @@ namespace sh::game
 	}
     auto MobAnimatorController::DecideState() const -> int
     {
+        if (mob->GetStatus().bStun)
+            return 2;
+
         const auto vel = mob->GetMovement()->GetVelocity();
         if (std::abs(vel.x) > 0.1f)
             return 1;

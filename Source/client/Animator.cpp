@@ -74,7 +74,6 @@ namespace sh::game
 	{
 		if (this->state == state)
 			return;
-		SH_INFO_FORMAT("state: {}", state);
 		this->state = state;
 		DecideAnimation();
 		t = 0.f;
@@ -89,14 +88,11 @@ namespace sh::game
 		{
 			if (anims[i].condition == state)
 			{
-				if (i < anims.size())
-				{
-					curAnim = anims[i].anim;
-					bStop = false;
-					animIdx = -1;
-					nextT = 0.f;
-					return;
-				}
+				curAnim = anims[i].anim;
+				bStop = false;
+				animIdx = -1;
+				nextT = 0.f;
+				return;
 			}
 		}
 	}
@@ -125,6 +121,7 @@ namespace sh::game
 		float w = texPtr->GetWidth() * 0.01f;
 		float h = texPtr->GetHeight() * 0.01f;
 		renderer->gameObject.transform->SetScale(w, 1.f, h);
+		renderer->gameObject.transform->UpdateMatrix();
 
 		auto prop = renderer->GetMaterialPropertyBlock();
 		prop->SetProperty("tex", texPtr);

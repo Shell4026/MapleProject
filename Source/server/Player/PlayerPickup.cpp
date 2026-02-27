@@ -1,50 +1,24 @@
 ﻿#include "Player/PlayerPickup.h"
+#include "Player/Player.h"
 #include "MapleServer.h"
 #include "CollisionTag.hpp"
 #include "MapleWorld.h"
-#include "Packet/KeyPacket.hpp"
 #include "Packet/InventorySyncPacket.hpp"
 
 #include "Game/GameObject.h"
 #include "Game/Component/Phys/Collider.h"
-#include "Game/Input.h"
+// 서버 사이드
 namespace sh::game
 {
 	PlayerPickup::PlayerPickup(GameObject& owner) :
 		Component(owner)
 	{
-		packetSubscriber.SetCallback(
-			[this](const network::PacketEvent& evt)
-			{
-				if (player == nullptr)
-					return;
-				if (evt.packet->GetId() == KeyPacket::ID)
-				{
-					auto keyPacket = static_cast<const KeyPacket*>(evt.packet);
-
-					if (player->GetUserUUID() != keyPacket->userUUID)
-						return;
-
-					if (keyPacket->keycode == static_cast<int>(Input::KeyCode::Z))
-					{
-						if (keyPacket->bPressed)
-							bPickupState = true;
-						else
-							bPickupState = false;
-					}
-				}
-			}
-		);
 	}
 	SH_USER_API void PlayerPickup::Awake()
 	{
 		player = gameObject.GetComponent<Player>();
 		if (player == nullptr)
-		{
 			SH_ERROR("Not found Player component!");
-		}
-		if (player->IsLocal())
-			MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
 	}
 	SH_USER_API void PlayerPickup::BeginUpdate()
 	{

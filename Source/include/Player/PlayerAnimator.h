@@ -5,6 +5,7 @@
 namespace sh::game
 {
 	class PlayerMovement;
+	class SkillManager;
 	class PlayerAnimator : public Animator
 	{
 		COMPONENT(PlayerAnimator, "user")
@@ -19,5 +20,7 @@ namespace sh::game
 	private:
 		PROPERTY(movement, core::PropertyOption::sobjPtr)
 		PlayerMovement* movement = nullptr;
+		PROPERTY(skillManager, core::PropertyOption::sobjPtr)
+		SkillManager* skillManager = nullptr;
 	};
 }//namespace

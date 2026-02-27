@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Skill/Skill.h"
+#include "Skill/Projectile.h"
 #include "MapleWorld.h"
 #include "MobStatus.hpp"
 
@@ -32,13 +32,14 @@ namespace sh::game
 
         SH_USER_API void Awake() override;
         SH_USER_API void Update() override;
+        SH_USER_API void OnTriggerEnter(Collider& collider) override;
 
         SH_USER_API void Reset();
         SH_USER_API void SetAIStrategy(AIStrategy* strategy) { ai = strategy; }
 #if SH_SERVER
         SH_USER_API void Kill(const Player& player);
         SH_USER_API void BroadcastStatePacket();
-        SH_USER_API void Hit(Skill& skill, Player& player);
+        SH_USER_API void Hit(const Projectile& projectile, Player& player);
 #endif
 
         SH_USER_API auto GetMaxHP() const -> uint32_t { return maxHp; }
@@ -55,7 +56,6 @@ namespace sh::game
     protected:
         PROPERTY(maxHp)
         uint32_t maxHp = 10;
-
         PROPERTY(ai)
         AIStrategy* ai = nullptr;
         PROPERTY(movement, core::PropertyOption::sobjPtr)
@@ -68,6 +68,8 @@ namespace sh::game
     private:
         PROPERTY(mapleWorld)
         MapleWorld* mapleWorld = nullptr;
+        PROPERTY(rigidbody)
+        RigidBody* rigidbody = nullptr;
         PROPERTY(mobId)
         int mobId = 0;
         MobStatus status;

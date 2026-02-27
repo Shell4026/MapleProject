@@ -4,6 +4,7 @@
 #include "EndPoint.hpp"
 #include "MapleServer.h"
 #include "MapleClient.h"
+#include "EntityRouter.h"
 #include "Player/PlayerCamera2D.h"
 #include "Item/Item.h"
 #include "Physics/Foothold.h"
@@ -47,8 +48,8 @@ namespace sh::game
 		SH_USER_API auto GetWorldTick() const -> uint64_t { return worldTick; }
 		SH_USER_API auto GetFoothold() const -> Foothold* { return foothold; }
 #if SH_SERVER
-		SH_USER_API void SpawnItem(int itemId, float x, float y, const core::UUID& owner);
-		SH_USER_API void SpawnItem(const std::vector<int>& itemIds, float x, float y, const core::UUID& owner);
+		SH_USER_API void SpawnItem(int itemId, float x, float y, const Player* owner = nullptr);
+		SH_USER_API void SpawnItem(const std::vector<int>& itemIds, float x, float y, const Player* owner = nullptr);
 		SH_USER_API void DestroyItem(Item& item);
 		/// @brief 월드에 존재하는 메이플 월드 컴포넌트를 가져오는 함수
 		/// @param worldUUID 월드 UUID (메이플 월드 UUID가 아님!)
@@ -59,6 +60,7 @@ namespace sh::game
 #if SH_SERVER
 		void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet);
 		void ProcessPlayerLeave(const PlayerLeavePacket& packet);
+		auto GetEmptyItem() -> Item&;
 		void TryClearSleepItems();
 #else
 		void ProcessPlayerSpawn(const PlayerSpawnPacket& packet);
@@ -88,6 +90,8 @@ namespace sh::game
 		uint64_t nextItemIdx = 0;
 		uint64_t clearSleepItemsAfterTicks = 600;
 		uint64_t lastItemSpawnTick = 0;
+
+		EntityRouter router;
 
 		static std::unordered_map<core::UUID, MapleWorld*> mapleWorlds;
 #else

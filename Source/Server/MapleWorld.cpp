@@ -1,4 +1,5 @@
 ﻿#include "MapleWorld.h"
+#include "Physics/FootholdMovement.h"
 #include "Player/Player.h"
 #include "Item/Item.h"
 
@@ -44,10 +45,12 @@ namespace sh::game
 			playerObj->transform->SetWorldPosition({ x, y, 0 });
 			playerObj->transform->UpdateMatrix();
 
-			auto player = playerObj->GetComponent<Player>();
+			Player* const player = playerObj->GetComponent<Player>();
 			player->SetUserUUID(uuid, Player::MapleWorldKey{});
 			player->SetCurrentWorld(*this);
 			players[uuid] = player;
+
+			router.RegisterPlayer(*player);
 
 			return player;
 		}
@@ -71,6 +74,8 @@ namespace sh::game
 
 		server->BroadCast(packet);
 
+		router.UnRegisterPlayer(player);
+
 		return true;
 	}
 	SH_USER_API void MapleWorld::Awake()
@@ -93,53 +98,29 @@ namespace sh::game
 			throw std::runtime_error{ "Invalid server" };
 
 		server->bus.Subscribe(packetEventSubscriber);
+		router.SetPacketBus(server->bus);
 	}
 	SH_USER_API void MapleWorld::LateUpdate()
 	{
 		TryClearSleepItems();
 		++worldTick;
 	}
-	SH_USER_API void MapleWorld::SpawnItem(int itemId, float x, float y, const core::UUID& owner)
+	SH_USER_API void MapleWorld::SpawnItem(int itemId, float x, float y, const Player* owner)
 	{
 		SH_INFO_FORMAT("Drop item: {}", itemId);
-		GameObject* itemObj = nullptr;
-		Item* item = nullptr;
-		if (sleepItems.empty())
-		{
-			itemObj = itemPrefab->AddToWorld(world);
-			item = itemObj->GetComponent<Item>();
-		}
-		else
-		{
-			do
-			{
-				item = sleepItems.front().Get();
-				sleepItems.pop();
-			} 
-			while (!core::IsValid(item) && !sleepItems.empty());
+		Item& item = GetEmptyItem();
+		GameObject& itemObj = item.gameObject;
 
-			if (!core::IsValid(item))
-			{
-				itemObj = itemPrefab->AddToWorld(world);
-				item = itemObj->GetComponent<Item>();
-			}
-			else
-			{
-				itemObj = &item->gameObject;
-				itemObj->SetUUID(core::UUID::Generate());
-				itemObj->SetActive(true);
-			}
-		}
-		auto pos = itemObj->transform->GetWorldPosition();
+		auto pos = itemObj.transform->GetWorldPosition();
 		pos.x = x;
 		pos.y = y;
-		itemObj->transform->SetWorldPosition(pos);
+		itemObj.transform->SetWorldPosition(pos);
 		
-		item->GetRigidBody()->ResetPhysicsTransform();
-		item->GetRigidBody()->SetLinearVelocity({ 0.f, 0.f, 0.f });
-		item->instanceId = nextItemIdx;
-		item->itemId = itemId;
-		item->owner = owner;
+		item.GetMovement()->AddImpulse(0.f, 6.f);
+		item.instanceId = nextItemIdx;
+		item.itemId = itemId;
+		if (owner != nullptr)
+			item.owner = owner->GetUserUUID();
 
 		// ItemDropPacket은 MapleWorld(client)클래스에서 처리
 		ItemDropPacket packet{};
@@ -148,14 +129,15 @@ namespace sh::game
 		packet.x = x;
 		packet.y = y;
 		packet.cnt = 1;
-		packet.itemUUID = itemObj->GetUUID();
-		packet.ownerUUID = owner;
+		packet.itemUUID = itemObj.GetUUID();
+		if (owner != nullptr)
+			packet.ownerUUID = owner->GetUUID();
 
 		MapleServer::GetInstance()->BroadCast(packet);
 
 		lastItemSpawnTick = worldTick;
 	}
-	SH_USER_API void MapleWorld::SpawnItem(const std::vector<int>& itemIds, float x, float y, const core::UUID& owner)
+	SH_USER_API void MapleWorld::SpawnItem(const std::vector<int>& itemIds, float x, float y, const Player* owner)
 	{
 		for (int id : itemIds)
 			SpawnItem(id, x, y, owner);
@@ -247,6 +229,40 @@ namespace sh::game
 		PlayerDespawnPacket despawnPacket{};
 		despawnPacket.player = packet.user;
 		server->BroadCast(despawnPacket);
+	}
+	auto MapleWorld::GetEmptyItem() -> Item&
+	{
+		GameObject* itemObj = nullptr;
+		Item* item = nullptr;
+		if (sleepItems.empty())
+		{
+			itemObj = itemPrefab->AddToWorld(world);
+			item = itemObj->GetComponent<Item>();
+		}
+		else
+		{
+			do
+			{
+				item = sleepItems.front().Get();
+				sleepItems.pop();
+			} while (!core::IsValid(item) && !sleepItems.empty());
+
+			if (!core::IsValid(item))
+			{
+				itemObj = itemPrefab->AddToWorld(world);
+				item = itemObj->GetComponent<Item>();
+			}
+			else
+			{
+				itemObj = &item->gameObject;
+				itemObj->SetUUID(core::UUID::Generate());
+				itemObj->SetActive(true);
+			}
+		}
+
+		item->SetCurrentWorld(*this);
+
+		return *item;
 	}
 	void MapleWorld::TryClearSleepItems()
 	{

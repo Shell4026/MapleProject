@@ -52,6 +52,6 @@ namespace sh::game
 		float y = 0.f;
 		int cnt = 1;
 		std::array<uint32_t, 4> itemUUID;
-		std::array<uint32_t, 4> ownerUUID;
+		std::array<uint32_t, 4> ownerUUID{ 0, 0, 0, 0 };
 	};
 }//namespace

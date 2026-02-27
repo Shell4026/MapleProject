@@ -18,6 +18,9 @@ namespace sh::game
 		SH_USER_API void OnEnable() override;
 		SH_USER_API void OnDisable() override;
 
+		SH_USER_API void OnCollisionEnter(const Collision& collision) override;
+		SH_USER_API void OnCollisionStay(const Collision& collision) override;
+
 		SH_USER_API void OnTriggerEnter(Collider& other) override;
 		SH_USER_API void OnTriggerStay(Collider& other) override;
 		SH_USER_API void OnTriggerExit(Collider& other) override;
