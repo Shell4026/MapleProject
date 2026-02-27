@@ -26,10 +26,9 @@ namespace sh::game
 			json["vy"] = vy;
 			json["lastSeq"] = lastProcessedInputSeq;
 			json["player"] = playerUUID;
-			json["tick"] = serverTick;
-			json["ts"] = timestamp;
+			json["st"] = serverTick;
+			json["ct"] = clientTickAtState;
 			json["ground"] = bGround;
-			json["floor"] = floor;
 			json["prone"] = bProne;
 			json["lock"] = bLock;
 			json["right"] = bRight;
@@ -50,14 +49,12 @@ namespace sh::game
 				lastProcessedInputSeq = json["lastSeq"];
 			if (json.contains("player"))
 				playerUUID = json["player"];
-			if (json.contains("tick"))
-				serverTick = json["tick"];
-			if (json.contains("ts"))
-				timestamp = json["ts"];
+			if (json.contains("st"))
+				serverTick = json["st"];
+			if (json.contains("ct"))
+				clientTickAtState = json["ct"];
 			if (json.contains("ground"))
 				bGround = json["ground"];
-			if (json.contains("floor"))
-				floor = json["floor"];
 			if (json.contains("prone"))
 				bProne = json["prone"];
 			if (json.contains("lock"))
@@ -68,12 +65,10 @@ namespace sh::game
 	public:
 		float px = 0.f, py = 0.f;
 		float vx = 0.f, vy = 0.f;
-		float floor = -1000.f;
 
 		uint32_t lastProcessedInputSeq = 0;
-		uint32_t serverTick = 0;
-
-		uint64_t timestamp = 0;
+		uint64_t serverTick = 0;
+		uint64_t clientTickAtState = 0;
 
 		std::array<uint32_t, 4> playerUUID;
 

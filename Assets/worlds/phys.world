@@ -16,18 +16,19 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 6.65500020980835
+            "distance": 18.987491607666016
         },
-        "SObject": {},
+        "SObject": null,
+        "fullType": "sh::game::EditorCamera",
         "name": "EditorCamera",
         "type": "EditorCamera",
         "uuid": "1e545d68c551eb7891d1661c8f63ed46",
         "version": 1
     },
     "camPos": [
-        3.842266321182251,
-        3.842266082763672,
-        3.842266321182251
+        3.827683925628662,
+        7.2552947998046875,
+        17.124088287353516
     ],
     "editorObjs": [],
     "name": "World",
@@ -39,7 +40,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -49,7 +50,7 @@
                         ],
                         "vPosition": [
                             0.0,
-                            1.0,
+                            5.0,
                             5.0
                         ],
                         "vRotation": [
@@ -63,6 +64,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "d748954d136a4d866f38b70177925d98",
@@ -83,7 +85,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::Camera",
                     "name": "Camera",
                     "type": "Camera",
                     "uuid": "5eecf57bbcdff23d714f03caa9f49b18",
@@ -108,7 +111,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -132,6 +135,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "664952e9ab84ddc9a1031bd620f17f6b",
@@ -153,7 +157,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::BoxCollider",
                     "name": "physics/BoxCollider",
                     "type": "BoxCollider",
                     "uuid": "acf09f4693e052510bda680371c9fdae",
@@ -179,12 +184,11 @@
                         "bGravity": false,
                         "bInterpolation": true,
                         "bKinematic": true,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "acf09f4693e052510bda680371c9fdae",
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
                     "name": "physics/RigidBody",
                     "type": "RigidBody",
                     "uuid": "beb1facf0c37fe3c1ed07c27579892c8",
@@ -209,7 +213,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -218,300 +222,7 @@
                             1.0
                         ],
                         "vPosition": [
-                            0.25,
-                            8.5,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "859ea5e5cd9e7cee18fc04e4b971245c",
-                    "version": 1
-                },
-                {
-                    "CapsuleCollider": {
-                        "bDisplayArea": true,
-                        "height": 1.0,
-                        "radius": 0.5
-                    },
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "physics/CapsuleCollider",
-                    "type": "CapsuleCollider",
-                    "uuid": "8371e87899d57eb1002a1b9295d57417",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "axisLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "bGravity": true,
-                        "bInterpolation": true,
-                        "bKinematic": false,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "8371e87899d57eb1002a1b9295d57417",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "e1c8ba14d6857da863d404391baa0155",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "Capsule0",
-            "type": "GameObject",
-            "uuid": "42e7400a865dc834f369deb6f90a033e",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
-                            2.0,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "e87ccdd7aa924b68c42da27a976127c7",
-                    "version": 1
-                },
-                {
-                    "CapsuleCollider": {
-                        "bDisplayArea": true,
-                        "height": 1.0,
-                        "radius": 0.5
-                    },
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "name": "physics/CapsuleCollider",
-                    "type": "CapsuleCollider",
-                    "uuid": "4c61d1223522fa2ce84acd0775881f92",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "axisLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "bGravity": true,
-                        "bInterpolation": true,
-                        "bKinematic": false,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "4c61d1223522fa2ce84acd0775881f92",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "a15aa1a133efd18225653a6bd146d869",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "Capsule1",
-            "type": "GameObject",
-            "uuid": "7150db9c1f90ad7e3832bfc759798463",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            -1.9880096912384033,
-                            2.489454746246338,
-                            0.3169100880622864
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "name": "Transform",
-                    "type": "Transform",
-                    "uuid": "f03d10fdba26896b70c5862ab29995b3",
-                    "version": 1
-                },
-                {
-                    "Collider": {
-                        "bTrigger": false
-                    },
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "ShpereCollider": {
-                        "bDisplayArea": true,
-                        "radius": 0.5
-                    },
-                    "name": "physics/ShpereCollider",
-                    "type": "ShpereCollider",
-                    "uuid": "541e25791a40e56130cfe956dbc01000",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "RigidBody": {
-                        "angularDamping": 0.10000000149011612,
-                        "angularLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "axisLock": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "bGravity": true,
-                        "bInterpolation": true,
-                        "bKinematic": false,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "541e25791a40e56130cfe956dbc01000",
-                        "linearDamping": 0.0,
-                        "mass": 1.0
-                    },
-                    "SObject": {},
-                    "name": "physics/RigidBody",
-                    "type": "RigidBody",
-                    "uuid": "fc0675a356a9284f89b5b12e1f8faf88",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "Sphere",
-            "type": "GameObject",
-            "uuid": "0ed5f92307a6e2ea000cbac5b4d38856",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": {},
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
+                            4.0,
                             0.0,
                             0.0
                         ],
@@ -526,6 +237,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "215d8fc89c1d12c68b10588bef10efc9",
@@ -547,7 +259,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::BoxCollider",
                     "name": "physics/BoxCollider",
                     "type": "BoxCollider",
                     "uuid": "aac78d680f3a176deb12e623653cfc58",
@@ -573,12 +286,11 @@
                         "bGravity": false,
                         "bInterpolation": false,
                         "bKinematic": true,
-                        "bouncy": 0.20000000298023224,
-                        "collision": "aac78d680f3a176deb12e623653cfc58",
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
                     "name": "physics/RigidBody",
                     "type": "RigidBody",
                     "uuid": "aa42db6ea4eeecfc58ca2e56a816aa07",
@@ -594,6 +306,512 @@
             "name": "Trigger",
             "type": "GameObject",
             "uuid": "2590bd11b02d7e369de4ee7b28c1f88b",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "b2ad4101fb031482d419cd1331ebc0c2",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            -1.75,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "f03d10fdba26896b70c5862ab29995b3",
+                    "version": 1
+                },
+                {
+                    "Collider": {
+                        "bTrigger": false
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "ShpereCollider": {
+                        "bDisplayArea": true,
+                        "radius": 0.5
+                    },
+                    "fullType": "sh::game::ShpereCollider",
+                    "name": "physics/ShpereCollider",
+                    "type": "ShpereCollider",
+                    "uuid": "541e25791a40e56130cfe956dbc01000",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Sphere",
+            "type": "GameObject",
+            "uuid": "0ed5f92307a6e2ea000cbac5b4d38856",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            1.5,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "b2ad4101fb031482d419cd1331ebc0c2",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "axisLock": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "bGravity": true,
+                        "bInterpolation": true,
+                        "bKinematic": false,
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "c9ef3765a9d2ec3e705fb6616f898e9c",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Test2": {
+                        "num": 10
+                    },
+                    "fullType": "sh::game::Test2",
+                    "name": "user/Test2",
+                    "type": "Test2",
+                    "uuid": "8b380888d0e7f8275127ae6fbe526fd8",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Car",
+            "type": "GameObject",
+            "uuid": "8b082f8cb32ea66471661c2faf1a39ac",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "b2ad4101fb031482d419cd1331ebc0c2",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            1.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "3c6ab39f86c0035333e660f80f5794c8",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            4.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "Collider": {
+                        "bTrigger": false
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::BoxCollider",
+                    "name": "physics/BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "e8434d7258561484a30529ba6dbf4231",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Cube",
+            "type": "GameObject",
+            "uuid": "d18d6fb1fb83f816229eebdbc347ee27",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "b2ad4101fb031482d419cd1331ebc0c2",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            1.75,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "66dd8f373ba916f9f50e6849063d1aae",
+                    "version": 1
+                },
+                {
+                    "Collider": {
+                        "bTrigger": false
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "ShpereCollider": {
+                        "bDisplayArea": true,
+                        "radius": 0.5
+                    },
+                    "fullType": "sh::game::ShpereCollider",
+                    "name": "physics/ShpereCollider",
+                    "type": "ShpereCollider",
+                    "uuid": "05ddeb4afacabcb2c3f215852189fa13",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Sphere",
+            "type": "GameObject",
+            "uuid": "35beeb4c93e5f00b3f247a0d4766b71c",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "f03d10fdba26896b70c5862ab29995b3",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "3dfd9cf052d2849019e4f942c955604e",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "bbc4ef7ec45dce223297a224f8093f10",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f19",
+                        "renderTag": 1
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "8ad5e0aaaddfbb7e6e1f63f76f0e484b",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "mesh",
+            "type": "GameObject",
+            "uuid": "b65c5e948b949f6086d77c98919fb623",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "66dd8f373ba916f9f50e6849063d1aae",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "f37a16c844c979cbd52beac46b4fcc9b",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "bbc4ef7ec45dce223297a224f8093f10",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f19",
+                        "renderTag": 1
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "6774f4110ae93dfb243d4278b187c38f",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "mesh",
+            "type": "GameObject",
+            "uuid": "a2e0ad865937199ff71e9d4ddde59823",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "3c6ab39f86c0035333e660f80f5794c8",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            4.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "15d08c39b9a339494766198f6fb613fd",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "bbc4ef7ec45dce223297a224f8093f10",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f20",
+                        "renderTag": 1
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "a1b84f15d9a558fa014b907995127d59",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Cube",
+            "type": "GameObject",
+            "uuid": "31e53c23b84f9af5d75c1679a5b6f071",
             "version": 1
         }
     ],

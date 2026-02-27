@@ -20,20 +20,25 @@ namespace sh::game
 		auto Serialize() const -> core::Json override
 		{
 			core::Json json = network::Packet::Serialize();
-			json["pid"] = userUUID;
+			json["seq"] = seq;
+			json["uid"] = userUUID;
 			json["sid"] = skillId;
+			json["dir"] = dir;
 			return json;
 		}
 		void Deserialize(const core::Json& json) override
 		{
 			network::Packet::Deserialize(json);
-			if (json.contains("pid"))
-				userUUID = json["pid"];
-			if (json.contains("sid"))
-				skillId = json["sid"];
+			if (json.contains("uid"))
+				userUUID = json["uid"];
+			seq = json.value("seq", 0);
+			skillId = json.value("sid", 0);
+			dir = json.value("dir", 0);
 		}
 	public:
 		std::array<uint32_t, 4> userUUID;
+		uint32_t seq;
 		uint32_t skillId;
+		int dir;
 	};
 }//namespace

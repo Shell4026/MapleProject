@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Skill/Skill.h"
+#include "Skill/Projectile.h"
 #include "MapleWorld.h"
 #include "MobStatus.hpp"
 
@@ -9,8 +9,6 @@
 #include "Network/PacketEvent.hpp"
 
 #if !SH_SERVER
-#include "MobAnimation.h"
-#include "MobAnimationController.h"
 #include "UI/HPUI.h"
 #endif
 
@@ -22,6 +20,7 @@
 
 namespace sh::game
 {
+    class MobMovement;
     class MobStatePacket;
     class ItemDropPacket;
 
@@ -33,20 +32,18 @@ namespace sh::game
 
         SH_USER_API void Awake() override;
         SH_USER_API void Update() override;
+        SH_USER_API void OnTriggerEnter(Collider& collider) override;
 
         SH_USER_API void Reset();
         SH_USER_API void SetAIStrategy(AIStrategy* strategy) { ai = strategy; }
 #if SH_SERVER
         SH_USER_API void Kill(const Player& player);
         SH_USER_API void BroadcastStatePacket();
-        SH_USER_API void Hit(Skill& skill, Player& player);
-#else
-        SH_USER_API void SetAnimation(MobAnimation& anim);
+        SH_USER_API void Hit(const Projectile& projectile, Player& player);
 #endif
 
         SH_USER_API auto GetMaxHP() const -> uint32_t { return maxHp; }
-        SH_USER_API auto GetSpeed() const -> float { return speed; }
-        SH_USER_API auto GetRigidbody() const -> RigidBody* { return rigidbody; }
+        SH_USER_API auto GetMovement() const -> MobMovement* { return movement; }
         SH_USER_API auto GetStatus() const -> const MobStatus& { return status; }
         SH_USER_API auto GetStatus() -> MobStatus& { return status; }
         SH_USER_API auto GetMapleWorld() const -> MapleWorld* { return mapleWorld; }
@@ -59,14 +56,10 @@ namespace sh::game
     protected:
         PROPERTY(maxHp)
         uint32_t maxHp = 10;
-        PROPERTY(speed)
-        float speed = 0.6f;
-
         PROPERTY(ai)
         AIStrategy* ai = nullptr;
-
-        PROPERTY(rigidbody)
-        RigidBody* rigidbody = nullptr;
+        PROPERTY(movement, core::PropertyOption::sobjPtr)
+        MobMovement* movement = nullptr;
 
 #if !SH_SERVER
         PROPERTY(healthBar)
@@ -75,6 +68,8 @@ namespace sh::game
     private:
         PROPERTY(mapleWorld)
         MapleWorld* mapleWorld = nullptr;
+        PROPERTY(rigidbody)
+        RigidBody* rigidbody = nullptr;
         PROPERTY(mobId)
         int mobId = 0;
         MobStatus status;
@@ -90,10 +85,6 @@ namespace sh::game
 #else
         glm::vec2 serverPos{};
         glm::vec2 serverVel{};
-        MobAnimationController animator;
-
-        PROPERTY(anim)
-        MobAnimation* anim = nullptr;
 #endif
     };
 }//namespace

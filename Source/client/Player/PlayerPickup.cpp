@@ -1,10 +1,12 @@
 ﻿#include "Player/PlayerPickup.h"
 #include "Packet/KeyPacket.hpp"
+#include "Player/Player.h"
 #include "MapleClient.h"
 
 #include "Game/GameObject.h"
 #include "Game/Input.h"
 
+// 클라 사이드
 namespace sh::game
 {
 	PlayerPickup::PlayerPickup(GameObject& owner) :

@@ -1,0 +1,19 @@
+{
+    "Constant": [
+        []
+    ],
+    "Material": {
+        "shader": "29a303056fef0dce249ab91740f1143e"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": {
+            "tex": "4d4ec05eee5dd5e3293a61c9f6fd6c38"
+        },
+        "vector": null
+    },
+    "name": "Background1",
+    "type": "Material",
+    "uuid": "f4621b83ffc7f6b4dfe81f91da050f79",
+    "version": 1
+}

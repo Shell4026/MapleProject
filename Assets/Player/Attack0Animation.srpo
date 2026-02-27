@@ -1,0 +1,24 @@
+{
+    "AnimationData": {
+        "bLoop": true,
+        "delayMs": [
+            350,
+            450
+        ],
+        "pos": [
+            -0.10000000149011612,
+            0.38999998569488525
+        ],
+        "textures": [
+            "05d76dab603cb40d72332e0e47b98c01",
+            "e81c5b68825058af8c9da5a60fd429c7"
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::AnimationData",
+    "name": "Attack0Animation",
+    "type": "AnimationData",
+    "uuid": "29f9bb4cfb4751d6d03eb94c420c0e1d",
+    "version": 1
+}

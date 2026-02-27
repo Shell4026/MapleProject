@@ -1,0 +1,22 @@
+{
+    "SObject": null,
+    "ScriptableObject": null,
+    "Skill": {
+        "activeMs": 450,
+        "animState": 4,
+        "bPreventAir": false,
+        "bPreventMove": true,
+        "cooldownMs": 0,
+        "id": 0,
+        "projectiles": [
+            "d9363f5a7428c6932fb47e6791f14384"
+        ],
+        "recoveryMs": 0,
+        "startupMs": 350
+    },
+    "fullType": "sh::game::Skill",
+    "name": "Attack",
+    "type": "Skill",
+    "uuid": "8f140723053e11bfdb71540797bb8a15",
+    "version": 1
+}

@@ -1,8 +1,11 @@
 ﻿#include "Item/Item.h"
 #include "CollisionTag.hpp"
+#include "MapleWorld.h"
+#include "Physics/FootholdMovement.h"
 
 #include "Game/GameObject.h"
 
+// 클라 사이드
 namespace sh::game
 {
 	Item::Item(GameObject& owner) :
@@ -11,32 +14,18 @@ namespace sh::game
 	}
 	SH_USER_API void Item::Awake()
 	{
-		if (renderer == nullptr || rb == nullptr || trigger == nullptr)
+		if (renderer == nullptr || rb == nullptr)
 		{
 			SH_ERROR("Invaild item properties!");
 			return;
 		}
+		if (movement == nullptr)
+			SH_ERROR("movement is nullptr!");
 		if (texture != nullptr)
 		{
 			renderer->GetMaterialPropertyBlock()->SetProperty("tex", texture);
 			renderer->UpdatePropertyBlockData();
 		}
-
-		rb->GetCollider()->SetCollisionTag(tag::entityTag);
-		rb->GetCollider()->SetAllowCollisions(tag::groundTag);
-
-		trigger->GetCollider()->SetCollisionTag(tag::itemTag);
-		trigger->GetCollider()->SetAllowCollisions(tag::entityTag);
-	}
-	SH_USER_API void Item::OnDisable()
-	{
-		rb->SetLinearVelocity({ 0.f, 0.f, 0.f });
-	}
-	SH_USER_API void Item::BeginUpdate()
-	{
-		if (trigger == nullptr)
-			return;
-		trigger->ResetPhysicsTransform();
 	}
 	SH_USER_API void Item::SetTexture(const render::Texture* texture)
 	{

@@ -1,0 +1,395 @@
+{
+    "Prefab": {
+        "2ce40c0f83abe981ea6c31336100e43c": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "005f4ffa1ef76453b10b3be25ef05f61",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "MapleWorld",
+            "type": "GameObject",
+            "uuid": "2ce40c0f83abe981ea6c31336100e43c",
+            "version": 1
+        },
+        "37029adb2850e71151045923b5da41c4": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "82a7b3d4caafcbaa3f6f4b754d508ce3",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MapleWorld": {
+                        "camera": "0e1736e35374ddcc9b38bcc45ec320e1",
+                        "itemPrefab": "ee1bee2efec5a690531dd2812a6192b7",
+                        "playerPrefab": "3627e56ca0c4ec9642b233813be981aa",
+                        "playerSpawnPoint": "f57c1af0610b68ab95f70bcc3c43dec3"
+                    },
+                    "SObject": {},
+                    "name": "user/MapleWorld",
+                    "type": "MapleWorld",
+                    "uuid": "2790dda99c97da477c8115f25d124347",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "World",
+            "type": "GameObject",
+            "uuid": "37029adb2850e71151045923b5da41c4",
+            "version": 1
+        },
+        "5a2e80b3b4566b93ffdd898d138bbc91": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            3.799999952316284,
+                            4.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "fb04fa0589785a34f022984c6d27fbef",
+                    "version": 1
+                },
+                {
+                    "Camera": {
+                        "depth": 0,
+                        "fov": 60.0,
+                        "lookPos": [
+                            0.0,
+                            3.799999952316284,
+                            0.0
+                        ],
+                        "projection": 1
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "name": "Camera",
+                    "type": "Camera",
+                    "uuid": "917d5fd9bc031527e97cd788a6d70534",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "PlayerCamera2D": {
+                        "camlimitMax": [
+                            7.099999904632568,
+                            7.599999904632568
+                        ],
+                        "camlimitMin": [
+                            -7.099999904632568,
+                            0.0
+                        ],
+                        "smoothTime": 0.25,
+                        "targetCamera": "917d5fd9bc031527e97cd788a6d70534"
+                    },
+                    "SObject": {},
+                    "name": "user/PlayerCamera2D",
+                    "type": "PlayerCamera2D",
+                    "uuid": "0e1736e35374ddcc9b38bcc45ec320e1",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Camera",
+            "type": "GameObject",
+            "uuid": "5a2e80b3b4566b93ffdd898d138bbc91",
+            "version": 1
+        },
+        "7f26c5dc8c0f9757e9c5ec2e9d677e2c": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "f57c1af0610b68ab95f70bcc3c43dec3",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "20ce72a7168c0d130f0b22a505a8aabb",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "bbc4ef7ec45dce223297a224f8093f10",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f19",
+                        "renderTag": 1
+                    },
+                    "SObject": {},
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "728827c7607d9ec5f8ff858b2edf6d68",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": true,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Sphere",
+            "type": "GameObject",
+            "uuid": "7f26c5dc8c0f9757e9c5ec2e9d677e2c",
+            "version": 1
+        },
+        "a8a6ef1bb88efcd837e040ec7566a346": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "fa167c7691a0ebb3eee93d3cb14d7a6a",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MobSpawner": {
+                        "mobLimit": 10,
+                        "mobs": [],
+                        "spawnDelayMs": 5000
+                    },
+                    "SObject": {},
+                    "name": "user/MobSpawner",
+                    "type": "MobSpawner",
+                    "uuid": "5ca84b42b3e6d8ed36ee2ce5eb05a76d",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "MobSpawner",
+            "type": "GameObject",
+            "uuid": "a8a6ef1bb88efcd837e040ec7566a346",
+            "version": 1
+        },
+        "c76d04e8ec5ebff3852de5332b08065b": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": {},
+                    "Transform": {
+                        "parent": "005f4ffa1ef76453b10b3be25ef05f61",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            -1.5456347465515137,
+                            5.856643199920654,
+                            -0.000377459276933223
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Transform",
+                    "type": "Transform",
+                    "uuid": "f57c1af0610b68ab95f70bcc3c43dec3",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "SpawnPoint",
+            "type": "GameObject",
+            "uuid": "c76d04e8ec5ebff3852de5332b08065b",
+            "version": 1
+        }
+    },
+    "name": "MapleWorld",
+    "rootObj": "2ce40c0f83abe981ea6c31336100e43c",
+    "type": "Prefab",
+    "uuid": "acc2f071af1c0833653b51bc5be97f04",
+    "version": 1
+}

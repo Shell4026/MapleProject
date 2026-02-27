@@ -1,5 +1,6 @@
 ﻿#include "AI/BasicAI.h"
 #include "Mob/Mob.h"
+#include "Mob/MobMovement.h"
 
 #include "Game/GameObject.h"
 #include "Game/World.h"
@@ -30,21 +31,21 @@ namespace sh::game
 			break;
 		}
 
-		RigidBody* rigidBody = mob.GetRigidbody();
-		if (!core::IsValid(rigidBody))
+		MobMovement* const movement = mob.GetMovement();
+		if (!core::IsValid(movement))
 			return;
 
 		if (state == State::Move || state == State::Chase)
 		{
-			auto vel = rigidBody->GetLinearVelocity();
-			vel.x = dir * mob.GetSpeed();
-			rigidBody->SetLinearVelocity(vel);
+			auto vel = movement->GetVelocity();
+			vel.x = dir * movement->GetSpeed();
+			movement->SetVelocity(vel);
 		}
 		else
 		{
-			auto vel = rigidBody->GetLinearVelocity();
+			auto vel = movement->GetVelocity();
 			vel.x = 0.f;
-			rigidBody->SetLinearVelocity(vel);
+			movement->SetVelocity(vel);
 		}
 	}
 	SH_USER_API void BasicAI::OnAttacked(Player& player)

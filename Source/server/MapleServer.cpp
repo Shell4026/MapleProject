@@ -160,7 +160,7 @@ namespace sh::game
 				GameManager::GetInstance()->LoadWorld(world->GetUUID(), GameManager::LoadMode::Additive, true);
 		}
 	}
-	SH_USER_API void MapleServer::Update()
+	SH_USER_API void MapleServer::BeginUpdate()
 	{
 		ProcessTcpListen();
 		ProcessUdpPacket();

@@ -25,6 +25,7 @@ namespace sh::game
 			json["seq"] = seq;
 			json["user"] = user;
 			json["prone"] = bProne;
+			json["tick"] = tick;
 			return json;
 		}
 		void Deserialize(const core::Json& json) override
@@ -40,11 +41,13 @@ namespace sh::game
 				user = json["user"];
 			if (json.contains("prone"))
 				bProne = json["prone"];
+			tick = json.value("tick", 0);
 		}
 	public:
 		std::array<uint32_t, 4> user;
 		float inputX = 0.0f; // -1..1
 		uint32_t seq = 0;
+		uint64_t tick = 0;
 		bool bJump = false;
 		bool bProne = false;
 	};

@@ -1,0 +1,16 @@
+{
+    "Job": {
+        "id": 0,
+        "name": "초보자",
+        "skills": [
+            "8f140723053e11bfdb71540797bb8a15"
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::Job",
+    "name": "초보자",
+    "type": "Job",
+    "uuid": "9da620ff9e46064eafd9ce2e49d19cb6",
+    "version": 1
+}

@@ -1,0 +1,22 @@
+{
+    "AnimationData": {
+        "bLoop": false,
+        "delayMs": [
+            10
+        ],
+        "pos": [
+            0.0,
+            0.4099999964237213
+        ],
+        "textures": [
+            "f1ab8160b5c555ffd12e67d0b7c4f92e"
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::AnimationData",
+    "name": "JumpAnimation",
+    "type": "AnimationData",
+    "uuid": "780d0ebe39dabf4a4fd230d9db8e62ca",
+    "version": 1
+}

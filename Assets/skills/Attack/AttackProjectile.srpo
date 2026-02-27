@@ -1,0 +1,18 @@
+{
+    "Projectile": {
+        "damage": 10,
+        "lifetimeMs": 450,
+        "prefab": "ab8ff71e62dff51d63b3c6bb3530aef5",
+        "velocity": [
+            0.0,
+            0.0
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::Projectile",
+    "name": "AttackProjectile",
+    "type": "Projectile",
+    "uuid": "d9363f5a7428c6932fb47e6791f14384",
+    "version": 1
+}

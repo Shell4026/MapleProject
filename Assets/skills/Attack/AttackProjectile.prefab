@@ -1,0 +1,249 @@
+{
+    "Prefab": {
+        "388317d1dc2de1382c7aa689762acdec": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "b0e1aaf5b916e25bcdacb00ce5b78516",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "ProjectileInstance": {
+                        "rigidbody": "deaa638b6d65ff77af90f11e18a02a84"
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::ProjectileInstance",
+                    "name": "user/ProjectileInstance",
+                    "type": "ProjectileInstance",
+                    "uuid": "3c984a8e513ae60edcc4d8a5cfdc62d2",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "axisLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "bGravity": false,
+                        "bInterpolation": false,
+                        "bKinematic": true,
+                        "bStatic": false,
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "deaa638b6d65ff77af90f11e18a02a84",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "AttackProjectile",
+            "type": "GameObject",
+            "uuid": "388317d1dc2de1382c7aa689762acdec",
+            "version": 1
+        },
+        "3ba58c25f4ddba06f5a729590953e831": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "b0e1aaf5b916e25bcdacb00ce5b78516",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            -0.403780460357666,
+                            0.2842274308204651,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "8d26d673c50e94047424e595ec4c7902",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            0.5,
+                            0.4000000059604645,
+                            1.0
+                        ]
+                    },
+                    "Collider": {
+                        "bTrigger": true,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "ProjectileHitBox": {
+                        "projectileInstance": "3c984a8e513ae60edcc4d8a5cfdc62d2"
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::ProjectileHitBox",
+                    "name": "user/ProjectileHitBox",
+                    "type": "ProjectileHitBox",
+                    "uuid": "ae7cb2e4a1ee09150ef0994d9b2e0c0c",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "trigger",
+            "type": "GameObject",
+            "uuid": "3ba58c25f4ddba06f5a729590953e831",
+            "version": 1
+        },
+        "84139b06567ebac8b57108f389010242": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "8d26d673c50e94047424e595ec4c7902",
+                        "quat": [
+                            0.7071068286895752,
+                            0.0,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            90.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            0.5,
+                            1.0,
+                            0.4000000059604645
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "cc0dc805d6e6512be8e06f83295bb5c4",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "bbc4ef7ec45dce223297a224f8093f10",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f21",
+                        "renderTag": 1
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "be6da2d32d297db51baa3e7ca15b3e28",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": true,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Quad",
+            "type": "GameObject",
+            "uuid": "84139b06567ebac8b57108f389010242",
+            "version": 1
+        }
+    },
+    "name": "AttackProjectile",
+    "rootObj": "388317d1dc2de1382c7aa689762acdec",
+    "type": "Prefab",
+    "uuid": "ab8ff71e62dff51d63b3c6bb3530aef5",
+    "version": 1
+}

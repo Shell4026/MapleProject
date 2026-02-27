@@ -1,89 +1,45 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Player/PlayerMovement2D.h"
-#include "SkillHitbox.h"
 
-#if !SH_SERVER
-#include "Player/PlayerAnimation.h"
-#include "Animation.h"
-#endif
+#include "Game/ScriptableObject.h"
 
-#include "Core/SContainer.hpp"
-
-#include "Game/Component/Component.h"
-#include "Game/Component/Render/MeshRenderer.h"
-#include "Game/Input.h"
-
-#include <random>
 #include <vector>
 namespace sh::game
 {
-	class SkillStatePacket;
-
-	class Skill : public Component
+	class Projectile;
+	class Skill : public ScriptableObject
 	{
-		COMPONENT(Skill, "user")
+		SRPO(Skill)
 	public:
-		SH_USER_API Skill(GameObject& owner);
-		
-		SH_USER_API void Awake() override;
-		SH_USER_API void Start() override;
-		SH_USER_API void BeginUpdate() override;
-		SH_USER_API void Update() override;
-
-		SH_USER_API auto GetId() const -> uint32_t;
-		SH_USER_API auto IsUsing() const -> bool;
-
-		SH_USER_API void Deserialize(const core::Json& json) override;
-
-		SH_USER_API virtual void Use();
-
-		SH_USER_API auto GetDamage() const -> float;
-#if !SH_SERVER
-		SH_USER_API void SetKey(Input::KeyCode keyCode);
-		SH_USER_API void ProcessState(const SkillStatePacket& packet);
-#endif
-	private:
-#if !SH_SERVER
-		void PlayAnim();
-#endif
-	protected:
-#if !SH_SERVER
-		PROPERTY(animator)
-		PlayerAnimation* animator = nullptr;
-		PROPERTY(anims)
-		std::vector<Animation*> anims;
-		
-		core::SObjWeakPtr<Animation> curAnim = nullptr;
-#endif
-		PROPERTY(playerMovement)
-		PlayerMovement2D* playerMovement = nullptr;
+		SH_USER_API auto GetId() const -> uint32_t { return id; }
+		SH_USER_API auto GetStartupMs() const -> uint32_t { return startupMs; }
+		SH_USER_API auto GetActiveMs() const -> uint32_t { return activeMs; }
+		SH_USER_API auto GetRecoveryMs() const -> uint32_t { return recoveryMs; }
+		SH_USER_API auto GetCooldownMs() const -> uint32_t { return cooldownMs; }
+		SH_USER_API auto GetAnimState() const -> uint32_t { return animState; }
+		SH_USER_API auto GetProjectiles() const -> const std::vector<Projectile*>& { return projectiles; }
+		SH_USER_API auto IsPreventMove() const -> bool { return bPreventMove; }
+		SH_USER_API auto IsPreventAir() const -> bool { return bPreventAir; }
 	private:
 		PROPERTY(id)
 		uint32_t id = 0;
-		PROPERTY(delayMs)
-		uint32_t delayMs = 800;
+		PROPERTY(startupMs)
+		uint32_t startupMs = 0; // 선딜
+		PROPERTY(activeMs)
+		uint32_t activeMs = 0; // 판정 구간
+		PROPERTY(recoveryMs)
+		uint32_t recoveryMs = 0; // 후딜
 		PROPERTY(cooldownMs)
 		uint32_t cooldownMs = 0;
-		PROPERTY(damage)
-		float damage = 10.f;
-		PROPERTY(hitBoxMs)
-		uint32_t hitBoxMs = 350;
-		PROPERTY(hitboxes)
-		std::vector<SkillHitbox*> hitboxes;
+		PROPERTY(animState)
+		uint32_t animState = 0;
 
-		core::EventSubscriber<network::PacketEvent> packetSubscriber;
+		PROPERTY(projectiles, core::PropertyOption::sobjPtr)
+		std::vector<Projectile*> projectiles;
 
-		int hitboxt = 0;
-		int delay = 0;
-		int cooldown = 0;
-#if !SH_SERVER
-		PROPERTY(keys)
-		std::vector<char> keys;
-#endif
-		bool bCanUse = true;
-		bool bUsing = false;
-		PROPERTY(bCanMove)
-		bool bCanMove = false;
+		PROPERTY(bPreventMove)
+		bool bPreventMove = true;
+		PROPERTY(bPreventAir)
+		bool bPreventAir = false;
 	};
 }//namespace

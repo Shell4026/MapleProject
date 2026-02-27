@@ -4,7 +4,8 @@
 #include "Game/Input.h"
 #include "Game/GameObject.h"
 #include "Game/Component/Render/MeshRenderer.h"
-
+#include "Game/Component/Phys/RigidBody.h"
+#include "Game/Component/Phys/Collider.h"
 #include "Render/Mesh.h"
 
 #include <random>
@@ -17,7 +18,7 @@ namespace sh::game
 	Test2::Test2(GameObject& owner) :
 		Component(owner)
 	{
-		canPlayInEditor = true;
+		//canPlayInEditor = true;
 	}
 
 	SH_USER_API void Test2::Awake()
@@ -40,21 +41,40 @@ namespace sh::game
 		SH_INFO_FORMAT("Disable... {}", gameObject.GetName().ToString());
 	}
 
+	SH_USER_API void Test2::OnCollisionEnter(const Collision& collision)
+	{
+	}
+
+	SH_USER_API void Test2::OnCollisionStay(const Collision& collision)
+	{
+		auto& point = collision.GetContactPoint(0);
+		SH_INFO_FORMAT("{} Stay into {}, count: {}, point: {} {} {}", gameObject.GetName().ToString(), collision.collider->gameObject.GetName().ToString(), collision.contactCount,
+			point.localPointOnCollider2.x, point.localPointOnCollider2.y, point.localPointOnCollider2.z);
+	}
+
 	SH_USER_API void Test2::OnTriggerEnter(Collider& other)
 	{
-		SH_INFO("enter!");
+		SH_INFO_FORMAT("Enter trigger! {}", gameObject.GetName().ToString());
 	}
 	SH_USER_API void Test2::OnTriggerStay(Collider& other)
 	{
-		//SH_INFO("stay!");
+		//SH_INFO_FORMAT("Stay... {}", gameObject.GetName().ToString());
 	}
 	SH_USER_API void Test2::OnTriggerExit(Collider& other)
 	{
-		SH_INFO("exit!");
+		SH_INFO_FORMAT("Exit trigger! {}", gameObject.GetName().ToString());
 	}
 	SH_USER_API void Test2::Update()
 	{
 		Super::Update();
+
+		if (Input::GetKeyDown(Input::KeyCode::D))
+		{
+			auto rb = gameObject.GetComponent<RigidBody>();
+			if (rb == nullptr)
+				return;
+			rb->SetLinearVelocity({ 1.0f, 0.f, 0.f });
+		}
 
 		if (Input::GetKeyPressed(Input::KeyCode::K))
 		{

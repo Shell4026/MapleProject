@@ -1,14 +1,17 @@
 ﻿#include "Mob/Mob.h"
 #include "Mob/MobEvents.hpp"
-
+#include "Mob/MobMovement.h"
 #include "MapleServer.h"
 #include "CollisionTag.hpp"
+#include "Skill/ProjectileHitBox.h"
+#include "Skill/ProjectileInstance.h"
 #include "Item/ItemDropManager.h"
 
 #include "Packet/MobStatePacket.hpp"
 
 #include "Game/GameObject.h"
-
+#include "Game/Component/Phys/Collider.h"
+// 서버 사이드
 namespace sh::game
 {
     Mob::Mob(GameObject& owner) :
@@ -18,20 +21,16 @@ namespace sh::game
 
     SH_USER_API void Mob::Awake()
     {
+        if (rigidbody == nullptr)
+            SH_INFO("rigidbody is nullptr!");
         SetPriority(-1);
         status.Reset(maxHp);
 
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->GetCollider()->SetCollisionTag(tag::entityTag);
-            rigidbody->GetCollider()->SetAllowCollisions(tag::groundTag);
-        }
         gameObject.SetActive(false);
 
         MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
         initPos = gameObject.transform->GetWorldPosition();
     }
-
     SH_USER_API void Mob::Update()
     {
         const auto& pos = gameObject.transform->GetWorldPosition();
@@ -48,6 +47,26 @@ namespace sh::game
 
             BroadcastStatePacket();
         }
+        rigidbody->ResetPhysicsTransform();
+    }
+    SH_USER_API void Mob::OnTriggerEnter(Collider& collider)
+    {
+        if (collider.GetCollisionTag() != tag::projectileHitboxTag)
+            return;
+
+        auto& projectileHitbox = static_cast<ProjectileHitBox&>(collider);
+        ProjectileInstance* const ProjectileInstance = projectileHitbox.GetProjectileInstance();
+        if (!core::IsValid(ProjectileInstance))
+            return;
+
+        Entity* const owner = ProjectileInstance->GetOwner();
+        if (!core::IsValid(owner))
+            return;
+
+        if (owner->GetEntityType() == Entity::Type::Player)
+        {
+            Hit(*ProjectileInstance->GetProjectile(), static_cast<Player&>(*owner));
+        }
     }
 
     SH_USER_API void Mob::Reset()
@@ -56,18 +75,16 @@ namespace sh::game
 
         gameObject.transform->SetWorldPosition(initPos);
         gameObject.transform->UpdateMatrix();
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->SetLinearVelocity({ 0.f, 0.f, 0.f });
-            rigidbody->ResetPhysicsTransform();
-        }
+        if (core::IsValid(movement))
+            movement->SetVelocity(0.f, 0.f);
+
         if (ai != nullptr)
             ai->Reset();
     }
 
-    SH_USER_API void Mob::Hit(Skill& skill, Player& player)
+    SH_USER_API void Mob::Hit(const Projectile& projectile, Player& player)
     {
-        status.ApplyDamage(skill.GetDamage());
+        status.ApplyDamage(projectile.GetDamage());
         status.ApplyStun(1000.f);
 
         if (status.hp == 0)
@@ -81,11 +98,11 @@ namespace sh::game
         const auto& mobPos = gameObject.transform->GetWorldPosition();
         float dx = (mobPos.x - playerPos.x) < 0 ? -1.f : 1.f;
 
-        if (core::IsValid(rigidbody))
+        if (core::IsValid(movement))
         {
-            auto v = rigidbody->GetLinearVelocity();
-            rigidbody->SetLinearVelocity({ 0.f, v.y, v.z });
-            rigidbody->AddForce({ dx * 100.f, 0.f, 0.f });
+            auto v = movement->GetVelocity();
+            movement->SetVelocity(0.f, v.y);
+            movement->AddImpulse(dx * 2.5f, 0.f); // Impulse = 4*루트x (1초에x만큼 움직이는 근사)
         }
 
         netAccum = 0.1f; // 즉시 state 패킷 전송
@@ -103,16 +120,16 @@ namespace sh::game
         if (!dropItems.empty())
         {
             auto& pos = gameObject.transform->GetWorldPosition();
-            mapleWorld->SpawnItem(dropItems, pos.x, pos.y, player.GetUserUUID());
+            mapleWorld->SpawnItem(dropItems, pos.x, pos.y, &player);
         }
     }
 
     SH_USER_API void Mob::BroadcastStatePacket()
     {
         const auto& pos = gameObject.transform->GetWorldPosition();
-        game::Vec3 vel{};
-        if (core::IsValid(rigidbody))
-            vel = rigidbody->GetLinearVelocity();
+        Vec2 vel{};
+        if (core::IsValid(movement))
+            vel = movement->GetVelocity();
 
         MobStatePacket packet{};
         packet.mobUUID = GetUUID();

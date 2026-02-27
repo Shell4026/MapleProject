@@ -1,0 +1,22 @@
+{
+    "AnimationData": {
+        "bLoop": false,
+        "delayMs": [
+            10
+        ],
+        "pos": [
+            -0.23000000417232513,
+            0.25999999046325684
+        ],
+        "textures": [
+            "7817ac8e38a71f3d52fd206632bbbdc8"
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::AnimationData",
+    "name": "ProneAnimation",
+    "type": "AnimationData",
+    "uuid": "eb32db257ca65a495d91fb2265bca980",
+    "version": 1
+}

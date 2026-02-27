@@ -24,7 +24,7 @@ namespace sh::game
 		SH_USER_API void OnDestroy() override;
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
-		SH_USER_API void Update() override;
+		SH_USER_API void BeginUpdate() override;
 
 		SH_USER_API void ConnectServer();
 		SH_USER_API void SendTcp(const network::Packet& packet);

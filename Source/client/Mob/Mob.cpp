@@ -1,4 +1,5 @@
 ﻿#include "Mob/Mob.h"
+#include "Mob/MobMovement.h"
 
 #include "MapleClient.h"
 #include "CollisionTag.hpp"
@@ -6,10 +7,12 @@
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
+#include "Game/Component/Phys/Collider.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/norm.hpp"
 
+// 클라
 namespace sh::game
 {
     Mob::Mob(GameObject& owner) : 
@@ -26,18 +29,14 @@ namespace sh::game
 
     SH_USER_API void Mob::Awake()
     {
+        if (rigidbody == nullptr)
+            SH_INFO("rigidbody is nullptr!");
         SetPriority(-1);
         status.Reset(maxHp);
 
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->GetCollider()->SetCollisionTag(tag::entityTag);
-            rigidbody->GetCollider()->SetAllowCollisions(tag::groundTag);
-        }
         gameObject.SetActive(false);
 
         MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
-        animator.SetAnimation(anim);
         initPos = gameObject.transform->GetWorldPosition();
     }
 
@@ -49,9 +48,9 @@ namespace sh::game
         // 클라 보정
         glm::vec2 curPos{ pos.x, pos.y };
         glm::vec2 curVel{};
-        if (core::IsValid(rigidbody))
+        if (core::IsValid(movement))
         {
-            auto v = rigidbody->GetLinearVelocity();
+            const auto v = movement->GetVelocity();
             curVel = { v.x, v.y };
         }
 
@@ -73,24 +72,14 @@ namespace sh::game
         gameObject.transform->SetWorldPosition({ correctedPos.x, correctedPos.y, pos.z });
         gameObject.transform->UpdateMatrix();
 
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->SetLinearVelocity({ correctedVel.x, correctedVel.y, 0.f });
-            rigidbody->ResetPhysicsTransform();
-        }
+        if (core::IsValid(movement))
+            movement->SetVelocity(correctedVel.x, correctedVel.y);
 
-        // 애니메이션
-        if (core::IsValid(anim))
-        {
-            animator.SetFacingFromVelocity(serverVel);
-            animator.Update(status, serverVel, world.deltaTime);
-        }
+        rigidbody->ResetPhysicsTransform();
     }
 
-    SH_USER_API void Mob::SetAnimation(MobAnimation& anim)
+    SH_USER_API void Mob::OnTriggerEnter(Collider& collider)
     {
-        this->anim = &anim;
-        animator.SetAnimation(this->anim);
     }
 
     SH_USER_API void Mob::Reset()
@@ -100,11 +89,8 @@ namespace sh::game
 
         gameObject.transform->SetWorldPosition(initPos);
         gameObject.transform->UpdateMatrix();
-        if (core::IsValid(rigidbody))
-        {
-            rigidbody->SetLinearVelocity({ 0.f, 0.f, 0.f });
-            rigidbody->ResetPhysicsTransform();
-        }
+        if (core::IsValid(movement))
+            movement->SetVelocity(0.f, 0.f);
         if (ai != nullptr)
             ai->Reset();
     }
