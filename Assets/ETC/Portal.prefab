@@ -1,0 +1,127 @@
+{
+    "Prefab": {
+        "7b9b7f2899cfbaf084e071d8c17f0f49": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "b8bddf5d54443b2e264be8bd2ce67bde",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Portal": null,
+                    "SObject": null,
+                    "fullType": "sh::game::Portal",
+                    "name": "user/Portal",
+                    "type": "Portal",
+                    "uuid": "b518a3ef18c11f45a55d806a27507145",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "axisLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "bGravity": false,
+                        "bInterpolation": false,
+                        "bKinematic": false,
+                        "bStatic": true,
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "3bf0f5f4e1dc9c38eba4644e8b7bc7a8",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            0.6000000238418579,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "Collider": {
+                        "bTrigger": true,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::BoxCollider",
+                    "name": "physics/BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "512ba707a77c4f886a8a6acdcfc03a44",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Portal",
+            "type": "GameObject",
+            "uuid": "7b9b7f2899cfbaf084e071d8c17f0f49",
+            "version": 1
+        }
+    },
+    "name": "Portal",
+    "rootObj": "7b9b7f2899cfbaf084e071d8c17f0f49",
+    "type": "Prefab",
+    "uuid": "179600503f7e570cf01201b1ba7974e1",
+    "version": 1
+}

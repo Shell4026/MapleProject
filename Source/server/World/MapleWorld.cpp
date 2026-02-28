@@ -1,6 +1,7 @@
 ﻿#include "World/MapleWorld.h"
 #include "Phys/FootholdMovement.h"
 #include "Player/Player.h"
+#include "World/Portal.h"
 #include "Item/Item.h"
 
 #include "Packet/PlayerJoinWorldPacket.hpp"
@@ -13,6 +14,8 @@
 
 #include "Game/World.h"
 #include "Game/GameObject.h"
+
+#include <algorithm>
 // 서버 사이드
 namespace sh::game
 {
@@ -72,11 +75,44 @@ namespace sh::game
 		PlayerDespawnPacket packet{};
 		packet.player = player->GetUUID();
 
-		server->BroadCast(packet);
+		BroadCastToWorld(packet);
 
 		router.UnRegisterPlayer(player);
 
 		return true;
+	}
+	SH_USER_API void MapleWorld::BroadCastToWorld(const network::Packet& packet)
+	{
+		if (server == nullptr)
+			return;
+
+		for (const auto& [userUUID, player] : players)
+		{
+			(void)player;
+
+			const User* const userPtr = server->GetUserManager().GetUser(userUUID);
+			if (userPtr == nullptr)
+				continue;
+
+			server->Send(packet, userPtr->GetIp(), userPtr->GetPort());
+		}
+	}
+	SH_USER_API void MapleWorld::BroadCastToWorld(const network::Packet& packet, const core::UUID& ignoreUserUUID)
+	{
+		if (server == nullptr)
+			return;
+
+		for (const auto& [userUUID, player] : players)
+		{
+			if (userUUID == ignoreUserUUID)
+				continue;
+
+			const User* const userPtr = server->GetUserManager().GetUser(userUUID);
+			if (userPtr == nullptr)
+				continue;
+
+			server->Send(packet, userPtr->GetIp(), userPtr->GetPort());
+		}
 	}
 	SH_USER_API void MapleWorld::Awake()
 	{
@@ -133,7 +169,7 @@ namespace sh::game
 		if (owner != nullptr)
 			packet.ownerUUID = owner->GetUUID();
 
-		MapleServer::GetInstance()->BroadCast(packet);
+		BroadCastToWorld(packet);
 
 		lastItemSpawnTick = worldTick;
 	}
@@ -151,7 +187,43 @@ namespace sh::game
 		ItemDespawnPacket packet{};
 		packet.itemObjectUUID = item.gameObject.GetUUID();
 
-		server->BroadCast(packet);
+		BroadCastToWorld(packet);
+	}
+	SH_USER_API void MapleWorld::RegisterPortal(Portal& portal)
+	{
+		for (Portal* registeredPortal : portals)
+		{
+			if (registeredPortal == &portal)
+				return;
+		}
+		portals.push_back(&portal);
+	}
+	SH_USER_API void MapleWorld::UnRegisterPortal(Portal* portal)
+	{
+		if (portal == nullptr)
+			return;
+
+		auto it = std::remove(portals.begin(), portals.end(), portal);
+		if (it != portals.end())
+			portals.erase(it, portals.end());
+	}
+	SH_USER_API auto MapleWorld::TryTransferByPortal(Player& player) -> bool
+	{
+		for (Portal* portal : portals)
+		{
+			if (portal != nullptr && portal->TryTransfer(player))
+				return true;
+		}
+		return false;
+	}
+	auto MapleWorld::FindPortal(int portalId) const -> Portal*
+	{
+		for (Portal* portal : portals)
+		{
+			if (portal != nullptr && portal->GetPortalId() == portalId)
+				return portal;
+		}
+		return nullptr;
 	}
 
 	SH_USER_API auto MapleWorld::GetMapleWorld(const core::UUID& worldUUID) -> MapleWorld*
@@ -167,14 +239,13 @@ namespace sh::game
 		if (world.GetUUID() != packet.worldUUID)
 			return;
 
-		const User* const userPtr = server->GetUserManager().GetUser(packet.user);
+		User* const userPtr = server->GetUserManager().GetUser(packet.user);
 		if (userPtr == nullptr)
 			return;
 
-		const auto& userWorldUUID = userPtr->GetCurrentWorldUUID();
-		if (userWorldUUID != world.GetUUID())
+		if (userPtr->GetCurrentWorldUUID() != packet.worldUUID)
 		{
-			SH_ERROR_FORMAT("User({})'s current world is diffrent", userPtr->GetUserUUID().ToString());
+			SH_ERROR_FORMAT("Wrong world move(user: {} world: {})", userPtr->GetUserUUID().ToString(), core::UUID{ packet.worldUUID }.ToString());
 			return;
 		}
 
@@ -184,11 +255,19 @@ namespace sh::game
 			return;
 		}
 
-		const auto& spawnPos = playerSpawnPoint->GetWorldPosition();
+		auto spawnPos = playerSpawnPoint->GetWorldPosition();
+		const int spawnPortalId = userPtr->ConsumePendingSpawnPortalId();
+		if (spawnPortalId >= 0)
+		{
+			if (Portal* const portal = FindPortal(spawnPortalId); portal != nullptr)
+				spawnPos = portal->gameObject.transform->GetWorldPosition();
+		}
 		// 접속한 플레이어에게 다른 플레이어 동기화
 		for (const auto& [uuid, playerPtr] : players)
 		{
 			const User* const remoteUserPtr = server->GetUserManager().GetUser(playerPtr->GetUserUUID());
+			if (remoteUserPtr == nullptr)
+				continue;
 
 			const auto& playerPos = playerPtr->gameObject.transform->GetWorldPosition();
 			PlayerSpawnPacket spawnPacket;
@@ -210,7 +289,7 @@ namespace sh::game
 			spawnPacket.playerUUID = player->GetUUID();
 			spawnPacket.nickname = userPtr->GetNickName();
 			spawnPacket.bLocal = false;
-			server->BroadCast(spawnPacket, Endpoint{ userPtr->GetIp(), userPtr->GetPort() });
+			BroadCastToWorld(spawnPacket, userPtr->GetUserUUID());
 			spawnPacket.bLocal = true;
 			server->Send(spawnPacket, userPtr->GetIp(), userPtr->GetPort());
 		}
@@ -228,7 +307,7 @@ namespace sh::game
 
 		PlayerDespawnPacket despawnPacket{};
 		despawnPacket.player = packet.user;
-		server->BroadCast(despawnPacket);
+		BroadCastToWorld(despawnPacket);
 	}
 	auto MapleWorld::GetEmptyItem() -> Item&
 	{

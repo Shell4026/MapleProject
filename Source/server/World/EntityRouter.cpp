@@ -1,4 +1,5 @@
 ﻿#include "World/EntityRouter.h"
+#include "World/MapleWorld.h"
 #include "Player/PlayerMovement.h"
 #include "Player/PlayerPickup.h"
 #include "Skill/SkillManager.h"
@@ -18,9 +19,15 @@ namespace sh::game
 				if (packetId == PlayerInputPacket::ID)
 				{
 					const auto& packet = static_cast<const PlayerInputPacket&>(*evt.packet);
-					Player* player = GetPlayer(packet.user);
+					Player* const player = GetPlayer(packet.user);
 					if (player != nullptr)
-						player->GetMovement()->ProcessInput(packet);
+					{
+						if (packet.bUp)
+						{
+							if (MapleWorld* currentWorld = player->GetCurrentWorld(); currentWorld != nullptr)
+								SH_INFO_FORMAT("transfer: {}", currentWorld->TryTransferByPortal(*player));
+						}
+					}
 				}
 				else if (packetId == KeyPacket::ID)
 				{
@@ -28,7 +35,7 @@ namespace sh::game
 
 					if (keyPacket.keycode == static_cast<int>(Input::KeyCode::Z))
 					{
-						Player* player = GetPlayer(keyPacket.userUUID);
+						Player* const player = GetPlayer(keyPacket.userUUID);
 						if (player == nullptr)
 							return;
 
@@ -41,7 +48,7 @@ namespace sh::game
 				else if (packetId == SkillUsingPacket::ID)
 				{
 					const auto& packet = static_cast<const SkillUsingPacket&>(*evt.packet);
-					Player* player = GetPlayer(packet.userUUID);
+					Player* const player = GetPlayer(packet.userUUID);
 					if (player != nullptr)
 						player->GetSkillManager()->ProcessPacket(packet);
 				}

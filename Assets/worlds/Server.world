@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                0.0,
-                0.0,
-                0.0
+                0.5262475609779358,
+                0.00816496554762125,
+                -0.5344125628471375
             ],
             "projection": 0,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -18,18 +18,19 @@
         "EditorCamera": {
             "distance": 5.0
         },
-        "SObject": {},
+        "SObject": null,
+        "fullType": "sh::game::EditorCamera",
         "name": "EditorCamera",
         "type": "EditorCamera",
         "uuid": "32a5a6527b241d7dd9b882b05f049478",
         "version": 1
     },
     "camPos": [
-        2.886751413345337,
-        2.886751174926758,
-        2.886751413345337
+        3.412998914718628,
+        2.89491605758667,
+        2.3523387908935547
     ],
-    "editorObjs": [],
+    "editorObjs": null,
     "name": "Server",
     "objs": [
         {
@@ -39,7 +40,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -63,6 +64,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "54f2aac8fe06ec4b96b56ed9cf81f6af",
@@ -83,7 +85,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::Camera",
                     "name": "Camera",
                     "type": "Camera",
                     "uuid": "1783615c3a2953253ae34d1ea1585050",
@@ -108,7 +111,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -132,6 +135,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "fe743c447b2742f83f5fe7e82f6f8173",
@@ -144,14 +148,16 @@
                     },
                     "MapleServer": {
                         "loadedWorlds": [
-                            "1c2428b8720cab83b1b46f7cd7408592"
+                            "1c2428b8720cab83b1b46f7cd7408592",
+                            "7bb888321004f6a9aedf717511b6ba4e"
                         ]
                     },
-                    "NetworkComponent": {},
-                    "SObject": {},
+                    "NetworkComponent": null,
+                    "SObject": null,
                     "UdpServer": {
                         "port": 4026
                     },
+                    "fullType": "sh::game::MapleServer",
                     "name": "user/MapleServer",
                     "type": "MapleServer",
                     "uuid": "207ca77a1e1aeaf0863a7046f92e9b82",
@@ -176,7 +182,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -200,6 +206,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "465b655bb29316cddeeddf60401e2d52",
@@ -224,7 +231,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "465b655bb29316cddeeddf60401e2d52",
                         "quat": [
@@ -249,6 +256,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "b8a1d492c75692b18267674e2d928872",
@@ -262,7 +270,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::AssetExportHelper",
                     "name": "user/AssetExportHelper",
                     "type": "AssetExportHelper",
                     "uuid": "dee9b9742217482b307c0e6aca04351c",

@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                0.08091717213392258,
-                3.5348927974700928,
-                0.002439563162624836
+                6.708864212036133,
+                5.285558700561523,
+                0.0021598017774522305
             ],
             "projection": 1,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -16,18 +16,19 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 8.579424858093262
+            "distance": 11.43666934967041
         },
-        "SObject": {},
+        "SObject": null,
+        "fullType": "sh::game::EditorCamera",
         "name": "EditorCamera",
         "type": "EditorCamera",
         "uuid": "78fda34330d734c9f9366664e4d342a4",
         "version": 1
     },
     "camPos": [
-        0.0786953866481781,
-        3.535268783569336,
-        8.581863403320313
+        6.705902576446533,
+        5.286059856414795,
+        11.438828468322754
     ],
     "editorObjs": [
         {
@@ -37,7 +38,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "c0638a2339fcd1466f2be2732592b2d0",
                         "quat": [
@@ -62,6 +63,7 @@
                             0.20000000298023224
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Unknown",
                     "type": "Transform",
                     "uuid": "296f65f220e040d2bfcd0d0f554831f5",
@@ -77,7 +79,8 @@
                         "mesh": "bbc4ef7ec45dce223297a224f8093f19",
                         "renderTag": 1
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
                     "name": "MeshRenderer",
                     "type": "MeshRenderer",
                     "uuid": "6246960f51c568ef9f88ec9c8bc511c8",
@@ -96,7 +99,7 @@
             "version": 1
         }
     ],
-    "name": "World",
+    "name": "maple0",
     "objs": [
         {
             "Components": [
@@ -105,7 +108,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -129,6 +132,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Unknown",
                     "type": "Transform",
                     "uuid": "1e2f248d765828c54a32a7251a85f3c2",
@@ -139,8 +143,9 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "Foothold": {},
-                    "SObject": {},
+                    "Foothold": null,
+                    "SObject": null,
+                    "fullType": "sh::game::Foothold",
                     "name": "user/Foothold",
                     "paths": [
                         {
@@ -213,7 +218,7 @@
                 "bStatic": false,
                 "hideInspector": false
             },
-            "name": "colliders",
+            "name": "Foothold",
             "type": "GameObject",
             "uuid": "443cfa66b4e04399e3228e79934ba6c3",
             "version": 1
@@ -225,7 +230,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.7071068286895752,
@@ -249,6 +254,7 @@
                             18.06999969482422
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Unknown",
                     "type": "Transform",
                     "uuid": "b2591cef89b314ee9c34b565fb956aad",
@@ -264,7 +270,8 @@
                         "mesh": "bbc4ef7ec45dce223297a224f8093f21",
                         "renderTag": 1
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
                     "name": "MeshRenderer",
                     "type": "MeshRenderer",
                     "uuid": "27017311bdba05a446755f6ffdbf20e0",
@@ -289,7 +296,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -313,6 +320,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Unknown",
                     "type": "Transform",
                     "uuid": "8a1553c2adc5c3509b8aed4ba762e6e2",
@@ -337,7 +345,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
                         "quat": [
@@ -362,6 +370,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "4c3b30a24066316e61e387c9315aac3b",
@@ -379,7 +388,8 @@
                         "playerPrefab": "4fc3a2c15a9d28d7ded5fbb2c3c0a898",
                         "playerSpawnPoint": "c0638a2339fcd1466f2be2732592b2d0"
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::MapleWorld",
                     "name": "user/MapleWorld",
                     "type": "MapleWorld",
                     "uuid": "7c18287ed5aba31cb5bcde7f1a2e68bb",
@@ -404,7 +414,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
                         "quat": [
@@ -429,6 +439,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "d978910e7d47281e601303be34acd40e",
@@ -449,7 +460,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::Camera",
                     "name": "Camera",
                     "type": "Camera",
                     "uuid": "a4c681d5b264378259f633a1b4d79fc2",
@@ -472,7 +484,8 @@
                         "smoothTime": 0.25,
                         "targetCamera": "a4c681d5b264378259f633a1b4d79fc2"
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::PlayerCamera2D",
                     "name": "user/PlayerCamera2D",
                     "type": "PlayerCamera2D",
                     "uuid": "1ef9d26a1fa81f236f4acb7b5fc3d096",
@@ -497,7 +510,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
                         "quat": [
@@ -522,6 +535,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "cdc9a4177b89119d337943a341c34688",
@@ -537,7 +551,8 @@
                         "mobs": [],
                         "spawnDelayMs": 5000
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::MobSpawner",
                     "name": "user/MobSpawner",
                     "type": "MobSpawner",
                     "uuid": "86cdf7e18e70f79a495045c9fc308da8",
@@ -562,7 +577,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "8a1553c2adc5c3509b8aed4ba762e6e2",
                         "quat": [
@@ -587,6 +602,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "c0638a2339fcd1466f2be2732592b2d0",
@@ -602,6 +618,126 @@
             "name": "SpawnPoint",
             "type": "GameObject",
             "uuid": "5d91f0611b8feb933f9bfcc2e36838c4",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            7.179999828338623,
+                            5.400000095367432,
+                            0.0016228380845859647
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "b8bddf5d54443b2e264be8bd2ce67bde",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Portal": {
+                        "targetWorld": "1c2428b8720cab83b1b46f7cd7408592"
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::Portal",
+                    "name": "user/Portal",
+                    "type": "Portal",
+                    "uuid": "b518a3ef18c11f45a55d806a27507145",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "axisLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "bGravity": false,
+                        "bInterpolation": false,
+                        "bKinematic": false,
+                        "bStatic": true,
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "3bf0f5f4e1dc9c38eba4644e8b7bc7a8",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            0.6000000238418579,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "Collider": {
+                        "bTrigger": true,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::BoxCollider",
+                    "name": "physics/BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "512ba707a77c4f886a8a6acdcfc03a44",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Portal",
+            "type": "GameObject",
+            "uuid": "7b9b7f2899cfbaf084e071d8c17f0f49",
             "version": 1
         }
     ],

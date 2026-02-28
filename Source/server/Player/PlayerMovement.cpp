@@ -63,7 +63,6 @@ namespace sh::game
 
 		if (bPendingSend)
 		{
-			static auto& server = *MapleServer::GetInstance();
 			auto& pos = gameObject.transform->GetWorldPosition();
 
 			PlayerStatePacket packet;
@@ -82,7 +81,8 @@ namespace sh::game
 			packet.bUp = state.bUp;
 			packet.bProne = state.bProne;
 			packet.bRight = IsRight();
-			server.BroadCast(packet);
+			if (MapleWorld* const mapleWorld = player->GetCurrentWorld(); mapleWorld != nullptr)
+				mapleWorld->BroadCastToWorld(packet);
 
 			bPendingSend = false;
 			sendTick = 0;

@@ -11,6 +11,6 @@ namespace sh::game
 	{
 		Super::Awake();
 		SetCollisionTag(tag::playerTag);
-		SetAllowCollisions(tag::itemTag);
+		SetAllowCollisions(tag::playerInteractionTagMask);
 	}
 }//namespace

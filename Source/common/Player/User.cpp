@@ -41,12 +41,25 @@ namespace sh::game
 	{
 		currentWorld = worldUUID;
 	}
+	SH_USER_API auto User::ConsumePendingSpawnPortalId() -> int
+	{
+		const int portalId = pendingSpawnPortalId;
+		pendingSpawnPortalId = -1;
+		return portalId;
+	}
 	SH_USER_API void User::IncreaseHeartbeat()
 	{
 		heartbeat = 10;
 	}
 	SH_USER_API void User::Tick(float dt)
 	{
+		if (portalTransferCooldownMs > 0.f)
+		{
+			portalTransferCooldownMs -= (dt * 1000.f);
+			if (portalTransferCooldownMs < 0.f)
+				portalTransferCooldownMs = 0.f;
+		}
+
 #if SH_SERVER
 		static float t = 0.f;
 		t += dt;

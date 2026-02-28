@@ -1,7 +1,6 @@
 ﻿#include "Mob/Mob.h"
 #include "Mob/MobEvents.hpp"
 #include "Mob/MobMovement.h"
-#include "World/MapleServer.h"
 #include "Phys/CollisionTag.hpp"
 #include "Skill/ProjectileHitBox.h"
 #include "Skill/ProjectileInstance.h"
@@ -28,7 +27,6 @@ namespace sh::game
 
         gameObject.SetActive(false);
 
-        MapleServer::GetInstance()->bus.Subscribe(packetSubscriber);
         initPos = gameObject.transform->GetWorldPosition();
     }
     SH_USER_API void Mob::Update()
@@ -146,6 +144,7 @@ namespace sh::game
         if (ai != nullptr)
             packet.state = ai->GetState();
 
-        MapleServer::GetInstance()->BroadCast(packet);
+        if (mapleWorld != nullptr)
+            mapleWorld->BroadCastToWorld(packet);
     }
 }//namespace

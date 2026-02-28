@@ -9,5 +9,7 @@ namespace sh::game::tag
 	constexpr phys::Tag projectileHitboxTag = phys::Tag::Tag4;
 	constexpr phys::Tag itemTag = phys::Tag::Tag5;
 	constexpr phys::Tag playerTag = phys::Tag::Tag6;
+	constexpr phys::Tag portalTag = phys::Tag::Tag7;
+	constexpr phys::Tagbit playerInteractionTagMask = itemTag | portalTag;
 	constexpr phys::Tagbit entityTagMask = groundTag;
 }//namespace

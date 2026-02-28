@@ -70,6 +70,11 @@ namespace sh::game
 	{
 		tcpSocket.Send(packet);
 	}
+	SH_USER_API void MapleClient::MoveWorld(const core::UUID& worldUUID)
+	{
+		SH_INFO_FORMAT("Move world to {}", worldUUID.ToString());
+		GameManager::GetInstance()->LoadWorld(worldUUID, GameManager::LoadMode::Single, true);
+	}
 	SH_USER_API auto MapleClient::GetUser() -> User&
 	{
 		return user;
@@ -130,8 +135,7 @@ namespace sh::game
 				else if (id == ChangeWorldPacket::ID)
 				{
 					auto packet = static_cast<const ChangeWorldPacket*>(receivedPacket);
-					SH_INFO_FORMAT("Move world to {}", core::UUID{ packet->worldUUID }.ToString());
-					GameManager::GetInstance()->LoadWorld(core::UUID{ packet->worldUUID }, GameManager::LoadMode::Single, true);
+					MoveWorld(core::UUID{ packet->worldUUID });
 				}
 
 				network::PacketEvent evt{ receivedPacket, "", 0 }; // 서버 아이피와 포트는 알릴 필요 없음

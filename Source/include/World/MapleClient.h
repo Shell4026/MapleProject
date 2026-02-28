@@ -28,6 +28,7 @@ namespace sh::game
 
 		SH_USER_API void ConnectServer();
 		SH_USER_API void SendTcp(const network::Packet& packet);
+		SH_USER_API void MoveWorld(const core::UUID& worldUUID);
 
 		SH_USER_API static auto GetUser() -> User&;
 		SH_USER_API static auto GetInstance() -> MapleClient*;

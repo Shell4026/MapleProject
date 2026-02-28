@@ -19,8 +19,15 @@
 #include "Game/Prefab.h"
 
 #include <unordered_map>
+#include <vector>
 
 #include <cstdint>
+
+namespace network
+{
+	class Packet;
+}
+
 namespace sh::game
 {
 	class Player;
@@ -30,6 +37,7 @@ namespace sh::game
 	class PlayerDespawnPacket;
 	class ItemDropPacket;
 	class ItemDespawnPacket;
+	class Portal;
 
 	/// @brief 맵의 단위
 	class MapleWorld : public Component
@@ -48,9 +56,15 @@ namespace sh::game
 		SH_USER_API auto GetWorldTick() const -> uint64_t { return worldTick; }
 		SH_USER_API auto GetFoothold() const -> Foothold* { return foothold; }
 #if SH_SERVER
+		SH_USER_API void BroadCastToWorld(const network::Packet& packet);
+		SH_USER_API void BroadCastToWorld(const network::Packet& packet, const core::UUID& ignoreUserUUID);
+
 		SH_USER_API void SpawnItem(int itemId, float x, float y, const Player* owner = nullptr);
 		SH_USER_API void SpawnItem(const std::vector<int>& itemIds, float x, float y, const Player* owner = nullptr);
 		SH_USER_API void DestroyItem(Item& item);
+		SH_USER_API void RegisterPortal(Portal& portal);
+		SH_USER_API void UnRegisterPortal(Portal* portal);
+		SH_USER_API auto TryTransferByPortal(Player& player) -> bool;
 		/// @brief 월드에 존재하는 메이플 월드 컴포넌트를 가져오는 함수
 		/// @param worldUUID 월드 UUID (메이플 월드 UUID가 아님!)
 		/// @return 월드에 없으면 nullptr
@@ -60,6 +74,7 @@ namespace sh::game
 #if SH_SERVER
 		void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet);
 		void ProcessPlayerLeave(const PlayerLeavePacket& packet);
+		auto FindPortal(int portalId) const -> Portal*;
 		auto GetEmptyItem() -> Item&;
 		void TryClearSleepItems();
 #else
@@ -90,6 +105,8 @@ namespace sh::game
 		uint64_t nextItemIdx = 0;
 		uint64_t clearSleepItemsAfterTicks = 600;
 		uint64_t lastItemSpawnTick = 0;
+
+		std::vector<Portal*> portals;
 
 		EntityRouter router;
 

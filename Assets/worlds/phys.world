@@ -151,7 +151,9 @@
                         ]
                     },
                     "Collider": {
-                        "bTrigger": false
+                        "bTrigger": false,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
                     },
                     "Component": {
                         "hideInspector": false,
@@ -184,6 +186,7 @@
                         "bGravity": false,
                         "bInterpolation": true,
                         "bKinematic": true,
+                        "bStatic": false,
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
@@ -253,7 +256,9 @@
                         ]
                     },
                     "Collider": {
-                        "bTrigger": true
+                        "bTrigger": true,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
                     },
                     "Component": {
                         "hideInspector": false,
@@ -286,6 +291,7 @@
                         "bGravity": false,
                         "bInterpolation": false,
                         "bKinematic": true,
+                        "bStatic": false,
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
@@ -348,7 +354,9 @@
                 },
                 {
                     "Collider": {
-                        "bTrigger": false
+                        "bTrigger": false,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
                     },
                     "Component": {
                         "hideInspector": false,
@@ -434,6 +442,7 @@
                         "bGravity": true,
                         "bInterpolation": true,
                         "bKinematic": false,
+                        "bStatic": false,
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
@@ -519,7 +528,9 @@
                         ]
                     },
                     "Collider": {
-                        "bTrigger": false
+                        "bTrigger": false,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
                     },
                     "Component": {
                         "hideInspector": false,
@@ -584,7 +595,9 @@
                 },
                 {
                     "Collider": {
-                        "bTrigger": false
+                        "bTrigger": false,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
                     },
                     "Component": {
                         "hideInspector": false,

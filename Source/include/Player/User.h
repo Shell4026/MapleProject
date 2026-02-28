@@ -31,6 +31,9 @@ namespace sh::game
 		SH_USER_API void SetNickname(const std::string& name);
 		SH_USER_API void SetNickname(std::string&& name) noexcept;
 		SH_USER_API void SetCurrentWorldUUID(const core::UUID& worldUUID);
+		SH_USER_API void SetPendingSpawnPortalId(int portalId) { pendingSpawnPortalId = portalId; }
+		SH_USER_API auto ConsumePendingSpawnPortalId() -> int;
+		SH_USER_API void SetPortalTransferCooldownMs(float ms) { portalTransferCooldownMs = ms > 0.f ? ms : 0.f; }
 		SH_USER_API void SetInventory(Inventory&& inventory) noexcept { this->inventory = std::move(inventory); }
 		SH_USER_API void IncreaseHeartbeat();
 		SH_USER_API void Tick(float dt);
@@ -45,6 +48,7 @@ namespace sh::game
 		SH_USER_API auto GetInventory() const -> const Inventory& { return inventory; }
 		SH_USER_API auto GetTcpSocket() const -> network::TcpSocket* { return tcpSocket.get(); }
 		SH_USER_API auto GetHeartbeat() const->uint32_t { return heartbeat; }
+		SH_USER_API auto CanTransferPortal() const -> bool { return portalTransferCooldownMs <= 0.f; }
 	private:
 		int64_t id = 0;
 
@@ -60,5 +64,7 @@ namespace sh::game
 		Inventory inventory;
 
 		uint32_t heartbeat = 10;
+		float portalTransferCooldownMs = 0.f;
+		int pendingSpawnPortalId = -1;
 	};
 }//namepsace

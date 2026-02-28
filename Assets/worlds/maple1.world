@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                -0.7874473929405212,
-                1.4921399354934692,
-                0.15035106241703033
+                -0.7086520791053772,
+                0.6214191317558289,
+                -1.8994529247283936
             ],
             "projection": 1,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 5.13876485824585
+            "distance": 5.641467571258545
         },
         "SObject": null,
         "fullType": "sh::game::EditorCamera",
@@ -26,9 +26,9 @@
         "version": 1
     },
     "camPos": [
-        -0.7882562279701233,
-        1.4922491312026978,
-        5.289115905761719
+        -0.7077666521072388,
+        0.6217595338821411,
+        3.7420146465301514
     ],
     "editorObjs": [
         {
@@ -166,7 +166,7 @@
             "version": 1
         }
     ],
-    "name": "maple",
+    "name": "maple1.world",
     "objs": [
         {
             "Components": [
@@ -1854,6 +1854,177 @@
             "name": "nameTag",
             "type": "GameObject",
             "uuid": "5949bdf6a450e85f8c8559da9eacc42d",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "9f936fa6af6ef3abc877ec57ca42aeb1",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Portals",
+            "type": "GameObject",
+            "uuid": "ca883726336e49b31fd57344db29fd72",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "9f936fa6af6ef3abc877ec57ca42aeb1",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            -5.96999979019165,
+                            2.3999998569488525,
+                            -0.0009971503168344498
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "cc26662568da8b4ba4a6cfc186c7bec5",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "Portal": {
+                        "portalId": 0,
+                        "targetWorld": "7bb888321004f6a9aedf717511b6ba4e"
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::Portal",
+                    "name": "user/Portal",
+                    "type": "Portal",
+                    "uuid": "e332afb3c1ca7cc13d51e4766134b7dd",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "RigidBody": {
+                        "angularDamping": 0.10000000149011612,
+                        "angularLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "axisLock": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "bGravity": false,
+                        "bInterpolation": false,
+                        "bKinematic": false,
+                        "bStatic": true,
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::RigidBody",
+                    "name": "physics/RigidBody",
+                    "type": "RigidBody",
+                    "uuid": "a70faa25193a4d27cb9b11f19c87dc87",
+                    "version": 1
+                },
+                {
+                    "BoxCollider": {
+                        "bDisplayArea": true,
+                        "size": [
+                            0.6000000238418579,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "Collider": {
+                        "bTrigger": true,
+                        "bouncy": 0.20000000298023224,
+                        "friction": 0.20000000298023224
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::BoxCollider",
+                    "name": "physics/BoxCollider",
+                    "type": "BoxCollider",
+                    "uuid": "7b4955bf4e9ebadd66a0c233f53e400c",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Portal",
+            "type": "GameObject",
+            "uuid": "690220595ef4ef5742fba055d25167b6",
             "version": 1
         }
     ],

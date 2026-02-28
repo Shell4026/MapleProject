@@ -1,5 +1,6 @@
 ﻿#include "Mob/MobSpawner.h"
 #include "World/MapleServer.h"
+#include "World/MapleWorld.h"
 #include "Packet/MobSpawnPacket.hpp"
 
 #include "Game/GameObject.h"
@@ -94,7 +95,9 @@ namespace sh::game
 			MobSpawnPacket spawnPacket{};
 			spawnPacket.idx = spawnIdx;
 			spawnPacket.mobUUID = mob->GetUUID();
-			MapleServer::GetInstance()->BroadCast(spawnPacket);
+
+			if (MapleWorld* const mapleWorld = MapleWorld::GetMapleWorld(world.GetUUID()); mapleWorld != nullptr)
+				mapleWorld->BroadCastToWorld(spawnPacket);
 
 			mob->BroadcastStatePacket();
 		}
@@ -105,6 +108,8 @@ namespace sh::game
 			return;
 
 		const User* const userPtr = MapleServer::GetInstance()->GetUserManager().GetUser(packet.user);
+		if (userPtr == nullptr)
+			return;
 
 		for (int i = 0; i < spawnedMobs.size(); ++i)
 		{

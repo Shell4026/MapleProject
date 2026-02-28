@@ -118,6 +118,38 @@ namespace sh::game
 				Send(packet, user->GetIp(), user->GetPort());
 		}
 	}
+	SH_USER_API auto MapleServer::MoveUserToWorld(const core::UUID& userUUID, const core::UUID& worldUUID, int spawnPortalId) -> bool
+	{
+		User* const user = userManager.GetUser(userUUID);
+		if (user == nullptr)
+			return false;
+
+		const core::UUID prevWorldUUID = user->GetCurrentWorldUUID();
+		if (prevWorldUUID == worldUUID)
+			return false;
+
+		MapleWorld* const targetWorld = MapleWorld::GetMapleWorld(worldUUID);
+		if (targetWorld == nullptr)
+		{
+			SH_ERROR_FORMAT("Target world is not loaded: {}", worldUUID.ToString());
+			return false;
+		}
+
+		if (MapleWorld* const prevWorld = MapleWorld::GetMapleWorld(prevWorldUUID); prevWorld != nullptr)
+			prevWorld->DespawnPlayer(userUUID);
+
+		user->SetCurrentWorldUUID(worldUUID);
+		user->SetPendingSpawnPortalId(spawnPortalId);
+
+		if (network::TcpSocket* const socket = user->GetTcpSocket(); socket != nullptr)
+		{
+			ChangeWorldPacket packet{};
+			packet.worldUUID = worldUUID;
+			socket->Send(packet);
+		}
+
+		return true;
+	}
 	SH_USER_API void MapleServer::OnDestroy()
 	{
 		Super::OnDestroy();

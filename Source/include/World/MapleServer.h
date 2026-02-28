@@ -36,6 +36,7 @@ namespace sh::game
 		SH_USER_API void BroadCast(const network::Packet& packet);
 		SH_USER_API void BroadCast(const network::Packet& packet, const Endpoint& ignore);
 		SH_USER_API void BroadCast(const network::Packet& packet, const std::vector<Endpoint>& ignores);
+		SH_USER_API auto MoveUserToWorld(const core::UUID& userUUID, const core::UUID& worldUUID, int spawnPortalId = -1) -> bool;
 
 		SH_USER_API void OnDestroy() override;
 		SH_USER_API void Awake() override;
