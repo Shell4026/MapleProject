@@ -1,10 +1,5 @@
 ﻿#include "Player/PlayerTickController.h"
 #include "Player/IPlayerTickable.h"
-#include "Player/Player.h"
-#include "Player/PlayerMovement.h"
-#include "Skill/SkillManager.h"
-
-#include "Game/GameObject.h"
 
 namespace sh::game
 {

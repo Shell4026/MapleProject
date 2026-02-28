@@ -22,6 +22,7 @@ namespace sh::game
 			auto json = network::Packet::Serialize();
 			json["inputX"] = inputX;
 			json["jump"] = bJump;
+			json["up"] = bUp;
 			json["seq"] = seq;
 			json["user"] = user;
 			json["prone"] = bProne;
@@ -35,6 +36,8 @@ namespace sh::game
 				inputX = json["inputX"];
 			if (json.contains("jump"))
 				bJump = json["jump"];
+			if (json.contains("up"))
+				bUp = json["up"];
 			if (json.contains("seq"))
 				seq = json["seq"];
 			if (json.contains("user"))
@@ -49,6 +52,7 @@ namespace sh::game
 		uint32_t seq = 0;
 		uint64_t tick = 0;
 		bool bJump = false;
+		bool bUp = false;
 		bool bProne = false;
 	};
 }

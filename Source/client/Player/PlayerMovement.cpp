@@ -47,19 +47,19 @@ namespace sh::game
 			return;
 
 		// 예측
-		if (bInputLock)
+		if (state.bLock)
 		{
 			vel.x = 0.f;
 		}
-		else if (!bProne)
+		else if (!state.bProne)
 		{
-			if (lastInput.xMove > 0)
+			if (state.xMove > 0)
 			{
 				bRight = true;
 				AddForce(14.f, 0.f);
 				//vel.x = GetSpeed();
 			}
-			else if (lastInput.xMove < 0)
+			else if (state.xMove < 0)
 			{
 				bRight = false;
 				AddForce(-14.f, 0.f);
@@ -68,7 +68,7 @@ namespace sh::game
 			//else
 			//	vel.x = 0.f;
 
-			if (lastInput.bJump && IsGround())
+			if (state.bJump && IsGround())
 			{
 				vel.y = GetJumpSpeed();
 				SetIsGround(false);
@@ -81,50 +81,50 @@ namespace sh::game
 
 		StepMovement();
 
-		StateHistory state{};
-		state.seq = lastInput.seq;
-		state.tick = tick;
-		state.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
-		state.vel = vel;
-		state.xMove = lastInput.xMove;
-		state.bLock = bInputLock;
-		state.bProne = lastInput.bProne;
-		state.bJump = lastInput.bJump;
-		history.push_back(state);
+		StateHistory stateHistory{};
+		stateHistory.tick = tick;
+		stateHistory.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
+		stateHistory.vel = vel;
+		stateHistory.state = state;
+
+		history.push_back(stateHistory);
 		while (history.size() > 180)
 			history.pop_front();
 	}
 	SH_USER_API void PlayerMovement::TickUpdate(uint64_t tick)
 	{
-		(void)tick;
 	}
 	void PlayerMovement::ProcessLocalInput(uint64_t tick)
 	{
 		int xInput = 0;
-		bool bJump = false;
-		bProne = false;
-
-		if (Input::GetKeyDown(Input::KeyCode::Down))
-			bProne = true;
-		if (Input::GetKeyDown(Input::KeyCode::F))
-			bJump = true;
+		bool bJump = Input::GetKeyDown(Input::KeyCode::F);
+		bool bUp = Input::GetKeyDown(Input::KeyCode::Up);
+		bool bProne = Input::GetKeyDown(Input::KeyCode::Down);
 	
 		if (Input::GetKeyDown(Input::KeyCode::Right))
 			xInput += 1;
 		if (Input::GetKeyDown(Input::KeyCode::Left))
 			xInput -= 1;
 
-		if (bInputLock)
+		if (state.bLock)
 		{
 			xInput = 0;
 			bProne = false;
 			bJump = false;
+			bUp = false;
 		}
 
 		const bool bChanged =
-			bJump != lastInput.bJump ||
-			bProne != lastInput.bProne ||
-			xInput != lastInput.xMove;
+			bJump != state.bJump ||
+			bUp != state.bUp ||
+			bProne != state.bProne ||
+			xInput != state.xMove;
+
+		state.seq = curSeq;
+		state.xMove = xInput;
+		state.bJump = bJump;
+		state.bUp = bUp;
+		state.bProne = bProne;
 
 		if (bChanged)
 		{
@@ -133,34 +133,30 @@ namespace sh::game
 
 			PlayerInputPacket packet{};
 			packet.user = client.GetUser().GetUserUUID();
-			packet.seq = curSeq;
+			packet.seq = state.seq;
 			packet.tick = tick;
-			packet.inputX = xInput;
-			packet.bJump = bJump;
-			packet.bProne = bProne;
+			packet.inputX = state.xMove;
+			packet.bJump = state.bJump;
+			packet.bUp = state.bUp;
+			packet.bProne = state.bProne;
 
 			//SH_INFO_FORMAT("send seq: {}, tick: {}", packet.seq, packet.tick);
 			client.SendPacket(packet);
 
 			bPendingSend = false;
 		}
-
-		lastInput.seq = curSeq;
-		lastInput.xMove = xInput;
-		lastInput.bJump = bJump;
-		lastInput.bProne = bProne;
 	}
 	void PlayerMovement::Reconciliation(const PlayerStatePacket& packet)
 	{
 		if (history.empty())
 			return;
-		if (packet.lastProcessedInputSeq < history.front().seq) // 오래된 패킷임
+		if (packet.lastProcessedInputSeq < history.front().state.seq) // 오래된 패킷임
 		{
 			//SH_INFO_FORMAT("packet seq: {}, seq: {}", packet.lastProcessedInputSeq, history.front().seq);
 			return;
 		}
 
-		while (!history.empty() && history.front().seq < packet.lastProcessedInputSeq)
+		while (!history.empty() && history.front().state.seq < packet.lastProcessedInputSeq)
 			history.pop_front();
 
 		if (history.empty())
@@ -192,8 +188,9 @@ namespace sh::game
 			vel.x = packet.vx;
 			vel.y = packet.vy;
 			SetIsGround(packet.bGround);
-			bInputLock = packet.bLock;
-			bProne = packet.bProne;
+			state.bLock = packet.bLock;
+			state.bProne = packet.bProne;
+			state.bUp = packet.bUp;
 			bRight = packet.bRight;
 
 			SetExpectedGround();
@@ -203,28 +200,27 @@ namespace sh::game
 		{
 			StateHistory& lastHistory = history[t];
 
-			bInputLock = lastHistory.bLock;
-			bProne = lastHistory.bProne;
-			if (bInputLock)
+			state = lastHistory.state;
+			if (state.bLock)
 			{
 				vel.x = 0.f;
 			}
-			else if(!bProne)
+			else if(!state.bProne)
 			{
-				if (lastHistory.xMove > 0)
+				if (lastHistory.state.xMove > 0)
 				{
 					AddForce(14.f, 0.f);
 					//vel.x = GetSpeed();
 					bRight = true;
 				}
-				else if (lastHistory.xMove < 0)
+				else if (lastHistory.state.xMove < 0)
 				{
 					AddForce(-14.f, 0.f);
 					//vel.x = -GetSpeed();
 					bRight = false;
 				}
 
-				if (lastHistory.bJump && IsGround())
+				if (lastHistory.state.bJump && IsGround())
 				{
 					SetIsGround(false);
 					vel.y = GetJumpSpeed();
@@ -242,7 +238,8 @@ namespace sh::game
 		serverPos = { packet.px, packet.py };
 		vel.x = packet.vx;
 		vel.y = packet.vy;
-		bProne = packet.bProne;
+		state.bUp = packet.bUp;
+		state.bProne = packet.bProne;
 		if (vel.x > 0.01f)
 			bRight = true;
 		else if (vel.x < -0.01f)

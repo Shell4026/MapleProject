@@ -32,6 +32,7 @@ namespace sh::game
 			json["prone"] = bProne;
 			json["lock"] = bLock;
 			json["right"] = bRight;
+			json["bUp"] = bUp;
 			return json;
 		}
 		void Deserialize(const core::Json& json) override
@@ -61,6 +62,8 @@ namespace sh::game
 				bLock = json["lock"];
 			if (json.contains("right"))
 				bRight = json["right"];
+			if (json.contains("bUp"))
+				bUp = json["bUp"];
 		}
 	public:
 		float px = 0.f, py = 0.f;
@@ -76,5 +79,6 @@ namespace sh::game
 		bool bProne = false;
 		bool bLock = false;
 		bool bRight = false;
+		bool bUp = false;
 	};
 }//namespace

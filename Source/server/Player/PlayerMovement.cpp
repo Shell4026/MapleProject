@@ -16,25 +16,27 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::TickFixed(uint64_t tick)
 	{
-		while (!inputs.empty() && inputs.front().applyServerTick <= tick)
+		while (!recvStates.empty() && recvStates.front().applyServerTick <= tick)
 		{
-			currentState = inputs.front();
-			inputs.pop_front();
+			applyServerTick = recvStates.front().applyServerTick;
+			clientTick = recvStates.front().clientTick;
+			state = recvStates.front().state;
+			recvStates.pop_front();
 		}
 
-		if (bInputLock)
+		if (state.bLock)
 		{
 			vel.x = 0.f;
 		}
-		else if (!currentState.bProne)
+		else if (!state.bProne)
 		{
-			if (currentState.xMove > 0)
+			if (state.xMove > 0)
 			{
 				AddForce(14.f, 0.f);
 				//vel.x = GetSpeed();
 				bRight = true;
 			}
-			else if (currentState.xMove < 0)
+			else if (state.xMove < 0)
 			{
 				AddForce(-14.f, 0.f);
 				//vel.x = -GetSpeed();
@@ -43,7 +45,7 @@ namespace sh::game
 			//else
 			//	vel.x = 0.f;
 
-			if (currentState.bJump && IsGround())
+			if (state.bJump && IsGround())
 			{
 				vel.y = GetJumpSpeed();
 				SetIsGround(false);
@@ -66,9 +68,9 @@ namespace sh::game
 
 			PlayerStatePacket packet;
 
-			packet.lastProcessedInputSeq = currentState.seq;
+			packet.lastProcessedInputSeq = state.seq;
 			packet.serverTick = tick;
-			packet.clientTickAtState = currentState.clientTick + (tick - currentState.applyServerTick);
+			packet.clientTickAtState = clientTick + (tick - applyServerTick);
 
 			packet.px = pos.x;
 			packet.py = pos.y;
@@ -76,8 +78,9 @@ namespace sh::game
 			packet.vy = vel.y;
 			packet.playerUUID = player->GetUUID();
 			packet.bGround = IsGround();
-			packet.bProne = currentState.bProne;
-			packet.bLock = bInputLock;
+			packet.bLock = state.bLock;
+			packet.bUp = state.bUp;
+			packet.bProne = state.bProne;
 			packet.bRight = IsRight();
 			server.BroadCast(packet);
 
@@ -99,19 +102,23 @@ namespace sh::game
 			offset = (offset * 9 + newOffset) / 10;
 		}
 		// 패킷 이벤트들은 BeginUpdate전에 이뤄짐
-		if (!inputs.empty() && inputs.back().seq >= packet.seq)
+		if (!recvStates.empty() && recvStates.back().state.seq >= packet.seq)
 			return;
 
 		//SH_INFO_FORMAT("recv seq: {}, tick: {}, serverTick: {}, offset: {}", packet.seq, packet.tick, tick, offset);
 
-		InputState input{};
-		input.seq = packet.seq;
-		input.clientTick = packet.tick;
-		input.applyServerTick = packet.tick + offset;
-		input.xMove = packet.inputX;
-		input.bJump = packet.bJump;
-		input.bProne = bProne = packet.bProne;
-		inputs.push_back(input);
+		State state{};
+		state.seq = packet.seq;
+		state.xMove = packet.inputX;
+		state.bJump = packet.bJump;
+		state.bUp = packet.bUp;
+		state.bProne = packet.bProne;
+
+		RecvState recv{};
+		recv.clientTick = packet.tick;
+		recv.applyServerTick = packet.tick + offset;
+		recv.state = state;
+		recvStates.push_back(recv);
 
 		bPendingSend = true;
 	}
