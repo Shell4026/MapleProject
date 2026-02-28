@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "ExportEditor.h"
-#include "Physics/Foothold.h"
+#include "Phys/Foothold.h"
 
 #include "Core/SContainer.hpp"
 

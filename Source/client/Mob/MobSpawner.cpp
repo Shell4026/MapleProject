@@ -1,6 +1,6 @@
 ﻿#include "Mob/MobSpawner.h"
 #include "Packet/MobSpawnPacket.hpp"
-#include "MapleServer.h"
+#include "World/MapleServer.h"
 
 #include "Game/GameObject.h"
 

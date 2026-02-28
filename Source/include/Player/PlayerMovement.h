@@ -2,7 +2,7 @@
 #include "Export.h"
 #include "Player/IPlayerTickable.h"
 #include "Player.h"
-#include "Physics/FootholdMovement.h"
+#include "Phys/FootholdMovement.h"
 #include "Packet/PlayerStatePacket.hpp"
 #include "Packet/PlayerInputPacket.hpp"
 

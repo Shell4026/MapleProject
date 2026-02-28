@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Entity.h"
 #include "PlayerTickController.h"
+#include "World/Entity.h"
 #if !SH_SERVER
 #include "NameTag.h"
 #include "UI/InventoryUI.h"

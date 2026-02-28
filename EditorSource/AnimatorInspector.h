@@ -1,6 +1,6 @@
 #pragma once
 #include "ExportEditor.h"
-#include "Animator.h"
+#include "System/Animator.h"
 
 #include "Editor/UI/CustomInspector.h"
 namespace sh::editor

@@ -1,7 +1,7 @@
 ﻿#include "Skill/SkillManager.h"
 #include "Player/Player.h"
 #include "Packet/SkillUsingPacket.hpp"
-#include "MapleClient.h"
+#include "World/MapleClient.h"
 
 #include "Game/World.h"
 

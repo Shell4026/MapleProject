@@ -1,7 +1,7 @@
 ﻿#include "Item/Item.h"
-#include "CollisionTag.hpp"
-#include "MapleWorld.h"
-#include "Physics/FootholdMovement.h"
+#include "Phys/CollisionTag.hpp"
+#include "Phys/FootholdMovement.h"
+#include "World/MapleWorld.h"
 
 #include "Game/GameObject.h"
 

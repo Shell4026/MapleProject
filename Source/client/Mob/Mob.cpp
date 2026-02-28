@@ -1,8 +1,8 @@
 ﻿#include "Mob/Mob.h"
 #include "Mob/MobMovement.h"
 
-#include "MapleClient.h"
-#include "CollisionTag.hpp"
+#include "World/MapleClient.h"
+#include "Phys/CollisionTag.hpp"
 #include "Packet/MobStatePacket.hpp"
 
 #include "Game/World.h"

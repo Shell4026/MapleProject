@@ -6,7 +6,7 @@
 #include "Game/GameObject.h"
 #if SH_SERVER
 #else
-#include "MapleClient.h"
+#include "World/MapleClient.h"
 #endif
 namespace sh::game
 {

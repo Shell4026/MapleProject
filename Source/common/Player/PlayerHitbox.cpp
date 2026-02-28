@@ -1,5 +1,5 @@
 ﻿#include "Player/PlayerHitbox.h"
-#include "CollisionTag.hpp"
+#include "Phys/CollisionTag.hpp"
 namespace sh::game
 {
 	PlayerHitbox::PlayerHitbox(GameObject& owner) :

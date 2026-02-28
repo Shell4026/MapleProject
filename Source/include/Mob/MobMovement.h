@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Physics/FootholdMovement.h"
+#include "Phys/FootholdMovement.h"
 
 #include "Game/Component/Component.h"
 

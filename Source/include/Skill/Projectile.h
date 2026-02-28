@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Entity.h"
+#include "World/Entity.h"
 
 #include "Game/Vector.h"
 #include "Game/ScriptableObject.h"

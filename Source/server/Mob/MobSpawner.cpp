@@ -1,9 +1,8 @@
 ﻿#include "Mob/MobSpawner.h"
+#include "World/MapleServer.h"
 #include "Packet/MobSpawnPacket.hpp"
-#include "MapleServer.h"
 
 #include "Game/GameObject.h"
-
 namespace sh::game
 {
 	MobSpawner::MobSpawner(GameObject& owner) :

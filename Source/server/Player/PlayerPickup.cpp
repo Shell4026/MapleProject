@@ -1,8 +1,8 @@
 ﻿#include "Player/PlayerPickup.h"
 #include "Player/Player.h"
-#include "MapleServer.h"
-#include "CollisionTag.hpp"
-#include "MapleWorld.h"
+#include "World/MapleServer.h"
+#include "World/MapleWorld.h"
+#include "Phys/CollisionTag.hpp"
 #include "Packet/InventorySyncPacket.hpp"
 
 #include "Game/GameObject.h"

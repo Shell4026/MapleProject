@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Export.h"
 #include "Skill/Projectile.h"
-#include "MapleWorld.h"
+#include "World/MapleWorld.h"
 #include "MobStatus.hpp"
 
 #include "AI/AIStrategy.h"

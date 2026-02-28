@@ -1,5 +1,5 @@
 ﻿#include "Skill/SkillManager.h"
-#include "MapleServer.h"
+#include "World/MapleServer.h"
 #include "Player/Player.h"
 
 // 서버측

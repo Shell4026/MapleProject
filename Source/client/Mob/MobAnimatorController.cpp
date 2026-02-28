@@ -1,7 +1,7 @@
 ﻿#include "Mob/MobAnimatorController.h"
 #include "Mob/Mob.h"
 #include "Mob/MobMovement.h"
-#include "Animator.h"
+#include "System/Animator.h"
 
 namespace sh::game
 {

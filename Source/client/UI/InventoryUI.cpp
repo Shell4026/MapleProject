@@ -1,5 +1,5 @@
 ﻿#include "UI/InventoryUI.h"
-#include "MapleClient.h"
+#include "World/MapleClient.h"
 #include "Item/ItemDB.h"
 #include "Packet/InventorySlotSwapPacket.hpp"
 

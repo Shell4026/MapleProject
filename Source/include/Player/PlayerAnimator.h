@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Animator.h"
+#include "System/Animator.h"
 
 namespace sh::game
 {

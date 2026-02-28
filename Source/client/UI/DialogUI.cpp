@@ -1,5 +1,5 @@
 ﻿#include "UI/DialogUI.h"
-#include "MapleClient.h"
+#include "World/MapleClient.h"
 
 #include "Game/World.h"
 #include "Game/Input.h"

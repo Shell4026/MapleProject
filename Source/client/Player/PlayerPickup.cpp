@@ -1,7 +1,7 @@
 ﻿#include "Player/PlayerPickup.h"
 #include "Packet/KeyPacket.hpp"
 #include "Player/Player.h"
-#include "MapleClient.h"
+#include "World/MapleClient.h"
 
 #include "Game/GameObject.h"
 #include "Game/Input.h"

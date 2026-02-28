@@ -1,6 +1,6 @@
 ﻿#include "Player/PlayerMovement.h"
-#include "MapleWorld.h"
-#include "MapleClient.h"
+#include "World/MapleWorld.h"
+#include "World/MapleClient.h"
 
 #include "Game/World.h"
 #include "Game/Input.h"
