@@ -1,30 +1,23 @@
 ﻿#pragma once
 #include "Export.h"
-
-#include "Game/Component/Component.h"
+#include "IPlayerTickable.h"
 
 #include <cstdint>
-
+#include <vector>
 namespace sh::game
 {
-	class Player;
-	class PlayerMovement;
-	class SkillManager;
-	class PlayerTickController : public Component
+	class PlayerTickController
 	{
-		COMPONENT(PlayerTickController, "user")
 	public:
-		SH_USER_API PlayerTickController(GameObject& owner);
+		SH_USER_API void BeginUpdate();
+		SH_USER_API void FixedUpdate();
+		SH_USER_API void Update();
 
-		SH_USER_API void Awake() override;
-		SH_USER_API void BeginUpdate() override;
-		SH_USER_API void FixedUpdate() override;
-		SH_USER_API void Update() override;
+		SH_USER_API void RegisterTickable(IPlayerTickable* tickable) { tickables.push_back(tickable); }
 
 		SH_USER_API auto GetTick() const -> uint64_t { return tick; }
 	private:
-		PROPERTY(player, core::PropertyOption::sobjPtr)
-		Player* player = nullptr;
 		uint64_t tick = 0;
+		std::vector<IPlayerTickable*> tickables;
 	};
 }//namespace

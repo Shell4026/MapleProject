@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Export.h"
 #include "Entity.h"
+#include "PlayerTickController.h"
 #if !SH_SERVER
 #include "NameTag.h"
 #include "UI/InventoryUI.h"
@@ -18,7 +19,6 @@ namespace sh::game
 	class SkillManager;
 	class PlayerMovement;
 	class PlayerPickup;
-	class PlayerTickController;
 	class Player : public Entity
 	{
 		COMPONENT(Player, "user")
@@ -33,6 +33,8 @@ namespace sh::game
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
+		SH_USER_API void BeginUpdate() override;
+		SH_USER_API void FixedUpdate() override;
 		SH_USER_API void Update() override;
 
 		SH_USER_API auto GetEntityType() const -> Type override { return Type::Player; }
@@ -44,7 +46,6 @@ namespace sh::game
 		SH_USER_API auto GetSkillManager() const -> SkillManager* { return skillManager; }
 		SH_USER_API auto GetMovement() const -> PlayerMovement* { return movement; }
 		SH_USER_API auto GetPickup() const -> PlayerPickup* { return pickup; }
-		SH_USER_API auto GetTickController() const -> PlayerTickController* { return tickController; }
 		SH_USER_API auto GetTick() const -> uint64_t;
 		SH_USER_API auto GetUserUUID() const -> const core::UUID& { return userUUID; }
 		SH_USER_API auto GetCurrentWorld() const -> MapleWorld* { return currentWorld; }
@@ -60,8 +61,6 @@ namespace sh::game
 		SkillManager* skillManager = nullptr;
 		PROPERTY(movement, core::PropertyOption::sobjPtr)
 		PlayerMovement* movement = nullptr;
-		PROPERTY(tickController, core::PropertyOption::sobjPtr)
-		PlayerTickController* tickController = nullptr;
 		PROPERTY(pickup, core::PropertyOption::sobjPtr)
 		PlayerPickup* pickup = nullptr;
 		PROPERTY(rigidbody)
@@ -70,6 +69,8 @@ namespace sh::game
 		core::UUID userUUID;
 
 		MapleWorld* currentWorld = nullptr;
+
+		PlayerTickController tickController;
 #if !SH_SERVER
 		PROPERTY(nametag)
 		NameTag* nametag = nullptr;
