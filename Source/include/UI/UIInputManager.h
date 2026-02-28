@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Export.h"
 
+#include "Core/GCObject.h"
+
 #include "Game/Component/Component.h"
 #include "Game/Component/Transform.h"
 
@@ -28,11 +30,13 @@ namespace sh::game
 		SH_USER_API void BuildRectList(const UIRect& rect);
 	private:
 		void BuildDirtyRectLists();
-		struct RectNode
+		struct RectNode : core::GCObject
 		{
 			UIRect* rect = nullptr;
 			RectNode* parent = nullptr;
 			std::vector<std::unique_ptr<RectNode>> childs;
+
+			SH_USER_API void PushReferenceObjects(core::GarbageCollection& gc) override;
 		};
 
 		static auto FindRoot(const UIRect& rect) -> UIRect&;
@@ -42,6 +46,7 @@ namespace sh::game
 		static UIInputManager* instance;
 
 		std::vector<std::unique_ptr<RectNode>> rootNodes;
+		PROPERTY(dirtyRoots, core::PropertyOption::sobjPtr, core::PropertyOption::invisible)
 		std::unordered_set<UIRect*> dirtyRoots;
 		uint32_t nullptrCount = 0;
 

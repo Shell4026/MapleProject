@@ -1,6 +1,8 @@
 ﻿#include "UI/UIInputManager.h"
 #include "UI/UIRect.h"
 
+#include "Core/GarbageCollection.h"
+
 #include "Game/World.h"
 #include "Game/GameManager.h"
 
@@ -44,7 +46,7 @@ namespace sh::game
 		float z = std::numeric_limits<float>::lowest();
 		for (auto& node : rootNodes)
 		{
-			if (node == nullptr)
+			if (node == nullptr || !core::IsValid(node->rect))
 				continue;
 
 			if (!node->rect->IsContainsMouse())
@@ -65,6 +67,8 @@ namespace sh::game
 				RectNode* curNode = bfs.front();
 				bfs.pop();
 				const UIRect* rect = curNode->rect;
+				if (!core::IsValid(rect))
+					continue;
 				if (rect->IsContainsMouse())
 				{
 					lastNode = curNode;
@@ -73,7 +77,7 @@ namespace sh::game
 				}
 			}
 		}
-		if (lastNode != nullptr)
+		if (lastNode != nullptr && core::IsValid(lastNode->rect))
 			lastNode->rect->OnHover();
 	}
 	SH_USER_API auto UIInputManager::GetInstance() -> UIInputManager&
@@ -152,6 +156,9 @@ namespace sh::game
 	}
 	auto UIInputManager::CreateRectNode(const UIRect& rect, RectNode* parent) -> std::unique_ptr<RectNode>
 	{
+		if (rect.IsPendingKill())
+			return nullptr;
+
 		auto node = std::make_unique<RectNode>();
 		node->rect = const_cast<UIRect*>(&rect);
 		node->parent = parent;
@@ -179,9 +186,13 @@ namespace sh::game
 	{
 		for (Component* component : transform.gameObject.GetComponents())
 		{
-			if (UIRect* rect = core::reflection::Cast<UIRect>(component); rect != nullptr)
+			if (UIRect* rect = core::reflection::Cast<UIRect>(component); core::IsValid(rect))
 				return rect;
 		}
 		return nullptr;
+	}
+	SH_USER_API void UIInputManager::RectNode::PushReferenceObjects(core::GarbageCollection& gc)
+	{
+		gc.PushReferenceObject(rect);
 	}
 }//namespace
