@@ -74,7 +74,7 @@ namespace sh::game
 			uint32_t seq = 0;
 			SkillId skillId = 0;
 			uint64_t applyServerTick = 0;
-		};
+		} currentSkill;
 		uint32_t lastSeq = 0;
 		uint64_t offset = 0;
 		bool bOffsetInit = false;

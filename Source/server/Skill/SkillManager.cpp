@@ -15,10 +15,11 @@ namespace sh::game
 	{
 		while (!pendingSkills.empty() && pendingSkills.front().applyServerTick <= tick)
 		{
-			UseSkill(pendingSkills.front().skillId, tick);
+			currentSkill = pendingSkills.front();
 			pendingSkills.pop_front();
 		}
 
+		UseSkill(currentSkill.skillId, tick);
 		UpdateState();
 	}
 	SH_USER_API void SkillManager::ProcessPacket(const SkillUsingPacket& packet)
