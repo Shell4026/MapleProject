@@ -1,6 +1,9 @@
 ﻿#include "Player/Player.h"
 #include "Player/Job.h"
+#include "Player/PlayerTickController.h"
 #include "Skill/SkillManager.h"
+
+#include "Game/GameObject.h"
 #if SH_SERVER
 #else
 #include "MapleClient.h"
@@ -17,6 +20,8 @@ namespace sh::game
 			SH_ERROR("job is nullptr!");
 		if (skillManager == nullptr)
 			SH_ERROR("skillManager is nullptr!");
+		if (tickController == nullptr)
+			tickController = gameObject.GetComponent<PlayerTickController>();
 		if (rigidbody == nullptr)
 			SH_ERROR("rigidbody is nullptr!");
 
@@ -42,6 +47,12 @@ namespace sh::game
 	SH_USER_API void Player::Update()
 	{
 		rigidbody->ResetPhysicsTransform();
+	}
+	SH_USER_API auto Player::GetTick() const -> uint64_t
+	{
+		if (tickController == nullptr)
+			return 0;
+		return tickController->GetTick();
 	}
 	SH_USER_API void Player::SetUserUUID(const core::UUID& uuid, MapleWorldKey)
 	{

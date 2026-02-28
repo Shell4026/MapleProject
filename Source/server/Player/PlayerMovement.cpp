@@ -11,10 +11,10 @@ namespace sh::game
 		if (player == nullptr)
 			SH_ERROR("Player is nullptr!");
 	}
-	SH_USER_API void PlayerMovement::BeginUpdate()
+	SH_USER_API void PlayerMovement::TickBegin(uint64_t tick)
 	{
 	}
-	SH_USER_API void PlayerMovement::FixedUpdate()
+	SH_USER_API void PlayerMovement::TickFixed(uint64_t tick)
 	{
 		while (!inputs.empty() && inputs.front().applyServerTick <= tick)
 		{
@@ -22,7 +22,11 @@ namespace sh::game
 			inputs.pop_front();
 		}
 
-		if (!currentState.bProne)
+		if (bInputLock)
+		{
+			vel.x = 0.f;
+		}
+		else if (!currentState.bProne)
 		{
 			if (currentState.xMove > 0)
 			{
@@ -49,10 +53,8 @@ namespace sh::game
 			vel.x = 0.f;
 
 		StepMovement();
-
-		++tick;
 	}
-	SH_USER_API void PlayerMovement::Update()
+	SH_USER_API void PlayerMovement::TickUpdate(uint64_t tick)
 	{
 		if (sendTick++ >= 2)
 			bPendingSend = true;
@@ -85,6 +87,7 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::ProcessInput(const PlayerInputPacket& packet)
 	{
+		const uint64_t tick = player != nullptr ? player->GetTick() : 0;
 		if (!bOffsetInit)
 		{
 			offset = tick - packet.tick + 5;

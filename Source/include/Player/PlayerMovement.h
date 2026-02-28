@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
+#include "Player/IPlayerTickable.h"
 #include "Player.h"
 #include "Physics/FootholdMovement.h"
 #include "Packet/PlayerStatePacket.hpp"
@@ -14,7 +15,7 @@
 #include <deque>
 namespace sh::game
 {
-	class PlayerMovement : public FootholdMovement
+	class PlayerMovement : public FootholdMovement, public IPlayerTickable
 	{
 		COMPONENT(PlayerMovement, "user")
 	public:
@@ -22,9 +23,10 @@ namespace sh::game
 
 		SH_USER_API void Awake() override;
 		SH_USER_API void Start() override;
-		SH_USER_API void BeginUpdate() override;
-		SH_USER_API void FixedUpdate() override;
-		SH_USER_API void Update() override;
+
+		SH_USER_API void TickBegin(uint64_t tick) override;
+		SH_USER_API void TickFixed(uint64_t tick) override;
+		SH_USER_API void TickUpdate(uint64_t tick) override;
 
 #if SH_SERVER
 		SH_USER_API void ProcessInput(const PlayerInputPacket& packet);
@@ -40,7 +42,7 @@ namespace sh::game
 	private:
 #if SH_SERVER
 #else
-		void ProcessLocalInput();
+		void ProcessLocalInput(uint64_t tick);
 		void Reconciliation(const PlayerStatePacket& packet);
 		void ProcessRemote(const PlayerStatePacket& packet);
 		void InterpolateRemote();
@@ -48,7 +50,6 @@ namespace sh::game
 	private:
 		PROPERTY(player)
 		Player* player = nullptr;
-		uint64_t tick = 0;
 #if SH_SERVER
 		uint32_t sendTick = 0;
 		struct InputState
@@ -78,12 +79,13 @@ namespace sh::game
 
 		/// @brief seq입력에 대한 결과물
 		struct StateHistory
-		{	
+		{
 			uint32_t seq = 0;
 			uint64_t tick = 0;
 			Vec2 pos;
 			Vec2 vel;
 			int xMove = 0;
+			bool bLock = false;
 			bool bJump = false;
 			bool bProne = false;
 		};

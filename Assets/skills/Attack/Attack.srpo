@@ -7,7 +7,7 @@
         "bPreventAir": false,
         "bPreventMove": true,
         "cooldownMs": 0,
-        "id": 0,
+        "id": 1,
         "projectiles": [
             "d9363f5a7428c6932fb47e6791f14384"
         ],

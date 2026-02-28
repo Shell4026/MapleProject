@@ -33,20 +33,25 @@ namespace sh::game
 		);
 		MapleClient::GetInstance()->bus.Subscribe(packetSubscriber);
 	}
-	SH_USER_API void PlayerMovement::BeginUpdate()
+
+	SH_USER_API void PlayerMovement::TickBegin(uint64_t tick)
 	{
 		if (player->IsLocal())
-			ProcessLocalInput();
+			ProcessLocalInput(tick);
 		else
 			InterpolateRemote();
 	}
-	SH_USER_API void PlayerMovement::FixedUpdate()
+	SH_USER_API void PlayerMovement::TickFixed(uint64_t tick)
 	{
 		if (!player->IsLocal())
 			return;
 
 		// 예측
-		if (!bProne)
+		if (bInputLock)
+		{
+			vel.x = 0.f;
+		}
+		else if (!bProne)
 		{
 			if (lastInput.xMove > 0)
 			{
@@ -82,18 +87,18 @@ namespace sh::game
 		state.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
 		state.vel = vel;
 		state.xMove = lastInput.xMove;
+		state.bLock = bInputLock;
 		state.bProne = lastInput.bProne;
 		state.bJump = lastInput.bJump;
 		history.push_back(state);
 		while (history.size() > 180)
 			history.pop_front();
-
-		++tick;
 	}
-	SH_USER_API void PlayerMovement::Update()
+	SH_USER_API void PlayerMovement::TickUpdate(uint64_t tick)
 	{
+		(void)tick;
 	}
-	void PlayerMovement::ProcessLocalInput()
+	void PlayerMovement::ProcessLocalInput(uint64_t tick)
 	{
 		int xInput = 0;
 		bool bJump = false;
@@ -187,8 +192,8 @@ namespace sh::game
 			vel.x = packet.vx;
 			vel.y = packet.vy;
 			SetIsGround(packet.bGround);
-			bProne = packet.bProne;
 			bInputLock = packet.bLock;
+			bProne = packet.bProne;
 			bRight = packet.bRight;
 
 			SetExpectedGround();
@@ -198,28 +203,34 @@ namespace sh::game
 		{
 			StateHistory& lastHistory = history[t];
 
-			if (lastHistory.xMove > 0)
-			{
-				AddForce(14.f, 0.f);
-				//vel.x = GetSpeed();
-				bRight = true;
-			}
-			else if (lastHistory.xMove < 0)
-			{
-				AddForce(-14.f, 0.f);
-				//vel.x = -GetSpeed();
-				bRight = false;
-			}
-			//else
-			//	vel.x = 0.f;
-
-			if (lastHistory.bJump && IsGround())
-			{
-				SetIsGround(false);
-				vel.y = GetJumpSpeed();
-			}
+			bInputLock = lastHistory.bLock;
 			bProne = lastHistory.bProne;
+			if (bInputLock)
+			{
+				vel.x = 0.f;
+			}
+			else if(!bProne)
+			{
+				if (lastHistory.xMove > 0)
+				{
+					AddForce(14.f, 0.f);
+					//vel.x = GetSpeed();
+					bRight = true;
+				}
+				else if (lastHistory.xMove < 0)
+				{
+					AddForce(-14.f, 0.f);
+					//vel.x = -GetSpeed();
+					bRight = false;
+				}
 
+				if (lastHistory.bJump && IsGround())
+				{
+					SetIsGround(false);
+					vel.y = GetJumpSpeed();
+				}
+			}
+			
 			StepMovement();
 
 			lastHistory.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };

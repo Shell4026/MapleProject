@@ -5,6 +5,7 @@
 #include "Core/Reflection/TypeTraits.hpp"
 
 #include <array>
+#include <cstdint>
 namespace sh::game
 {
 	class SkillUsingPacket : public network::Packet
@@ -21,6 +22,7 @@ namespace sh::game
 		{
 			core::Json json = network::Packet::Serialize();
 			json["seq"] = seq;
+			json["tick"] = tick;
 			json["uid"] = userUUID;
 			json["sid"] = skillId;
 			json["dir"] = dir;
@@ -32,12 +34,14 @@ namespace sh::game
 			if (json.contains("uid"))
 				userUUID = json["uid"];
 			seq = json.value("seq", 0);
+			tick = json.value("tick", static_cast<uint64_t>(0));
 			skillId = json.value("sid", 0);
 			dir = json.value("dir", 0);
 		}
-	public:
+public:
 		std::array<uint32_t, 4> userUUID;
 		uint32_t seq;
+		uint64_t tick = 0;
 		uint32_t skillId;
 		int dir;
 	};

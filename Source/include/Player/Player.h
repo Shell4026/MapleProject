@@ -18,6 +18,7 @@ namespace sh::game
 	class SkillManager;
 	class PlayerMovement;
 	class PlayerPickup;
+	class PlayerTickController;
 	class Player : public Entity
 	{
 		COMPONENT(Player, "user")
@@ -43,6 +44,8 @@ namespace sh::game
 		SH_USER_API auto GetSkillManager() const -> SkillManager* { return skillManager; }
 		SH_USER_API auto GetMovement() const -> PlayerMovement* { return movement; }
 		SH_USER_API auto GetPickup() const -> PlayerPickup* { return pickup; }
+		SH_USER_API auto GetTickController() const -> PlayerTickController* { return tickController; }
+		SH_USER_API auto GetTick() const -> uint64_t;
 		SH_USER_API auto GetUserUUID() const -> const core::UUID& { return userUUID; }
 		SH_USER_API auto GetCurrentWorld() const -> MapleWorld* { return currentWorld; }
 		SH_USER_API auto IsLocal() const -> bool { return bLocal; }
@@ -57,6 +60,8 @@ namespace sh::game
 		SkillManager* skillManager = nullptr;
 		PROPERTY(movement, core::PropertyOption::sobjPtr)
 		PlayerMovement* movement = nullptr;
+		PROPERTY(tickController, core::PropertyOption::sobjPtr)
+		PlayerTickController* tickController = nullptr;
 		PROPERTY(pickup, core::PropertyOption::sobjPtr)
 		PlayerPickup* pickup = nullptr;
 		PROPERTY(rigidbody)

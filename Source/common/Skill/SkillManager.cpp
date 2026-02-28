@@ -83,6 +83,7 @@ namespace sh::game
 	}
 	void SkillManager::UpdateState()
 	{
+		const float dt = world.FIXED_TIME * 1000.f;
 		for (int i = 0; i < skillStates.size(); ++i)
 		{
 			SkillState& state = skillStates[i];
@@ -92,7 +93,7 @@ namespace sh::game
 				float& cooldown = state.cooldownRemainingMs;
 				if (cooldown > 0.f)
 				{
-					cooldown -= world.deltaTime * 1000.f;
+					cooldown -= dt;
 					if (cooldown < 0.f)
 						cooldown = 0.f;
 				}
@@ -103,7 +104,7 @@ namespace sh::game
 
 					auto prevState = state.state;
 					const uint32_t skillTime = skillPtr->GetStartupMs() + skillPtr->GetActiveMs() + skillPtr->GetRecoveryMs();
-					state.counterMs += world.deltaTime * 1000.f;
+					state.counterMs += dt;
 					if (state.counterMs > skillTime)
 					{
 						if (lastState == &state)
