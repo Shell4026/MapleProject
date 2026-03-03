@@ -1,35 +1,77 @@
 {
     "AnimationData": {
         "bLoop": true,
-        "delayMs": [
-            180,
-            180,
-            180,
-            180,
-            180,
-            180,
-            180,
-            180
-        ],
-        "pos": [
-            0.0,
-            0.0
-        ],
-        "textures": [
-            "270909f319de43afc5de03cd2c0cb591",
-            "ee46dfe7eefebf71860a70672fa2f9bc",
-            "fe430f250eda48cd74e2cabb32461a9c",
-            "34ac7a3e901fb12c4109c51a2a473cb9",
-            "b946f553d9e8f28bae4c1e90d53ed2b4",
-            "34ac7a3e901fb12c4109c51a2a473cb9",
-            "fe430f250eda48cd74e2cabb32461a9c",
-            "ee46dfe7eefebf71860a70672fa2f9bc"
+        "frames": [
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "270909f319de43afc5de03cd2c0cb591"
+            },
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "ee46dfe7eefebf71860a70672fa2f9bc"
+            },
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "fe430f250eda48cd74e2cabb32461a9c"
+            },
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "34ac7a3e901fb12c4109c51a2a473cb9"
+            },
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "b946f553d9e8f28bae4c1e90d53ed2b4"
+            },
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "34ac7a3e901fb12c4109c51a2a473cb9"
+            },
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "fe430f250eda48cd74e2cabb32461a9c"
+            },
+            {
+                "delayMs": 180,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "ee46dfe7eefebf71860a70672fa2f9bc"
+            }
         ]
     },
     "SObject": null,
     "ScriptableObject": null,
     "fullType": "sh::game::AnimationData",
-    "name": "Move.srpo",
+    "name": "Move",
     "type": "AnimationData",
     "uuid": "6954393821bcf4750edbd70e8fb53581",
     "version": 1

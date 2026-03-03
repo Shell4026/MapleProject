@@ -18,7 +18,8 @@
         "EditorCamera": {
             "distance": 8.052550315856934
         },
-        "SObject": {},
+        "SObject": null,
+        "fullType": "sh::game::EditorCamera",
         "name": "EditorCamera",
         "type": "EditorCamera",
         "uuid": "ffec26b9a990e8a37b33c19898fda7d1",
@@ -29,7 +30,7 @@
         4.649141311645508,
         4.649142265319824
     ],
-    "editorObjs": [],
+    "editorObjs": null,
     "name": "World",
     "objs": [
         {
@@ -39,7 +40,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -63,6 +64,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "ad3026b2e12602524d7dc99cd877764e",
@@ -76,7 +78,8 @@
                     "Login": {
                         "nextWorld": "1c2428b8720cab83b1b46f7cd7408592"
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::Login",
                     "name": "user/Login",
                     "type": "Login",
                     "uuid": "53617c5461c1c27ff57f7450192bb3fc",
@@ -101,7 +104,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -125,6 +128,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "93b12da106989f845ee38b9790f8dd0f",
@@ -145,7 +149,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::Camera",
                     "name": "Camera",
                     "type": "Camera",
                     "uuid": "c61acb03cb9e9cb502ad51619ca87cd4",
@@ -170,7 +175,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "5551df43e40fe51b2d313ac559491493",
                         "quat": [
@@ -195,6 +200,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "e59881aa3cefdb0e1a8b974ce1fcb5d0",
@@ -208,7 +214,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::AssetExportHelper",
                     "name": "user/AssetExportHelper",
                     "type": "AssetExportHelper",
                     "uuid": "94c089f4bb41d088f6a866f067b53209",
@@ -233,7 +240,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "e59881aa3cefdb0e1a8b974ce1fcb5d0",
                         "quat": [
@@ -258,6 +265,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "8ca9e69d1b7fefd7fcc1d57745a0d17d",
@@ -271,7 +279,8 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::AssetExportHelper",
                     "name": "user/AssetExportHelper",
                     "type": "AssetExportHelper",
                     "uuid": "c991fcb77960433debf760917c55d8c3",
@@ -296,7 +305,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -320,6 +329,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "fdfb9962a345070dc2f9a654b3509e69",
@@ -330,13 +340,14 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "MapleClient": {},
-                    "NetworkComponent": {},
-                    "SObject": {},
+                    "MapleClient": null,
+                    "NetworkComponent": null,
+                    "SObject": null,
                     "UdpClient": {
                         "serverIp": "127.0.0.1",
                         "serverPort": 4026
                     },
+                    "fullType": "sh::game::MapleClient",
                     "name": "user/MapleClient",
                     "type": "MapleClient",
                     "uuid": "58a8f3f82333e45d1601443c2f4d4781",
@@ -361,7 +372,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "quat": [
                             0.0,
@@ -385,6 +396,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Transform",
                     "type": "Transform",
                     "uuid": "5551df43e40fe51b2d313ac559491493",
@@ -409,7 +421,7 @@
                         "hideInspector": false,
                         "priority": 0
                     },
-                    "SObject": {},
+                    "SObject": null,
                     "Transform": {
                         "parent": "5551df43e40fe51b2d313ac559491493",
                         "quat": [
@@ -434,6 +446,7 @@
                             1.0
                         ]
                     },
+                    "fullType": "sh::game::Transform",
                     "name": "Unknown",
                     "type": "Transform",
                     "uuid": "107c491b22d93ed540888bc9ef6698a3",
@@ -447,7 +460,8 @@
                     "NPCDB": {
                         "npcDB": "dbe3dce220e5ca106368317db36fbdc2"
                     },
-                    "SObject": {},
+                    "SObject": null,
+                    "fullType": "sh::game::NPCDB",
                     "name": "user/NPCDB",
                     "type": "NPCDB",
                     "uuid": "5f5539843fefbc05584a1e2592a4c8c5",

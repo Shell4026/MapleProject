@@ -79,6 +79,12 @@ namespace sh::game
 		t = 0.f;
 		Next();
 	}
+	SH_USER_API auto Animator::GetCurAnimationPos() const -> const Vec2&
+	{
+		if (curAnim == nullptr)
+			return Vec2{ 0.f, 0.f };
+		return curAnim->GetPos(animIdx);
+	}
 	void Animator::DecideAnimation()
 	{
 		curAnim = nullptr;
@@ -100,6 +106,13 @@ namespace sh::game
 	{
 		if (curAnim == nullptr)
 			return;
+		if (curAnim->GetSize() == 0)
+		{
+			bStop = true;
+			animIdx = 0;
+			nextT = 0.f;
+			return;
+		}
 		++animIdx;
 		if (animIdx == curAnim->GetSize())
 		{
@@ -116,7 +129,7 @@ namespace sh::game
 			return;
 		nextT = curAnim->GetDelay(animIdx) / 1000.f;
 
-		const Vec2& animPos = curAnim->GetPos();
+		const Vec2& animPos = curAnim->GetPos(animIdx);
 		renderer->gameObject.transform->SetPosition(animPos.x, animPos.y, renderer->gameObject.transform->position.z);
 		float w = texPtr->GetWidth() * 0.01f;
 		float h = texPtr->GetHeight() * 0.01f;

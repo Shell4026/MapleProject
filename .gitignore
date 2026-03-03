@@ -4,5 +4,6 @@ Library
 out
 temp
 *.png
+*.png~
 *.jpg
 AGENTS.md

@@ -64,13 +64,11 @@ namespace sh::game
 			scale.x = -scale.x;
 		renderer->gameObject.transform->SetScale(scale);
 
-		if (bRight)
+		if (AnimationData* curAnim = GetCurAnimation(); core::IsValid(curAnim))
 		{
-			if (AnimationData* curAnim = GetCurAnimation(); core::IsValid(curAnim))
-			{
-				const auto& animPos = curAnim->GetPos();
-				renderer->gameObject.transform->SetPosition(-animPos.x, animPos.y, renderer->gameObject.transform->position.z);
-			}
+			const auto& animPos = GetCurAnimationPos();
+			const float x = bRight ? -animPos.x : animPos.x;
+			renderer->gameObject.transform->SetPosition(x, animPos.y, renderer->gameObject.transform->position.z);
 		}
 		renderer->gameObject.transform->UpdateMatrix();
 	}

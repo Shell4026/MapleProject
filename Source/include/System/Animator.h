@@ -31,6 +31,7 @@ namespace sh::game
 		SH_USER_API auto GetState() const -> int { return state; }
 		SH_USER_API auto GetMeshRenderer() const -> MeshRenderer* { return renderer; }
 		SH_USER_API auto GetCurAnimation() const -> AnimationData* { return curAnim; }
+		SH_USER_API auto GetCurAnimationPos() const -> const Vec2&;
 	private:
 		void DecideAnimation();
 		void Next();

@@ -1,21 +1,21 @@
 {
     "AnimationData": {
         "bLoop": false,
-        "delayMs": [
-            500
-        ],
-        "pos": [
-            0.0,
-            0.0
-        ],
-        "textures": [
-            "ccfcbf7ea24d61e26e709dafc6c55d63"
+        "frames": [
+            {
+                "delayMs": 10,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "ccfcbf7ea24d61e26e709dafc6c55d63"
+            }
         ]
     },
     "SObject": null,
     "ScriptableObject": null,
     "fullType": "sh::game::AnimationData",
-    "name": "Hit.srpo",
+    "name": "Hit",
     "type": "AnimationData",
     "uuid": "17b54d4cedddafd09681c14a9fa15818",
     "version": 1
