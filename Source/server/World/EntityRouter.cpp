@@ -27,6 +27,7 @@ namespace sh::game
 							if (MapleWorld* currentWorld = player->GetCurrentWorld(); currentWorld != nullptr)
 								SH_INFO_FORMAT("transfer: {}", currentWorld->TryTransferByPortal(*player));
 						}
+						player->GetMovement()->ProcessInput(packet);
 					}
 				}
 				else if (packetId == KeyPacket::ID)
