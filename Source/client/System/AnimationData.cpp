@@ -24,6 +24,9 @@ namespace sh::game
 				frameJson["texture"] = core::UUID::GenerateEmptyUUID().ToString();
 			frameJson["delayMs"] = frame.delayMs;
 			frameJson["pos"] = { frame.pos.x, frame.pos.y };
+			frameJson["a0"] = frame.a0;
+			frameJson["a1"] = frame.a1;
+
 			data["frames"].push_back(std::move(frameJson));
 		}
 		return json;
@@ -55,6 +58,9 @@ namespace sh::game
 					frame.pos.x = frameJson["pos"][0];
 					frame.pos.y = frameJson["pos"][1];
 				}
+				frame.a0 = frameJson.value("a0", (uint8_t)255);
+				frame.a1 = frameJson.value("a1", (uint8_t)255);
+
 				frames.push_back(frame);
 			}
 		}
@@ -84,9 +90,17 @@ namespace sh::game
 			return zero;
 		return frames[idx].pos;
 	}
-	SH_USER_API auto AnimationData::GetSize() const -> std::size_t
+	SH_USER_API auto AnimationData::GetAlphaSrc(int idx) const -> uint8_t
 	{
-		return frames.size();
+		if (idx < 0 || idx >= frames.size())
+			return 255;
+		return frames[idx].a0;
+	}
+	SH_USER_API auto AnimationData::GetAlphaDst(int idx) const -> uint8_t
+	{
+		if (idx < 0 || idx >= frames.size())
+			return 255;
+		return frames[idx].a1;
 	}
 	SH_USER_API void AnimationData::Frame::PushReferenceObjects(core::GarbageCollection& gc)
 	{

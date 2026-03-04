@@ -25,6 +25,8 @@ namespace sh::game
 			render::Texture* texture = nullptr;
 			uint32_t delayMs = 10;
 			Vec2 pos{ 0.f, 0.f };
+			uint8_t a0 = 255;
+			uint8_t a1 = 255;
 
 			SH_USER_API void PushReferenceObjects(core::GarbageCollection& gc) override;
 		};
@@ -38,6 +40,8 @@ namespace sh::game
 		SH_USER_API auto GetTexture(int idx) const -> render::Texture*;
 		SH_USER_API auto GetDelay(int idx) const -> uint32_t;
 		SH_USER_API auto GetPos(int idx) const -> const Vec2&;
+		SH_USER_API auto GetAlphaSrc(int idx) const -> uint8_t;
+		SH_USER_API auto GetAlphaDst(int idx) const -> uint8_t;
 
 		SH_USER_API auto GetSize() const -> std::size_t { return frames.size(); }
 		SH_USER_API auto IsLoop() const -> bool { return bLoop; }

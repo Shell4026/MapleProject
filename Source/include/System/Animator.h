@@ -35,6 +35,7 @@ namespace sh::game
 	private:
 		void DecideAnimation();
 		void Next();
+		void ChangeAlpha();
 	protected:
 		PROPERTY(renderer)
 		MeshRenderer* renderer = nullptr;

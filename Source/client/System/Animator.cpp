@@ -152,6 +152,32 @@ namespace sh::game
 		renderer->UpdatePropertyBlockData();
 	}
 
+	void Animator::ChangeAlpha()
+	{
+		if (curAnim == nullptr)
+			return;
+
+		const uint8_t a0 = curAnim->GetAlphaSrc(animIdx);
+		const uint8_t a1 = curAnim->GetAlphaDst(animIdx);
+
+		auto prop = renderer->GetMaterialPropertyBlock();
+		auto colorPtr = prop->GetVectorProperty("color");
+		glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
+		if (colorPtr != nullptr)
+			color = *colorPtr;
+
+		if (nextT > 0.f)
+		{
+			const float alpha = t / nextT;
+			color.a = glm::mix(a0, a1, alpha) / 255.f;
+		}
+		else
+			color.a = a0 / 255.f;
+
+		prop->SetProperty("color", color);
+		renderer->UpdatePropertyBlockData();
+	}
+
 	SH_USER_API void Animator::AnimState::PushReferenceObjects(core::GarbageCollection& gc)
 	{
 		gc.PushReferenceObject(anim);
