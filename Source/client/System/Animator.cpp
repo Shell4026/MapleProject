@@ -12,6 +12,15 @@ namespace sh::game
 	{
 		if (renderer == nullptr)
 			SH_ERROR("renderer is nullptr!");
+		else
+		{
+			auto propBlock = renderer->GetMaterialPropertyBlock();
+			if (propBlock->GetVectorProperty("color") != nullptr)
+			{
+				propBlock->SetProperty("color", glm::vec4{ 1.f, 1.f, 1.f, 1.f });
+				renderer->UpdatePropertyBlockData();
+			}
+		}
 	}
 	SH_USER_API void Animator::Start()
 	{
@@ -23,6 +32,7 @@ namespace sh::game
 	{
 		t += world.deltaTime;
 
+		ChangeAlpha();
 		while (!bStop && t >= nextT && nextT > 0.f) {
 			t -= nextT;
 			Next();
@@ -81,8 +91,9 @@ namespace sh::game
 	}
 	SH_USER_API auto Animator::GetCurAnimationPos() const -> const Vec2&
 	{
+		static Vec2 zero{ 0.f, 0.f };
 		if (curAnim == nullptr)
-			return Vec2{ 0.f, 0.f };
+			return zero;
 		return curAnim->GetPos(animIdx);
 	}
 	void Animator::DecideAnimation()

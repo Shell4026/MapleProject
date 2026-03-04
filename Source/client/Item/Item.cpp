@@ -24,6 +24,7 @@ namespace sh::game
 		if (texture != nullptr)
 		{
 			renderer->GetMaterialPropertyBlock()->SetProperty("tex", texture);
+			renderer->GetMaterialPropertyBlock()->SetProperty("color", glm::vec4{ 1.f });
 			renderer->UpdatePropertyBlockData();
 		}
 	}

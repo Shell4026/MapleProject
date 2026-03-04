@@ -4,7 +4,7 @@ Shader "Unlit Transparent Shader2"
 {
 	Property
 	{
-		vec4 color;
+		[Local] vec4 color;
 		[Local] sampler2D tex;
 	}
 	
@@ -36,6 +36,7 @@ Shader "Unlit Transparent Shader2"
 			{
 				outColor = texture(tex, uvs);
 				outColor.xyzw *= color.xyzw;
+				
 			}
 		}
 	}
