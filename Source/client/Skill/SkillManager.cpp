@@ -43,11 +43,22 @@ namespace sh::game
 			if (pressedSkillId == 37001000)
 				pressedSkillId = 0;
 		}
+
+		if (!player->GetMovement()->IsGround())
+		{
+			if (Input::GetKeyPressed(Input::KeyCode::F))
+			{
+				SendPacket(37001003, SkillInputAction::Pressed, tick);
+				pressedSkillId = 37001003;
+			}
+		}
 	}
 	SH_USER_API void SkillManager::TickFixed(uint64_t tick)
 	{
 		if (!player->IsLocal())
 			return;
+
+		UpdateConditionState(tick);
 
 		UseSkill(pressedSkillId, tick);
 		UpdateState();
@@ -76,7 +87,9 @@ namespace sh::game
 			effect->SpawnProjectile(world, player, pos.x, pos.y, player->GetMovement()->IsRight());
 		}
 		ApplyCooldown(id);
+		state->lastUsedTick = tick;
 		lastState = state;
+		lastUsedSkillId = id;
 		SH_INFO_FORMAT("Use skill: {}", id);
 	}
 	void SkillManager::SendPacket(SkillId skillId, SkillInputAction action, uint64_t tick)
@@ -89,6 +102,9 @@ namespace sh::game
 		packet.userUUID = client.GetUser().GetUserUUID();
 		packet.skillId = skillId;
 		packet.action = action;
+		packet.dir = 0;
+		if (player != nullptr && player->GetMovement() != nullptr)
+			packet.dir = player->GetMovement()->IsRight() ? 1 : -1;
 		client.SendPacket(packet);
 	}
 }//namespace

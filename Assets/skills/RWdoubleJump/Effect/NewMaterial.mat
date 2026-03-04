@@ -1,0 +1,26 @@
+{
+    "Constant": [
+        []
+    ],
+    "Material": {
+        "shader": "089d8842bfa9932827da7d0fcc393b59"
+    },
+    "MaterialPropertyBlock": {
+        "scalar": null,
+        "textures": {
+            "tex": "6cdd4c8b07cdf85f1906571b8f81b144"
+        },
+        "vector": {
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        }
+    },
+    "name": "NewMaterial.mat",
+    "type": "Material",
+    "uuid": "c25bcf63d2ed66f1c79fa2303cabb072",
+    "version": 1
+}

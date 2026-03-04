@@ -16,9 +16,12 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerPickup::Awake()
 	{
-		player = gameObject.GetComponent<Player>();
 		if (player == nullptr)
-			SH_ERROR("Not found Player component!");
+		{
+			player = gameObject.GetComponent<Player>();
+			if (player == nullptr)
+				SH_ERROR("Not found Player component!");
+		}
 	}
 	SH_USER_API void PlayerPickup::BeginUpdate()
 	{

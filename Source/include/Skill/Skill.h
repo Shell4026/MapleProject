@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
+#include "Skill/SkillCondition.h"
 
 #include "Game/ScriptableObject.h"
 
@@ -19,9 +20,11 @@ namespace sh::game
 		SH_USER_API auto GetAnimState() const -> uint32_t { return animState; }
 		SH_USER_API auto GetProjectiles() const -> const std::vector<Projectile*>& { return projectiles; }
 		SH_USER_API auto GetEffects() const -> const std::vector<Projectile*>& { return effects; }
+		SH_USER_API auto GetConditions() const -> const std::vector<SkillCondition*>& { return conditions; }
 		SH_USER_API auto IsPreventMove() const -> bool { return bPreventMove; }
 		SH_USER_API auto IsPreventAir() const -> bool { return bPreventAir; }
 		SH_USER_API auto IsAllowSkill(uint32_t skillId) -> bool { return std::find(allowSkill.begin(), allowSkill.end(), skillId) != allowSkill.end(); }
+		SH_USER_API auto IsAllowContinousInput() const -> bool { return bContinousInput; }
 	private:
 		PROPERTY(id)
 		uint32_t id = 0;
@@ -42,10 +45,14 @@ namespace sh::game
 		std::vector<Projectile*> projectiles;
 		PROPERTY(effects, core::PropertyOption::sobjPtr)
 		std::vector<Projectile*> effects;
+		PROPERTY(conditions, core::PropertyOption::sobjPtr)
+		std::vector<SkillCondition*> conditions;
 
 		PROPERTY(bPreventMove)
 		bool bPreventMove = true;
 		PROPERTY(bPreventAir)
 		bool bPreventAir = false;
+		PROPERTY(bContinousInput)
+		bool bContinousInput = true;
 	};
 }//namespace

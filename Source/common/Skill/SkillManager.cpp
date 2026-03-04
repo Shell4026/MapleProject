@@ -1,4 +1,5 @@
 ﻿#include "Skill/SkillManager.h"
+#include "Skill/MovementSkill.h"
 #include "Skill/Projectile.h"
 #include "Skill/ProjectileInstance.h"
 #include "Player/Player.h"
@@ -7,6 +8,8 @@
 #include "Core/Logger.h"
 
 #include "Game/World.h"
+#include <algorithm>
+#include <cmath>
 // 공용
 namespace sh::game
 {
@@ -43,7 +46,17 @@ namespace sh::game
 		if (lastState != nullptr && !state->skill->IsAllowSkill(lastState->skillId))
 			return false;
 
-		return state->cooldownRemainingMs == 0.f && state->state == SkillState::State::Wait;
+		if (!(state->cooldownRemainingMs == 0.f && state->state == SkillState::State::Wait))
+			return false;
+
+		for (const SkillCondition* condition : state->skill->GetConditions())
+		{
+			if (!core::IsValid(condition))
+				continue;
+			if (!CheckCondition(*condition, *state))
+				return false;
+		}
+		return true;
 	}
 	SH_USER_API void SkillManager::ApplyCooldown(SkillId id)
 	{
@@ -85,6 +98,39 @@ namespace sh::game
 			return nullptr;
 		return &skillStates[it->second];
 	}
+	void SkillManager::UpdateConditionState(uint64_t tick)
+	{
+		if (!core::IsValid(player))
+			return;
+
+		PlayerMovement* const movement = player->GetMovement();
+		if (!core::IsValid(movement))
+			return;
+
+		if (movement->IsLandedThisTick())
+			lastLandedTick = tick;
+		if (movement->IsJumpTriggered())
+			lastJumpTick = tick;
+	}
+	auto SkillManager::CheckCondition(const SkillCondition& condition, const SkillState& state) const -> bool
+	{
+		switch (condition.GetConditionType())
+		{
+		case SkillCondition::Type::None:
+			return true;
+		case SkillCondition::Type::LandedAfterLastUse:
+			return lastLandedTick > state.lastUsedTick;
+		case SkillCondition::Type::JumpAfterLastUse:
+			return lastJumpTick > state.lastUsedTick;
+		case SkillCondition::Type::PreviousSkillIn:
+		{
+			const auto& requiredSkills = condition.GetRequiredSkills();
+			return std::find(requiredSkills.begin(), requiredSkills.end(), lastUsedSkillId) != requiredSkills.end();
+		}
+		default:
+			return true;
+		}
+	}
 	void SkillManager::UpdateState()
 	{
 		const float dt = world.FIXED_TIME * 1000.f;
@@ -107,6 +153,7 @@ namespace sh::game
 						player->GetMovement()->LockInput();
 
 					auto prevState = state.state;
+					const bool bStartEntered = state.state == SkillState::State::Start && state.counterMs == 0.f;
 					const uint32_t skillTime = skillPtr->GetStartupMs() + skillPtr->GetActiveMs() + skillPtr->GetRecoveryMs();
 					state.counterMs += dt;
 					if (state.counterMs > skillTime)
@@ -123,8 +170,20 @@ namespace sh::game
 					else if (state.counterMs > skillPtr->GetStartupMs())
 						state.state = SkillState::State::Active;
 
+					if (bStartEntered)
+					{
+						ApplyMovementSkill(skillPtr, SkillState::State::Start);
+						if (!state.skill->IsAllowContinousInput())
+						{
+							if (pressedSkillId == state.skillId)
+								pressedSkillId = 0;
+						}
+					}
+
 					if (state.state != prevState)
 					{
+						ApplyMovementSkill(skillPtr, state.state);
+
 						if (state.state == SkillState::State::Active)
 						{
 							const auto& pos = gameObject.transform->GetWorldPosition();
@@ -155,6 +214,56 @@ namespace sh::game
 					skillStates.pop_back();
 				}
 			}
+		}
+	}
+	void SkillManager::ApplyMovementSkill(Skill* skill, SkillState::State phase)
+	{
+		MovementSkill* const movementSkill = core::reflection::Cast<MovementSkill>(skill);
+		if (movementSkill == nullptr)
+			return;
+
+		PlayerMovement* const movement = player->GetMovement();
+		if (!core::IsValid(movement))
+			return;
+
+		if (movementSkill->IsRequireGround() && !movement->IsGround())
+			return;
+
+		const MovementSkill::ApplyPhase applyPhase = movementSkill->GetApplyPhase();
+		const SkillState::State targetPhase =
+			applyPhase == MovementSkill::ApplyPhase::Start ? SkillState::State::Start :
+			(applyPhase == MovementSkill::ApplyPhase::Active ? SkillState::State::Active : SkillState::State::Recovery);
+		if (targetPhase != phase)
+			return;
+
+		float moveX = movementSkill->GetMoveX();
+		float moveY = movementSkill->GetMoveY();
+		if (movementSkill->IsUseFacing() && !movement->IsRight())
+			moveX = -moveX;
+
+		//const float maxDistance = movementSkill->GetMaxDistance();
+		//if (maxDistance > 0.f)
+		//{
+		//	const float lenSq = moveX * moveX + moveY * moveY;
+		//	if (lenSq > maxDistance * maxDistance)
+		//	{
+		//		const float len = std::sqrt(lenSq);
+		//		if (len > 0.f)
+		//		{
+		//			const float ratio = maxDistance / len;
+		//			moveX *= ratio;
+		//			moveY *= ratio;
+		//		}
+		//	}
+		//}
+
+		if (movementSkill->GetMoveType() == MovementSkill::MoveType::Impulse)
+		{
+			movement->ApplySkillImpulse(moveX, moveY);
+		}
+		else
+		{
+			movement->ApplySkillTeleport(moveX, moveY);
 		}
 	}
 }//namespace

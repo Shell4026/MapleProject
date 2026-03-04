@@ -30,16 +30,23 @@ namespace sh::game
 
 #if SH_SERVER
 		SH_USER_API void ProcessInput(const PlayerInputPacket& packet);
+		SH_USER_API auto EstimateApplyServerTick(uint64_t clientTick) const -> uint64_t;
 #endif
 
 		SH_USER_API void LockInput() { state.bLock = true; }
 		SH_USER_API void UnlockInput() { state.bLock = false; }
+		SH_USER_API void SetFacing(bool bRight) { this->bRight = bRight; }
+		SH_USER_API void ApplySkillImpulse(float vx, float vy);
+		SH_USER_API void ApplySkillTeleport(float dx, float dy);
 
 		SH_USER_API auto GetPlayer() const -> Player* { return player; }
 		SH_USER_API auto IsInputLock() const -> bool { return state.bLock; }
 		SH_USER_API auto IsRight() const -> bool { return bRight; }
+		SH_USER_API auto IsJump() const -> bool { return state.bJump; }
 		SH_USER_API auto IsProne() const -> bool { return state.bProne; }
 		SH_USER_API auto IsUp() const -> bool { return state.bUp; }
+		SH_USER_API auto IsJumpTriggered() const -> bool { return bJumpTriggeredThisTick; }
+		SH_USER_API auto IsLandedThisTick() const -> bool { return bLandedThisTick; }
 	private:
 #if SH_SERVER
 #else
@@ -61,6 +68,15 @@ namespace sh::game
 			bool bProne = false;
 			bool bLock = false;
 		} state;
+
+		struct SkillMoveHistory
+		{
+			Vec2 impulse{ 0.f, 0.f };
+			Vec2 teleportDelta{ 0.f, 0.f };
+			bool bImpulse = false;
+			bool bTeleport = false;
+			bool bSetExpectedGround = false;
+		} skillMoveThisTick;
 #if SH_SERVER
 		uint32_t sendTick = 0;
 		struct RecvState
@@ -87,6 +103,7 @@ namespace sh::game
 			Vec2 pos;
 			Vec2 vel;
 			State state;
+			SkillMoveHistory skillMove;
 		};
 		std::deque<StateHistory> history;
 
@@ -94,5 +111,7 @@ namespace sh::game
 #endif
 		bool bPendingSend = false;
 		bool bRight = false;
+		bool bJumpTriggeredThisTick = false;
+		bool bLandedThisTick = false;
 	};
 }//namespace

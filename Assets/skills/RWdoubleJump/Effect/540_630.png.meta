@@ -1,0 +1,19 @@
+{
+    "metaHash": 17872916436692125496,
+    "name": "540_630",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 1
+        },
+        "name": "540_630",
+        "type": "Texture",
+        "uuid": "7c76dbc33c6bd6d3ded4aed537d089a0",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "7c76dbc33c6bd6d3ded4aed537d089a0",
+    "version": 1
+}

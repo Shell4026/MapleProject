@@ -1,0 +1,19 @@
+{
+    "metaHash": 3555619719066804062,
+    "name": "270_360",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 1
+        },
+        "name": "270_360",
+        "type": "Texture",
+        "uuid": "543053931d1cb116c6b39b488e64a208",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "543053931d1cb116c6b39b488e64a208",
+    "version": 1
+}

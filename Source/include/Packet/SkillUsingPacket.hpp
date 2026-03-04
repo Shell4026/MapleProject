@@ -55,6 +55,6 @@ public:
 		uint64_t tick = 0;
 		uint32_t skillId;
 		SkillInputAction action = SkillInputAction::Pressed;
-		int dir;
+		int dir = 0;
 	};
 }//namespace

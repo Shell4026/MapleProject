@@ -1,0 +1,19 @@
+{
+    "metaHash": 0,
+    "name": "90_180",
+    "obj": {
+        "Texture": {
+            "aniso": 0,
+            "bGenerateMipmap": false,
+            "bSRGB": true,
+            "filtering": 0
+        },
+        "name": "90_180",
+        "type": "Texture",
+        "uuid": "f73d1aed301f8fc996c8235613f00331",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "f73d1aed301f8fc996c8235613f00331",
+    "version": 1
+}

@@ -1,6 +1,7 @@
 ﻿#include "Skill/SkillManager.h"
 #include "World/MapleServer.h"
 #include "Player/Player.h"
+#include "Player/PlayerMovement.h"
 
 // 서버측
 namespace sh::game
@@ -13,6 +14,8 @@ namespace sh::game
 	}
 	SH_USER_API void SkillManager::TickFixed(uint64_t tick)
 	{
+		UpdateConditionState(tick);
+
 		while (!pendingSkills.empty() && pendingSkills.front().applyServerTick <= tick)
 		{
 			const PendingSkill pending = pendingSkills.front();
@@ -20,6 +23,8 @@ namespace sh::game
 
 			if (pending.action == SkillInputAction::Pressed)
 			{
+				if (pending.dir != 0 && player != nullptr && player->GetMovement() != nullptr)
+					player->GetMovement()->SetFacing(pending.dir > 0);
 				pressedSkillId = pending.skillId;
 			}
 			else if (pending.action == SkillInputAction::Released)
@@ -54,7 +59,11 @@ namespace sh::game
 		pending.seq = packet.seq;
 		pending.skillId = packet.skillId;
 		pending.action = packet.action;
-		pending.applyServerTick = packet.tick + offset;
+		pending.dir = packet.dir;
+		if (player != nullptr && player->GetMovement() != nullptr)
+			pending.applyServerTick = player->GetMovement()->EstimateApplyServerTick(packet.tick);
+		else
+			pending.applyServerTick = packet.tick + offset;
 		pendingSkills.push_back(pending);
 	}
 	void SkillManager::UseSkill(SkillId id, uint64_t tick)
@@ -67,8 +76,10 @@ namespace sh::game
 			return;
 
 		state->state = SkillState::State::Start;
+		state->lastUsedTick = tick;
 		ApplyCooldown(id);
 		lastState = state;
+		lastUsedSkillId = id;
 		SH_INFO_FORMAT("Use skill: {}", id);
 	}
 }//namespace

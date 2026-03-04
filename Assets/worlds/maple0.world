@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                -0.4044571816921234,
-                -0.004289962351322174,
-                0.0005494956276379526
+                1.2037016153335571,
+                4.795065879821777,
+                0.0007557446951977909
             ],
             "projection": 1,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 5.628101348876953
+            "distance": 14.597850799560547
         },
         "SObject": null,
         "fullType": "sh::game::EditorCamera",
@@ -26,9 +26,9 @@
         "version": 1
     },
     "camPos": [
-        -0.40591466426849365,
-        -0.004043382592499256,
-        5.628650188446045
+        1.1999212503433228,
+        4.795705318450928,
+        14.598605155944824
     ],
     "editorObjs": [
         {
@@ -385,7 +385,7 @@
                         "camera": "1ef9d26a1fa81f236f4acb7b5fc3d096",
                         "foothold": "91446d37ccd450840f5ba0ad3caa242c",
                         "itemPrefab": "ee1bee2efec5a690531dd2812a6192b7",
-                        "playerPrefab": "4fc3a2c15a9d28d7ded5fbb2c3c0a898",
+                        "playerPrefab": "3627e56ca0c4ec9642b233813be981aa",
                         "playerSpawnPoint": "c0638a2339fcd1466f2be2732592b2d0"
                     },
                     "SObject": null,
@@ -739,55 +739,6 @@
             "name": "Portal",
             "type": "GameObject",
             "uuid": "7b9b7f2899cfbaf084e071d8c17f0f49",
-            "version": 1
-        },
-        {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": null,
-                    "Transform": {
-                        "quat": [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "vPosition": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vRotation": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    "fullType": "sh::game::Transform",
-                    "name": "Unknown",
-                    "type": "Transform",
-                    "uuid": "4e4ef51da16398c357867dbcde2628d5",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": false,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "EmptyObject",
-            "type": "GameObject",
-            "uuid": "9d4c2c8a1fd30efa8fd280b0957bb923",
             "version": 1
         }
     ],

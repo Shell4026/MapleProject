@@ -11,6 +11,25 @@ namespace sh::game
 		FootholdMovement(owner)
 	{
 	}
+	SH_USER_API void PlayerMovement::ApplySkillImpulse(float vx, float vy)
+	{
+		SetVelocity(vx, vy);
+		skillMoveThisTick.bImpulse = true;
+		skillMoveThisTick.impulse = { vx, vy };
+	}
+	SH_USER_API void PlayerMovement::ApplySkillTeleport(float dx, float dy)
+	{
+		const auto& pos = gameObject.transform->GetWorldPosition();
+		gameObject.transform->SetWorldPosition(pos.x + dx, pos.y + dy, pos.z);
+		gameObject.transform->UpdateMatrix();
+		SetVelocity(0.f, 0.f);
+		SetExpectedGround();
+
+		skillMoveThisTick.bTeleport = true;
+		skillMoveThisTick.teleportDelta.x += dx;
+		skillMoveThisTick.teleportDelta.y += dy;
+		skillMoveThisTick.bSetExpectedGround = true;
+	}
 	SH_USER_API void PlayerMovement::Start()
 	{
 		SetFoothold(*player->GetCurrentWorld()->GetFoothold());

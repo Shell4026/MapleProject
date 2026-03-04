@@ -1,0 +1,18 @@
+{
+    "Projectile": {
+        "damage": 0,
+        "lifetimeMs": 810,
+        "prefab": "0522263556fac0a62aeb95fb22255cc3",
+        "velocity": [
+            0.0,
+            0.0
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::Projectile",
+    "name": "EffectProjectile.srpo",
+    "type": "Projectile",
+    "uuid": "843a883917e5759dfe5a0b8ccc50fc3e",
+    "version": 1
+}

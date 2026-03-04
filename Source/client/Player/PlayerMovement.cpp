@@ -43,15 +43,26 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::TickFixed(uint64_t tick)
 	{
-		if (!player->IsLocal())
-			return;
+		bJumpTriggeredThisTick = false;
+		bLandedThisTick = false;
 
-		// 예측
+		if (!player->IsLocal())
+		{
+			skillMoveThisTick = {};
+			return;
+		}
+
 		if (state.bLock)
 		{
-			vel.x = 0.f;
+			state.xMove = 0;
+			state.bJump = false;
+			state.bUp = false;
+			state.bProne = false;
 		}
-		else if (!state.bProne)
+
+		const bool bWasGround = IsGround();
+		// 예측
+		if (!state.bProne)
 		{
 			if (state.xMove > 0)
 			{
@@ -72,6 +83,7 @@ namespace sh::game
 			{
 				vel.y = GetJumpSpeed();
 				SetIsGround(false);
+				bJumpTriggeredThisTick = true;
 			}
 		}
 		else
@@ -80,16 +92,21 @@ namespace sh::game
 		}
 
 		StepMovement();
+		if (!bWasGround && IsGround())
+			bLandedThisTick = true;
 
 		StateHistory stateHistory{};
 		stateHistory.tick = tick;
 		stateHistory.pos = { gameObject.transform->GetWorldPosition().x, gameObject.transform->GetWorldPosition().y };
 		stateHistory.vel = vel;
 		stateHistory.state = state;
+		stateHistory.skillMove = skillMoveThisTick;
 
 		history.push_back(stateHistory);
 		while (history.size() > 180)
 			history.pop_front();
+
+		skillMoveThisTick = {};
 	}
 	SH_USER_API void PlayerMovement::TickUpdate(uint64_t tick)
 	{
@@ -176,7 +193,7 @@ namespace sh::game
 		const float dx = (pastHistory.pos.x - packet.px);
 		const float dy = (pastHistory.pos.y - packet.py);
 		const float difSqr = dx * dx + dy * dy;
-		if (difSqr < 0.05f * 0.05f) // 5픽셀 오차까진 허용
+		if (difSqr < 0.03f * 0.03f) // 3픽셀 오차까진 허용
 			return;
 
 		// 즉시 이동
@@ -195,17 +212,39 @@ namespace sh::game
 
 			SetExpectedGround();
 		}
+		const uint64_t startTick = static_cast<uint64_t>(std::distance(history.begin(), it));
 		// 리플레이
-		for (uint64_t t = std::distance(history.begin(), it); t < history.size(); ++t)
+		for (uint64_t t = startTick; t < history.size(); ++t)
 		{
 			StateHistory& lastHistory = history[t];
 
 			state = lastHistory.state;
+			if (lastHistory.skillMove.bTeleport)
+			{
+				const auto& curPos = gameObject.transform->GetWorldPosition();
+				gameObject.transform->SetWorldPosition(
+					curPos.x + lastHistory.skillMove.teleportDelta.x,
+					curPos.y + lastHistory.skillMove.teleportDelta.y,
+					curPos.z
+				);
+				gameObject.transform->UpdateMatrix();
+				vel.x = 0.f;
+				vel.y = 0.f;
+				if (lastHistory.skillMove.bSetExpectedGround)
+					SetExpectedGround();
+			}
+			if (lastHistory.skillMove.bImpulse)
+				SetVelocity(lastHistory.skillMove.impulse.x, lastHistory.skillMove.impulse.y);
+
 			if (state.bLock)
 			{
-				vel.x = 0.f;
+				state.xMove = 0;
+				state.bJump = false;
+				state.bUp = false;
+				state.bProne = false;
 			}
-			else if(!state.bProne)
+			
+			if(!state.bProne)
 			{
 				if (lastHistory.state.xMove > 0)
 				{

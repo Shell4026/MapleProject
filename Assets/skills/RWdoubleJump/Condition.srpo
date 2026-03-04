@@ -1,0 +1,13 @@
+{
+    "SObject": null,
+    "ScriptableObject": null,
+    "SkillCondition": {
+        "requiredSkills": [],
+        "type": 1
+    },
+    "fullType": "sh::game::SkillCondition",
+    "name": "Condition.srpo",
+    "type": "SkillCondition",
+    "uuid": "615d01609fc638d5b51f794ffba22892",
+    "version": 1
+}

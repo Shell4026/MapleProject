@@ -1,0 +1,19 @@
+{
+    "metaHash": 10015454622082771144,
+    "name": "630_720",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 1
+        },
+        "name": "630_720",
+        "type": "Texture",
+        "uuid": "8d4d3910f8817d8a0cf46c9d5db6d9b7",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "8d4d3910f8817d8a0cf46c9d5db6d9b7",
+    "version": 1
+}

@@ -23,9 +23,9 @@ namespace sh::game
 		if (rigidbody == nullptr)
 			SH_ERROR("rigidbody is nullptr!");
 
-		tickController.RegisterTickable(movement);
 		tickController.RegisterTickable(skillManager);
-
+		tickController.RegisterTickable(movement);
+		
 		for (Skill* skill : job->GetSkills())
 		{
 			if (skill == nullptr)

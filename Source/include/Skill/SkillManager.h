@@ -2,6 +2,7 @@
 #include "Export.h"
 #include "Player/IPlayerTickable.h"
 #include "Skill.h"
+#include "SkillCondition.h"
 #include "Packet/SkillUsingPacket.hpp"
 
 #include "Core/SContainer.hpp"
@@ -27,6 +28,7 @@ namespace sh::game
 			uint32_t skillId = 0;
 			float counterMs = 0.f;
 			float cooldownRemainingMs = 0.f;
+			uint64_t lastUsedTick = 0;
 			enum class State
 			{
 				Wait,
@@ -60,7 +62,10 @@ namespace sh::game
 	private:
 		auto GetSkillState(SkillId id) -> SkillState*;
 		void UseSkill(SkillId id, uint64_t tick);
+		void UpdateConditionState(uint64_t tick);
+		auto CheckCondition(const SkillCondition& condition, const SkillState& state) const -> bool;
 		void UpdateState();
+		void ApplyMovementSkill(Skill* skill, SkillState::State phase);
 #if SH_SERVER
 #else
 		void SendPacket(SkillId skillId, SkillInputAction action, uint64_t tick);
@@ -73,12 +78,16 @@ namespace sh::game
 		std::vector<SkillState> skillStates;
 
 		SkillState* lastState = nullptr;
+		uint64_t lastLandedTick = 0;
+		uint64_t lastJumpTick = 0;
+		SkillId lastUsedSkillId = 0;
 #if SH_SERVER
 		struct PendingSkill
 		{
 			uint32_t seq = 0;
 			SkillId skillId = 0;
 			SkillInputAction action = SkillInputAction::Pressed;
+			int dir = 0;
 			uint64_t applyServerTick = 0;
 		};
 		uint32_t lastSeq = 0;

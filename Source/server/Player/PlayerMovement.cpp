@@ -16,19 +16,29 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::TickFixed(uint64_t tick)
 	{
+		bJumpTriggeredThisTick = false;
+		bLandedThisTick = false;
+		const bool bLockPrev = state.bLock;
+
 		while (!recvStates.empty() && recvStates.front().applyServerTick <= tick)
 		{
 			applyServerTick = recvStates.front().applyServerTick;
 			clientTick = recvStates.front().clientTick;
 			state = recvStates.front().state;
+			state.bLock = bLockPrev;
 			recvStates.pop_front();
 		}
 
 		if (state.bLock)
 		{
-			vel.x = 0.f;
+			state.xMove = 0;
+			state.bJump = false;
+			state.bUp = false;
+			state.bProne = false;
 		}
-		else if (!state.bProne)
+
+		const bool bWasGround = IsGround();
+		if (!state.bProne)
 		{
 			if (state.xMove > 0)
 			{
@@ -49,12 +59,17 @@ namespace sh::game
 			{
 				vel.y = GetJumpSpeed();
 				SetIsGround(false);
+				bJumpTriggeredThisTick = true;
 			}
 		}
 		else
 			vel.x = 0.f;
 
 		StepMovement();
+		if (!bWasGround && IsGround())
+			bLandedThisTick = true;
+
+		skillMoveThisTick = {};
 	}
 	SH_USER_API void PlayerMovement::TickUpdate(uint64_t tick)
 	{
@@ -121,5 +136,11 @@ namespace sh::game
 		recvStates.push_back(recv);
 
 		bPendingSend = true;
+	}
+	SH_USER_API auto PlayerMovement::EstimateApplyServerTick(uint64_t clientTick) const -> uint64_t
+	{
+		if (!bOffsetInit)
+			return clientTick + 5;
+		return clientTick + offset;
 	}
 }//namespace

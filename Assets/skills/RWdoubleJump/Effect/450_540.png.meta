@@ -1,0 +1,19 @@
+{
+    "metaHash": 13555303358493539029,
+    "name": "450_540",
+    "obj": {
+        "Texture": {
+            "aniso": 1,
+            "bGenerateMipmap": true,
+            "bSRGB": true,
+            "filtering": 1
+        },
+        "name": "450_540",
+        "type": "Texture",
+        "uuid": "c8671d37868b7b3d4e3832ff6598d191",
+        "version": 1
+    },
+    "typeHash": 17680227326398108413,
+    "uuid": "c8671d37868b7b3d4e3832ff6598d191",
+    "version": 1
+}
