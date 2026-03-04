@@ -5,11 +5,11 @@
 #include <limits>
 namespace sh::editor
 {
-	SH_EDIT_API void AnimatorInspector::RenderUI(void* obj, int idx)
+	SH_EDIT_API void AnimatorInspector::RenderUI(const std::vector<core::SObject*>& objs, int idx)
 	{
-		CustomInspector::RenderUI(obj, idx);
+		CustomInspector::RenderUI(objs, idx);
 
-		game::Animator& animator = *reinterpret_cast<game::Animator*>(obj);
+		game::Animator& animator = *reinterpret_cast<game::Animator*>(objs.back());
 		if (animator.IsPendingKill())
 			return;
 

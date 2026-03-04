@@ -13,11 +13,11 @@ namespace sh::editor
 	{
 		DestroyAdjustObjects();
 	}
-	SH_EDIT_API void FootholdInspector::RenderUI(void* obj, int idx)
+	SH_EDIT_API void FootholdInspector::RenderUI(const std::vector<core::SObject*>& objs, int idx)
 	{
-		CustomInspector::RenderUI(obj, idx);
+		CustomInspector::RenderUI(objs, idx);
 
-		game::Foothold& foothold = *reinterpret_cast<game::Foothold*>(obj);
+		game::Foothold& foothold = *reinterpret_cast<game::Foothold*>(objs.back());
 		if (foothold.IsPendingKill())
 			return;
 		ImGui::SetCurrentContext(foothold.world.GetUiContext().GetContext());

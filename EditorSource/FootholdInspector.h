@@ -18,7 +18,7 @@ namespace sh::editor
 		SH_EDIT_API FootholdInspector();
 		SH_EDIT_API ~FootholdInspector();
 
-		SH_EDIT_API void RenderUI(void* obj, int idx) override;
+		SH_EDIT_API void RenderUI(const std::vector<core::SObject*>& objs, int idx) override;
 		SH_EDIT_API void AdjustUpdate(game::Foothold& foothold);
 	private:
 		void CreateAdjustObjects(game::Foothold& foothold);

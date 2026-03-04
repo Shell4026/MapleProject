@@ -9,6 +9,6 @@ namespace sh::editor
 	{
 		INSPECTOR(AnimatorInspector, game::Animator)
 	public:
-		SH_EDIT_API void RenderUI(void* obj, int idx) override;
+		SH_EDIT_API void RenderUI(const std::vector<core::SObject*>& objs, int idx) override;
 	};
 }//namespace
