@@ -1,6 +1,7 @@
 ﻿#include "Player/PlayerMovement.h"
 #include "World/MapleWorld.h"
 #include "World/MapleClient.h"
+#include "Skill/SkillManager.h"
 
 #include "Game/World.h"
 #include "Game/Input.h"
@@ -279,10 +280,10 @@ namespace sh::game
 		vel.y = packet.vy;
 		state.bUp = packet.bUp;
 		state.bProne = packet.bProne;
-		if (vel.x > 0.01f)
-			bRight = true;
-		else if (vel.x < -0.01f)
-			bRight = false;
+		bRight = packet.bRight;
+
+		if (SkillManager* const skillManager = player->GetSkillManager(); skillManager != nullptr)
+			skillManager->SyncRemoteState(packet.skillId, packet.bSkillUsing);
 
 		SetIsGround(packet.bGround);
 	}

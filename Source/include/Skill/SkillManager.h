@@ -54,10 +54,13 @@ namespace sh::game
 		SH_USER_API auto GetSkill(SkillId id) const -> Skill*;
 		SH_USER_API auto GetSkillState(SkillId id) const -> const SkillState*;
 		SH_USER_API auto GetLastSkillState() const -> SkillState* { return lastState; }
+		SH_USER_API auto GetUsingSkillId() const -> SkillId { return lastState != nullptr ? lastState->skillId : 0; }
+		SH_USER_API auto IsUsingSkill() const -> bool { return lastState != nullptr; }
 #if SH_SERVER
 		SH_USER_API void ProcessPacket(const SkillUsingPacket& packet);
 #else
 		SH_USER_API void SetKeyBinding(Input::KeyCode keycode, SkillId skill);
+		SH_USER_API void SyncRemoteState(SkillId skillId, bool bUsing);
 #endif
 	private:
 		auto GetSkillState(SkillId id) -> SkillState*;

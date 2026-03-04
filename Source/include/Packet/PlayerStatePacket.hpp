@@ -33,6 +33,8 @@ namespace sh::game
 			json["lock"] = bLock;
 			json["right"] = bRight;
 			json["bUp"] = bUp;
+			json["skid"] = skillId;
+			json["skusing"] = bSkillUsing;
 			return json;
 		}
 		void Deserialize(const core::Json& json) override
@@ -64,6 +66,10 @@ namespace sh::game
 				bRight = json["right"];
 			if (json.contains("bUp"))
 				bUp = json["bUp"];
+			if (json.contains("skid"))
+				skillId = json["skid"];
+			if (json.contains("skusing"))
+				bSkillUsing = json["skusing"];
 		}
 	public:
 		float px = 0.f, py = 0.f;
@@ -80,5 +86,7 @@ namespace sh::game
 		bool bLock = false;
 		bool bRight = false;
 		bool bUp = false;
+		uint32_t skillId = 0;
+		bool bSkillUsing = false;
 	};
 }//namespace

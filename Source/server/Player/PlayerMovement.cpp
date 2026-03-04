@@ -1,6 +1,7 @@
 ﻿#include "Player/PlayerMovement.h"
 #include "World/MapleWorld.h"
 #include "Packet/PlayerInputPacket.hpp"
+#include "Skill/SkillManager.h"
 
 #include "Game/World.h"
 namespace sh::game
@@ -96,6 +97,11 @@ namespace sh::game
 			packet.bUp = state.bUp;
 			packet.bProne = state.bProne;
 			packet.bRight = IsRight();
+			if (const SkillManager* const skillManager = player != nullptr ? player->GetSkillManager() : nullptr; skillManager != nullptr)
+			{
+				packet.skillId = skillManager->GetUsingSkillId();
+				packet.bSkillUsing = skillManager->IsUsingSkill();
+			}
 			if (MapleWorld* const mapleWorld = player->GetCurrentWorld(); mapleWorld != nullptr)
 				mapleWorld->BroadCastToWorld(packet);
 

@@ -55,17 +55,51 @@ namespace sh::game
 	}
 	SH_USER_API void SkillManager::TickFixed(uint64_t tick)
 	{
-		if (!player->IsLocal())
-			return;
+		if (player->IsLocal())
+		{
+			UpdateConditionState(tick);
+			UseSkill(pressedSkillId, tick);
+		}
 
-		UpdateConditionState(tick);
-
-		UseSkill(pressedSkillId, tick);
 		UpdateState();
 	}
 	SH_USER_API void SkillManager::SetKeyBinding(Input::KeyCode keycode, SkillId skill)
 	{
 		keybindings[keycode] = skill;
+	}
+	SH_USER_API void SkillManager::SyncRemoteState(SkillId skillId, bool bUsing)
+	{
+		if (player == nullptr || player->IsLocal())
+			return;
+
+		if (!bUsing || skillId == 0)
+		{
+			if (lastState != nullptr)
+			{
+				lastState->state = SkillState::State::Wait;
+				lastState->counterMs = 0.f;
+				lastState = nullptr;
+			}
+			return;
+		}
+
+		SkillState* const state = GetSkillState(skillId);
+		if (state == nullptr)
+			return;
+
+		if (lastState == state && state->state != SkillState::State::Wait)
+			return;
+
+		if (lastState != nullptr)
+		{
+			lastState->state = SkillState::State::Wait;
+			lastState->counterMs = 0.f;
+		}
+
+		state->state = SkillState::State::Start;
+		state->counterMs = 0.f;
+		lastState = state;
+		lastUsedSkillId = skillId;
 	}
 
 	void SkillManager::UseSkill(SkillId id, uint64_t tick)
