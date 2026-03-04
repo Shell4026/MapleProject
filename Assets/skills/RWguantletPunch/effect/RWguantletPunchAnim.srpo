@@ -1,0 +1,102 @@
+{
+    "AnimationData": {
+        "bLoop": false,
+        "frames": [
+            {
+                "delayMs": 210,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "e9e193fac582fa97ab9a13bf5e1f9a7b"
+            },
+            {
+                "delayMs": 150,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "ea9f6f9d15ad125bf5ee5c23031bc13d"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "1786a1ed5fa2bac470b4e0539137abe0"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "c469fe43e349b05baa96b841daf8b0d0"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "0bd52c1d2685d246e898ce0b83f3c828"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "6f670db683bad8784592e2f0304095bc"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "4401fc2799035f39088f895032e0669e"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "299022ddb09f5a4f3d4f3c2c97ce0783"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "4e26067f38d08e20d036647c34269d93"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "6375fc359e7566c9ecb7cd2340a2047c"
+            },
+            {
+                "delayMs": 90,
+                "pos": [
+                    -1.0099999904632568,
+                    0.3499999940395355
+                ],
+                "texture": "67ddee9ae8f3edc619f11b14098ac4b0"
+            }
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::AnimationData",
+    "name": "RWguantletPunchAnim",
+    "type": "AnimationData",
+    "uuid": "af69365503af0a54366b8cb9ae7adff3",
+    "version": 1
+}

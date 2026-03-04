@@ -1,0 +1,18 @@
+{
+    "Projectile": {
+        "damage": 0,
+        "lifetimeMs": 1170,
+        "prefab": "84e1b7004ecad735b4ae390953e348eb",
+        "velocity": [
+            0.0,
+            0.0
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::Projectile",
+    "name": "RWguantletPunchEffect.srpo",
+    "type": "Projectile",
+    "uuid": "9f44d5228b2f0d041eedb8853789d435",
+    "version": 1
+}

@@ -1,0 +1,226 @@
+{
+    "Prefab": {
+        "07985c37e5b80099f0faa4b204ad3d82": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "65747c34373f2fba8ef86a2ca3dfbe49",
+                        "quat": [
+                            0.7071068286895752,
+                            0.0,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "vPosition": [
+                            -1.0099999904632568,
+                            0.3499999940395355,
+                            -0.0002769018174149096
+                        ],
+                        "vRotation": [
+                            90.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            5.570000171661377,
+                            1.0,
+                            2.759999990463257
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "6ff6d4c8750e9489088671785aa564e0",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "0ee1338431fdcadece3a5982569a448e",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f21",
+                        "renderTag": 1
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "6af2daa164d10312cde7a884156cfc98",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Quad",
+            "type": "GameObject",
+            "uuid": "07985c37e5b80099f0faa4b204ad3d82",
+            "version": 1
+        },
+        "82434bc9c478ce4a59c09d971dbadcd1": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.30000001192092896
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "65747c34373f2fba8ef86a2ca3dfbe49",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "ProjectileInstance": null,
+                    "SObject": null,
+                    "fullType": "sh::game::ProjectileInstance",
+                    "name": "user/ProjectileInstance",
+                    "type": "ProjectileInstance",
+                    "uuid": "a61815a449ad02de360edaad6e176857",
+                    "version": 1
+                },
+                {
+                    "Animator": {
+                        "anims": [
+                            {
+                                "anim": "af69365503af0a54366b8cb9ae7adff3",
+                                "condition": 0
+                            }
+                        ],
+                        "renderer": "6af2daa164d10312cde7a884156cfc98"
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::Animator",
+                    "name": "user/Animator",
+                    "type": "Animator",
+                    "uuid": "4f7a5914c451ca2db6d550356f2d2e2e",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Effect",
+            "type": "GameObject",
+            "uuid": "82434bc9c478ce4a59c09d971dbadcd1",
+            "version": 1
+        },
+        "d8dd7e6c5c0c58d68f7c8962e96b3f20": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "65747c34373f2fba8ef86a2ca3dfbe49",
+                        "quat": [
+                            0.7071068286895752,
+                            0.0,
+                            0.0,
+                            0.7071068286895752
+                        ],
+                        "vPosition": [
+                            -0.9699999690055847,
+                            0.3400000035762787,
+                            0.09973389655351639
+                        ],
+                        "vRotation": [
+                            90.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            5.570000171661377,
+                            1.0,
+                            2.759999990463257
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "4d0c47ed0ee3b3d26f0e521308bb16b0",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "dd0e758b47bd4c907f33164a4eba4588",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f21",
+                        "renderTag": 1
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "1358ccb2935a54de7bd82c26b9b31cd5",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": true,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "EditorView",
+            "type": "GameObject",
+            "uuid": "d8dd7e6c5c0c58d68f7c8962e96b3f20",
+            "version": 1
+        }
+    },
+    "name": "Effect",
+    "rootObj": "82434bc9c478ce4a59c09d971dbadcd1",
+    "type": "Prefab",
+    "uuid": "84e1b7004ecad735b4ae390953e348eb",
+    "version": 1
+}

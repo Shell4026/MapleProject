@@ -11,8 +11,6 @@ namespace sh::game
 
 	SH_USER_API void ProjectileInstance::Awake()
 	{
-		if (rigidbody == nullptr)
-			SH_ERROR("rigidbody is nullptr!");
 	}
 
 	SH_USER_API void ProjectileInstance::Update()
@@ -31,8 +29,11 @@ namespace sh::game
 		this->projectile = &projectile;
 		if (core::IsValid(owner))
 			this->owner = owner;
-		rigidbody->SetLinearVelocity({ projectile.GetVelocity().x, projectile.GetVelocity().y, 0.f });
-		rigidbody->ResetPhysicsTransform();
+		if (rigidbody != nullptr)
+		{
+			rigidbody->SetLinearVelocity({ projectile.GetVelocity().x, projectile.GetVelocity().y, 0.f });
+			rigidbody->ResetPhysicsTransform();
+		}
 	}
 	SH_USER_API auto ProjectileInstance::GetVelocity() const -> Vec2
 	{

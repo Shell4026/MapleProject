@@ -15,11 +15,21 @@ namespace sh::game
 	{
 		while (!pendingSkills.empty() && pendingSkills.front().applyServerTick <= tick)
 		{
-			currentSkill = pendingSkills.front();
+			const PendingSkill pending = pendingSkills.front();
 			pendingSkills.pop_front();
+
+			if (pending.action == SkillInputAction::Pressed)
+			{
+				pressedSkillId = pending.skillId;
+			}
+			else if (pending.action == SkillInputAction::Released)
+			{
+				if (pressedSkillId == pending.skillId)
+					pressedSkillId = 0;
+			}
 		}
 
-		UseSkill(currentSkill.skillId, tick);
+		UseSkill(pressedSkillId, tick);
 		UpdateState();
 	}
 	SH_USER_API void SkillManager::ProcessPacket(const SkillUsingPacket& packet)
@@ -43,6 +53,7 @@ namespace sh::game
 		PendingSkill pending{};
 		pending.seq = packet.seq;
 		pending.skillId = packet.skillId;
+		pending.action = packet.action;
 		pending.applyServerTick = packet.tick + offset;
 		pendingSkills.push_back(pending);
 	}

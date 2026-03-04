@@ -1,0 +1,25 @@
+{
+    "SObject": null,
+    "ScriptableObject": null,
+    "Skill": {
+        "activeMs": 510,
+        "animState": 37001000,
+        "bPreventAir": false,
+        "bPreventMove": true,
+        "cooldownMs": 0,
+        "effects": [
+            "9f44d5228b2f0d041eedb8853789d435"
+        ],
+        "id": 37001000,
+        "projectiles": [
+            "a90909d0b12437a5132848c826ae5471"
+        ],
+        "recoveryMs": 0,
+        "startupMs": 210
+    },
+    "fullType": "sh::game::Skill",
+    "name": "RWguantletPunch",
+    "type": "Skill",
+    "uuid": "09a732c9f24bec23625bc9133cb033dc",
+    "version": 1
+}

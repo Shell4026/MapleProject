@@ -39,6 +39,10 @@ namespace sh::game
 		const SkillState* const state = GetSkillState(id);
 		if (state == nullptr)
 			return false;
+
+		if (lastState != nullptr && !state->skill->IsAllowSkill(lastState->skillId))
+			return false;
+
 		return state->cooldownRemainingMs == 0.f && state->state == SkillState::State::Wait;
 	}
 	SH_USER_API void SkillManager::ApplyCooldown(SkillId id)

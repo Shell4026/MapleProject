@@ -1,6 +1,6 @@
 {
-    "metaHash": 9507461054315864591,
-    "name": "bsc.5",
+    "metaHash": 10802573326739832562,
+    "name": "360_450",
     "obj": {
         "Texture": {
             "aniso": 0,
@@ -8,12 +8,12 @@
             "bSRGB": true,
             "filtering": 0
         },
-        "name": "bsc.5",
+        "name": "360_450",
         "type": "Texture",
-        "uuid": "6a5f634cdd06b45e148e18e96c2ff4aa",
+        "uuid": "1786a1ed5fa2bac470b4e0539137abe0",
         "version": 1
     },
     "typeHash": 17680227326398108413,
-    "uuid": "6a5f634cdd06b45e148e18e96c2ff4aa",
+    "uuid": "1786a1ed5fa2bac470b4e0539137abe0",
     "version": 1
 }

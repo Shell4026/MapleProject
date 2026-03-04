@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <deque>
 #include <unordered_map>
+#include <queue>
 namespace sh::game
 {
 	class Player;
@@ -60,6 +61,10 @@ namespace sh::game
 		auto GetSkillState(SkillId id) -> SkillState*;
 		void UseSkill(SkillId id, uint64_t tick);
 		void UpdateState();
+#if SH_SERVER
+#else
+		void SendPacket(SkillId skillId, SkillInputAction action, uint64_t tick);
+#endif
 	private:
 		PROPERTY(player, core::PropertyOption::sobjPtr)
 		Player* player = nullptr;
@@ -73,21 +78,18 @@ namespace sh::game
 		{
 			uint32_t seq = 0;
 			SkillId skillId = 0;
+			SkillInputAction action = SkillInputAction::Pressed;
 			uint64_t applyServerTick = 0;
-		} currentSkill;
+		};
 		uint32_t lastSeq = 0;
 		uint64_t offset = 0;
 		bool bOffsetInit = false;
+		SkillId pressedSkillId = 0;
 		std::deque<PendingSkill> pendingSkills;
 #else
 		uint32_t seq = 1;
 		std::unordered_map<Input::KeyCode, SkillId> keybindings;
-		struct InputState
-		{
-			SkillId skillId = 0;
-		} lastInput;
-
-		bool bPendingSend = false;
+		SkillId pressedSkillId = 0;
 #endif
 	};
 }//namespace

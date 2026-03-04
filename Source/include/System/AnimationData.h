@@ -28,16 +28,18 @@ namespace sh::game
 
 			SH_USER_API void PushReferenceObjects(core::GarbageCollection& gc) override;
 		};
-
+	public:
 		SH_USER_API ~AnimationData();
 
 		SH_USER_API auto Serialize() const -> core::Json override;
 		SH_USER_API void Deserialize(const core::Json& json) override;
 
+		SH_USER_API auto GetFrame(int idx) const -> const Frame*;
 		SH_USER_API auto GetTexture(int idx) const -> render::Texture*;
 		SH_USER_API auto GetDelay(int idx) const -> uint32_t;
 		SH_USER_API auto GetPos(int idx) const -> const Vec2&;
-		SH_USER_API auto GetSize() const -> std::size_t;
+
+		SH_USER_API auto GetSize() const -> std::size_t { return frames.size(); }
 		SH_USER_API auto IsLoop() const -> bool { return bLoop; }
 	private:
 		std::vector<Frame> frames;

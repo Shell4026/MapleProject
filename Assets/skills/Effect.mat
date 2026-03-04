@@ -3,13 +3,11 @@
         []
     ],
     "Material": {
-        "shader": "089d8842bfa9932827da7d0fcc393b59"
+        "shader": "38c9cad5714e57e7188346e334a1e90a"
     },
     "MaterialPropertyBlock": {
         "scalar": null,
-        "textures": {
-            "tex": "e81c5b68825058af8c9da5a60fd429c7"
-        },
+        "textures": null,
         "vector": {
             "color": [
                 1.0,
@@ -19,8 +17,8 @@
             ]
         }
     },
-    "name": "testing",
+    "name": "Effect.mat",
     "type": "Material",
-    "uuid": "5a2f23f5d16f10d25ad835c92fe412e0",
+    "uuid": "0ee1338431fdcadece3a5982569a448e",
     "version": 1
 }

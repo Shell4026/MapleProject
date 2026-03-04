@@ -59,6 +59,12 @@ namespace sh::game
 			}
 		}
 	}
+	SH_USER_API auto AnimationData::GetFrame(int idx) const -> const Frame*
+	{
+		if (idx < 0 || idx >= frames.size())
+			return nullptr;
+		return &frames[idx];
+	}
 	SH_USER_API auto AnimationData::GetTexture(int idx) const -> render::Texture*
 	{
 		if (idx < 0 || idx >= frames.size())
@@ -73,8 +79,9 @@ namespace sh::game
 	}
 	SH_USER_API auto AnimationData::GetPos(int idx) const -> const Vec2&
 	{
+		static Vec2 zero{ 0.f, 0.f };
 		if (idx < 0 || idx >= frames.size())
-			return Vec2{ 0.f, 0.f };
+			return zero;
 		return frames[idx].pos;
 	}
 	SH_USER_API auto AnimationData::GetSize() const -> std::size_t

@@ -1,0 +1,46 @@
+{
+    "AnimationData": {
+        "bLoop": false,
+        "frames": [
+            {
+                "delayMs": 90,
+                "pos": [
+                    0.27000001072883606,
+                    0.1899999976158142
+                ],
+                "texture": "65767b666bbdd60a2df7fce91df5160a"
+            },
+            {
+                "delayMs": 120,
+                "pos": [
+                    0.1599999964237213,
+                    0.14000000059604645
+                ],
+                "texture": "6a7e6e8088f16c704a1a6d13060b4702"
+            },
+            {
+                "delayMs": 150,
+                "pos": [
+                    0.019999999552965164,
+                    0.1599999964237213
+                ],
+                "texture": "e81c5b68825058af8c9da5a60fd429c7"
+            },
+            {
+                "delayMs": 300,
+                "pos": [
+                    -0.10000000149011612,
+                    0.25999999046325684
+                ],
+                "texture": "12ce90c9dba829136123b1ce56fb2db5"
+            }
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::AnimationData",
+    "name": "RWgauntletPunchAction.srpo",
+    "type": "AnimationData",
+    "uuid": "3db92bea9b3ae42420f5de3a998173e3",
+    "version": 1
+}

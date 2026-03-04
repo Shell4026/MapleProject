@@ -4,9 +4,9 @@
             "depth": 0,
             "fov": 60.0,
             "lookPos": [
-                0.05107541382312775,
-                0.23585587739944458,
-                0.0006569699035026133
+                -0.4044571816921234,
+                -0.004289962351322174,
+                0.0005494956276379526
             ],
             "projection": 1,
             "renderTexture": "180635b4e4d1a98ebb0064ab47dc452a"
@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 2.0562937259674072
+            "distance": 5.628101348876953
         },
         "SObject": null,
         "fullType": "sh::game::EditorCamera",
@@ -26,9 +26,9 @@
         "version": 1
     },
     "camPos": [
-        0.05054290220141411,
-        0.23594598472118378,
-        2.056950569152832
+        -0.40591466426849365,
+        -0.004043382592499256,
+        5.628650188446045
     ],
     "editorObjs": [
         {
@@ -739,6 +739,55 @@
             "name": "Portal",
             "type": "GameObject",
             "uuid": "7b9b7f2899cfbaf084e071d8c17f0f49",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vRotation": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "4e4ef51da16398c357867dbcde2628d5",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "EmptyObject",
+            "type": "GameObject",
+            "uuid": "9d4c2c8a1fd30efa8fd280b0957bb923",
             "version": 1
         }
     ],

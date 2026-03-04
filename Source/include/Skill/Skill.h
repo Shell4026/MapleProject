@@ -18,8 +18,10 @@ namespace sh::game
 		SH_USER_API auto GetCooldownMs() const -> uint32_t { return cooldownMs; }
 		SH_USER_API auto GetAnimState() const -> uint32_t { return animState; }
 		SH_USER_API auto GetProjectiles() const -> const std::vector<Projectile*>& { return projectiles; }
+		SH_USER_API auto GetEffects() const -> const std::vector<Projectile*>& { return effects; }
 		SH_USER_API auto IsPreventMove() const -> bool { return bPreventMove; }
 		SH_USER_API auto IsPreventAir() const -> bool { return bPreventAir; }
+		SH_USER_API auto IsAllowSkill(uint32_t skillId) -> bool { return std::find(allowSkill.begin(), allowSkill.end(), skillId) != allowSkill.end(); }
 	private:
 		PROPERTY(id)
 		uint32_t id = 0;
@@ -34,8 +36,12 @@ namespace sh::game
 		PROPERTY(animState)
 		uint32_t animState = 0;
 
+		PROPERTY(allowSkill)
+		std::vector<uint32_t> allowSkill; // 동시에 쓸 수 있는 스킬 리스트
 		PROPERTY(projectiles, core::PropertyOption::sobjPtr)
 		std::vector<Projectile*> projectiles;
+		PROPERTY(effects, core::PropertyOption::sobjPtr)
+		std::vector<Projectile*> effects;
 
 		PROPERTY(bPreventMove)
 		bool bPreventMove = true;
