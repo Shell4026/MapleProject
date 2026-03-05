@@ -8,6 +8,7 @@
 namespace sh::game
 {
 	class Projectile;
+	class Buff;
 	class Skill : public ScriptableObject
 	{
 		SRPO(Skill)
@@ -20,6 +21,7 @@ namespace sh::game
 		SH_USER_API auto GetAnimState() const -> uint32_t { return animState; }
 		SH_USER_API auto GetProjectiles() const -> const std::vector<Projectile*>& { return projectiles; }
 		SH_USER_API auto GetEffects() const -> const std::vector<Projectile*>& { return effects; }
+		SH_USER_API auto GetBuffs() const -> const std::vector<Buff*>& { return buffs; }
 		SH_USER_API auto GetConditions() const -> const std::vector<SkillCondition*>& { return conditions; }
 		SH_USER_API auto IsPreventMove() const -> bool { return bPreventMove; }
 		SH_USER_API auto IsPreventAir() const -> bool { return bPreventAir; }
@@ -45,6 +47,8 @@ namespace sh::game
 		std::vector<Projectile*> projectiles;
 		PROPERTY(effects, core::PropertyOption::sobjPtr)
 		std::vector<Projectile*> effects;
+		PROPERTY(buffs, core::PropertyOption::sobjPtr)
+		std::vector<Buff*> buffs;
 		PROPERTY(conditions, core::PropertyOption::sobjPtr)
 		std::vector<SkillCondition*> conditions;
 

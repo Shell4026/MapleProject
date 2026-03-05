@@ -1,0 +1,20 @@
+{
+    "Buff": {
+        "applyPhase": 1
+    },
+    "MovementBuff": {
+        "bRequireGround": false,
+        "bUseFacing": true,
+        "maxDistance": 0.0,
+        "moveType": 0,
+        "moveX": 3.5,
+        "moveY": 2.5
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::MovementBuff",
+    "name": "ScriptableObject",
+    "type": "MovementBuff",
+    "uuid": "1d229bdd5c01d8eede05c3e4e3808ae0",
+    "version": 1
+}

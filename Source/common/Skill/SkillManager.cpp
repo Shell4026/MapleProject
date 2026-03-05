@@ -1,5 +1,5 @@
 ﻿#include "Skill/SkillManager.h"
-#include "Skill/MovementSkill.h"
+#include "Skill/Buff.h"
 #include "Skill/Projectile.h"
 #include "Skill/ProjectileInstance.h"
 #include "Player/Player.h"
@@ -9,7 +9,6 @@
 
 #include "Game/World.h"
 #include <algorithm>
-#include <cmath>
 // 공용
 namespace sh::game
 {
@@ -172,7 +171,7 @@ namespace sh::game
 
 					if (bStartEntered)
 					{
-						ApplyMovementSkill(skillPtr, SkillState::State::Start);
+						ApplySkillBuffs(skillPtr, SkillState::State::Start);
 						if (!state.skill->IsAllowContinousInput())
 						{
 							if (pressedSkillId == state.skillId)
@@ -182,7 +181,7 @@ namespace sh::game
 
 					if (state.state != prevState)
 					{
-						ApplyMovementSkill(skillPtr, state.state);
+						ApplySkillBuffs(skillPtr, state.state);
 
 						if (state.state == SkillState::State::Active)
 						{
@@ -216,54 +215,24 @@ namespace sh::game
 			}
 		}
 	}
-	void SkillManager::ApplyMovementSkill(Skill* skill, SkillState::State phase)
+	void SkillManager::ApplySkillBuffs(Skill* skill, SkillState::State phase)
 	{
-		MovementSkill* const movementSkill = core::reflection::Cast<MovementSkill>(skill);
-		if (movementSkill == nullptr)
+		if (!core::IsValid(skill) || !core::IsValid(player))
 			return;
 
-		PlayerMovement* const movement = player->GetMovement();
-		if (!core::IsValid(movement))
-			return;
-
-		if (movementSkill->IsRequireGround() && !movement->IsGround())
-			return;
-
-		const MovementSkill::ApplyPhase applyPhase = movementSkill->GetApplyPhase();
-		const SkillState::State targetPhase =
-			applyPhase == MovementSkill::ApplyPhase::Start ? SkillState::State::Start :
-			(applyPhase == MovementSkill::ApplyPhase::Active ? SkillState::State::Active : SkillState::State::Recovery);
-		if (targetPhase != phase)
-			return;
-
-		float moveX = movementSkill->GetMoveX();
-		float moveY = movementSkill->GetMoveY();
-		if (movementSkill->IsUseFacing() && !movement->IsRight())
-			moveX = -moveX;
-
-		//const float maxDistance = movementSkill->GetMaxDistance();
-		//if (maxDistance > 0.f)
-		//{
-		//	const float lenSq = moveX * moveX + moveY * moveY;
-		//	if (lenSq > maxDistance * maxDistance)
-		//	{
-		//		const float len = std::sqrt(lenSq);
-		//		if (len > 0.f)
-		//		{
-		//			const float ratio = maxDistance / len;
-		//			moveX *= ratio;
-		//			moveY *= ratio;
-		//		}
-		//	}
-		//}
-
-		if (movementSkill->GetMoveType() == MovementSkill::MoveType::Impulse)
+		for (Buff* buff : skill->GetBuffs())
 		{
-			movement->ApplySkillImpulse(moveX, moveY);
-		}
-		else
-		{
-			movement->ApplySkillTeleport(moveX, moveY);
+			if (!core::IsValid(buff))
+				continue;
+
+			const Buff::ApplyPhase applyPhase = buff->GetApplyPhase();
+			const SkillState::State targetPhase =
+				applyPhase == Buff::ApplyPhase::Start ? SkillState::State::Start :
+				(applyPhase == Buff::ApplyPhase::Active ? SkillState::State::Active : SkillState::State::Recovery);
+			if (targetPhase != phase)
+				continue;
+
+			buff->OnApply(*player, *skill);
 		}
 	}
 }//namespace

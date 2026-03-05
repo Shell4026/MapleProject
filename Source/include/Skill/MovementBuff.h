@@ -1,28 +1,23 @@
 ﻿#pragma once
 #include "Export.h"
-#include "Skill/Skill.h"
+#include "Skill/Buff.h"
 
 #include <cstdint>
 namespace sh::game
 {
-	class MovementSkill : public Skill
+	class MovementBuff : public Buff
 	{
-		SRPO(MovementSkill)
+		SRPO(MovementBuff)
 	public:
 		enum class MoveType : uint8_t
 		{
 			Impulse = 0,
 			Teleport = 1
 		};
-		enum class ApplyPhase : uint8_t
-		{
-			Start = 0,
-			Active = 1,
-			Recovery = 2
-		};
 	public:
+		SH_USER_API void OnApply(Player& player, const Skill& skill) const override;
+
 		SH_USER_API auto GetMoveType() const -> MoveType { return static_cast<MoveType>(moveType); }
-		SH_USER_API auto GetApplyPhase() const -> ApplyPhase { return static_cast<ApplyPhase>(applyPhase); }
 		SH_USER_API auto GetMoveX() const -> float { return moveX; }
 		SH_USER_API auto GetMoveY() const -> float { return moveY; }
 		SH_USER_API auto GetMaxDistance() const -> float { return maxDistance; }
@@ -31,8 +26,6 @@ namespace sh::game
 	private:
 		PROPERTY(moveType)
 		uint32_t moveType = static_cast<uint32_t>(MoveType::Impulse);
-		PROPERTY(applyPhase)
-		uint32_t applyPhase = static_cast<uint32_t>(ApplyPhase::Active);
 		PROPERTY(moveX)
 		float moveX = 0.f;
 		PROPERTY(moveY)

@@ -48,8 +48,9 @@ namespace sh::game
 		SH_USER_API void RegisterSkill(Skill& skill);
 		SH_USER_API void UnRegisterSkill(SkillId id);
 
-		SH_USER_API auto CanUse(SkillId id) const -> bool;
 		SH_USER_API void ApplyCooldown(SkillId id);
+
+		SH_USER_API auto CanUse(SkillId id) const -> bool;
 		SH_USER_API auto IsOnCooldown(SkillId id) const -> bool;
 		SH_USER_API auto GetSkill(SkillId id) const -> Skill*;
 		SH_USER_API auto GetSkillState(SkillId id) const -> const SkillState*;
@@ -68,7 +69,7 @@ namespace sh::game
 		void UpdateConditionState(uint64_t tick);
 		auto CheckCondition(const SkillCondition& condition, const SkillState& state) const -> bool;
 		void UpdateState();
-		void ApplyMovementSkill(Skill* skill, SkillState::State phase);
+		void ApplySkillBuffs(Skill* skill, SkillState::State phase);
 #if SH_SERVER
 #else
 		void SendPacket(SkillId skillId, SkillInputAction action, uint64_t tick);

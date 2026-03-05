@@ -1,13 +1,4 @@
 {
-    "MovementSkill": {
-        "applyPhase": 1,
-        "bRequireGround": false,
-        "bUseFacing": true,
-        "maxDistance": 0.0,
-        "moveType": 0,
-        "moveX": 3.5,
-        "moveY": 2.5
-    },
     "SObject": null,
     "ScriptableObject": null,
     "Skill": {
@@ -17,6 +8,9 @@
         "bContinousInput": false,
         "bPreventAir": false,
         "bPreventMove": false,
+        "buffs": [
+            "1d229bdd5c01d8eede05c3e4e3808ae0"
+        ],
         "conditions": [
             "615d01609fc638d5b51f794ffba22892",
             "15ad05b70a207a31bc90d63229e0e539"
@@ -30,9 +24,9 @@
         "recoveryMs": 0,
         "startupMs": 0
     },
-    "fullType": "sh::game::MovementSkill",
-    "name": "DoubleJump",
-    "type": "MovementSkill",
-    "uuid": "458709ba592cf5a59e7ed12c59328579",
+    "fullType": "sh::game::Skill",
+    "name": "ScriptableObject",
+    "type": "Skill",
+    "uuid": "e99c692ac6046a5fe2074765df9b8322",
     "version": 1
 }
