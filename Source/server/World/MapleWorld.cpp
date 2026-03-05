@@ -143,8 +143,13 @@ namespace sh::game
 	}
 	SH_USER_API void MapleWorld::SpawnItem(int itemId, float x, float y, const Player* owner)
 	{
+		if (itemPrefab == nullptr)
+		{
+			SH_ERROR("itemPrefab is nullptr!");
+			return;
+		}
 		SH_INFO_FORMAT("Drop item: {}", itemId);
-		Item& item = GetEmptyItem();
+		Item& item = itemPool.GetItem(*this, *itemPrefab);
 		GameObject& itemObj = item.gameObject;
 
 		auto pos = itemObj.transform->GetWorldPosition();
@@ -160,7 +165,6 @@ namespace sh::game
 
 		// ItemDropPacket은 MapleWorld(client)클래스에서 처리
 		ItemDropPacket packet{};
-
 		packet.itemId = itemId;
 		packet.x = x;
 		packet.y = y;
@@ -181,8 +185,7 @@ namespace sh::game
 
 	SH_USER_API void MapleWorld::DestroyItem(Item& item)
 	{
-		item.gameObject.SetActive(false);
-		sleepItems.push(&item);
+		itemPool.DestroyItem(item);
 
 		ItemDespawnPacket packet{};
 		packet.itemObjectUUID = item.gameObject.GetUUID();
@@ -309,60 +312,17 @@ namespace sh::game
 		despawnPacket.player = packet.user;
 		BroadCastToWorld(despawnPacket);
 	}
-	auto MapleWorld::GetEmptyItem() -> Item&
-	{
-		GameObject* itemObj = nullptr;
-		Item* item = nullptr;
-		if (sleepItems.empty())
-		{
-			itemObj = itemPrefab->AddToWorld(world);
-			item = itemObj->GetComponent<Item>();
-		}
-		else
-		{
-			do
-			{
-				item = sleepItems.front().Get();
-				sleepItems.pop();
-			} while (!core::IsValid(item) && !sleepItems.empty());
-
-			if (!core::IsValid(item))
-			{
-				itemObj = itemPrefab->AddToWorld(world);
-				item = itemObj->GetComponent<Item>();
-			}
-			else
-			{
-				itemObj = &item->gameObject;
-				itemObj->SetUUID(core::UUID::Generate());
-				itemObj->SetActive(true);
-			}
-		}
-
-		item->SetCurrentWorld(*this);
-
-		return *item;
-	}
 	void MapleWorld::TryClearSleepItems()
 	{
-		if (sleepItems.empty())
+		if (itemPool.GetSleepItemSize() == 0)
 			return;
 
 		const uint64_t noSpawnTicks = worldTick - lastItemSpawnTick;
 		if (noSpawnTicks < clearSleepItemsAfterTicks)
 			return;
 
-		while (!sleepItems.empty())
-		{
-			Item* item = sleepItems.front().Get();
-			sleepItems.pop();
+		itemPool.TryClearSleepItems();
 
-			if (!core::IsValid(item))
-				continue;
-
-			item->gameObject.Destroy();
-		}
-		sleepItems = std::queue<core::SObjWeakPtr<Item>>();
 		SH_INFO("Clear sleepItems...");
 	}
 }//namespace

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
+#include "ItemPool.h"
 #include "Player/User.h"
 #include "System/EndPoint.hpp"
 #include "MapleServer.h"
@@ -70,18 +71,17 @@ namespace sh::game
 		/// @return 월드에 없으면 nullptr
 		SH_USER_API static auto GetMapleWorld(const core::UUID& worldUUID) -> MapleWorld*;
 #endif
-	private:
+private:
 #if SH_SERVER
 		void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet);
 		void ProcessPlayerLeave(const PlayerLeavePacket& packet);
 		auto FindPortal(int portalId) const -> Portal*;
-		auto GetEmptyItem() -> Item&;
-		void TryClearSleepItems();
 #else
 		void ProcessPlayerSpawn(const PlayerSpawnPacket& packet);
 		void ProcessItemDrop(const ItemDropPacket& packet);
 		void ProcessItemDespawn(const ItemDespawnPacket& packet);
 #endif
+		void TryClearSleepItems();
 	public:
 		PROPERTY(playerSpawnPoint)
 		Transform* playerSpawnPoint = nullptr;
@@ -95,16 +95,24 @@ namespace sh::game
 
 		/// @brief 서버는 UserUUID가 키, 클라면 PlayerUUID가 키
 		std::unordered_map<core::UUID, Player*> players;
+		
+		ItemPool itemPool;
+		struct ItemState
+		{
+			core::SObjWeakPtr<Item> item = nullptr;
+			bool bSleep = false;
+		};
+		std::vector<ItemState> items;
 		std::queue<core::SObjWeakPtr<Item>> sleepItems;
 
 		core::EventSubscriber<network::PacketEvent> packetEventSubscriber;
 
 		uint64_t worldTick = 0;
+		uint64_t clearSleepItemsAfterTicks = 600;
+		uint64_t lastItemSpawnTick = 0;
 #if SH_SERVER
 		MapleServer* server = nullptr;
 		uint64_t nextItemIdx = 0;
-		uint64_t clearSleepItemsAfterTicks = 600;
-		uint64_t lastItemSpawnTick = 0;
 
 		std::vector<Portal*> portals;
 

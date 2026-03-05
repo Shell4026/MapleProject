@@ -103,6 +103,8 @@ namespace sh::game
 	}
 	SH_USER_API void MapleWorld::LateUpdate()
 	{
+		TryClearSleepItems();
+		++worldTick;
 	}
 
 	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet)
@@ -133,17 +135,17 @@ namespace sh::game
 		}
 
 		SH_INFO_FORMAT("Drop item: {}", packet.itemId);
-		GameObject* const itemObj = itemPrefab->AddToWorld(world);
+		Item& item = itemPool.GetItem(*this, *itemPrefab);
+		GameObject* const itemObj = &item.gameObject;
 		itemObj->SetUUID(core::UUID{ packet.itemUUID });
 		auto pos = itemObj->transform->GetWorldPosition();
 		pos.x = packet.x;
 		pos.y = packet.y;
 		itemObj->transform->SetWorldPosition(pos);
 
-		Item* const item = itemObj->GetComponent<Item>();
-		item->SetCurrentWorld(*this);
-		item->GetMovement()->AddImpulse(0.f, 6.f);
-		item->itemId = packet.itemId;
+		item.GetMovement()->AddImpulse(0.f, 6.f);
+		item.itemId = packet.itemId;
+		lastItemSpawnTick = worldTick;
 
 		auto texPtr = static_cast<render::Texture*>(core::SObject::GetSObjectUsingResolver(itemInfo->texUUID));
 		if (texPtr == nullptr)
@@ -151,7 +153,7 @@ namespace sh::game
 			SH_ERROR_FORMAT("texture {} is not valid!", itemInfo->texUUID.ToString());
 			return;
 		}
-		item->SetTexture(texPtr);
+		item.SetTexture(texPtr);
 	}
 	void MapleWorld::ProcessItemDespawn(const ItemDespawnPacket& packet)
 	{
@@ -160,6 +162,27 @@ namespace sh::game
 		auto obj = core::SObjectManager::GetInstance()->GetSObject(itemObjUUID);
 		if (!core::IsValid(obj))
 			return;
-		obj->Destroy();
+
+		Item* const item = static_cast<GameObject*>(obj)->GetComponent<Item>();
+		if (item == nullptr)
+		{
+			obj->Destroy();
+			return;
+		}
+
+		itemPool.DestroyItem(*item);
+	}
+
+	void MapleWorld::TryClearSleepItems()
+	{
+		if (itemPool.GetSleepItemSize() == 0)
+			return;
+
+		const uint64_t noSpawnTicks = worldTick - lastItemSpawnTick;
+		if (noSpawnTicks < clearSleepItemsAfterTicks)
+			return;
+
+		itemPool.TryClearSleepItems();
+		SH_INFO("Clear sleepItems...");
 	}
 }//namespace

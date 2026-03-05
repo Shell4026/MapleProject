@@ -54,7 +54,5 @@ namespace sh::game
 		MapleWorld* mapleWorld = nullptr;
 		PROPERTY(movement, core::PropertyOption::sobjPtr)
 		FootholdMovement* movement = nullptr;
-
-		core::EventSubscriber<network::PacketEvent> packetSubscriber;
 	};
 }//namespace
