@@ -1,0 +1,24 @@
+{
+    "AnimationData": {
+        "bLoop": false,
+        "frames": [
+            {
+                "a0": 255,
+                "a1": 0,
+                "delayMs": 1000,
+                "pos": [
+                    0.0,
+                    0.0
+                ],
+                "texture": "00000000000000000000000000000000"
+            }
+        ]
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::AnimationData",
+    "name": "FadeOut",
+    "type": "AnimationData",
+    "uuid": "2883c76de1ca9119d64a3b771273292e",
+    "version": 1
+}

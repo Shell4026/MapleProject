@@ -16,7 +16,7 @@
             "priority": 0
         },
         "EditorCamera": {
-            "distance": 7.318791389465332
+            "distance": 10.71544361114502
         },
         "SObject": null,
         "fullType": "sh::game::EditorCamera",
@@ -26,9 +26,9 @@
         "version": 1
     },
     "camPos": [
-        -0.5327345132827759,
-        1.0064334869384766,
-        5.419288635253906
+        -0.53220134973526,
+        1.0066384077072144,
+        8.815940856933594
     ],
     "editorObjs": [
         {
@@ -779,7 +779,8 @@
                             0.0
                         ],
                         "smoothTime": 0.25,
-                        "targetCamera": "02458a6d4c537bab176ac44e300d2c2e"
+                        "targetCamera": "02458a6d4c537bab176ac44e300d2c2e",
+                        "zOffset": 0.0
                     },
                     "SObject": null,
                     "fullType": "sh::game::PlayerCamera2D",
@@ -8601,6 +8602,93 @@
             "name": "background2",
             "type": "GameObject",
             "uuid": "68947e921c1031bd504625c92a5f8ea2",
+            "version": 1
+        },
+        {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "quat": [
+                            0.7071067690849304,
+                            0.0,
+                            0.0,
+                            0.7071067690849304
+                        ],
+                        "vPosition": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vRotation": [
+                            90.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            30.0,
+                            30.0,
+                            30.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "24d110ea38f82955efaa9bf3d4c61839",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MeshRenderer": {
+                        "mat": "71b12a2bf5f9f68b807bd5ced2c397ac",
+                        "mesh": "bbc4ef7ec45dce223297a224f8093f21",
+                        "renderTag": 1
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MeshRenderer",
+                    "name": "MeshRenderer",
+                    "type": "MeshRenderer",
+                    "uuid": "f7175291bfe0404628c577bf613d3a6e",
+                    "version": 1
+                },
+                {
+                    "Animator": {
+                        "anims": [
+                            {
+                                "anim": "2883c76de1ca9119d64a3b771273292e",
+                                "condition": 0
+                            }
+                        ],
+                        "renderer": "f7175291bfe0404628c577bf613d3a6e"
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::Animator",
+                    "name": "user/Animator",
+                    "type": "Animator",
+                    "uuid": "137e02ae10635572df22eeaefb92e01c",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "Black",
+            "type": "GameObject",
+            "uuid": "b1faadfc141dc30cd7ec1aa7d2831bc5",
             "version": 1
         }
     ],
