@@ -87,10 +87,6 @@ namespace sh::game
 				bJumpTriggeredThisTick = true;
 			}
 		}
-		else
-		{
-			vel.x = 0.f;
-		}
 
 		StepMovement();
 		if (!bWasGround && IsGround())
