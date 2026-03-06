@@ -48,8 +48,8 @@ namespace sh::game
 		}
 	public:
 		std::array<uint32_t, 4> user;
-		float inputX = 0.0f; // -1..1
-		uint32_t seq = 0;
+		int inputX = 0; // -1..1
+		uint64_t seq = 0;
 		uint64_t tick = 0;
 		bool bJump = false;
 		bool bUp = false;

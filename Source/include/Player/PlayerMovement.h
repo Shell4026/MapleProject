@@ -61,7 +61,7 @@ namespace sh::game
 
 		struct State
 		{
-			uint32_t seq = 0;
+			uint64_t seq = 0;
 			int xMove = 0;
 			bool bJump = false;
 			bool bUp = false;

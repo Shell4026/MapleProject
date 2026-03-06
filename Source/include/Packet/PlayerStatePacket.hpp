@@ -75,7 +75,7 @@ namespace sh::game
 		float px = 0.f, py = 0.f;
 		float vx = 0.f, vy = 0.f;
 
-		uint32_t lastProcessedInputSeq = 0;
+		uint64_t lastProcessedInputSeq = 0;
 		uint64_t serverTick = 0;
 		uint64_t clientTickAtState = 0;
 
