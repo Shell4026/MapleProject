@@ -39,21 +39,8 @@ namespace sh::game
 	}
 	SH_USER_API void SkillManager::ProcessPacket(const SkillUsingPacket& packet)
 	{
-		if (lastSeq >= packet.seq)
+		if (!pendingSkills.empty() && pendingSkills.back().seq >= packet.seq)
 			return;
-		lastSeq = packet.seq;
-
-		const uint64_t tick = player != nullptr ? player->GetTick() : 0;
-		if (!bOffsetInit)
-		{
-			offset = tick - packet.tick + 5;
-			bOffsetInit = true;
-		}
-		else
-		{
-			const uint64_t newOffset = tick - packet.tick + 5;
-			offset = (offset * 9 + newOffset) / 10;
-		}
 		//SH_INFO_FORMAT("recv seq: {}, tick: {}, serverTick: {}, offset: {}", packet.seq, packet.tick, tick, offset);
 
 		PendingSkill pending{};
@@ -61,10 +48,7 @@ namespace sh::game
 		pending.skillId = packet.skillId;
 		pending.action = packet.action;
 		pending.dir = packet.dir;
-		if (player != nullptr && player->GetMovement() != nullptr)
-			pending.applyServerTick = player->GetMovement()->EstimateApplyServerTick(packet.tick);
-		else
-			pending.applyServerTick = packet.tick + offset;
+		pending.applyServerTick = player->EstimateApplyServerTick(packet.tick);
 		pendingSkills.push_back(pending);
 	}
 	void SkillManager::UseSkill(SkillId id, uint64_t tick)
@@ -76,7 +60,7 @@ namespace sh::game
 		if (id == 0 || !CanUse(id))
 		{
 			if (!state->skill->IsAllowContinousInput())
-				lastUsedSkillId = 0;
+				pressedSkillId = 0;
 			return;
 		}
 

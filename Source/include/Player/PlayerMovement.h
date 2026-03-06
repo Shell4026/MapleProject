@@ -30,7 +30,9 @@ namespace sh::game
 
 #if SH_SERVER
 		SH_USER_API void ProcessInput(const PlayerInputPacket& packet);
-		SH_USER_API auto EstimateApplyServerTick(uint64_t clientTick) const -> uint64_t;
+		SH_USER_API auto GetAppliedClientTick() const -> uint64_t { return clientTick; }
+		SH_USER_API auto GetAppliedServerTick() const -> uint64_t { return applyServerTick; }
+		SH_USER_API auto GetAppliedInputSeq() const -> uint64_t { return state.seq; }
 #endif
 
 		SH_USER_API void LockInput() { state.bLock = true; }
@@ -88,13 +90,8 @@ namespace sh::game
 		std::deque<RecvState> recvStates;
 		uint64_t applyServerTick = 0;
 		uint64_t clientTick = 0;
-		uint64_t offset = 0;
-		bool bOffsetInit = false;
 #else
 		core::EventSubscriber<network::PacketEvent> packetSubscriber;
-
-		uint64_t curSeq = 0;
-		uint64_t nextSeq = 1;
 
 		/// @brief seq입력에 대한 결과물
 		struct StateHistory
@@ -109,7 +106,6 @@ namespace sh::game
 
 		Vec2 serverPos{ 0.f, 0.f };
 #endif
-		bool bPendingSend = false;
 		bool bRight = false;
 		bool bJumpTriggeredThisTick = false;
 		bool bLandedThisTick = false;

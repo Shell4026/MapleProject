@@ -95,13 +95,9 @@ namespace sh::game
 			int dir = 0;
 			uint64_t applyServerTick = 0;
 		};
-		uint32_t lastSeq = 0;
-		uint64_t offset = 0;
-		bool bOffsetInit = false;
 		SkillId pressedSkillId = 0;
 		std::deque<PendingSkill> pendingSkills;
 #else
-		uint32_t seq = 1;
 		std::unordered_map<Input::KeyCode, SkillId> keybindings;
 		SkillId pressedSkillId = 0;
 #endif

@@ -101,6 +101,13 @@ namespace sh::game
 
 		state->state = SkillState::State::Start;
 		state->counterMs = 0.f;
+		const auto& pos = gameObject.transform->GetWorldPosition();
+		for (auto effect : state->skill->GetEffects())
+		{
+			if (effect == nullptr)
+				continue;
+			effect->SpawnProjectile(world, player, pos.x, pos.y, player->GetMovement()->IsRight());
+		}
 		lastState = state;
 		lastUsedSkillId = skillId;
 	}
@@ -139,7 +146,7 @@ namespace sh::game
 		static MapleClient& client = *MapleClient::GetInstance();
 
 		SkillUsingPacket packet{};
-		packet.seq = seq++;
+		packet.seq = player->GetSeq();
 		packet.tick = tick;
 		packet.userUUID = client.GetUser().GetUserUUID();
 		packet.skillId = skillId;
@@ -148,5 +155,7 @@ namespace sh::game
 		if (player != nullptr && player->GetMovement() != nullptr)
 			packet.dir = player->GetMovement()->IsRight() ? 1 : -1;
 		client.SendPacket(packet);
+
+		player->IncreaseSeq();
 	}
 }//namespace

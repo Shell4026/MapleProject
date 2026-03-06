@@ -134,7 +134,7 @@ namespace sh::game
 			bProne != state.bProne ||
 			xInput != state.xMove;
 
-		state.seq = curSeq;
+		state.seq = player->GetSeq();
 		state.xMove = xInput;
 		state.bJump = bJump;
 		state.bUp = bUp;
@@ -143,7 +143,6 @@ namespace sh::game
 		if (bChanged)
 		{
 			static MapleClient& client = *MapleClient::GetInstance();
-			curSeq = nextSeq++;
 
 			PlayerInputPacket packet{};
 			packet.user = client.GetUser().GetUserUUID();
@@ -157,7 +156,7 @@ namespace sh::game
 			//SH_INFO_FORMAT("send seq: {}, tick: {}", packet.seq, packet.tick);
 			client.SendPacket(packet);
 
-			bPendingSend = false;
+			player->IncreaseSeq();
 		}
 	}
 	void PlayerMovement::Reconciliation(const PlayerStatePacket& packet)

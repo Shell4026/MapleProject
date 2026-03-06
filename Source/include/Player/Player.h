@@ -19,6 +19,9 @@ namespace sh::game
 	class SkillManager;
 	class PlayerMovement;
 	class PlayerPickup;
+	class PlayerInputPacket;
+	class SkillUsingPacket;
+
 	class Player : public Entity
 	{
 		COMPONENT(Player, "user")
@@ -42,6 +45,15 @@ namespace sh::game
 		SH_USER_API void SetUserUUID(const core::UUID& uuid, MapleWorldKey);
 		SH_USER_API void SetCurrentWorld(MapleWorld& world) { currentWorld = &world; }
 
+#if SH_SERVER
+		SH_USER_API auto EstimateApplyServerTick(uint64_t clientTick) const -> uint64_t { return clientTick + tickOffset; }
+		SH_USER_API void BroadcastState();
+		SH_USER_API void ProcessInputPacket(const PlayerInputPacket& packet);
+		SH_USER_API void ProcessSkillPacket(const SkillUsingPacket& packet);
+#else
+		SH_USER_API void IncreaseSeq() { ++curSeq; }
+#endif
+
 		SH_USER_API auto GetJob() const -> Job* { return job; }
 		SH_USER_API auto GetSkillManager() const -> SkillManager* { return skillManager; }
 		SH_USER_API auto GetMovement() const -> PlayerMovement* { return movement; }
@@ -51,8 +63,14 @@ namespace sh::game
 		SH_USER_API auto GetCurrentWorld() const -> MapleWorld* { return currentWorld; }
 		SH_USER_API auto IsLocal() const -> bool { return bLocal; }
 
-#if !SH_SERVER
+#if SH_SERVER
+#else
+		SH_USER_API auto GetSeq() const -> uint64_t { return curSeq; }
 		SH_USER_API auto GetNameTag() const -> NameTag* { return nametag; }
+#endif
+	private:
+#if SH_SERVER
+		void CalcTickOffset(uint64_t clientTick);
 #endif
 	private:
 		PROPERTY(job, core::PropertyOption::sobjPtr)
@@ -71,7 +89,15 @@ namespace sh::game
 		MapleWorld* currentWorld = nullptr;
 
 		PlayerTickController tickController;
-#if !SH_SERVER
+#if SH_SERVER
+		uint64_t lastProcessedSeq = 0;
+		uint64_t tickOffset = 0;
+		uint32_t sendTick = 0;
+
+		bool bSend = false;
+		bool bOffsetInit = false;
+#else
+		uint64_t curSeq = 1;
 		PROPERTY(nametag)
 		NameTag* nametag = nullptr;
 		PROPERTY(inventoryPrefab)

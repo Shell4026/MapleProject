@@ -57,6 +57,14 @@ namespace sh::game
 	{
 		rigidbody->ResetPhysicsTransform();
 		tickController.Update();
+#if SH_SERVER
+		if (sendTick++ >= 2 || bSend)
+		{
+			BroadcastState();
+			sendTick = 0;
+			bSend = false;
+		}
+#endif
 	}
 	SH_USER_API auto Player::GetTick() const -> uint64_t
 	{

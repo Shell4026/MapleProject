@@ -72,54 +72,9 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerMovement::TickUpdate(uint64_t tick)
 	{
-		if (sendTick++ >= 2)
-			bPendingSend = true;
-
-		if (bPendingSend)
-		{
-			auto& pos = gameObject.transform->GetWorldPosition();
-
-			PlayerStatePacket packet;
-
-			packet.lastProcessedInputSeq = state.seq;
-			packet.serverTick = tick;
-			packet.clientTickAtState = clientTick + (tick - applyServerTick);
-
-			packet.px = pos.x;
-			packet.py = pos.y;
-			packet.vx = vel.x;
-			packet.vy = vel.y;
-			packet.playerUUID = player->GetUUID();
-			packet.bGround = IsGround();
-			packet.bLock = state.bLock;
-			packet.bUp = state.bUp;
-			packet.bProne = state.bProne;
-			packet.bRight = IsRight();
-			if (const SkillManager* const skillManager = player != nullptr ? player->GetSkillManager() : nullptr; skillManager != nullptr)
-			{
-				packet.skillId = skillManager->GetUsingSkillId();
-				packet.bSkillUsing = skillManager->IsUsingSkill();
-			}
-			if (MapleWorld* const mapleWorld = player->GetCurrentWorld(); mapleWorld != nullptr)
-				mapleWorld->BroadCastToWorld(packet);
-
-			bPendingSend = false;
-			sendTick = 0;
-		}
 	}
 	SH_USER_API void PlayerMovement::ProcessInput(const PlayerInputPacket& packet)
 	{
-		const uint64_t tick = player != nullptr ? player->GetTick() : 0;
-		if (!bOffsetInit)
-		{
-			offset = tick - packet.tick + 5;
-			bOffsetInit = true;
-		}
-		else
-		{
-			const uint64_t newOffset = tick - packet.tick + 5;
-			offset = (offset * 9 + newOffset) / 10;
-		}
 		// 패킷 이벤트들은 BeginUpdate전에 이뤄짐
 		if (!recvStates.empty() && recvStates.back().state.seq >= packet.seq)
 			return;
@@ -135,16 +90,8 @@ namespace sh::game
 
 		RecvState recv{};
 		recv.clientTick = packet.tick;
-		recv.applyServerTick = packet.tick + offset;
+		recv.applyServerTick = player->EstimateApplyServerTick(packet.tick);
 		recv.state = state;
 		recvStates.push_back(recv);
-
-		bPendingSend = true;
-	}
-	SH_USER_API auto PlayerMovement::EstimateApplyServerTick(uint64_t clientTick) const -> uint64_t
-	{
-		if (!bOffsetInit)
-			return clientTick + 5;
-		return clientTick + offset;
 	}
 }//namespace

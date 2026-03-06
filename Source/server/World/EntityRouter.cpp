@@ -27,7 +27,7 @@ namespace sh::game
 							if (MapleWorld* currentWorld = player->GetCurrentWorld(); currentWorld != nullptr)
 								SH_INFO_FORMAT("transfer: {}", currentWorld->TryTransferByPortal(*player));
 						}
-						player->GetMovement()->ProcessInput(packet);
+						player->ProcessInputPacket(packet);
 					}
 				}
 				else if (packetId == KeyPacket::ID)
@@ -51,7 +51,7 @@ namespace sh::game
 					const auto& packet = static_cast<const SkillUsingPacket&>(*evt.packet);
 					Player* const player = GetPlayer(packet.userUUID);
 					if (player != nullptr)
-						player->GetSkillManager()->ProcessPacket(packet);
+						player->ProcessSkillPacket(packet);
 				}
 			}
 		);
