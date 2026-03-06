@@ -64,7 +64,7 @@ namespace sh::game
 			[](const ItemState& itemState)
 			{
 				if (itemState.bSleep && itemState.item.IsValid())
-					itemState.item->Destroy();
+					itemState.item->gameObject.Destroy();
 				return itemState.bSleep || !itemState.item.IsValid();
 			}
 		);
