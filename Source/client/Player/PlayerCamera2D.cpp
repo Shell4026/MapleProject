@@ -18,7 +18,7 @@ namespace sh::game
 	}
 	SH_USER_API void PlayerCamera2D::Start()
 	{
-		world.renderer.GetWindow().SetSize(1366, 768);
+		world.renderer.GetWindow().SetSize(1366, 768 + 39);
 		world.GetUICamera().SetWidth(13.66f);
 		world.GetUICamera().SetHeight(7.68f);
 		
@@ -119,7 +119,7 @@ namespace sh::game
 
 		const float h = gameObject.world.renderer.GetHeight();
 		dis = h * 0.01f;
-		pos.z = dis;
+		pos.z = dis + zOffset;
 
 		targetCamera->gameObject.transform->SetWorldPosition(pos);
 		targetCamera->gameObject.transform->UpdateMatrix();

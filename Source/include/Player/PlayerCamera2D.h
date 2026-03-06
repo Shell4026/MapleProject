@@ -35,6 +35,8 @@ namespace sh::game
 		Vec2 camlimitMin;
 		PROPERTY(camlimitMax)
 		Vec2 camlimitMax;
+		PROPERTY(zOffset)
+		float zOffset = 0.f;
 
 		float lastWidth = 0.f;
 		float lastHeight = 0.f;
