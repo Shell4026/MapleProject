@@ -23,7 +23,7 @@
 - 패킷 수신 후 EventBus에 발행하고, 월드/플레이어/UI가 필요한 이벤트만 구독합니다.
 - 월드 진입은 `PlayerJoinWorldPacket`(TCP) 기반으로 시작됩니다.
 
-## 공통 Tick 모델
+## 플레이어 공통 Tick 모델
 - `PlayerTickController`가 `TickBegin -> TickFixed -> TickUpdate` 순서를 보장합니다.
 - 클라이언트 예측/서버 권한 상태 계산 모두 해당 틱 기반으로 동작합니다.
 - 결정적 처리 단위를 유지해 재조정(Reconciliation) 시 오차를 줄입니다.
@@ -32,10 +32,33 @@
 ### EventBus
 - 네트워크 계층과 게임 로직의 직접 결합을 줄이기 위한 기본 이벤트 채널입니다.
 - 월드/엔티티/시스템 컴포넌트는 필요한 패킷 이벤트만 구독합니다.
+```cpp
+// packetSubscriber에서 패킷을 받으면 어떻게 할지 정의 후
+core::EventBus packetBus;
+packetBus.Subscribe(packetSubscriber);
+```
 
 ### EntityRouter
+- 월드마다 존재합니다.
 - 플레이어 단위 입력(`PlayerInputPacket`, `KeyPacket`, `SkillUsingPacket`)을 플레이어 객체로 직접 전달합니다.
 - 서버 월드(`MapleWorld`)에서 플레이어 Spawn/Despawn 시 라우터 등록/해제를 동기화합니다.
+```cpp
+// 패킷을 받으면 월드 내 플레이어 컴포넌트에 패킷을 전달하고 처리하게 만듦
+packetSubscriber.SetCallback(
+  [this](const network::PacketEvent& evt)
+  {
+    const uint32_t packetId = evt.packet->GetId();
+    if (packetId == PlayerInputPacket::ID)
+    {
+      const auto& packet = static_cast<const PlayerInputPacket&>(*evt.packet);
+      Player* const player = GetPlayer(packet.user);
+      player->GetMovement()->ProcessInput(packet);
+      ...
+    }
+    ...
+  }
+);
+```
 
 ## 월드/엔티티 라이프사이클
 1. 유저 접속 후 서버가 월드를 지정합니다.
