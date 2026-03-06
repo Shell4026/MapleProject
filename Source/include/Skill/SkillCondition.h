@@ -5,34 +5,46 @@
 
 #include <cstdint>
 #include <vector>
-namespace sh::editor
-{
-	class SkillConditionInspector;
-}
 namespace sh::game
 {
+	struct SkillConditionContext
+	{
+		uint64_t lastLandedTick = 0;
+		uint64_t lastJumpTick = 0;
+		uint64_t lastUsedTick = 0;
+		uint32_t lastUsedSkillId = 0;
+	};
+
 	class SkillCondition : public ScriptableObject
 	{
-		SRPO(SkillCondition)
-		friend editor::SkillConditionInspector;
+		SCLASS(SkillCondition)
 	public:
-		enum class Type : uint8_t
-		{
-			None = 0,
-			LandedAfterLastUse = 1,
-			JumpAfterLastUse = 2,
-			PreviousSkillIn = 3
-		};
-	public:
-		SH_USER_API auto GetConditionType() const -> Type { return static_cast<Type>(type); }
-		SH_USER_API auto GetRequiredSkills() const -> const std::vector<uint32_t>& { return requiredSkills; }
+		SH_USER_API virtual auto Evaluate(const SkillConditionContext& context) const -> bool = 0;
+	};
 
-		SH_USER_API static auto TypeToString(Type type) -> const char*;
+	class LandedAfterLastUseSkillCondition : public SkillCondition
+	{
+		SRPO(LandedAfterLastUseSkillCondition)
+	public:
+		SH_USER_API auto Evaluate(const SkillConditionContext& context) const -> bool override;
+	};
+
+	class JumpAfterLastUseSkillCondition : public SkillCondition
+	{
+		SRPO(JumpAfterLastUseSkillCondition)
+	public:
+		SH_USER_API auto Evaluate(const SkillConditionContext& context) const -> bool override;
+	};
+
+	class PreviousSkillInSkillCondition : public SkillCondition
+	{
+		SRPO(PreviousSkillInSkillCondition)
+	public:
+		SH_USER_API auto Evaluate(const SkillConditionContext& context) const -> bool override;
+
+		SH_USER_API auto GetRequiredSkills() const -> const std::vector<uint32_t>& { return requiredSkills; }
 	private:
-		PROPERTY(type, core::PropertyOption::invisible)
-		uint32_t type = static_cast<uint32_t>(Type::None);
 		PROPERTY(requiredSkills)
 		std::vector<uint32_t> requiredSkills;
 	};
 }//namespace
-

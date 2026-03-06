@@ -1,0 +1,11 @@
+{
+    "JumpAfterLastUseSkillCondition": null,
+    "SObject": null,
+    "ScriptableObject": null,
+    "SkillCondition": null,
+    "fullType": "sh::game::JumpAfterLastUseSkillCondition",
+    "name": "ScriptableObject",
+    "type": "JumpAfterLastUseSkillCondition",
+    "uuid": "c05fd0b66a09798c5e44a6ae1d4b70a3",
+    "version": 1
+}

@@ -67,7 +67,6 @@ namespace sh::game
 		auto GetSkillState(SkillId id) -> SkillState*;
 		void UseSkill(SkillId id, uint64_t tick);
 		void UpdateConditionState(uint64_t tick);
-		auto CheckCondition(const SkillCondition& condition, const SkillState& state) const -> bool;
 		void UpdateCooldown(SkillState& state);
 		void UpdateState();
 		void RemoveInvalidState(std::size_t idx);

@@ -48,11 +48,17 @@ namespace sh::game
 		if (!(state->cooldownRemainingMs == 0.f && state->state == SkillState::State::Wait))
 			return false;
 
+		SkillConditionContext context{};
+		context.lastLandedTick = lastLandedTick;
+		context.lastJumpTick = lastJumpTick;
+		context.lastUsedTick = state->lastUsedTick;
+		context.lastUsedSkillId = lastUsedSkillId;
+
 		for (const SkillCondition* condition : state->skill->GetConditions())
 		{
 			if (!core::IsValid(condition))
 				continue;
-			if (!CheckCondition(*condition, *state))
+			if (!condition->Evaluate(context))
 				return false;
 		}
 		return true;
@@ -110,25 +116,6 @@ namespace sh::game
 			lastLandedTick = tick - 1; // SkillManager -> Movement순서로 실행 되기 때문에 이전틱임
 		if (movement->IsJumpTriggered())
 			lastJumpTick = tick - 1;
-	}
-	auto SkillManager::CheckCondition(const SkillCondition& condition, const SkillState& state) const -> bool
-	{
-		switch (condition.GetConditionType())
-		{
-		case SkillCondition::Type::None:
-			return true;
-		case SkillCondition::Type::LandedAfterLastUse:
-			return lastLandedTick > state.lastUsedTick;
-		case SkillCondition::Type::JumpAfterLastUse:
-			return lastJumpTick > state.lastUsedTick;
-		case SkillCondition::Type::PreviousSkillIn:
-		{
-			const auto& requiredSkills = condition.GetRequiredSkills();
-			return std::find(requiredSkills.begin(), requiredSkills.end(), lastUsedSkillId) != requiredSkills.end();
-		}
-		default:
-			return true;
-		}
 	}
 	void SkillManager::UpdateCooldown(SkillState& state)
 	{

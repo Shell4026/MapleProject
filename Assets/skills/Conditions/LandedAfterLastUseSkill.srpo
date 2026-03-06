@@ -1,0 +1,11 @@
+{
+    "LandedAfterLastUseSkillCondition": null,
+    "SObject": null,
+    "ScriptableObject": null,
+    "SkillCondition": null,
+    "fullType": "sh::game::LandedAfterLastUseSkillCondition",
+    "name": "ScriptableObject",
+    "type": "LandedAfterLastUseSkillCondition",
+    "uuid": "ab42688c5f1f863c6f9184f60291fac7",
+    "version": 1
+}
