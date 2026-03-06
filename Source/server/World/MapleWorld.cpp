@@ -141,9 +141,10 @@ namespace sh::game
 		pos.x = x;
 		pos.y = y;
 		itemObj.transform->SetWorldPosition(pos);
-		
+		itemObj.transform->UpdateMatrix();
+
 		item.GetMovement()->AddImpulse(0.f, 6.f);
-		item.instanceId = nextItemIdx;
+		item.instanceId = nextItemIdx++;
 		item.itemId = itemId;
 		if (owner != nullptr)
 			item.owner = owner->GetUserUUID();
@@ -257,7 +258,9 @@ namespace sh::game
 			if (remoteUserPtr == nullptr)
 				continue;
 
-			const auto& playerPos = playerPtr->gameObject.transform->GetWorldPosition();
+			GameObject& body = playerPtr->GetMovement()->gameObject;
+			const auto& playerPos = body.transform->GetWorldPosition();
+			
 			PlayerSpawnPacket spawnPacket;
 			spawnPacket.x = playerPos.x;
 			spawnPacket.y = playerPos.y;

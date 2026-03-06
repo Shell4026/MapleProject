@@ -121,14 +121,16 @@ namespace sh::game
 
 		SH_INFO_FORMAT("Drop item: {}", packet.itemId);
 		Item& item = itemPool.GetItem(*this, *itemPrefab);
-		GameObject* const itemObj = &item.gameObject;
-		itemObj->SetUUID(core::UUID{ packet.itemUUID });
-		auto pos = itemObj->transform->GetWorldPosition();
+		GameObject& itemObj = item.gameObject;
+		itemObj.SetUUID(core::UUID{ packet.itemUUID });
+		auto pos = itemObj.transform->GetWorldPosition();
 		pos.x = packet.x;
 		pos.y = packet.y;
-		itemObj->transform->SetWorldPosition(pos);
+		itemObj.transform->SetWorldPosition(pos);
+		itemObj.transform->UpdateMatrix();
 
 		item.GetMovement()->AddImpulse(0.f, 6.f);
+		item.GetMovement()->SetIsGround(false);
 		item.itemId = packet.itemId;
 		lastItemSpawnTick = worldTick;
 
