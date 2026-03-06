@@ -107,9 +107,9 @@ namespace sh::game
 			return;
 
 		if (movement->IsLandedThisTick())
-			lastLandedTick = tick;
+			lastLandedTick = tick - 1; // SkillManager -> Movement순서로 실행 되기 때문에 이전틱임
 		if (movement->IsJumpTriggered())
-			lastJumpTick = tick;
+			lastJumpTick = tick - 1;
 	}
 	auto SkillManager::CheckCondition(const SkillCondition& condition, const SkillState& state) const -> bool
 	{
@@ -130,97 +130,106 @@ namespace sh::game
 			return true;
 		}
 	}
+	void SkillManager::UpdateCooldown(SkillState& state)
+	{
+		const float dt = world.FIXED_TIME * 1000.f;
+		float& cooldown = state.cooldownRemainingMs;
+		if (cooldown <= 0.f)
+			return;
+
+		cooldown -= dt;
+		if (cooldown < 0.f)
+			cooldown = 0.f;
+	}
 	void SkillManager::UpdateState()
 	{
 		const float dt = world.FIXED_TIME * 1000.f;
-		for (int i = 0; i < skillStates.size(); ++i)
+
+		for (std::size_t i = 0; i < skillStates.size(); ++i)
 		{
 			SkillState& state = skillStates[i];
 			Skill* const skillPtr = state.skill;
-			if (core::IsValid(skillPtr))
+			if (!core::IsValid(skillPtr))
 			{
-				float& cooldown = state.cooldownRemainingMs;
-				if (cooldown > 0.f)
-				{
-					cooldown -= dt;
-					if (cooldown < 0.f)
-						cooldown = 0.f;
-				}
-				if (state.state != SkillState::State::Wait)
-				{
-					if (state.skill->IsPreventMove())
-						player->GetMovement()->LockInput();
-
-					auto prevState = state.state;
-					const bool bStartEntered = state.state == SkillState::State::Start && state.counterMs == 0.f;
-					const uint32_t skillTime = skillPtr->GetStartupMs() + skillPtr->GetActiveMs() + skillPtr->GetRecoveryMs();
-					state.counterMs += dt;
-					if (state.counterMs > skillTime)
-					{
-						if (lastState == &state)
-							lastState = nullptr;
-						state.state = SkillState::State::Wait;
-						state.counterMs = 0.f;
-						if (state.skill->IsPreventMove())
-							player->GetMovement()->UnlockInput();
-					}
-					else if (state.counterMs > skillPtr->GetStartupMs() + skillPtr->GetActiveMs())
-						state.state = SkillState::State::Recovery;
-					else if (state.counterMs > skillPtr->GetStartupMs())
-						state.state = SkillState::State::Active;
-
-					if (bStartEntered)
-					{
-						ApplySkillBuffs(skillPtr, SkillState::State::Start);
-						if (!state.skill->IsAllowContinousInput())
-						{
-							if (pressedSkillId == state.skillId)
-								pressedSkillId = 0;
-						}
-					}
-
-					if (state.state != prevState)
-					{
-						ApplySkillBuffs(skillPtr, state.state);
-
-						if (state.state == SkillState::State::Active)
-						{
-							const auto& pos = gameObject.transform->GetWorldPosition();
-							for (auto projectile : skillPtr->GetProjectiles())
-							{
-								if (projectile == nullptr)
-									continue;
-								projectile->SpawnProjectile(world, player, pos.x, pos.y, player->GetMovement()->IsRight());
-							}
-						}
-					}
-				}
+				RemoveInvalidState(i);
+				--i;
+				continue;
 			}
-			else
+
+			UpdateCooldown(state);
+			if (state.state == SkillState::State::Wait)
+				continue;
+
+			if (skillPtr->IsPreventMove())
+				player->GetMovement()->LockInput();
+
+			const SkillState::State prevState = state.state;
+			const bool bEnterStart = prevState == SkillState::State::Start && state.counterMs == 0.f;
+			const uint32_t startupMs = skillPtr->GetStartupMs();
+			const uint32_t activeEndMs = startupMs + skillPtr->GetActiveMs();
+			const uint32_t skillEndMs = activeEndMs + skillPtr->GetRecoveryMs();
+
+			state.counterMs += dt;
+			if (state.counterMs > skillEndMs)
 			{
-				if (i != skillStates.size() - 1)
+				if (lastState == &state)
+					lastState = nullptr;
+
+				state.state = SkillState::State::Wait;
+				state.counterMs = 0.f;
+
+				if (skillPtr->IsPreventMove())
+					player->GetMovement()->UnlockInput();
+			}
+			else if (state.counterMs > activeEndMs)
+				state.state = SkillState::State::Recovery;
+			else if (state.counterMs > startupMs)
+				state.state = SkillState::State::Active;
+
+			if (bEnterStart)
+			{
+				ApplySkillBuffs(*skillPtr, SkillState::State::Start);
+				if (!skillPtr->IsAllowContinousInput() && pressedSkillId == state.skillId)
+					pressedSkillId = 0;
+			}
+
+			if (state.state == prevState)
+				continue;
+
+			ApplySkillBuffs(*skillPtr, state.state);
+			if (state.state == SkillState::State::Active)
+			{
+				const auto& pos = gameObject.transform->GetWorldPosition();
+				for (auto projectile : skillPtr->GetProjectiles())
 				{
-					skillStateIdxs.erase(state.skillId);
-					skillStateIdxs[skillStates.back().skill->GetId()] = i;
-					skillStates[i] = skillStates.back();
-					skillStates.pop_back();
-					--i;
-					continue;
-				}
-				else
-				{
-					skillStateIdxs.erase(state.skillId);
-					skillStates.pop_back();
+					if (projectile == nullptr)
+						continue;
+
+					projectile->SpawnProjectile(world, player, pos.x, pos.y, player->GetMovement()->IsRight());
 				}
 			}
 		}
 	}
-	void SkillManager::ApplySkillBuffs(Skill* skill, SkillState::State phase)
+	void SkillManager::RemoveInvalidState(std::size_t idx)
 	{
-		if (!core::IsValid(skill) || !core::IsValid(player))
+		SkillState& state = skillStates[idx];
+		skillStateIdxs.erase(state.skillId);
+
+		const std::size_t lastIdx = skillStates.size() - 1;
+		if (idx != lastIdx)
+		{
+			skillStates[idx] = skillStates.back();
+			skillStateIdxs[skillStates[idx].skillId] = idx;
+		}
+
+		skillStates.pop_back();
+	}
+	void SkillManager::ApplySkillBuffs(Skill& skill, SkillState::State phase)
+	{
+		if (!core::IsValid(player))
 			return;
 
-		for (Buff* buff : skill->GetBuffs())
+		for (Buff* buff : skill.GetBuffs())
 		{
 			if (!core::IsValid(buff))
 				continue;
@@ -232,7 +241,7 @@ namespace sh::game
 			if (targetPhase != phase)
 				continue;
 
-			buff->OnApply(*player, *skill);
+			buff->OnApply(*player, skill);
 		}
 	}
 }//namespace

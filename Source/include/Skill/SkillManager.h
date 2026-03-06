@@ -68,8 +68,10 @@ namespace sh::game
 		void UseSkill(SkillId id, uint64_t tick);
 		void UpdateConditionState(uint64_t tick);
 		auto CheckCondition(const SkillCondition& condition, const SkillState& state) const -> bool;
+		void UpdateCooldown(SkillState& state);
 		void UpdateState();
-		void ApplySkillBuffs(Skill* skill, SkillState::State phase);
+		void RemoveInvalidState(std::size_t idx);
+		void ApplySkillBuffs(Skill& skill, SkillState::State phase);
 #if SH_SERVER
 #else
 		void SendPacket(SkillId skillId, SkillInputAction action, uint64_t tick);

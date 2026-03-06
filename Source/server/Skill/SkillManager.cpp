@@ -54,6 +54,7 @@ namespace sh::game
 			const uint64_t newOffset = tick - packet.tick + 5;
 			offset = (offset * 9 + newOffset) / 10;
 		}
+		//SH_INFO_FORMAT("recv seq: {}, tick: {}, serverTick: {}, offset: {}", packet.seq, packet.tick, tick, offset);
 
 		PendingSkill pending{};
 		pending.seq = packet.seq;
@@ -68,16 +69,22 @@ namespace sh::game
 	}
 	void SkillManager::UseSkill(SkillId id, uint64_t tick)
 	{
-		if (id == 0 || !CanUse(id))
-			return;
-
 		SkillState* const state = GetSkillState(id);
 		if (state == nullptr)
 			return;
 
+		if (id == 0 || !CanUse(id))
+		{
+			if (!state->skill->IsAllowContinousInput())
+				lastUsedSkillId = 0;
+			return;
+		}
+
 		state->state = SkillState::State::Start;
 		state->lastUsedTick = tick;
+
 		ApplyCooldown(id);
+
 		lastState = state;
 		lastUsedSkillId = id;
 		SH_INFO_FORMAT("Use skill: {}", id);
