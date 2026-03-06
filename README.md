@@ -1,5 +1,5 @@
 # MapleProject
-<img width="1070" height="849" alt="스크린샷 2025-09-15 155939" src="https://github.com/user-attachments/assets/32fd5787-f8d8-4a80-8e09-69b818bb705c" />
+<img width="687" height="480" alt="image" src="https://github.com/user-attachments/assets/883ec872-0090-43b8-8429-6194df79ec3e" />
 
 ShellEngine 기반 C++17 멀티플레이 메이플스토리 모작 프로젝트입니다.  
 클라이언트-서버 분리 구조에서 플레이어/몹/아이템/월드 상태를 동기화하고, 예측-재조정 기반 이동을 적용합니다.
