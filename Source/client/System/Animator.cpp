@@ -32,11 +32,12 @@ namespace sh::game
 	{
 		t += world.deltaTime;
 
-		ChangeAlpha();
 		while (!bStop && t >= nextT && nextT > 0.f) {
 			t -= nextT;
 			Next();
 		}
+		if (!bStop)
+			ChangeAlpha();
 	}
 	SH_USER_API auto Animator::Serialize() const -> core::Json
 	{
@@ -135,21 +136,22 @@ namespace sh::game
 			}
 			animIdx = 0;
 		}
-		auto texPtr = curAnim->GetTexture(animIdx);
-		if (texPtr == nullptr)
-			return;
 		nextT = curAnim->GetDelay(animIdx) / 1000.f;
 
 		const Vec2& animPos = curAnim->GetPos(animIdx);
 		renderer->gameObject.transform->SetPosition(animPos.x, animPos.y, renderer->gameObject.transform->position.z);
-		float w = texPtr->GetWidth() * 0.01f;
-		float h = texPtr->GetHeight() * 0.01f;
-		renderer->gameObject.transform->SetScale(w, 1.f, h);
-		renderer->gameObject.transform->UpdateMatrix();
+		auto texPtr = curAnim->GetTexture(animIdx);
+		if (texPtr != nullptr)
+		{
+			float w = texPtr->GetWidth() * 0.01f;
+			float h = texPtr->GetHeight() * 0.01f;
+			renderer->gameObject.transform->SetScale(w, 1.f, h);
 
-		auto prop = renderer->GetMaterialPropertyBlock();
-		prop->SetProperty("tex", texPtr);
-		renderer->UpdatePropertyBlockData();
+			auto prop = renderer->GetMaterialPropertyBlock();
+			prop->SetProperty("tex", texPtr);
+			renderer->UpdatePropertyBlockData();
+		}
+		renderer->gameObject.transform->UpdateMatrix();
 	}
 
 	void Animator::ChangeAlpha()
