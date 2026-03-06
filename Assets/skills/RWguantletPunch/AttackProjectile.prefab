@@ -1,6 +1,6 @@
 {
     "Prefab": {
-        "1226e91cc11a4b3df891dc656bc65f9b": {
+        "98333bf21bfa8627a09a73e23c315217": {
             "Components": [
                 {
                     "Component": {
@@ -9,7 +9,7 @@
                     },
                     "SObject": null,
                     "Transform": {
-                        "parent": "8d7d274e9162b6deac2ae5d36c46a604",
+                        "parent": "46183498c1e5400277a06a7ea99a2e77",
                         "quat": [
                             0.0,
                             0.0,
@@ -35,7 +35,7 @@
                     "fullType": "sh::game::Transform",
                     "name": "Unknown",
                     "type": "Transform",
-                    "uuid": "eae2d79a47a727219ab32af68bb423dc",
+                    "uuid": "a8ca643f9bf3e8588c925631ff4ce8ca",
                     "version": 1
                 },
                 {
@@ -57,13 +57,13 @@
                         "priority": 0
                     },
                     "ProjectileHitBox": {
-                        "projectileInstance": "2baf6c3c89caeaf3222da2d149a85998"
+                        "projectileInstance": "94216d8f8b68f945ac3b4fd17c75c06c"
                     },
                     "SObject": null,
                     "fullType": "sh::game::ProjectileHitBox",
                     "name": "user/ProjectileHitBox",
                     "type": "ProjectileHitBox",
-                    "uuid": "6f1c849d05cdeda07d00f2058b78e711",
+                    "uuid": "d997d3945858a33913d6cf635230cf64",
                     "version": 1
                 }
             ],
@@ -75,77 +75,10 @@
             },
             "name": "trigger",
             "type": "GameObject",
-            "uuid": "1226e91cc11a4b3df891dc656bc65f9b",
+            "uuid": "98333bf21bfa8627a09a73e23c315217",
             "version": 1
         },
-        "34c3162a3c31718108a78e84b498295d": {
-            "Components": [
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "SObject": null,
-                    "Transform": {
-                        "parent": "eae2d79a47a727219ab32af68bb423dc",
-                        "quat": [
-                            0.7071068286895752,
-                            0.0,
-                            0.0,
-                            0.7071068286895752
-                        ],
-                        "vPosition": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "vRotation": [
-                            90.0,
-                            -0.0,
-                            0.0
-                        ],
-                        "vScale": [
-                            2.9200000762939453,
-                            1.0,
-                            1.600000023841858
-                        ]
-                    },
-                    "fullType": "sh::game::Transform",
-                    "name": "Unknown",
-                    "type": "Transform",
-                    "uuid": "8677546a786e748d95a8b9e12029e295",
-                    "version": 1
-                },
-                {
-                    "Component": {
-                        "hideInspector": false,
-                        "priority": 0
-                    },
-                    "MeshRenderer": {
-                        "mat": "bbc4ef7ec45dce223297a224f8093f10",
-                        "mesh": "bbc4ef7ec45dce223297a224f8093f21",
-                        "renderTag": 1
-                    },
-                    "SObject": null,
-                    "fullType": "sh::game::MeshRenderer",
-                    "name": "MeshRenderer",
-                    "type": "MeshRenderer",
-                    "uuid": "6960dda41a8c84f839b658c433550b90",
-                    "version": 1
-                }
-            ],
-            "GameObject": {
-                "bEditorOnly": true,
-                "bEnable": true,
-                "bStatic": false,
-                "hideInspector": false
-            },
-            "name": "Quad",
-            "type": "GameObject",
-            "uuid": "34c3162a3c31718108a78e84b498295d",
-            "version": 1
-        },
-        "b13a07d95d0d9ff9ee59197e9741cae7": {
+        "ceb4210aa5ee750ca85331977038285c": {
             "Components": [
                 {
                     "Component": {
@@ -179,7 +112,7 @@
                     "fullType": "sh::game::Transform",
                     "name": "Unknown",
                     "type": "Transform",
-                    "uuid": "8d7d274e9162b6deac2ae5d36c46a604",
+                    "uuid": "46183498c1e5400277a06a7ea99a2e77",
                     "version": 1
                 },
                 {
@@ -188,13 +121,13 @@
                         "priority": 0
                     },
                     "ProjectileInstance": {
-                        "rigidbody": "772d40813c10f28034099cc6c49dfa37"
+                        "rigidbody": "acaac1c9ac88c8d9c7d1ff4e80b70bee"
                     },
                     "SObject": null,
                     "fullType": "sh::game::ProjectileInstance",
                     "name": "user/ProjectileInstance",
                     "type": "ProjectileInstance",
-                    "uuid": "2baf6c3c89caeaf3222da2d149a85998",
+                    "uuid": "94216d8f8b68f945ac3b4fd17c75c06c",
                     "version": 1
                 },
                 {
@@ -225,7 +158,7 @@
                     "fullType": "sh::game::RigidBody",
                     "name": "physics/RigidBody",
                     "type": "RigidBody",
-                    "uuid": "772d40813c10f28034099cc6c49dfa37",
+                    "uuid": "acaac1c9ac88c8d9c7d1ff4e80b70bee",
                     "version": 1
                 }
             ],
@@ -237,12 +170,12 @@
             },
             "name": "AttackProjectile",
             "type": "GameObject",
-            "uuid": "b13a07d95d0d9ff9ee59197e9741cae7",
+            "uuid": "ceb4210aa5ee750ca85331977038285c",
             "version": 1
         }
     },
     "name": "AttackProjectile",
-    "rootObj": "b13a07d95d0d9ff9ee59197e9741cae7",
+    "rootObj": "ceb4210aa5ee750ca85331977038285c",
     "type": "Prefab",
     "uuid": "3cb90b7ace0f973889d692d8142b21fa",
     "version": 1
