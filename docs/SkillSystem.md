@@ -1,5 +1,7 @@
 ﻿# 스킬 시스템
 ## 개요
+![3](https://github.com/user-attachments/assets/ba2e3e5d-7617-47c3-be09-231e1b7f6f22)
+
 스킬 시스템은 온라인 액션 게임 환경에서 다음 세 가지를 충족하도록 설계되었습니다.
 
 - 클라이언트 입력 즉시 로컬 피드백이 발생해야 함
@@ -25,6 +27,8 @@
 이러한 구조는 프로그래머의 개입 없이도 기획자가 데이터 조합만으로 복잡한 스킬을 구성할 수 있게 하며, 신규 기능을 추가할 때 시스템 전체를 수정할 필요 없이 새로운 데이터 타입을 정의하는 것만으로 확장이 가능합니다.
 
 ## 시스템 아키텍처
+<img width="351" height="201" alt="Skill drawio" src="https://github.com/user-attachments/assets/2fa217d3-afc8-4184-8af2-5b8b7c2331ea" />
+
 ### SkillManager
 스킬 실행의 라이프사이클을 관리합니다. 등록된 스킬의 상태를 보관하고, 매 프레임 쿨다운 감소 및 상태 머신(Wait → Start → Active → Recovery)을 갱신하며 정의된 시점에 맞춰 버프나 투사체를 생성합니다.
 
