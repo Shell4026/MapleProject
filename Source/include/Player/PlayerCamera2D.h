@@ -7,6 +7,7 @@
 
 namespace sh::game
 {
+	class Player;
 	class PlayerCamera2D : public Component
 	{
 		COMPONENT(PlayerCamera2D, "user")
@@ -17,15 +18,15 @@ namespace sh::game
 		SH_USER_API void Start() override;
 		SH_USER_API void Update() override;
 
-		SH_USER_API void SetPlayer(GameObject& player);
+		SH_USER_API void SetPlayer(Player& player);
 	private:
 		auto SmoothDamp(float current, float target, float& currentVelocity, float smoothTime, float deltaTime) const -> float;
 		void MoveToPlayer();
 	private:
 		PROPERTY(targetCamera)
 		Camera* targetCamera = nullptr;
-		PROPERTY(player)
-		GameObject* player = nullptr;
+		PROPERTY(player, core::PropertyOption::sobjPtr)
+		Player* player = nullptr;
 		float dis = 1.0f;
 		float velocityX = 0.0f;
 		float velocityY = 0.0f;
@@ -45,5 +46,5 @@ namespace sh::game
 		float centerX = 0.f;
 		float centerY = 0.f;
 	};
-}
+}//namespace
 #endif

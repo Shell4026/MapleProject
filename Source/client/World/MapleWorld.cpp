@@ -1,6 +1,7 @@
 ﻿#include "World/MapleWorld.h"
 #include "Phys/FootholdMovement.h"
 #include "Player/Player.h"
+#include "Player/PlayerMovement.h"
 #include "Item/Item.h"
 #include "Item/ItemDB.h"
 
@@ -43,13 +44,15 @@ namespace sh::game
 		{
 			SH_INFO_FORMAT("Spawn player at {}, {}", x, y);
 			auto playerObj = playerPrefab->AddToWorld(world);
-			playerObj->transform->SetWorldPosition({ x, y, 0 });
-			playerObj->transform->UpdateMatrix();
 
 			auto player = playerObj->GetComponent<Player>();
 			player->SetCurrentWorld(*this);
 			player->SetUUID(playerUUID);
 			players[playerUUID] = player;
+
+			GameObject& body = player->GetMovement()->gameObject;
+			body.transform->SetWorldPosition({ x, y, 0 });
+			body.transform->UpdateMatrix();
 
 			return player;
 		}
@@ -74,19 +77,6 @@ namespace sh::game
 		player->gameObject.Destroy();
 		return true;
 	}
-	SH_USER_API void MapleWorld::Awake()
-	{
-		if (itemPrefab == nullptr)
-		{
-			itemPrefab = static_cast<Prefab*>(core::SObject::GetSObjectUsingResolver(core::UUID{ Item::PREFAB_UUID }));
-			if (itemPrefab == nullptr)
-				SH_ERROR_FORMAT("Item prefab is not valid!: {}", Item::PREFAB_UUID);
-			else
-			{
-				core::GarbageCollection::GetInstance()->SetRootSet(itemPrefab);
-			}
-		}
-	}
 	SH_USER_API void MapleWorld::Start()
 	{
 		client = MapleClient::GetInstance();
@@ -101,11 +91,6 @@ namespace sh::game
 		client->SendTcp(packet);
 		SH_INFO_FORMAT("Join the world {}", world.GetUUID().ToString());
 	}
-	SH_USER_API void MapleWorld::LateUpdate()
-	{
-		TryClearSleepItems();
-		++worldTick;
-	}
 
 	void MapleWorld::ProcessPlayerSpawn(const PlayerSpawnPacket& packet)
 	{
@@ -116,7 +101,7 @@ namespace sh::game
 		if (packet.bLocal)
 		{
 			player->SetUserUUID(client->GetUser().GetUserUUID(), Player::MapleWorldKey{});
-			camera->SetPlayer(player->gameObject);
+			camera->SetPlayer(*player);
 		}
 	}
 	void MapleWorld::ProcessItemDrop(const ItemDropPacket& packet)
@@ -171,18 +156,5 @@ namespace sh::game
 		}
 
 		itemPool.DestroyItem(*item);
-	}
-
-	void MapleWorld::TryClearSleepItems()
-	{
-		if (itemPool.GetSleepItemSize() == 0)
-			return;
-
-		const uint64_t noSpawnTicks = worldTick - lastItemSpawnTick;
-		if (noSpawnTicks < clearSleepItemsAfterTicks)
-			return;
-
-		itemPool.TryClearSleepItems();
-		SH_INFO("Clear sleepItems...");
 	}
 }//namespace

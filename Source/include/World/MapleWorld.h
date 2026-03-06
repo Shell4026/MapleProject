@@ -72,6 +72,7 @@ namespace sh::game
 		SH_USER_API static auto GetMapleWorld(const core::UUID& worldUUID) -> MapleWorld*;
 #endif
 private:
+	void TryClearSleepItems();
 #if SH_SERVER
 		void ProcessPlayerJoin(const PlayerJoinWorldPacket& packet);
 		void ProcessPlayerLeave(const PlayerLeavePacket& packet);
@@ -81,7 +82,6 @@ private:
 		void ProcessItemDrop(const ItemDropPacket& packet);
 		void ProcessItemDespawn(const ItemDespawnPacket& packet);
 #endif
-		void TryClearSleepItems();
 	public:
 		PROPERTY(playerSpawnPoint)
 		Transform* playerSpawnPoint = nullptr;
@@ -108,7 +108,7 @@ private:
 		core::EventSubscriber<network::PacketEvent> packetEventSubscriber;
 
 		uint64_t worldTick = 0;
-		uint64_t clearSleepItemsAfterTicks = 600;
+		uint64_t clearSleepItemsAfterTicks = 1000;
 		uint64_t lastItemSpawnTick = 0;
 #if SH_SERVER
 		MapleServer* server = nullptr;

@@ -1,5 +1,8 @@
 ﻿#include "Player/PlayerCamera2D.h"
 #if !SH_SERVER
+#include "Player/Player.h"
+#include "Player/PlayerMovement.h"
+
 #include "Game/World.h"
 
 #include "Window/Window.h"
@@ -27,8 +30,9 @@ namespace sh::game
 
 		if (core::IsValid(player))
 		{
-			const float px = player->transform->GetWorldPosition().x;
-			const float py = player->transform->GetWorldPosition().y;
+			const GameObject& body = player->GetMovement()->gameObject;
+			const float px = body.transform->GetWorldPosition().x;
+			const float py = body.transform->GetWorldPosition().y;
 			centerX = px;
 			centerY = py + 0.81f;
 		}
@@ -53,7 +57,7 @@ namespace sh::game
 
 		MoveToPlayer();
 	}
-	SH_USER_API void PlayerCamera2D::SetPlayer(GameObject& player)
+	SH_USER_API void PlayerCamera2D::SetPlayer(Player& player)
 	{
 		this->player = &player;
 	}
@@ -75,8 +79,9 @@ namespace sh::game
 		const float width = world.renderer.GetWidth() * 0.01f;
 		const float height = world.renderer.GetHeight() * 0.01f;
 
-		const float px = player->transform->GetWorldPosition().x;
-		const float py = player->transform->GetWorldPosition().y;
+		const GameObject& body = player->GetMovement()->gameObject;
+		const float px = body.transform->GetWorldPosition().x;
+		const float py = body.transform->GetWorldPosition().y;
 		const float upOffset = 0.81f; // 플레이어가 centerY보다 upOffset 위로 가면 카메라를 올림 (playerY + upOffset)
 		const float downOffset = upOffset * 2.0f; // centerY가 playerY보다 이만큼 더 높으면 카메라를 내림 (playerY + downOffset)
 

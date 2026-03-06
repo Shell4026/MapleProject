@@ -1,6 +1,7 @@
 ﻿#include "World/MapleWorld.h"
 #include "Phys/FootholdMovement.h"
 #include "Player/Player.h"
+#include "Player/PlayerMovement.h"
 #include "World/Portal.h"
 #include "Item/Item.h"
 
@@ -45,13 +46,15 @@ namespace sh::game
 		{
 			SH_INFO_FORMAT("Spawn player at {}, {}", x, y);
 			auto playerObj = playerPrefab->AddToWorld(world);
-			playerObj->transform->SetWorldPosition({ x, y, 0 });
-			playerObj->transform->UpdateMatrix();
 
 			Player* const player = playerObj->GetComponent<Player>();
 			player->SetUserUUID(uuid, Player::MapleWorldKey{});
 			player->SetCurrentWorld(*this);
 			players[uuid] = player;
+
+			GameObject& body = player->GetMovement()->gameObject;
+			body.transform->SetWorldPosition({ x, y, 0 });
+			body.transform->UpdateMatrix();
 
 			router.RegisterPlayer(*player);
 
@@ -114,19 +117,6 @@ namespace sh::game
 			server->Send(packet, userPtr->GetIp(), userPtr->GetPort());
 		}
 	}
-	SH_USER_API void MapleWorld::Awake()
-	{
-		if (itemPrefab == nullptr)
-		{
-			itemPrefab = static_cast<Prefab*>(core::SObject::GetSObjectUsingResolver(core::UUID{ Item::PREFAB_UUID }));
-			if (itemPrefab == nullptr)
-				SH_ERROR_FORMAT("Item prefab is not valid!: {}", Item::PREFAB_UUID);
-			else
-			{
-				core::GarbageCollection::GetInstance()->SetRootSet(itemPrefab);
-			}
-		}
-	}
 	SH_USER_API void MapleWorld::Start()
 	{
 		server = MapleServer::GetInstance();
@@ -135,11 +125,6 @@ namespace sh::game
 
 		server->bus.Subscribe(packetEventSubscriber);
 		router.SetPacketBus(server->bus);
-	}
-	SH_USER_API void MapleWorld::LateUpdate()
-	{
-		TryClearSleepItems();
-		++worldTick;
 	}
 	SH_USER_API void MapleWorld::SpawnItem(int itemId, float x, float y, const Player* owner)
 	{
@@ -311,18 +296,5 @@ namespace sh::game
 		PlayerDespawnPacket despawnPacket{};
 		despawnPacket.player = packet.user;
 		BroadCastToWorld(despawnPacket);
-	}
-	void MapleWorld::TryClearSleepItems()
-	{
-		if (itemPool.GetSleepItemSize() == 0)
-			return;
-
-		const uint64_t noSpawnTicks = worldTick - lastItemSpawnTick;
-		if (noSpawnTicks < clearSleepItemsAfterTicks)
-			return;
-
-		itemPool.TryClearSleepItems();
-
-		SH_INFO("Clear sleepItems...");
 	}
 }//namespace
