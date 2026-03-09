@@ -4,7 +4,7 @@
 ShellEngine 기반 C++17 멀티플레이 메이플스토리 모작 프로젝트입니다.  
 클라이언트-서버 분리 구조에서 플레이어/몹/아이템/월드 상태를 동기화하고, 예측-재조정 기반 이동을 적용합니다.
 
-https://youtu.be/2mhPIT_tTDc
+[프로젝트 설명 영상](https://youtu.be/s7-2ZrSjIuo)
 
 ## 요약
 - 언어: C++17
@@ -46,5 +46,5 @@ https://youtu.be/2mhPIT_tTDc
   - `linux-debug`, `linux-release`
 
 ## 데모
-- 프로젝트 설명 영상: https://youtu.be/2mhPIT_tTDc
+- 프로젝트 설명 영상: https://youtu.be/s7-2ZrSjIuo
 - 초기 테스트 영상: https://youtu.be/-ZEik9VYwIc
