@@ -63,6 +63,7 @@ namespace sh::game
 
 		Inventory inventory;
 
+		float t = 0.f;
 		uint32_t heartbeat = 10;
 		float portalTransferCooldownMs = 0.f;
 		int pendingSpawnPortalId = -1;

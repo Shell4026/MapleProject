@@ -61,7 +61,6 @@ namespace sh::game
 		}
 
 #if SH_SERVER
-		static float t = 0.f;
 		t += dt;
 		if (t >= 1.f)
 		{
@@ -69,7 +68,6 @@ namespace sh::game
 			t = 0.f;
 		}
 #else
-		static float t = 0.f;
 		t += dt;
 		if (t >= 1.f)
 		{
