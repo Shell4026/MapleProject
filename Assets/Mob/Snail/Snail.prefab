@@ -140,6 +140,78 @@
             "uuid": "4f59f80635d65eb4c4374be71267dcbd",
             "version": 1
         },
+        "594213096fafb03176962abbbfb16f95": {
+            "Components": [
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "Transform": {
+                        "parent": "7c9b123d48e85b4a829cabc2e15c4c6b",
+                        "quat": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "vPosition": [
+                            1.309999942779541,
+                            -2.4600000381469727,
+                            -0.10024503618478775
+                        ],
+                        "vRotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "vScale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "fullType": "sh::game::Transform",
+                    "name": "Unknown",
+                    "type": "Transform",
+                    "uuid": "0c3abd8d920cd7e370a7c4ac9411d0ec",
+                    "version": 1
+                },
+                {
+                    "AudioSource": {
+                        "bLoop": false,
+                        "bPlayOnAwake": false,
+                        "bRelative": false,
+                        "maxDistance": 30.0,
+                        "pitch": 1.0,
+                        "referenceDistance": 1.0,
+                        "rolloffFactor": 0.0,
+                        "volume": 1.0
+                    },
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::AudioSource",
+                    "name": "Sound/AudioSource",
+                    "type": "AudioSource",
+                    "uuid": "40d49f0740400d17a42149b639494e69",
+                    "version": 1
+                }
+            ],
+            "GameObject": {
+                "bEditorOnly": false,
+                "bEnable": true,
+                "bStatic": false,
+                "hideInspector": false
+            },
+            "name": "SFX",
+            "type": "GameObject",
+            "uuid": "594213096fafb03176962abbbfb16f95",
+            "version": 1
+        },
         "897e2ddaf15923bf6df1d579c7c08949": {
             "Components": [
                 {
@@ -157,8 +229,8 @@
                             1.0
                         ],
                         "vPosition": [
-                            -6.061727523803711,
-                            2.4628891944885254,
+                            -6.059999942779541,
+                            2.4600000381469727,
                             0.00024503469467163086
                         ],
                         "vRotation": [
@@ -187,8 +259,7 @@
                         "ai": "a04d96157c35511952f08e82c97bef99",
                         "healthBar": "01ce9b34602342643f8437ad5a31a700",
                         "mapleWorld": "da5427b39c40fbd3d1e391fae236b9da",
-                        "maxHp": 15,
-                        "mobId": 0,
+                        "mobData": "290622db4fde16b436e734ad07704bd9",
                         "movement": "7791a885ae98b4bcecc349e3db748c6c",
                         "rigidbody": "f74afbd9e848bdb9fde99b3154ecfa39"
                     },
@@ -250,8 +321,10 @@
                         "priority": 0
                     },
                     "FootholdMovement": {
+                        "airDrag": 1.0,
                         "bCliffFall": false,
                         "foothold": "a140d9827f2838ddb3665cafaf19370f",
+                        "groundDrag": 8.0,
                         "jumpSpeed": 0.0,
                         "maxFallSpeed": 6.699999809265137,
                         "maxStepHeight": 0.20000000298023224,
@@ -284,7 +357,8 @@
                         ],
                         "bGravity": false,
                         "bInterpolation": false,
-                        "bKinematic": true,
+                        "bKinematic": false,
+                        "bStatic": true,
                         "linearDamping": 0.0,
                         "mass": 1.0
                     },
@@ -293,6 +367,22 @@
                     "name": "physics/RigidBody",
                     "type": "RigidBody",
                     "uuid": "f74afbd9e848bdb9fde99b3154ecfa39",
+                    "version": 1
+                },
+                {
+                    "Component": {
+                        "hideInspector": false,
+                        "priority": 0
+                    },
+                    "MobSoundController": {
+                        "audioSource": "40d49f0740400d17a42149b639494e69",
+                        "mob": "90b4a8bbd9dcce5c5cbb65184219744f"
+                    },
+                    "SObject": null,
+                    "fullType": "sh::game::MobSoundController",
+                    "name": "user/MobSoundController",
+                    "type": "MobSoundController",
+                    "uuid": "62f8271286168505ba215584cb1e5dde",
                     "version": 1
                 }
             ],

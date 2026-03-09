@@ -22,8 +22,11 @@ namespace sh::game
     {
         if (rigidbody == nullptr)
             SH_INFO("rigidbody is nullptr!");
+        if (mobData == nullptr)
+            SH_INFO("mobData is nullptr!");
         SetPriority(-1);
-        status.Reset(maxHp);
+
+        status.Reset(mobData->GetMaxHp());
 
         gameObject.SetActive(false);
 
@@ -76,6 +79,8 @@ namespace sh::game
         if (core::IsValid(movement))
             movement->SetVelocity(0.f, 0.f);
 
+        status.Reset(mobData->GetMaxHp());
+
         if (ai != nullptr)
             ai->Reset();
     }
@@ -114,7 +119,7 @@ namespace sh::game
         BroadcastStatePacket();
         gameObject.SetActive(false);
 
-        std::vector<int> dropItems = ItemDropManager::GetInstance()->DropItem(mobId);
+        std::vector<int> dropItems = ItemDropManager::GetInstance()->DropItem(mobData->GetMobId());
         if (!dropItems.empty())
         {
             auto& pos = gameObject.transform->GetWorldPosition();

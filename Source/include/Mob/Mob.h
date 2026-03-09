@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Export.h"
+#include "Mob/MobData.h"
 #include "Skill/Projectile.h"
 #include "World/MapleWorld.h"
 #include "MobStatus.hpp"
@@ -41,8 +42,7 @@ namespace sh::game
         SH_USER_API void BroadcastStatePacket();
         SH_USER_API void Hit(const Projectile& projectile, Player& player);
 #endif
-
-        SH_USER_API auto GetMaxHP() const -> uint32_t { return maxHp; }
+        SH_USER_API auto GetMobData() const -> const MobData* { return mobData; }
         SH_USER_API auto GetMovement() const -> MobMovement* { return movement; }
         SH_USER_API auto GetStatus() const -> const MobStatus& { return status; }
         SH_USER_API auto GetStatus() -> MobStatus& { return status; }
@@ -53,14 +53,6 @@ namespace sh::game
 #endif
     public:
         core::EventBus evtBus;
-    protected:
-        PROPERTY(maxHp)
-        uint32_t maxHp = 10;
-        PROPERTY(ai)
-        AIStrategy* ai = nullptr;
-        PROPERTY(movement, core::PropertyOption::sobjPtr)
-        MobMovement* movement = nullptr;
-
 #if !SH_SERVER
         PROPERTY(healthBar)
         HPUI* healthBar = nullptr;
@@ -70,8 +62,12 @@ namespace sh::game
         MapleWorld* mapleWorld = nullptr;
         PROPERTY(rigidbody)
         RigidBody* rigidbody = nullptr;
-        PROPERTY(mobId)
-        int mobId = 0;
+        PROPERTY(mobData, core::PropertyOption::sobjPtr)
+        MobData* mobData = nullptr;
+        PROPERTY(ai)
+        AIStrategy* ai = nullptr;
+        PROPERTY(movement, core::PropertyOption::sobjPtr)
+        MobMovement* movement = nullptr;
         MobStatus status;
 
         uint32_t netSeq = 0;

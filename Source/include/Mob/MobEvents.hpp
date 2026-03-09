@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "Core/IEvent.h"
 
-#include "Game/WorldEvents.hpp"
-
 namespace sh::game
 {
 	class Mob;

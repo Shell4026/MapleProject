@@ -4,6 +4,7 @@
 
 #include "Game/GameObject.h"
 
+// 클라 사이드
 namespace sh::game
 {
 	MobSpawner::MobSpawner(GameObject& owner) :
@@ -43,7 +44,6 @@ namespace sh::game
 		}
 
 		mob->gameObject.SetActive(true);
-		mob->GetStatus().Reset(mob->GetMaxHP());
 		mob->Reset();
 	}
 }//namespace

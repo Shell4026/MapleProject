@@ -1,0 +1,15 @@
+{
+    "MobData": {
+        "dieSound": "b607bf6d3015f57e2bbf57479926a0f1",
+        "maxHp": 10,
+        "mobId": 0,
+        "mobName": "달팽이"
+    },
+    "SObject": null,
+    "ScriptableObject": null,
+    "fullType": "sh::game::MobData",
+    "name": "Snail.srpo",
+    "type": "MobData",
+    "uuid": "290622db4fde16b436e734ad07704bd9",
+    "version": 1
+}

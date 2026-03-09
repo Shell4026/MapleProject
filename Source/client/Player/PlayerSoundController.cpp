@@ -23,7 +23,6 @@ namespace sh::game
 		{
 			if (jumpSound != nullptr && player->GetMovement()->IsJumpTriggered())
 			{
-				SH_INFO("jump sound");
 				audioSource->PlayOneshot(*jumpSound);
 			}
 			const SkillManager::SkillState* const curTickSkillState = player->GetSkillManager()->GetCurTickSkillState();
@@ -32,7 +31,6 @@ namespace sh::game
 				const sound::SoundClip* const skillSoundClip = curTickSkillState->skill->GetSoundClip();
 				if (skillSoundClip != nullptr)
 				{
-					SH_INFO("skill sound");
 					audioSource->PlayOneshot(*skillSoundClip);
 				}
 			}

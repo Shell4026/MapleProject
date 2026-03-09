@@ -1,5 +1,6 @@
 ﻿#include "Mob/Mob.h"
 #include "Mob/MobMovement.h"
+#include "Mob/MobEvents.hpp"
 
 #include "World/MapleClient.h"
 #include "Phys/CollisionTag.hpp"
@@ -31,8 +32,11 @@ namespace sh::game
     {
         if (rigidbody == nullptr)
             SH_INFO("rigidbody is nullptr!");
+        if (mobData == nullptr)
+            SH_INFO("mobData is nullptr!");
         SetPriority(-1);
-        status.Reset(maxHp);
+
+        status.Reset(mobData->GetMaxHp());
 
         gameObject.SetActive(false);
 
@@ -91,6 +95,9 @@ namespace sh::game
         gameObject.transform->UpdateMatrix();
         if (core::IsValid(movement))
             movement->SetVelocity(0.f, 0.f);
+
+        status.Reset(mobData->GetMaxHp());
+
         if (ai != nullptr)
             ai->Reset();
     }
@@ -113,6 +120,9 @@ namespace sh::game
 
         if (status.hp == 0)
         {
+            MobDeathEvent evt{ *this };
+            evtBus.Publish(evt);
+
             gameObject.SetActive(false);
         }
 
@@ -122,4 +132,4 @@ namespace sh::game
             healthBar->SetHp(status.hp);
         }
     }
-}
+}//namespace

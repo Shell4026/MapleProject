@@ -6,6 +6,7 @@
 #include "Game/GameObject.h"
 namespace sh::game
 {
+	// 서버 사이드
 	MobSpawner::MobSpawner(GameObject& owner) :
 		Component(owner)
 	{
@@ -86,7 +87,6 @@ namespace sh::game
 
 			SH_INFO_FORMAT("spawn: {}", spawnIdx);
 			mob->gameObject.SetActive(true);
-			mob->GetStatus().Reset(mob->GetMaxHP());
 			mob->Reset();
 
 			spawnedMobs[spawnIdx] = true;
