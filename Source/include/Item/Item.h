@@ -54,5 +54,9 @@ namespace sh::game
 		MapleWorld* mapleWorld = nullptr;
 		PROPERTY(movement, core::PropertyOption::sobjPtr)
 		FootholdMovement* movement = nullptr;
+		PROPERTY(destroyMs)
+		uint32_t destroyMs = 3 * 60 * 1000;
+
+		float t = 0.f;
 	};
 }//namespace

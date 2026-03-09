@@ -5,17 +5,13 @@
 
 #include "Game/GameObject.h"
 
+// 공통
 namespace sh::game
 {
 	SH_USER_API void Item::OnDisable()
 	{
 		if (movement != nullptr)
 			movement->SetVelocity(0.f, 0.f);
-	}
-	SH_USER_API void Item::FixedUpdate()
-	{
-		if (movement != nullptr)
-			movement->StepMovement();
 	}
 	SH_USER_API void Item::Update()
 	{

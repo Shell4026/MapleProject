@@ -28,6 +28,11 @@ namespace sh::game
 			renderer->UpdatePropertyBlockData();
 		}
 	}
+	SH_USER_API void Item::FixedUpdate()
+	{
+		if (movement != nullptr)
+			movement->StepMovement();
+	}
 	SH_USER_API void Item::SetTexture(const render::Texture* texture)
 	{
 		this->texture = texture;
