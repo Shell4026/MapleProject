@@ -10,6 +10,7 @@ namespace sh::game
 	{
 		GameObject* itemObj = nullptr;
 		Item* item = nullptr;
+		std::size_t itemIdx = items.size();
 		if (sleepItemIdx.empty())
 		{
 			itemObj = itemPrefab.AddToWorld(world.world);
@@ -22,6 +23,7 @@ namespace sh::game
 			{
 				const std::size_t idx = sleepItemIdx.front();
 				sleepItemIdx.pop();
+				itemIdx = idx;
 				item = items[idx].item.Get();
 			} while (!core::IsValid(item) && !sleepItemIdx.empty());
 
@@ -30,10 +32,12 @@ namespace sh::game
 				itemObj = itemPrefab.AddToWorld(world.world);
 				item = itemObj->GetComponent<Item>();
 				items.push_back(ItemState{ item, false });
+				itemIdx = items.size() - 1;
 			}
 			else
 			{
 				itemObj = &item->gameObject;
+				items[itemIdx].bSleep = false;
 				itemObj->SetUUID(core::UUID::Generate());
 				itemObj->SetActive(true);
 			}
@@ -70,5 +74,21 @@ namespace sh::game
 		);
 		items.erase(it, items.end());
 		sleepItemIdx = std::queue<std::size_t>{};
+	}
+	SH_USER_API auto ItemPool::GetActiveItems() const -> std::vector<Item*>
+	{
+		std::vector<Item*> result;
+		result.reserve(items.size());
+
+		for (const ItemState& itemState : items)
+		{
+			Item* const item = itemState.item.Get();
+			if (itemState.bSleep || !core::IsValid(item))
+				continue;
+
+			result.push_back(item);
+		}
+
+		return result;
 	}
 }//namespace

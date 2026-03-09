@@ -36,6 +36,8 @@ namespace sh::game
 		SH_USER_API auto GetRigidBody() const -> RigidBody* { return rb; }
 		SH_USER_API auto GetCurrentWorld() const -> MapleWorld* { return mapleWorld; }
 		SH_USER_API auto GetMovement() const -> FootholdMovement* { return movement; }
+		SH_USER_API auto GetElapsedMs() const -> float { return t; }
+		SH_USER_API void SetElapsedMs(float elapsedMs) { t = elapsedMs; }
 	public:
 		static constexpr const char* PREFAB_UUID = "ee1bee2efec5a690531dd2812a6192b7";
 	public:

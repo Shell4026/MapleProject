@@ -24,6 +24,7 @@ namespace sh::game
 			mainJson["itemId"] = itemId;
 			mainJson["x"] = x;
 			mainJson["y"] = y;
+			mainJson["t"] = t;
 			mainJson["cnt"] = cnt;
 			mainJson["ownerUUID"] = ownerUUID;
 			return mainJson;
@@ -37,12 +38,14 @@ namespace sh::game
 				x = json["x"];
 			if (json.contains("y"))
 				y = json["y"];
+			if (json.contains("t"))
+				t = json["t"];
 			if (json.contains("cnt"))
 				cnt = json["cnt"];
 			if (json.contains("itemUUID"))
 				itemUUID = json["itemUUID"];
 			if (json.contains("ownerUUID"))
-				ownerUUID = json["itemUUID"];
+				ownerUUID = json["ownerUUID"];
 		}
 	public:
 		constexpr static uint32_t ID = (core::reflection::TypeTraits::GetTypeHash<ItemDropPacket>() >> 32);
@@ -50,6 +53,7 @@ namespace sh::game
 		int itemId = 0;
 		float x = 0.f;
 		float y = 0.f;
+		float t = 0.f;
 		int cnt = 1;
 		std::array<uint32_t, 4> itemUUID;
 		std::array<uint32_t, 4> ownerUUID{ 0, 0, 0, 0 };

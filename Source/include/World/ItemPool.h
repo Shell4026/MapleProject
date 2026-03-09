@@ -18,6 +18,7 @@ namespace sh::game
 		SH_USER_API void DestroyItem(Item& item);
 		SH_USER_API void TryClearSleepItems();
 		SH_USER_API auto GetSleepItemSize() const -> std::size_t {return sleepItemIdx.size(); }
+		SH_USER_API auto GetActiveItems() const -> std::vector<Item*>;
 	private:
 		struct ItemState
 		{

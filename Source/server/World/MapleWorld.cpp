@@ -146,6 +146,8 @@ namespace sh::game
 		item.GetMovement()->AddImpulse(0.f, 6.f);
 		item.instanceId = nextItemIdx++;
 		item.itemId = itemId;
+		item.SetElapsedMs(0.f);
+		item.owner = core::UUID::GenerateEmptyUUID();
 		if (owner != nullptr)
 			item.owner = owner->GetUserUUID();
 
@@ -154,6 +156,7 @@ namespace sh::game
 		packet.itemId = itemId;
 		packet.x = x;
 		packet.y = y;
+		packet.t = item.GetElapsedMs();
 		packet.cnt = 1;
 		packet.itemUUID = itemObj.GetUUID();
 		if (owner != nullptr)
@@ -269,6 +272,24 @@ namespace sh::game
 			spawnPacket.bLocal = false;
 
 			server->Send(spawnPacket, userPtr->GetIp(), userPtr->GetPort());
+		}
+		for (Item* const item : itemPool.GetActiveItems())
+		{
+			if (!core::IsValid(item))
+				continue;
+
+			const auto& itemPos = item->gameObject.transform->GetWorldPosition();
+
+			ItemDropPacket itemPacket{};
+			itemPacket.itemUUID = item->gameObject.GetUUID();
+			itemPacket.itemId = item->itemId;
+			itemPacket.x = itemPos.x;
+			itemPacket.y = itemPos.y;
+			itemPacket.t = item->GetElapsedMs();
+			if (item->owner != core::UUID::GenerateEmptyUUID())
+				itemPacket.ownerUUID = item->owner;
+
+			server->Send(itemPacket, userPtr->GetIp(), userPtr->GetPort());
 		}
 		// 접속한 플레이어 생성
 		{

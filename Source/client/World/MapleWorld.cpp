@@ -129,9 +129,18 @@ namespace sh::game
 		itemObj.transform->SetWorldPosition(pos);
 		itemObj.transform->UpdateMatrix();
 
-		item.GetMovement()->AddImpulse(0.f, 6.f);
-		item.GetMovement()->SetIsGround(false);
 		item.itemId = packet.itemId;
+		item.SetElapsedMs(packet.t);
+		if (packet.t <= world.FIXED_TIME * 1000.f)
+		{
+			item.GetMovement()->AddImpulse(0.f, 6.f);
+			item.GetMovement()->SetIsGround(false);
+		}
+		else
+		{
+			item.GetMovement()->SetVelocity(0.f, 0.f);
+			item.GetMovement()->SetIsGround(false);
+		}
 		lastItemSpawnTick = worldTick;
 
 		auto texPtr = static_cast<render::Texture*>(core::SObject::GetSObjectUsingResolver(itemInfo->texUUID));
