@@ -58,6 +58,8 @@ namespace sh::game
 	}
 	SH_USER_API void SkillManager::TickFixed(uint64_t tick)
 	{
+		curTickState = nullptr;
+
 		if (player->IsLocal())
 		{
 			UpdateConditionState(tick);
@@ -138,6 +140,7 @@ namespace sh::game
 		
 		ApplyCooldown(id);
 		lastState = state;
+		curTickState = state;
 		lastUsedSkillId = id;
 		SH_INFO_FORMAT("Use skill: {}", id);
 	}

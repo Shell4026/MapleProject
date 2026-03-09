@@ -55,6 +55,7 @@ namespace sh::game
 		SH_USER_API auto GetSkill(SkillId id) const -> Skill*;
 		SH_USER_API auto GetSkillState(SkillId id) const -> const SkillState*;
 		SH_USER_API auto GetLastSkillState() const -> SkillState* { return lastState; }
+		SH_USER_API auto GetCurTickSkillState() const -> SkillState* { return curTickState; }
 		SH_USER_API auto GetUsingSkillId() const -> SkillId { return lastState != nullptr ? lastState->skillId : 0; }
 		SH_USER_API auto IsUsingSkill() const -> bool { return lastState != nullptr; }
 #if SH_SERVER
@@ -83,6 +84,7 @@ namespace sh::game
 		std::vector<SkillState> skillStates;
 
 		SkillState* lastState = nullptr;
+		SkillState* curTickState = nullptr;
 		uint64_t lastLandedTick = 0;
 		uint64_t lastJumpTick = 0;
 		SkillId lastUsedSkillId = 0;

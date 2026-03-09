@@ -1,6 +1,6 @@
 ﻿#include "Player/PlayerSoundController.h"
 #include "Player/PlayerMovement.h"
-
+#include "skill/SkillManager.h"
 namespace sh::game
 {
 	PlayerSoundController::PlayerSoundController(GameObject& owner) :
@@ -25,6 +25,16 @@ namespace sh::game
 			{
 				SH_INFO("jump sound");
 				audioSource->PlayOneshot(*jumpSound);
+			}
+			const SkillManager::SkillState* const curTickSkillState = player->GetSkillManager()->GetCurTickSkillState();
+			if (curTickSkillState != nullptr)
+			{
+				const sound::SoundClip* const skillSoundClip = curTickSkillState->skill->GetSoundClip();
+				if (skillSoundClip != nullptr)
+				{
+					SH_INFO("skill sound");
+					audioSource->PlayOneshot(*skillSoundClip);
+				}
 			}
 		}
 	}

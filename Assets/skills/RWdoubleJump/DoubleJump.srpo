@@ -22,6 +22,7 @@
         "id": 37001003,
         "projectiles": [],
         "recoveryMs": 0,
+        "soundClip": "e8308a335092c4637c6fe2817e9a42a7",
         "startupMs": 0
     },
     "fullType": "sh::game::Skill",

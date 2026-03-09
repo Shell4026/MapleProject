@@ -2,6 +2,8 @@
 #include "Export.h"
 #include "Skill/SkillCondition.h"
 
+#include "Sound/SoundClip.h"
+
 #include "Game/ScriptableObject.h"
 
 #include <vector>
@@ -23,6 +25,7 @@ namespace sh::game
 		SH_USER_API auto GetEffects() const -> const std::vector<Projectile*>& { return effects; }
 		SH_USER_API auto GetBuffs() const -> const std::vector<Buff*>& { return buffs; }
 		SH_USER_API auto GetConditions() const -> const std::vector<SkillCondition*>& { return conditions; }
+		SH_USER_API auto GetSoundClip() const -> const sound::SoundClip* { return soundClip; }
 		SH_USER_API auto IsPreventMove() const -> bool { return bPreventMove; }
 		SH_USER_API auto IsPreventAir() const -> bool { return bPreventAir; }
 		SH_USER_API auto IsAllowSkill(uint32_t skillId) -> bool { return std::find(allowSkill.begin(), allowSkill.end(), skillId) != allowSkill.end(); }
@@ -40,6 +43,8 @@ namespace sh::game
 		uint32_t cooldownMs = 0;
 		PROPERTY(animState)
 		uint32_t animState = 0;
+		PROPERTY(soundClip)
+		const sound::SoundClip* soundClip = nullptr;
 
 		PROPERTY(allowSkill)
 		std::vector<uint32_t> allowSkill; // 동시에 쓸 수 있는 스킬 리스트
