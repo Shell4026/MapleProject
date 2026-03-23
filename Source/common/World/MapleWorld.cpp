@@ -1,4 +1,5 @@
 ﻿#include "World/MapleWorld.h"
+#include "Item/Item.h"
 
 // 공용
 namespace sh::game

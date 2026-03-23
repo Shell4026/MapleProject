@@ -22,7 +22,7 @@ namespace sh::game
 	private:
 		struct ItemState
 		{
-			core::SObjWeakPtr<Item, void> item = nullptr;
+			core::SObjWeakPtr<Item> item = nullptr;
 			bool bSleep = false;
 		};
 		std::vector<ItemState> items;

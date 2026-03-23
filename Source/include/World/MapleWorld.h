@@ -7,7 +7,6 @@
 #include "MapleClient.h"
 #include "EntityRouter.h"
 #include "Player/PlayerCamera2D.h"
-#include "Item/Item.h"
 #include "Phys/Foothold.h"
 
 #include "Core/SContainer.hpp"
@@ -36,6 +35,7 @@ namespace sh::game
 	class PlayerLeavePacket;
 	class PlayerSpawnPacket;
 	class PlayerDespawnPacket;
+	class Item;
 	class ItemDropPacket;
 	class ItemDespawnPacket;
 	class Portal;
