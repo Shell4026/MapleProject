@@ -6,12 +6,12 @@
 - TCP: 접속/월드 이동/인벤토리 등 신뢰 전송 필요 이벤트
 
 ## 연결 과정
-1. 클라이언트가 `PlayerJoinPacket`(UDP)을 전송합니다.
-2. 서버는 임시 토큰(`PlayerTokenPacket`)을 UDP로 반환합니다.
-3. 클라이언트는 TCP 연결 후 동일 토큰을 TCP로 전송합니다.
-4. 서버 `UserManager`가 UDP 엔드포인트와 TCP 소켓을 매칭해 유저 세션을 확정합니다.
-5. 서버는 `InventorySyncPacket`과 `ChangeWorldPacket`(TCP)을 전송합니다.
-6. 클라이언트는 해당 월드에 `PlayerJoinWorldPacket`(TCP)으로 입장 요청합니다.
+1. 클라이언트가 `PlayerJoinPacket`(UDP)을 전송
+2. 서버는 임시 토큰(`PlayerTokenPacket`)을 UDP로 반환
+3. 클라이언트는 TCP 연결 후 동일 토큰을 TCP로 전송
+4. 서버 `UserManager`가 UDP 엔드포인트와 TCP 소켓을 매칭해 유저 세션을 확정
+5. 서버는 `InventorySyncPacket`과 `ChangeWorldPacket`(TCP)을 전송
+6. 클라이언트는 해당 월드에 `PlayerJoinWorldPacket`(TCP)으로 입장 요청
 
 ## 패킷 분류
 | 영역 | 패킷 예시 | 채널 |
