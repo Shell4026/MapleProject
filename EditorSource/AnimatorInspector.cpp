@@ -1,6 +1,7 @@
 #include "AnimatorInspector.h"
 
 #include "Editor/UI/Inspector.h"
+#include "Editor/DragDropHelper.hpp"
 
 #include <limits>
 namespace sh::editor
@@ -25,11 +26,8 @@ namespace sh::editor
 			}
 			if (ImGui::BeginDragDropTarget())
 			{
-				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(std::string{ game::AnimationData::GetStaticType().type.name }.c_str());
-				if (payload != nullptr)
-				{
-					animPtr = static_cast<game::AnimationData*>(*reinterpret_cast<core::SObject**>(payload->Data));
-				}
+				if (game::AnimationData* animationDataPtr = editor::dragdrop::AcceptAsset<game::AnimationData>())
+					animPtr = animationDataPtr;
 			}
 			ImGui::SameLine();
 
